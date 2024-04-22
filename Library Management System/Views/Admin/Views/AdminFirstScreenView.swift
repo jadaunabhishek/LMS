@@ -10,7 +10,7 @@ import SwiftUI
 struct AdminFirstScreenView: View {
     var body: some View {
         TabView(){
-            
+            Text("Library management system")
         }
     }
 }
