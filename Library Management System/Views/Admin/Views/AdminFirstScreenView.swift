@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct FirstScreenView: View {
+struct AdminFirstScreenView: View {
     var body: some View {
         TabView(){
             
@@ -16,5 +16,5 @@ struct FirstScreenView: View {
 }
 
 #Preview {
-    FirstScreenView()
+    AdminFirstScreenView()
 }
