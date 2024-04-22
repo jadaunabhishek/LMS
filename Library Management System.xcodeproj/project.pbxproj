@@ -112,7 +112,10 @@
 			isa = PBXGroup;
 			children = (
 				D55820F52BD61BCC005A00F9 /* GoogleService-Info.plist */,
-				D55820F02BD61ACE005A00F9 /* Views */,
+				D55820FF2BD637BD005A00F9 /* Admin */,
+				D55821002BD637C4005A00F9 /* Librarian */,
+				D55821012BD637CB005A00F9 /* Member */,
+				D55820F02BD61ACE005A00F9 /* AuthViews */,
 				D55820C62BD61AB0005A00F9 /* Library_Management_SystemApp.swift */,
 				D55820C82BD61AB0005A00F9 /* ContentView.swift */,
 				D55820CA2BD61AB2005A00F9 /* Assets.xcassets */,
@@ -146,16 +149,13 @@
 			path = "Library Management SystemUITests";
 			sourceTree = "<group>";
 		};
-		D55820F02BD61ACE005A00F9 /* Views */ = {
+		D55820F02BD61ACE005A00F9 /* AuthViews */ = {
 			isa = PBXGroup;
 			children = (
-				D55821012BD637CB005A00F9 /* Member */,
-				D55821002BD637C4005A00F9 /* Librarian */,
-				D55820FF2BD637BD005A00F9 /* Admin */,
 				D55820F12BD61ADE005A00F9 /* LoginView.swift */,
 				D55820F32BD61AF2005A00F9 /* SignupView.swift */,
 			);
-			path = Views;
+			path = AuthViews;
 			sourceTree = "<group>";
 		};
 		D55820F82BD61C5A005A00F9 /* Frameworks */ = {
