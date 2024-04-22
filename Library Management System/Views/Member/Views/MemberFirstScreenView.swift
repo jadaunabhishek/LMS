@@ -7,12 +7,13 @@
 
 import SwiftUI
 
-struct FirstScreenView: View {
+struct MemberFirstScreenView: View {
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        Text("Hello, World!")
+        Text("Library management system")
     }
 }
 
 #Preview {
-    FirstScreenView()
+    MemberFirstScreenView()
 }

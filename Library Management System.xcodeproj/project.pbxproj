@@ -19,7 +19,9 @@
 		D55820F62BD61BCC005A00F9 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = D55820F52BD61BCC005A00F9 /* GoogleService-Info.plist */; };
 		D55820FA2BD61C5A005A00F9 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = D55820F92BD61C5A005A00F9 /* FirebaseAuth */; };
 		D55820FC2BD61C6F005A00F9 /* FirebaseDatabase in Frameworks */ = {isa = PBXBuildFile; productRef = D55820FB2BD61C6F005A00F9 /* FirebaseDatabase */; };
-		D55820FE2BD635A1005A00F9 /* FirstScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D55820FD2BD635A1005A00F9 /* FirstScreenView.swift */; };
+		D55820FE2BD635A1005A00F9 /* AdminFirstScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D55820FD2BD635A1005A00F9 /* AdminFirstScreenView.swift */; };
+		D55821062BD63AF4005A00F9 /* LibrarianFirstScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D55821052BD63AF4005A00F9 /* LibrarianFirstScreenView.swift */; };
+		D55821082BD63AFC005A00F9 /* MemberFirstScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D55821072BD63AFC005A00F9 /* MemberFirstScreenView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,7 +55,9 @@
 		D55820F12BD61ADE005A00F9 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		D55820F32BD61AF2005A00F9 /* SignupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignupView.swift; sourceTree = "<group>"; };
 		D55820F52BD61BCC005A00F9 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
-		D55820FD2BD635A1005A00F9 /* FirstScreenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstScreenView.swift; sourceTree = "<group>"; };
+		D55820FD2BD635A1005A00F9 /* AdminFirstScreenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdminFirstScreenView.swift; sourceTree = "<group>"; };
+		D55821052BD63AF4005A00F9 /* LibrarianFirstScreenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibrarianFirstScreenView.swift; sourceTree = "<group>"; };
+		D55821072BD63AFC005A00F9 /* MemberFirstScreenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemberFirstScreenView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -165,7 +169,6 @@
 			isa = PBXGroup;
 			children = (
 				D55821022BD63950005A00F9 /* Views */,
-				D55820FD2BD635A1005A00F9 /* FirstScreenView.swift */,
 			);
 			path = Admin;
 			sourceTree = "<group>";
@@ -189,6 +192,7 @@
 		D55821022BD63950005A00F9 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				D55820FD2BD635A1005A00F9 /* AdminFirstScreenView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -196,6 +200,7 @@
 		D55821032BD63957005A00F9 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				D55821052BD63AF4005A00F9 /* LibrarianFirstScreenView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -203,6 +208,7 @@
 		D55821042BD63A66005A00F9 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				D55821072BD63AFC005A00F9 /* MemberFirstScreenView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -345,10 +351,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D55821082BD63AFC005A00F9 /* MemberFirstScreenView.swift in Sources */,
 				D55820F42BD61AF2005A00F9 /* SignupView.swift in Sources */,
 				D55820F22BD61ADE005A00F9 /* LoginView.swift in Sources */,
 				D55820C92BD61AB0005A00F9 /* ContentView.swift in Sources */,
-				D55820FE2BD635A1005A00F9 /* FirstScreenView.swift in Sources */,
+				D55821062BD63AF4005A00F9 /* LibrarianFirstScreenView.swift in Sources */,
+				D55820FE2BD635A1005A00F9 /* AdminFirstScreenView.swift in Sources */,
 				D55820C72BD61AB0005A00F9 /* Library_Management_SystemApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
