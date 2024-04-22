@@ -10,9 +10,11 @@ import Firebase
 
 @main
 struct Library_Management_SystemApp: App {
+    @StateObject var themeManager = ThemeManager()
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .environmentObject(themeManager)
         }
     }
     init(){
