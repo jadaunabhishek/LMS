@@ -19,6 +19,7 @@
 		D55820F62BD61BCC005A00F9 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = D55820F52BD61BCC005A00F9 /* GoogleService-Info.plist */; };
 		D55820FA2BD61C5A005A00F9 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = D55820F92BD61C5A005A00F9 /* FirebaseAuth */; };
 		D55820FC2BD61C6F005A00F9 /* FirebaseDatabase in Frameworks */ = {isa = PBXBuildFile; productRef = D55820FB2BD61C6F005A00F9 /* FirebaseDatabase */; };
+		D55820FE2BD635A1005A00F9 /* FirstScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D55820FD2BD635A1005A00F9 /* FirstScreenView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -52,6 +53,7 @@
 		D55820F12BD61ADE005A00F9 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		D55820F32BD61AF2005A00F9 /* SignupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignupView.swift; sourceTree = "<group>"; };
 		D55820F52BD61BCC005A00F9 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		D55820FD2BD635A1005A00F9 /* FirstScreenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstScreenView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -143,6 +145,9 @@
 		D55820F02BD61ACE005A00F9 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				D55821012BD637CB005A00F9 /* Member */,
+				D55821002BD637C4005A00F9 /* Librarian */,
+				D55820FF2BD637BD005A00F9 /* Admin */,
 				D55820F12BD61ADE005A00F9 /* LoginView.swift */,
 				D55820F32BD61AF2005A00F9 /* SignupView.swift */,
 			);
@@ -154,6 +159,52 @@
 			children = (
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		D55820FF2BD637BD005A00F9 /* Admin */ = {
+			isa = PBXGroup;
+			children = (
+				D55821022BD63950005A00F9 /* Views */,
+				D55820FD2BD635A1005A00F9 /* FirstScreenView.swift */,
+			);
+			path = Admin;
+			sourceTree = "<group>";
+		};
+		D55821002BD637C4005A00F9 /* Librarian */ = {
+			isa = PBXGroup;
+			children = (
+				D55821032BD63957005A00F9 /* Views */,
+			);
+			path = Librarian;
+			sourceTree = "<group>";
+		};
+		D55821012BD637CB005A00F9 /* Member */ = {
+			isa = PBXGroup;
+			children = (
+				D55821042BD63A66005A00F9 /* Views */,
+			);
+			path = Member;
+			sourceTree = "<group>";
+		};
+		D55821022BD63950005A00F9 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		D55821032BD63957005A00F9 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		D55821042BD63A66005A00F9 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -297,6 +348,7 @@
 				D55820F42BD61AF2005A00F9 /* SignupView.swift in Sources */,
 				D55820F22BD61ADE005A00F9 /* LoginView.swift in Sources */,
 				D55820C92BD61AB0005A00F9 /* ContentView.swift in Sources */,
+				D55820FE2BD635A1005A00F9 /* FirstScreenView.swift in Sources */,
 				D55820C72BD61AB0005A00F9 /* Library_Management_SystemApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
