@@ -10,6 +10,7 @@ import SwiftUI
 
 class ThemeManager: ObservableObject {
     @Published var selectedTheme: ThemeProtocol = Red()
+    let themes: [ThemeProtocol] = [Red(), Blue(), Green()]
     
     func setTheme(_ theme: ThemeProtocol) {
         selectedTheme = theme
@@ -18,19 +19,19 @@ class ThemeManager: ObservableObject {
 
 struct Red: ThemeProtocol {
     var primaryThemeColor: Color { return Color("rdPrimaryThemeColor") }
-    var secondoryThemeColor: Color { return Color("rdSecondoryThemeColor") }
+    var secondaryThemeColor: Color { return Color("rdSecondaryThemeColor") }
     var bodyTextColor: Color { return Color("rdBodyTextColor") }
 }
 
 struct Blue: ThemeProtocol {
     var primaryThemeColor: Color { return Color("blPrimaryThemeColor") }
-    var secondoryThemeColor: Color { return Color("blSecondoryThemeColor") }
+    var secondaryThemeColor: Color { return Color("blSecondaryThemeColor") }
     var bodyTextColor: Color { return Color("blBodyTextColor") }
 }
 
 struct Green: ThemeProtocol {
     var primaryThemeColor: Color { return Color("grPrimaryThemeColor") }
-    var secondoryThemeColor: Color { return Color("grSecondoryThemeColor") }
+    var secondaryThemeColor: Color { return Color("grSecondaryThemeColor") }
     var bodyTextColor: Color { return Color("grBodyTextColor") }
 }
 
