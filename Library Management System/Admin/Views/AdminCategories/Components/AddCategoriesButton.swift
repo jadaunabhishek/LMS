@@ -1,18 +1,48 @@
 //
-//  AddCategoriesButton.swift
+//  AddCategories.swift
 //  Library Management System
 //
-//  Created by admin on 23/04/24.
+//  Created by user2 on 23/04/24.
 //
 
 import SwiftUI
 
-struct AddCategoriesButton: View {
+struct AddCategories: View {
+    
+    @State private var isSheetPresented = false
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        ZStack(alignment: .trailing) {
+            HStack {
+                Button{
+                    isSheetPresented.toggle()
+                }label:{
+                    Image(systemName: "plus")
+                        .padding()
+                        .background(.pink)
+                        .cornerRadius(10)
+                        .foregroundColor(.white)
+                }
+            }
+            .sheet(isPresented: $isSheetPresented ) {
+                
+                NavigationView {
+                    AddCategoriesView(isSheetPresented: $isSheetPresented)
+                        .background(.gray)
+                        .navigationBarItems(
+                            trailing:  Button(action:{isSheetPresented.toggle()}){
+                                Image(systemName: "xmark.circle.fill")
+                                    .foregroundColor(.gray)
+                            }
+                        )
+//                        .environment(\.colorScheme, .dark)
+                }
+                .presentationDetents([.medium, .large])
+            }
+        }
     }
 }
 
 #Preview {
-    AddCategoriesButton()
+    AddCategories()
 }
