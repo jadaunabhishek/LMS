@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct AdminCatalogView: View {
+struct AdminCategoriesView: View {
     
     let books: [Bok] = [
         Bok(id: 1, isbn: "978-0-553-57340-4", name: "The Great Adventure", author: "Emily Smith", description: "A thrilling adventure novel filled with mystery and excitement.", publishingDate: "2023-05-15", category: "Fiction", subcategory: "Action", status: "Available"),
@@ -62,7 +62,7 @@ struct AdminCatalogView: View {
                         ForEach(groupedBooks.keys.sorted(), id: \.self) { category in
                             NavigationLink(destination:AdminSubCategoriesView(groupedBooks: groupedBooks[category]!)) {
                                 VStack(alignment: .leading) {
-                                    Catalogsub(category: category)
+                                    AdminCategoriesCard(category: category)
                                         .foregroundStyle(.black)
                                 }
                                 .padding(.horizontal)
@@ -75,65 +75,17 @@ struct AdminCatalogView: View {
             }
             .ignoresSafeArea(.all)
         }
+        .overlay(
+            AddCategories()
+                .position(CGPoint(x: 350.0, y: 680.0))
+        )
     }
 }
 
 
 #Preview {
-    AdminCatalogView()
+    AdminCategoriesView()
 }
-
-
-
-
-struct Catalogsub: View {
-    @State var category: String
-    var body: some View {
-        
-        
-        ZStack(alignment:.leading){
-            
-            Rectangle()
-                .fill(gradient())
-                .frame(width: 150, height: 100)
-                .cornerRadius(12)
-                .padding(6)
-            Text(category)
-                .font(.title3)
-                .padding(.bottom, 8)
-                .offset(x:16,y:30)
-                .bold()
-            
-        }
-    }
-    
-    
-    
-    
-    func gradient() -> LinearGradient {
-        let colors: [Color] = [randomColor(), randomColor()]
-        return LinearGradient(gradient: Gradient(colors: colors), startPoint: .leading, endPoint: .trailing)
-    }
-    
-    //    func randomColor() -> Color {
-    //        let red = Double.random(in: 0.7...1)
-    //        let green = Double.random(in: 0.7...1)
-    //        let blue = Double.random(in: 0.7...1)
-    //        return Color(red: red, green: green, blue: blue)
-    //    }
-    
-    func randomColor() -> Color {
-        let red = Double.random(in: 0.5...1)
-        let green = Double.random(in: 0.5...1)
-        let blue = Double.random(in: 0.5...1)
-        return Color(red: red, green: green, blue: blue)
-    }
-}
-
-#Preview {
-    Catalogsub(category: "Cool-Day")
-}
-
 
 
 struct Bok: Identifiable {
