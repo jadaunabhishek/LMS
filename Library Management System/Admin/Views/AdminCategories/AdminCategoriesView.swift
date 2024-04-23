@@ -7,8 +7,7 @@
 
 import SwiftUI
 
-struct AdminCategoriesView: View {
-    
+struct AdminCatalogView: View {
     let books: [Bok] = [
         Bok(id: 1, isbn: "978-0-553-57340-4", name: "The Great Adventure", author: "Emily Smith", description: "A thrilling adventure novel filled with mystery and excitement.", publishingDate: "2023-05-15", category: "Fiction", subcategory: "Action", status: "Available"),
         Bok(id: 2, isbn: "978-0-439-02348-6", name: "Secrets of the Lost City", author: "John Johnson", description: "An archaeological thriller uncovering the secrets of an ancient civilization.", publishingDate: "2022-09-20", category: "Fiction", subcategory: "Mystery", status: "Available"),
@@ -57,12 +56,38 @@ struct AdminCategoriesView: View {
                 Spacer()
                             let groupedBooks = Dictionary(grouping: books, by: { $0.category })
                             
+                            // Display books for each category
+    //                        ScrollView {
+    //                            ForEach(groupedBooks.keys.sorted(), id: \.self) { category in
+    //                                VStack(alignment: .leading) {
+    //                                    Text(category)
+    //                                        .font(.headline)
+    //                                        .padding(.top, 10)
+    //                                        .padding(.bottom, 5)
+    //
+    ////                                    ForEach(groupedBooks[category]!) { book in
+    ////                                        Text(book.name)
+    ////                                            .font(.subheadline)
+    ////                                            .padding(.bottom, 2)
+    ////                                    }
+    //                                }
+    //                                .padding(.horizontal)
+    //                            }
+    //                        }
                 ScrollView{
                     LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 20) {
                         ForEach(groupedBooks.keys.sorted(), id: \.self) { category in
+    //                        VStack(alignment: .leading) {
+    //                            Catalogsub(category:category)
+    ////                            Text(category)
+    ////                                .foregroundStyle(.black)
+    ////                                .font(.headline)
+    ////                                .padding(.top, 10)
+    ////                                .padding(.bottom, 5)
+    //                        }
                             NavigationLink(destination:AdminSubCategoriesView(groupedBooks: groupedBooks[category]!)) {
                                 VStack(alignment: .leading) {
-                                    AdminCategoriesCard(category: category)
+                                    Catalogsub(category: category)
                                         .foregroundStyle(.black)
                                 }
                                 .padding(.horizontal)
@@ -75,17 +100,78 @@ struct AdminCategoriesView: View {
             }
             .ignoresSafeArea(.all)
         }
-        .overlay(
-            AddCategories()
-                .position(CGPoint(x: 350.0, y: 680.0))
-        )
+        
+//        NavigationView {
+//            List(books) { book in
+//                VStack(alignment: .leading) {
+//                    Text(book.name)
+//                        .font(.headline)
+//                    Text("Category: \(book.category)")
+//                        .font(.subheadline)
+//                    Text("Subcategory: \(book.subcategory)")
+//                }
+//            }
+//            .navigationTitle("Book List")
+//        }
     }
 }
 
 
 #Preview {
-    AdminCategoriesView()
+    AdminCatalogView()
 }
+
+
+
+
+struct Catalogsub: View {
+    @State var category: String
+    var body: some View {
+        
+        
+        ZStack(alignment:.leading){
+            
+            Rectangle()
+                .fill(gradient())
+                .frame(width: 150, height: 100)
+                .cornerRadius(12)
+                .padding(6)
+            Text(category)
+                .font(.title3)
+                .padding(.bottom, 8)
+                .offset(x:16,y:30)
+                .bold()
+            
+        }
+    }
+    
+    
+    
+    
+    func gradient() -> LinearGradient {
+        let colors: [Color] = [randomColor(), randomColor()]
+        return LinearGradient(gradient: Gradient(colors: colors), startPoint: .leading, endPoint: .trailing)
+    }
+    
+    //    func randomColor() -> Color {
+    //        let red = Double.random(in: 0.7...1)
+    //        let green = Double.random(in: 0.7...1)
+    //        let blue = Double.random(in: 0.7...1)
+    //        return Color(red: red, green: green, blue: blue)
+    //    }
+    
+    func randomColor() -> Color {
+        let red = Double.random(in: 0.5...1)
+        let green = Double.random(in: 0.5...1)
+        let blue = Double.random(in: 0.5...1)
+        return Color(red: red, green: green, blue: blue)
+    }
+}
+
+#Preview {
+    Catalogsub(category: "Cool-Day")
+}
+
 
 
 struct Bok: Identifiable {
@@ -96,6 +182,6 @@ struct Bok: Identifiable {
     let description: String
     let publishingDate: String
     let category: String
-    var subcategory: String
+    let subcategory: String
     let status: String
 }
