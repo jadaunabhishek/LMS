@@ -13,6 +13,10 @@
 		0FD7C28D2BD7B12C001937B5 /* CardListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FD7C28C2BD7B12C001937B5 /* CardListView.swift */; };
 		0FD7C28F2BD7B217001937B5 /* AddCategoriesButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FD7C28E2BD7B217001937B5 /* AddCategoriesButton.swift */; };
 		0FD7C2912BD7B2A4001937B5 /* AddCategoriesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FD7C2902BD7B2A4001937B5 /* AddCategoriesView.swift */; };
+		1F7C0E4D2BD7A920007D5221 /* StaffSchema.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F7C0E4C2BD7A920007D5221 /* StaffSchema.swift */; };
+		1F7C0E502BD7B142007D5221 /* StaffViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F7C0E4F2BD7B142007D5221 /* StaffViewModel.swift */; };
+		1F7C0E522BD7B3B2007D5221 /* AddStaffView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F7C0E512BD7B3B2007D5221 /* AddStaffView.swift */; };
+		1F7C0E542BD7B62A007D5221 /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F7C0E532BD7B62A007D5221 /* ImagePicker.swift */; };
 		1F84616D2BD6563E008B7B3E /* ThemeProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F84616C2BD6563E008B7B3E /* ThemeProtocol.swift */; };
 		1F84616F2BD65679008B7B3E /* ThemeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F84616E2BD65679008B7B3E /* ThemeManager.swift */; };
 		1F8461712BD6583B008B7B3E /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1F8461702BD6583B008B7B3E /* Colors.xcassets */; };
@@ -89,6 +93,10 @@
 		0FD7C28C2BD7B12C001937B5 /* CardListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardListView.swift; sourceTree = "<group>"; };
 		0FD7C28E2BD7B217001937B5 /* AddCategoriesButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCategoriesButton.swift; sourceTree = "<group>"; };
 		0FD7C2902BD7B2A4001937B5 /* AddCategoriesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCategoriesView.swift; sourceTree = "<group>"; };
+		1F7C0E4C2BD7A920007D5221 /* StaffSchema.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaffSchema.swift; sourceTree = "<group>"; };
+		1F7C0E4F2BD7B142007D5221 /* StaffViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaffViewModel.swift; sourceTree = "<group>"; };
+		1F7C0E512BD7B3B2007D5221 /* AddStaffView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddStaffView.swift; sourceTree = "<group>"; };
+		1F7C0E532BD7B62A007D5221 /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
 		1F84616C2BD6563E008B7B3E /* ThemeProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeProtocol.swift; sourceTree = "<group>"; };
 		1F84616E2BD65679008B7B3E /* ThemeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeManager.swift; sourceTree = "<group>"; };
 		1F8461702BD6583B008B7B3E /* Colors.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Colors.xcassets; sourceTree = "<group>"; };
@@ -189,6 +197,20 @@
 				841B6DA42BD7BB4000ECF891 /* CardListDetailView.swift */,
 			);
 			path = Components;
+		1F7C0E4B2BD7A8EB007D5221 /* Schemas */ = {
+			isa = PBXGroup;
+			children = (
+				1F7C0E4C2BD7A920007D5221 /* StaffSchema.swift */,
+			);
+			path = Schemas;
+			sourceTree = "<group>";
+		};
+		1F7C0E4E2BD7B124007D5221 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				1F7C0E4F2BD7B142007D5221 /* StaffViewModel.swift */,
+			);
+			path = ViewModels;
 			sourceTree = "<group>";
 		};
 		1F84616B2BD6561C008B7B3E /* Colors */ = {
@@ -235,6 +257,7 @@
 				1F8461702BD6583B008B7B3E /* Colors.xcassets */,
 				1F84616B2BD6561C008B7B3E /* Colors */,
 				D55820CC2BD61AB2005A00F9 /* Preview Content */,
+				1F7C0E532BD7B62A007D5221 /* ImagePicker.swift */,
 			);
 			path = "Library Management System";
 			sourceTree = "<group>";
@@ -283,6 +306,8 @@
 		D55820FF2BD637BD005A00F9 /* Admin */ = {
 			isa = PBXGroup;
 			children = (
+				1F7C0E4E2BD7B124007D5221 /* ViewModels */,
+				1F7C0E4B2BD7A8EB007D5221 /* Schemas */,
 				D55821022BD63950005A00F9 /* Views */,
 			);
 			path = Admin;
@@ -313,6 +338,7 @@
 				DC1D402F2BD77E4B00970C7B /* AdminHomeView.swift */,
 				DC1D40312BD77E8000970C7B /* AdminStaffView.swift */,
 				DC1D40332BD77E9600970C7B /* AdminTabView.swift */,
+				1F7C0E512BD7B3B2007D5221 /* AddStaffView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -520,7 +546,10 @@
 				D55821082BD63AFC005A00F9 /* MemberFirstScreenView.swift in Sources */,
 				D55820F42BD61AF2005A00F9 /* SignupView.swift in Sources */,
 				0FD7C28D2BD7B12C001937B5 /* CardListView.swift in Sources */,
+				1F7C0E542BD7B62A007D5221 /* ImagePicker.swift in Sources */,
+				1F7C0E502BD7B142007D5221 /* StaffViewModel.swift in Sources */,
 				DC1D402C2BD6EB4A00970C7B /* BookSchema.swift in Sources */,
+				1F7C0E522BD7B3B2007D5221 /* AddStaffView.swift in Sources */,
 				D55820F22BD61ADE005A00F9 /* LoginView.swift in Sources */,
 				DC48E7222BD6E78000794A7C /* LibrarianViewModel.swift in Sources */,
 				DC1D402E2BD76BF000970C7B /* AddBookPage.swift in Sources */,
@@ -529,6 +558,7 @@
 				DC1D40302BD77E4B00970C7B /* AdminHomeView.swift in Sources */,
 				D55820C92BD61AB0005A00F9 /* ContentView.swift in Sources */,
 				841B6DA52BD7BB4000ECF891 /* CardListDetailView.swift in Sources */,
+				1F7C0E4D2BD7A920007D5221 /* StaffSchema.swift in Sources */,
 				1F84616F2BD65679008B7B3E /* ThemeManager.swift in Sources */,
 				DC1D40322BD77E8000970C7B /* AdminStaffView.swift in Sources */,
 				0FD7C2912BD7B2A4001937B5 /* AddCategoriesView.swift in Sources */,
