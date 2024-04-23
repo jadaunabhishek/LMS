@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct AdminCatalogView: View {
+    
     let books: [Bok] = [
         Bok(id: 1, isbn: "978-0-553-57340-4", name: "The Great Adventure", author: "Emily Smith", description: "A thrilling adventure novel filled with mystery and excitement.", publishingDate: "2023-05-15", category: "Fiction", subcategory: "Action", status: "Available"),
         Bok(id: 2, isbn: "978-0-439-02348-6", name: "Secrets of the Lost City", author: "John Johnson", description: "An archaeological thriller uncovering the secrets of an ancient civilization.", publishingDate: "2022-09-20", category: "Fiction", subcategory: "Mystery", status: "Available"),
@@ -56,35 +57,9 @@ struct AdminCatalogView: View {
                 Spacer()
                             let groupedBooks = Dictionary(grouping: books, by: { $0.category })
                             
-                            // Display books for each category
-    //                        ScrollView {
-    //                            ForEach(groupedBooks.keys.sorted(), id: \.self) { category in
-    //                                VStack(alignment: .leading) {
-    //                                    Text(category)
-    //                                        .font(.headline)
-    //                                        .padding(.top, 10)
-    //                                        .padding(.bottom, 5)
-    //
-    ////                                    ForEach(groupedBooks[category]!) { book in
-    ////                                        Text(book.name)
-    ////                                            .font(.subheadline)
-    ////                                            .padding(.bottom, 2)
-    ////                                    }
-    //                                }
-    //                                .padding(.horizontal)
-    //                            }
-    //                        }
                 ScrollView{
                     LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 20) {
                         ForEach(groupedBooks.keys.sorted(), id: \.self) { category in
-    //                        VStack(alignment: .leading) {
-    //                            Catalogsub(category:category)
-    ////                            Text(category)
-    ////                                .foregroundStyle(.black)
-    ////                                .font(.headline)
-    ////                                .padding(.top, 10)
-    ////                                .padding(.bottom, 5)
-    //                        }
                             NavigationLink(destination:AdminSubCategoriesView(groupedBooks: groupedBooks[category]!)) {
                                 VStack(alignment: .leading) {
                                     Catalogsub(category: category)
@@ -100,19 +75,6 @@ struct AdminCatalogView: View {
             }
             .ignoresSafeArea(.all)
         }
-        
-//        NavigationView {
-//            List(books) { book in
-//                VStack(alignment: .leading) {
-//                    Text(book.name)
-//                        .font(.headline)
-//                    Text("Category: \(book.category)")
-//                        .font(.subheadline)
-//                    Text("Subcategory: \(book.subcategory)")
-//                }
-//            }
-//            .navigationTitle("Book List")
-//        }
     }
 }
 
