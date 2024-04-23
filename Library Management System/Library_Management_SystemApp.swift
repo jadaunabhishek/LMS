@@ -11,7 +11,6 @@ import Firebase
 @main
 struct Library_Management_SystemApp: App {
     @StateObject var themeManager = ThemeManager()
-    @StateObject var LibViewModel = LibrarianViewModel()
     var body: some Scene {
         WindowGroup {
             ContentView()

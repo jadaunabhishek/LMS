@@ -122,4 +122,9 @@ class LibrarianViewModel: ObservableObject{
         }
     }
     
+//    func filterBook(){
+//        
+//        let allBooks = self.dbInstance.collection("Books")
+//    }
+    
 }
