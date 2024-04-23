@@ -14,13 +14,14 @@ struct AdminSubCategoriesView: View {
         let subGroupedBooks = Dictionary(grouping: groupedBooks, by: { $0.subcategory })
         
         NavigationStack {
-            VStack {
+            VStack(spacing: 10) {
                 ScrollView{
                     ForEach(subGroupedBooks.sorted(by: { $0.key < $1.key }), id: \.key) { subcategory, books in
                         VStack(alignment: .leading) {
                             HStack{
                                 Text(subcategory)
-                                    .font(.subheadline)
+                                    .font(.title2)
+                                    .fontWeight(.bold)
                                     .padding(.bottom, 2)
                                 Spacer()
                                     // MARK: function call for the button
@@ -34,6 +35,7 @@ struct AdminSubCategoriesView: View {
                     }
                 }
             }
+            .padding()
         }
     }
 }
@@ -62,9 +64,9 @@ struct CardView: View {
                     ZStack(alignment: .leading) {
                                 Rectangle()
                                     .fill(Color.red)
-                                    .frame(width: 100, height: 100)
+                                    .frame(width: 100, height: 150)
                                     .cornerRadius(12)
-                                    .padding(6)
+                                    .padding(.vertical,6)
                                 Text(books[index].name)
                                     .font(.caption)
                                     .multilineTextAlignment(.center)
