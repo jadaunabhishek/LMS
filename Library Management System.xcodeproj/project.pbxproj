@@ -7,8 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0FD7C2852BD7A200001937B5 /* AdminCategoriesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FD7C2842BD7A200001937B5 /* AdminCategoriesView.swift */; };
-		0FD7C2882BD7A35B001937B5 /* AdminSubCategoriesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FD7C2872BD7A35B001937B5 /* AdminSubCategoriesView.swift */; };
 		1F7C0E4D2BD7A920007D5221 /* StaffSchema.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F7C0E4C2BD7A920007D5221 /* StaffSchema.swift */; };
 		1F7C0E502BD7B142007D5221 /* StaffViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F7C0E4F2BD7B142007D5221 /* StaffViewModel.swift */; };
 		1F7C0E522BD7B3B2007D5221 /* AddStaffView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F7C0E512BD7B3B2007D5221 /* AddStaffView.swift */; };
@@ -17,6 +15,13 @@
 		1F84616F2BD65679008B7B3E /* ThemeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F84616E2BD65679008B7B3E /* ThemeManager.swift */; };
 		1F8461712BD6583B008B7B3E /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1F8461702BD6583B008B7B3E /* Colors.xcassets */; };
 		848B46722BD78DF900143E7A /* NotificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 848B46712BD78DF900143E7A /* NotificationView.swift */; };
+		84E87D452BD7D08200FAD5DC /* AddCategoriesButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84E87D3C2BD7D08200FAD5DC /* AddCategoriesButton.swift */; };
+		84E87D462BD7D08200FAD5DC /* AddCategoriesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84E87D3D2BD7D08200FAD5DC /* AddCategoriesView.swift */; };
+		84E87D472BD7D08200FAD5DC /* AdminCategoriesCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84E87D3E2BD7D08200FAD5DC /* AdminCategoriesCard.swift */; };
+		84E87D482BD7D08200FAD5DC /* CardListDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84E87D3F2BD7D08200FAD5DC /* CardListDetailView.swift */; };
+		84E87D492BD7D08200FAD5DC /* CardListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84E87D402BD7D08200FAD5DC /* CardListView.swift */; };
+		84E87D4A2BD7D08200FAD5DC /* AdminCategoriesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84E87D422BD7D08200FAD5DC /* AdminCategoriesView.swift */; };
+		84E87D4B2BD7D08200FAD5DC /* AdminSubCategoriesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84E87D432BD7D08200FAD5DC /* AdminSubCategoriesView.swift */; };
 		D55820C72BD61AB0005A00F9 /* Library_Management_SystemApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D55820C62BD61AB0005A00F9 /* Library_Management_SystemApp.swift */; };
 		D55820C92BD61AB0005A00F9 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D55820C82BD61AB0005A00F9 /* ContentView.swift */; };
 		D55820CB2BD61AB2005A00F9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D55820CA2BD61AB2005A00F9 /* Assets.xcassets */; };
@@ -82,8 +87,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		0FD7C2842BD7A200001937B5 /* AdminCategoriesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdminCategoriesView.swift; sourceTree = "<group>"; };
-		0FD7C2872BD7A35B001937B5 /* AdminSubCategoriesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdminSubCategoriesView.swift; sourceTree = "<group>"; };
 		1F7C0E4C2BD7A920007D5221 /* StaffSchema.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaffSchema.swift; sourceTree = "<group>"; };
 		1F7C0E4F2BD7B142007D5221 /* StaffViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaffViewModel.swift; sourceTree = "<group>"; };
 		1F7C0E512BD7B3B2007D5221 /* AddStaffView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddStaffView.swift; sourceTree = "<group>"; };
@@ -92,6 +95,13 @@
 		1F84616E2BD65679008B7B3E /* ThemeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeManager.swift; sourceTree = "<group>"; };
 		1F8461702BD6583B008B7B3E /* Colors.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Colors.xcassets; sourceTree = "<group>"; };
 		848B46712BD78DF900143E7A /* NotificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationView.swift; sourceTree = "<group>"; };
+		84E87D3C2BD7D08200FAD5DC /* AddCategoriesButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddCategoriesButton.swift; sourceTree = "<group>"; };
+		84E87D3D2BD7D08200FAD5DC /* AddCategoriesView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddCategoriesView.swift; sourceTree = "<group>"; };
+		84E87D3E2BD7D08200FAD5DC /* AdminCategoriesCard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AdminCategoriesCard.swift; sourceTree = "<group>"; };
+		84E87D3F2BD7D08200FAD5DC /* CardListDetailView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CardListDetailView.swift; sourceTree = "<group>"; };
+		84E87D402BD7D08200FAD5DC /* CardListView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CardListView.swift; sourceTree = "<group>"; };
+		84E87D422BD7D08200FAD5DC /* AdminCategoriesView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AdminCategoriesView.swift; sourceTree = "<group>"; };
+		84E87D432BD7D08200FAD5DC /* AdminSubCategoriesView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AdminSubCategoriesView.swift; sourceTree = "<group>"; };
 		D55820C32BD61AB0005A00F9 /* Library Management System.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Library Management System.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D55820C62BD61AB0005A00F9 /* Library_Management_SystemApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Library_Management_SystemApp.swift; sourceTree = "<group>"; };
 		D55820C82BD61AB0005A00F9 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -167,15 +177,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		0FD7C2862BD7A234001937B5 /* AdminCategories */ = {
-			isa = PBXGroup;
-			children = (
-				0FD7C2842BD7A200001937B5 /* AdminCategoriesView.swift */,
-				0FD7C2872BD7A35B001937B5 /* AdminSubCategoriesView.swift */,
-			);
-			path = AdminCategories;
-			sourceTree = "<group>";
-		};
 		1F7C0E4B2BD7A8EB007D5221 /* Schemas */ = {
 			isa = PBXGroup;
 			children = (
@@ -199,6 +200,29 @@
 				1F84616E2BD65679008B7B3E /* ThemeManager.swift */,
 			);
 			path = Colors;
+			sourceTree = "<group>";
+		};
+		84E87D412BD7D08200FAD5DC /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				84E87D3C2BD7D08200FAD5DC /* AddCategoriesButton.swift */,
+				84E87D3D2BD7D08200FAD5DC /* AddCategoriesView.swift */,
+				84E87D3E2BD7D08200FAD5DC /* AdminCategoriesCard.swift */,
+				84E87D3F2BD7D08200FAD5DC /* CardListDetailView.swift */,
+				84E87D402BD7D08200FAD5DC /* CardListView.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		84E87D442BD7D08200FAD5DC /* AdminCategories */ = {
+			isa = PBXGroup;
+			children = (
+				84E87D412BD7D08200FAD5DC /* Components */,
+				84E87D422BD7D08200FAD5DC /* AdminCategoriesView.swift */,
+				84E87D432BD7D08200FAD5DC /* AdminSubCategoriesView.swift */,
+			);
+			name = AdminCategories;
+			path = "../../../../../Downloads/LibraryManagementSystem-VishalTyagi/Library Management System/Admin/Views/AdminCategories";
 			sourceTree = "<group>";
 		};
 		D55820BA2BD61AB0005A00F9 = {
@@ -313,7 +337,7 @@
 		D55821022BD63950005A00F9 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				0FD7C2862BD7A234001937B5 /* AdminCategories */,
+				84E87D442BD7D08200FAD5DC /* AdminCategories */,
 				DC1D402F2BD77E4B00970C7B /* AdminHomeView.swift */,
 				DC1D40312BD77E8000970C7B /* AdminStaffView.swift */,
 				DC1D40332BD77E9600970C7B /* AdminTabView.swift */,
@@ -520,26 +544,31 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0FD7C2852BD7A200001937B5 /* AdminCategoriesView.swift in Sources */,
 				D55821082BD63AFC005A00F9 /* MemberFirstScreenView.swift in Sources */,
+				84E87D472BD7D08200FAD5DC /* AdminCategoriesCard.swift in Sources */,
 				D55820F42BD61AF2005A00F9 /* SignupView.swift in Sources */,
 				1F7C0E542BD7B62A007D5221 /* ImagePicker.swift in Sources */,
 				1F7C0E502BD7B142007D5221 /* StaffViewModel.swift in Sources */,
+				84E87D4B2BD7D08200FAD5DC /* AdminSubCategoriesView.swift in Sources */,
 				DC1D402C2BD6EB4A00970C7B /* BookSchema.swift in Sources */,
 				1F7C0E522BD7B3B2007D5221 /* AddStaffView.swift in Sources */,
 				D55820F22BD61ADE005A00F9 /* LoginView.swift in Sources */,
 				DC48E7222BD6E78000794A7C /* LibrarianViewModel.swift in Sources */,
 				DC1D402E2BD76BF000970C7B /* AddBookPage.swift in Sources */,
+				84E87D482BD7D08200FAD5DC /* CardListDetailView.swift in Sources */,
 				DC1D40342BD77E9600970C7B /* AdminTabView.swift in Sources */,
 				1F84616D2BD6563E008B7B3E /* ThemeProtocol.swift in Sources */,
 				DC1D40302BD77E4B00970C7B /* AdminHomeView.swift in Sources */,
 				D55820C92BD61AB0005A00F9 /* ContentView.swift in Sources */,
 				1F7C0E4D2BD7A920007D5221 /* StaffSchema.swift in Sources */,
 				1F84616F2BD65679008B7B3E /* ThemeManager.swift in Sources */,
+				84E87D4A2BD7D08200FAD5DC /* AdminCategoriesView.swift in Sources */,
+				84E87D462BD7D08200FAD5DC /* AddCategoriesView.swift in Sources */,
+				84E87D452BD7D08200FAD5DC /* AddCategoriesButton.swift in Sources */,
 				DC1D40322BD77E8000970C7B /* AdminStaffView.swift in Sources */,
 				D55821062BD63AF4005A00F9 /* LibrarianFirstScreenView.swift in Sources */,
 				D55820C72BD61AB0005A00F9 /* Library_Management_SystemApp.swift in Sources */,
-				0FD7C2882BD7A35B001937B5 /* AdminSubCategoriesView.swift in Sources */,
+				84E87D492BD7D08200FAD5DC /* CardListView.swift in Sources */,
 				848B46722BD78DF900143E7A /* NotificationView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
