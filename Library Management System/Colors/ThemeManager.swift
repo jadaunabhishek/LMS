@@ -12,6 +12,10 @@ class ThemeManager: ObservableObject {
     @Published var selectedTheme: ThemeProtocol = Red()
     let themes: [ThemeProtocol] = [Red(), Blue(), Green()]
     
+    init() {
+            self.selectedTheme = Red()
+        }
+    
     func setTheme(_ theme: ThemeProtocol) {
         selectedTheme = theme
     }
