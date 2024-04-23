@@ -16,6 +16,7 @@
 		1F84616D2BD6563E008B7B3E /* ThemeProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F84616C2BD6563E008B7B3E /* ThemeProtocol.swift */; };
 		1F84616F2BD65679008B7B3E /* ThemeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F84616E2BD65679008B7B3E /* ThemeManager.swift */; };
 		1F8461712BD6583B008B7B3E /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1F8461702BD6583B008B7B3E /* Colors.xcassets */; };
+		841B6DA52BD7BB4000ECF891 /* CardListDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 841B6DA42BD7BB4000ECF891 /* CardListDetailView.swift */; };
 		848B46722BD78DF900143E7A /* NotificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 848B46712BD78DF900143E7A /* NotificationView.swift */; };
 		D55820C72BD61AB0005A00F9 /* Library_Management_SystemApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D55820C62BD61AB0005A00F9 /* Library_Management_SystemApp.swift */; };
 		D55820C92BD61AB0005A00F9 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D55820C82BD61AB0005A00F9 /* ContentView.swift */; };
@@ -91,6 +92,7 @@
 		1F84616C2BD6563E008B7B3E /* ThemeProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeProtocol.swift; sourceTree = "<group>"; };
 		1F84616E2BD65679008B7B3E /* ThemeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeManager.swift; sourceTree = "<group>"; };
 		1F8461702BD6583B008B7B3E /* Colors.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Colors.xcassets; sourceTree = "<group>"; };
+		841B6DA42BD7BB4000ECF891 /* CardListDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardListDetailView.swift; sourceTree = "<group>"; };
 		848B46712BD78DF900143E7A /* NotificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationView.swift; sourceTree = "<group>"; };
 		D55820C32BD61AB0005A00F9 /* Library Management System.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Library Management System.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D55820C62BD61AB0005A00F9 /* Library_Management_SystemApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Library_Management_SystemApp.swift; sourceTree = "<group>"; };
@@ -184,6 +186,7 @@
 				0FD7C28C2BD7B12C001937B5 /* CardListView.swift */,
 				0FD7C28E2BD7B217001937B5 /* AddCategoriesButton.swift */,
 				0FD7C2902BD7B2A4001937B5 /* AddCategoriesView.swift */,
+				841B6DA42BD7BB4000ECF891 /* CardListDetailView.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -525,6 +528,7 @@
 				1F84616D2BD6563E008B7B3E /* ThemeProtocol.swift in Sources */,
 				DC1D40302BD77E4B00970C7B /* AdminHomeView.swift in Sources */,
 				D55820C92BD61AB0005A00F9 /* ContentView.swift in Sources */,
+				841B6DA52BD7BB4000ECF891 /* CardListDetailView.swift in Sources */,
 				1F84616F2BD65679008B7B3E /* ThemeManager.swift in Sources */,
 				DC1D40322BD77E8000970C7B /* AdminStaffView.swift in Sources */,
 				0FD7C2912BD7B2A4001937B5 /* AddCategoriesView.swift in Sources */,

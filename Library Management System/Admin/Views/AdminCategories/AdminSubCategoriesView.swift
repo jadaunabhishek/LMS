@@ -57,7 +57,7 @@ struct AdminSubCategoriesView: View {
                                     
                                 }
                                 else{
-                                    NavigationLink(destination: cardlists(books: books)){
+                                    NavigationLink(destination: CardListDetailView(books: books)){
                                         Text("See All")
                                     }
                                 }
@@ -82,25 +82,6 @@ struct AdminSubCategoriesView: View {
     }
 }
 
-
-
-
-
-struct cardlists: View {
-    var books: [Bok]
-    var body: some View {
-        ForEach(books) { book in
-            ZStack{
-                Rectangle()
-                    .fill(.blue)
-                    .frame(maxWidth: .infinity).frame(height: /*@START_MENU_TOKEN@*/100/*@END_MENU_TOKEN@*/)
-                Text(book.name)
-                
-                
-            }
-        }
-    }
-}
 
 
 
