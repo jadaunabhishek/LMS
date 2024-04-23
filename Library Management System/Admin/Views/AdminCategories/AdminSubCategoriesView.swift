@@ -63,7 +63,7 @@ struct AdminSubCategoriesView: View {
                                 }
                                 
                             }
-                            CardView(books: books)
+                            CardListView(books: books)
                         }
                     }
                 }
