@@ -182,6 +182,6 @@ struct Bok: Identifiable {
     let description: String
     let publishingDate: String
     let category: String
-    let subcategory: String
+    var subcategory: String
     let status: String
 }
