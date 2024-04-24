@@ -19,7 +19,7 @@ struct NotificationItem: Identifiable {
     var name: String
     var message: String
     var type: NotificationType
-    var date: String
+    var email: String
     var detail: String? // Only for grievances
 }
 
@@ -59,12 +59,13 @@ class NotificationsViewModel: ObservableObject {
                 id: user.id,
                 name: user.name,
                 message: "Role: \(user.role)",
-                type: user.role == "grievance" ? .grievance : .membershipRequest, // Example condition
-                date: Date().formatted(date: .numeric, time: .shortened),
+                type: user.role == "grievance" ? .grievance : .membershipRequest,
+                email:user.email,
                 detail: user.role == "grievance" ? "Needs immediate attention" : nil
             )
         }
     }
+
 
     func approve(notification: NotificationItem) {
         let db = Firestore.firestore()
@@ -124,7 +125,7 @@ struct NotificationRow: View {
                 VStack(alignment: .leading, spacing: 4) {
                     Text(notification.name).font(.headline)
                     Text(notification.message).font(.subheadline)
-                    Text(notification.date).font(.footnote).foregroundColor(.gray)
+                    Text(notification.email).font(.footnote).foregroundColor(.gray)
                 }
                 
                 Spacer()
@@ -252,7 +253,7 @@ struct NotificationsView_Previews: PreviewProvider {
         // You can create a mock NotificationsViewModel with sample data for the preview
         let viewModel = NotificationsViewModel()
         viewModel.notifications = [
-            NotificationItem(id: "1" ,name: "John Doe", message: "Membership Request", type: .membershipRequest, date: "23:35")
+            NotificationItem(id: "1" ,name: "John Doe", message: "Membership Request", type: .membershipRequest, email:"john@gmail.com")
         ]
 
         return NotificationsView(viewModel: viewModel)
