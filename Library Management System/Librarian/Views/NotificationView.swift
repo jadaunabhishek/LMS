@@ -34,7 +34,8 @@ class NotificationsViewModel: ObservableObject {
     }
 
     func fetchData() {
-        db.collection("users").addSnapshotListener { [weak self] querySnapshot, error in
+        db.collection("users").whereField("role", isEqualTo: "user").whereField("status", isEqualTo: "registered")
+          .addSnapshotListener { [weak self] querySnapshot, error in
             guard let documents = querySnapshot?.documents else {
                 print("Error fetching documents: \(error?.localizedDescription ?? "Unknown error")")
                 return
@@ -43,13 +44,13 @@ class NotificationsViewModel: ObservableObject {
             self?.users = documents.map { doc -> User in
                 let data = doc.data()
                 let email = data["email"] as? String ?? ""
-                let role = data["role"] as? String ?? ""
                 let name = data["name"] as? String ?? ""
-                return User(id: doc.documentID, email: email, role: role, name: name)
+                return User(id: doc.documentID, email: email, role: "user", name: name)
             }
 
-            self?.createNotifications() // Transform user data into notifications
+            self?.createNotifications()
         }
+
     }
 
     private func createNotifications() {
@@ -66,17 +67,42 @@ class NotificationsViewModel: ObservableObject {
     }
 
     func approve(notification: NotificationItem) {
+        let db = Firestore.firestore()
+        let userDocRef = db.collection("users").document(notification.id)
         // Update logic if needed in Firestore or locally
-        if let index = notifications.firstIndex(where: { $0.id == notification.id }) {
-            notifications[index].message = "Approved"
-        }
+        userDocRef.updateData([
+                "role": "member",
+                "status" : "approved"
+            ]) { error in
+                if let error = error {
+                    print("Error updating user role: \(error.localizedDescription)")
+                } else {
+                    print("User role successfully updated to 'member'")
+                    // Optionally update local notifications array if needed
+                    if let index = self.notifications.firstIndex(where: { $0.id == notification.id }) {
+                        self.notifications[index].message = "Approved"
+                    }
+                }
+            }
     }
 
     func reject(notification: NotificationItem) {
+        let db = Firestore.firestore()
+        let userDocRef = db.collection("users").document(notification.id)
         // Update logic if needed in Firestore or locally
-        if let index = notifications.firstIndex(where: { $0.id == notification.id }) {
-            notifications[index].message = "Rejected"
-        }
+        userDocRef.updateData([
+            "status" : "rejected"
+            ]) { error in
+                if let error = error {
+                    print("Error updating user role: \(error.localizedDescription)")
+                } else {
+                    print("User role successfully updated to 'member'")
+                    // Optionally update local notifications array if needed
+                    if let index = self.notifications.firstIndex(where: { $0.id == notification.id }) {
+                        self.notifications[index].message = "Approved"
+                    }
+                }
+            }
     }
 }
 
@@ -220,42 +246,6 @@ struct NotificationsView: View {
         }
     }
 }
-
-//struct NotificationsView: View {
-//    @StateObject var viewModel = NotificationsViewModel()
-//
-//    var body: some View {
-//        NavigationView {
-//            ScrollView {
-//                if viewModel.users.isEmpty {
-//                    Text("No users found or waiting for data...")
-//                        .padding()
-//                } else {
-//                    LazyVStack(spacing: 16) {
-//                        ForEach(viewModel.notifications) { notification in
-//                            NotificationRow(viewModel: viewModel, notification: notification)
-//                                .padding(.horizontal)
-//                        }
-//                    }
-//                    .padding(.top)
-//                }
-//            }
-//            .background(Color(UIColor.systemGroupedBackground))
-//            .navigationBarTitleDisplayMode(.inline)
-//            .toolbar {
-//                ToolbarItem(placement: .principal) {
-//                    HStack {
-//                        Image(systemName: "bell.fill").foregroundColor(.orange)
-//                        Text("Notifications").font(.headline)
-//                    }
-//                }
-//            }
-//        }
-//    }
-//}
-
-
-
 
 struct NotificationsView_Previews: PreviewProvider {
     static var previews: some View {

@@ -104,7 +104,8 @@ struct SignupView: View {
                                                 db.collection("users").document(userId).setData([
                                                     "email": email,
                                                     "role": "user",
-                                                    "name": name
+                                                    "name": name,
+                                                    "status" : "registered"
                                                 ]) { err in
                                                     if let err = err {
                                                         print("Error setting user data: \(err.localizedDescription)")
