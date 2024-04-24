@@ -8,15 +8,19 @@
 import SwiftUI
 
 struct AddStaffView: View {
-    @State private var staffName = ""
-    @State private var staffEmail = ""
-    @State private var staffMobile = ""
-    @State private var staffAadhar = ""
-    @State private var selectedRole: Staff.Role = .librarian
-    @State private var selectedImage: UIImage?
-    @State private var isShowingImagePicker = false
-    @State private var showAlert = false
-    @State private var successMessage = ""
+    @State var staffName = ""
+    @State var staffEmail = ""
+    @State var staffMobile = ""
+    @State var staffAadhar = ""
+    @State var selectedRole: Staff.Role = .librarian
+    
+    @State var selectedImage: UIImage = UIImage()
+    @State var isShowingImagePicker = false
+    @State var isImageSelected = false
+    
+    @State var showSuccessAlert = false
+    @State var showImageAlert = false
+    
     @StateObject var staffViewModel = StaffViewModel()
     @EnvironmentObject var themeManager: ThemeManager
     @Environment(\.presentationMode) var presentationMode
@@ -28,8 +32,8 @@ struct AddStaffView: View {
                 Button(action: {
                     isShowingImagePicker.toggle()
                 }) {
-                    if let image = selectedImage {
-                        Image(uiImage: image)
+                    if (isImageSelected) {
+                        Image(uiImage: selectedImage)
                             .resizable()
                             .aspectRatio(contentMode: .fill)
                             .frame(width: 150, height: 150)
@@ -47,7 +51,7 @@ struct AddStaffView: View {
                 }
                 .padding()
                 .sheet(isPresented: $isShowingImagePicker) {
-                    ImagePicker(image: $selectedImage, defaultImage: nil)
+                    ImagePicker(selectedImage: $selectedImage, isImageSelected: $isImageSelected, sourceType: .photoLibrary)
                 }
                 
                 TextField("Name", text: $staffName)
@@ -68,10 +72,10 @@ struct AddStaffView: View {
                     .padding()
                 
                 Button(action: {
-                    if selectedImage == nil {
-                        showAlert = true
-                    } else {
+                    if isImageSelected {
                         addStaff()
+                    } else {
+                        showImageAlert = true
                     }
                 }) {
                     Text("Add Staff")
@@ -81,7 +85,7 @@ struct AddStaffView: View {
                         .background(
                             staffName.isEmpty || staffEmail.isEmpty || staffMobile.isEmpty || staffAadhar.isEmpty ?
                             themeManager.selectedTheme.secondaryThemeColor :
-                            themeManager.selectedTheme.primaryThemeColor
+                                themeManager.selectedTheme.primaryThemeColor
                         )
                         .cornerRadius(8)
                 }
@@ -92,26 +96,15 @@ struct AddStaffView: View {
                     staffMobile.isEmpty ||
                     staffAadhar.isEmpty
                 )
-                
+                .alert(isPresented: $showImageAlert, content: imageAlert)
+                .alert(isPresented: $showSuccessAlert, content: successAlert)
                 
                 Spacer()
-            }
-            .padding()
-            .alert(isPresented: $showAlert) {
-                Alert(title: Text("Profile Photo Required"), message: Text("Please select a profile photo."), dismissButton: .default(Text("OK")))
             }
         }
     }
     
     private func addStaff() {
-        guard !staffName.isEmpty,
-              !staffEmail.isEmpty,
-              !staffMobile.isEmpty,
-              !staffAadhar.isEmpty,
-              let selectedImage = selectedImage else {
-            return
-        }
-        
         staffViewModel.addStaff(
             name: staffName,
             email: staffEmail,
@@ -121,8 +114,10 @@ struct AddStaffView: View {
             profilePhoto: selectedImage,
             completion: { success, error in
                 if success {
-                    showAlert = true
-                    successMessage = "Staff added successfully!"
+                    DispatchQueue.main.async {
+                        print("Data added to Firebase successfully!")
+                        showSuccessAlert = true
+                    }
                 } else {
                     if let error = error {
                         print("Error adding staff: \(error.localizedDescription)")
@@ -132,6 +127,20 @@ struct AddStaffView: View {
                 }
             }
         )
+    }
+    
+    private func successAlert() -> Alert {
+        Alert(title: Text("Success"),
+              message: Text("Staff Added Successfully!"),
+              dismissButton: .default(Text("OK")) {
+            presentationMode.wrappedValue.dismiss()
+        })
+    }
+    
+    private func imageAlert() -> Alert {
+        Alert(title: Text("Profile Photo Required"),
+              message: Text("Please select a profile photo."),
+              dismissButton: .default(Text("OK")))
     }
 }
 
