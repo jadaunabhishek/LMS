@@ -34,7 +34,7 @@ class NotificationsViewModel: ObservableObject {
     }
 
     func fetchData() {
-        db.collection("users").whereField("role", isEqualTo: "user").whereField("status", isEqualTo: "registered")
+        db.collection("users").whereField("role", isEqualTo: "user").whereField("status", isEqualTo: "applied")
           .addSnapshotListener { [weak self] querySnapshot, error in
             guard let documents = querySnapshot?.documents else {
                 print("Error fetching documents: \(error?.localizedDescription ?? "Unknown error")")
