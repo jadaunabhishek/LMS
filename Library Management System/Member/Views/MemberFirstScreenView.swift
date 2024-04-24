@@ -10,13 +10,20 @@ import SwiftUI
 struct MemberFirstScreenView: View {
     @EnvironmentObject var themeManager: ThemeManager
     var body: some View {
-        VStack{
-            Rectangle()
-                .frame(width: 100, height: 100)
-                .foregroundColor(themeManager.selectedTheme.primaryThemeColor)
-            Text("Hi world")
-                .foregroundColor(themeManager.selectedTheme.bodyTextColor)
+        TabView {
+            Membership()
+                .tabItem {
+                    Image(systemName: "house")
+                    Text("Home")
+                }
+            Filter()
+                .tabItem {
+                    Image(systemName: "magnifyingglass")
+                    Text("Search")
+                }
+            
         }
+        .navigationBarHidden(true)
     }
 }
 
