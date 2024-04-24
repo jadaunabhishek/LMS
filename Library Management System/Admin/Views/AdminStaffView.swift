@@ -9,11 +9,28 @@ import SwiftUI
 
 struct AdminStaffView: View {
     @State private var isAddStaffViewPresented = false
+    @StateObject var staffViewModel = StaffViewModel()
     @EnvironmentObject var themeManager: ThemeManager
     
     var body: some View {
         NavigationView {
             VStack {
+                if !staffViewModel.currentStaff.isEmpty {
+                    List(staffViewModel.currentStaff, id: \.userID) { staffMember in
+                        VStack(alignment: .leading) {
+                            Text(staffMember.name)
+                                .font(.headline)
+                            Text(staffMember.email)
+                                .font(.subheadline)
+                                .foregroundColor(.secondary)
+                        }
+                        .padding()
+                    }
+                } else {
+                    Text("No staff members found.")
+                        .foregroundColor(.secondary)
+                }
+                
                 Button(action: {
                     isAddStaffViewPresented.toggle()
                 }) {
@@ -24,17 +41,15 @@ struct AdminStaffView: View {
                         .clipShape(Circle())
                 }
                 .padding()
-                .padding(.bottom, 16)
             }
-            .navigationBarTitle("Admin Staff")
-        }
-        .sheet(isPresented: $isAddStaffViewPresented) {
-            NavigationView {
+            .navigationBarTitle("Manage Staff")
+            .navigationBarBackButtonHidden()
+            .sheet(isPresented: $isAddStaffViewPresented) {
                 AddStaffView()
-                    .navigationBarItems(leading: Button("Cancel") {
-                        isAddStaffViewPresented.toggle()
-                    })
-                    .foregroundColor(themeManager.selectedTheme.primaryThemeColor)
+                    .presentationDetents([.fraction(0.85)])
+            }
+            .onAppear{
+                staffViewModel.getStaff()
             }
         }
     }

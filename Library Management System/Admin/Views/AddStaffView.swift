@@ -12,7 +12,7 @@ struct AddStaffView: View {
     @State var staffEmail = ""
     @State var staffMobile = ""
     @State var staffAadhar = ""
-    @State var selectedRole: Staff.Role = .librarian
+    @State var selectedRole: String = "Librarian"
     
     @State var selectedImage: UIImage = UIImage()
     @State var isShowingImagePicker = false
@@ -26,81 +26,80 @@ struct AddStaffView: View {
     @Environment(\.presentationMode) var presentationMode
     
     var body: some View {
-        NavigationView {
-            VStack {
-                
-                Button(action: {
-                    isShowingImagePicker.toggle()
-                }) {
-                    if (isImageSelected) {
-                        Image(uiImage: selectedImage)
-                            .resizable()
-                            .aspectRatio(contentMode: .fill)
+        VStack {
+            
+            Button(action: {
+                isShowingImagePicker.toggle()
+            }) {
+                if (isImageSelected) {
+                    Image(uiImage: selectedImage)
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                        .frame(width: 150, height: 150)
+                        .clipShape(Circle())
+                } else {
+                    ZStack {
+                        Circle()
                             .frame(width: 150, height: 150)
-                            .clipShape(Circle())
-                    } else {
-                        ZStack {
-                            Circle()
-                                .frame(width: 150, height: 150)
-                                .foregroundColor(themeManager.selectedTheme.primaryThemeColor)
-                            Image(systemName: "person.fill")
-                                .font(.system(size: 80))
-                                .foregroundColor(.white)
-                        }
+                            .foregroundColor(themeManager.selectedTheme.primaryThemeColor)
+                        Image(systemName: "person.fill")
+                            .font(.system(size: 80))
+                            .foregroundColor(.white)
                     }
                 }
-                .padding()
-                .sheet(isPresented: $isShowingImagePicker) {
-                    ImagePicker(selectedImage: $selectedImage, isImageSelected: $isImageSelected, sourceType: .photoLibrary)
-                }
-                
-                TextField("Name", text: $staffName)
-                    .modifier(CustomTextFieldStyle())
-                    .padding()
-                
-                TextField("Email", text: $staffEmail)
-                    .modifier(CustomTextFieldStyle())
-                    .padding()
-                    .autocapitalization(.none)
-                
-                TextField("Mobile Number", text: $staffMobile)
-                    .modifier(CustomTextFieldStyle())
-                    .padding()
-                
-                TextField("Aadhar Number", text: $staffAadhar)
-                    .modifier(CustomTextFieldStyle())
-                    .padding()
-                
-                Button(action: {
-                    if isImageSelected {
-                        addStaff()
-                    } else {
-                        showImageAlert = true
-                    }
-                }) {
-                    Text("Add Staff")
-                        .padding()
-                        .foregroundColor(.white)
-                        .fontWeight(.bold)
-                        .background(
-                            staffName.isEmpty || staffEmail.isEmpty || staffMobile.isEmpty || staffAadhar.isEmpty ?
-                            themeManager.selectedTheme.secondaryThemeColor :
-                                themeManager.selectedTheme.primaryThemeColor
-                        )
-                        .cornerRadius(8)
-                }
-                .padding()
-                .disabled(
-                    staffName.isEmpty ||
-                    staffEmail.isEmpty ||
-                    staffMobile.isEmpty ||
-                    staffAadhar.isEmpty
-                )
-                .alert(isPresented: $showImageAlert, content: imageAlert)
-                .alert(isPresented: $showSuccessAlert, content: successAlert)
-                
-                Spacer()
             }
+            .padding()
+            .sheet(isPresented: $isShowingImagePicker) {
+                ImagePicker(selectedImage: $selectedImage, isImageSelected: $isImageSelected, sourceType: .photoLibrary)
+            }
+            
+            TextField("Name", text: $staffName)
+                .modifier(CustomTextFieldStyle())
+                .padding()
+            
+            TextField("Email", text: $staffEmail)
+                .modifier(CustomTextFieldStyle())
+                .padding()
+                .autocapitalization(.none)
+            
+            TextField("Mobile Number", text: $staffMobile)
+                .modifier(CustomTextFieldStyle())
+                .padding()
+            
+            TextField("Aadhar Number", text: $staffAadhar)
+                .modifier(CustomTextFieldStyle())
+                .padding()
+                .alert(isPresented: $showImageAlert, content: imageAlert)
+            
+            Button(action: {
+                if isImageSelected == true {
+                    addStaff()
+                } else {
+                    print("No Image Selected")
+                    showImageAlert = true
+                }
+            }) {
+                Text("Add Staff")
+                    .padding()
+                    .foregroundColor(.white)
+                    .fontWeight(.bold)
+                    .background(
+                        staffName.isEmpty || staffEmail.isEmpty || staffMobile.isEmpty || staffAadhar.isEmpty ?
+                        themeManager.selectedTheme.secondaryThemeColor :
+                            themeManager.selectedTheme.primaryThemeColor
+                    )
+                    .cornerRadius(8)
+            }
+            .padding()
+            .disabled(
+                staffName.isEmpty ||
+                staffEmail.isEmpty ||
+                staffMobile.isEmpty ||
+                staffAadhar.isEmpty
+            )
+            .alert(isPresented: $showSuccessAlert, content: successAlert)
+
+            Spacer()
         }
     }
     

@@ -14,16 +14,11 @@ struct Staff {
     var mobile: String
     var profileImageURL: String
     var aadhar: String
-    var role: Role
+    var role: String
     var password: String
     var createdOn: Date
     var updatedOn: Date
     var status: Status
-    
-    enum Role: String {
-        case librarian = "Librarian"
-        case member = "Member"
-    }
     
     enum Status: String {
         case active = "Active"
@@ -38,7 +33,7 @@ struct Staff {
             "mobile": mobile,
             "profileImageURL": profileImageURL,
             "aadhar": aadhar,
-            "role": role.rawValue,
+            "role": role,
             "password": password,
             "createdOn": createdOn,
             "updatedOn": updatedOn,
