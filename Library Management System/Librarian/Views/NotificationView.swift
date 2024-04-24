@@ -1,11 +1,21 @@
 import SwiftUI
+import FirebaseFirestore
+
+
+struct User: Identifiable {
+    var id: String
+    var email: String
+    var role: String
+    var name: String
+}
+
 
 enum NotificationType {
     case membershipRequest, grievance
 }
 
 struct NotificationItem: Identifiable {
-    var id = UUID()
+    var id : String
     var name: String
     var message: String
     var type: NotificationType
@@ -14,24 +24,58 @@ struct NotificationItem: Identifiable {
 }
 
 class NotificationsViewModel: ObservableObject {
-    @Published var notifications: [NotificationItem] = [
-        // Populate with initial data
-        NotificationItem(name: "John Doe", message: "Membership Request", type: .membershipRequest, date: "23:35"),
-        NotificationItem(name: "John Doe", message: "GRIEVANCE", type: .grievance, date: "23:35", detail: "Detailed grievance text here"),
-        // More notifications...
-    ]
-    
-    func approve(notification: NotificationItem) {
-        // Handle approval
-        if let index = notifications.firstIndex(where: { $0.id == notification.id }) {
-            notifications[index].message = "Approved" // Update the UI
+    @Published var users = [User]()
+    @Published var notifications = [NotificationItem]()
+
+    private var db = Firestore.firestore()
+
+    init() {
+        fetchData()
+    }
+
+    func fetchData() {
+        db.collection("users").addSnapshotListener { [weak self] querySnapshot, error in
+            guard let documents = querySnapshot?.documents else {
+                print("Error fetching documents: \(error?.localizedDescription ?? "Unknown error")")
+                return
+            }
+
+            self?.users = documents.map { doc -> User in
+                let data = doc.data()
+                let email = data["email"] as? String ?? ""
+                let role = data["role"] as? String ?? ""
+                let name = data["name"] as? String ?? ""
+                return User(id: doc.documentID, email: email, role: role, name: name)
+            }
+
+            self?.createNotifications() // Transform user data into notifications
         }
     }
-    
-    func reject(notification: NotificationItem) {
-        // Handle rejection
+
+    private func createNotifications() {
+        notifications = users.map { user in
+            NotificationItem(
+                id: user.id,
+                name: user.name,
+                message: "Role: \(user.role)",
+                type: user.role == "grievance" ? .grievance : .membershipRequest, // Example condition
+                date: Date().formatted(date: .numeric, time: .shortened),
+                detail: user.role == "grievance" ? "Needs immediate attention" : nil
+            )
+        }
+    }
+
+    func approve(notification: NotificationItem) {
+        // Update logic if needed in Firestore or locally
         if let index = notifications.firstIndex(where: { $0.id == notification.id }) {
-            notifications[index].message = "Rejected" // Update the UI
+            notifications[index].message = "Approved"
+        }
+    }
+
+    func reject(notification: NotificationItem) {
+        // Update logic if needed in Firestore or locally
+        if let index = notifications.firstIndex(where: { $0.id == notification.id }) {
+            notifications[index].message = "Rejected"
         }
     }
 }
@@ -98,6 +142,9 @@ struct NotificationRow: View {
         }
         .sheet(isPresented: $isShowingGrievanceDetail) { // Use the corrected state variable name
             GrievanceDetailView(grievance: notification.detail ?? "No details provided", viewModel: viewModel, notification: notification)
+        }
+        .onAppear {
+            self.viewModel.fetchData()
         }
     }
 }
@@ -174,6 +221,39 @@ struct NotificationsView: View {
     }
 }
 
+//struct NotificationsView: View {
+//    @StateObject var viewModel = NotificationsViewModel()
+//
+//    var body: some View {
+//        NavigationView {
+//            ScrollView {
+//                if viewModel.users.isEmpty {
+//                    Text("No users found or waiting for data...")
+//                        .padding()
+//                } else {
+//                    LazyVStack(spacing: 16) {
+//                        ForEach(viewModel.notifications) { notification in
+//                            NotificationRow(viewModel: viewModel, notification: notification)
+//                                .padding(.horizontal)
+//                        }
+//                    }
+//                    .padding(.top)
+//                }
+//            }
+//            .background(Color(UIColor.systemGroupedBackground))
+//            .navigationBarTitleDisplayMode(.inline)
+//            .toolbar {
+//                ToolbarItem(placement: .principal) {
+//                    HStack {
+//                        Image(systemName: "bell.fill").foregroundColor(.orange)
+//                        Text("Notifications").font(.headline)
+//                    }
+//                }
+//            }
+//        }
+//    }
+//}
+
 
 
 
@@ -182,8 +262,7 @@ struct NotificationsView_Previews: PreviewProvider {
         // You can create a mock NotificationsViewModel with sample data for the preview
         let viewModel = NotificationsViewModel()
         viewModel.notifications = [
-            NotificationItem(name: "John Doe", message: "Membership Request", type: .membershipRequest, date: "23:35"),
-            NotificationItem(name: "Jane Smith", message: "GRIEVANCE", type: .grievance, date: "23:40", detail: "Lorem ipsum dolor sit amet...")
+            NotificationItem(id: "1" ,name: "John Doe", message: "Membership Request", type: .membershipRequest, date: "23:35")
         ]
 
         return NotificationsView(viewModel: viewModel)
@@ -191,19 +270,3 @@ struct NotificationsView_Previews: PreviewProvider {
 }
 
 
-struct NotificationRow_Previews: PreviewProvider {
-    static var previews: some View {
-        // Create a preview instance of your NotificationsViewModel
-        let viewModel = NotificationsViewModel()
-
-        // Add preview data for a single notification
-        let membershipRequest = NotificationItem(name: "John Doe", message: "Membership Request", type: .membershipRequest, date: "23:35")
-        let grievance = NotificationItem(name: "Jane Smith", message: "GRIEVANCE", type: .grievance, date: "23:40", detail: "Lorem ipsum dolor sit amet...")
-
-        Group {
-            NotificationRow(viewModel: viewModel, notification: membershipRequest)
-            NotificationRow(viewModel: viewModel, notification: grievance)
-        }
-        .previewLayout(.sizeThatFits)
-    }
-}
