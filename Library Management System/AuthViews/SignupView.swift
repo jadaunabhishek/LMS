@@ -8,9 +8,11 @@
 import SwiftUI
 import FirebaseCore
 import FirebaseAuth
+import FirebaseFirestore
 
 struct SignupView: View {
     @State private var email: String = ""
+    @State private var name: String = ""
     @State private var password: String = ""
     @State private var confirmPassword: String = ""
     @State private var isChecked = false
@@ -32,6 +34,18 @@ struct SignupView: View {
                         .font(.largeTitle)
                         .fontWeight(.bold)
                         .padding(.bottom, 30)
+                    
+                    TextField("Name", text: $name)
+                        .font(.title3)
+                        .padding(12)
+                        .autocapitalization(.none)
+                        .foregroundColor(Color("TextColor"))
+                        .frame(maxWidth: .infinity)
+                        .background(Color.white)
+                        .cornerRadius(15)
+                        .padding(.horizontal, 5)
+                        .padding(.bottom, 5)
+                        .shadow(color: Color.gray.opacity(0.3), radius: 5, x: 0, y: 2)
                     
                     TextField("Email Id", text: $email)
                         .font(.title3)
@@ -73,10 +87,9 @@ struct SignupView: View {
                             .font(.system(size: UIFont.systemFontSize))
                     }
                     .toggleStyle(CheckboxToggleStyle())
-                    .padding()
                     
                     Button(action: {
-                        if !email.isEmpty, !confirmPassword.isEmpty, !password.isEmpty, password == confirmPassword, isChecked {
+                        if !email.isEmpty, !confirmPassword.isEmpty, !password.isEmpty,!name.isEmpty, password == confirmPassword, isChecked {
                             Auth.auth().createUser(withEmail: email, password: password) { authResult, error in
                                 if let error = error {
                                     // Handle the login error
@@ -84,6 +97,23 @@ struct SignupView: View {
                                 } else {
                                     // If login is successful, navigate to UserFirstView
                                     print("Signup successful!")
+        
+                                        
+                                    if let userId = authResult?.user.uid {
+                                                let db = Firestore.firestore()
+                                                db.collection("users").document(userId).setData([
+                                                    "email": email,
+                                                    "role": "user",
+                                                    "name": name
+                                                ]) { err in
+                                                    if let err = err {
+                                                        print("Error setting user data: \(err.localizedDescription)")
+                                                    } else {
+                                                        print("User data including role set successfully")
+                                                    }
+                                                }
+                                    }
+                                    
                                     shouldNavigate = true
                                 }
                             }

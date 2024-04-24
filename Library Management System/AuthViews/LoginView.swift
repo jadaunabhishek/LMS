@@ -5,11 +5,23 @@
 //  Created by Abhishek Jadaun on 22/04/24.
 //
 
+//
+//  LoginView.swift
+//  Library Management System
+//
+//  Created by Abhishek Jadaun on 22/04/24.
+//
+
 import SwiftUI
 import FirebaseCore
 import FirebaseAuth
+import FirebaseFirestore
+
 
 struct LoginView: View {
+    private var db = Firestore.firestore()
+    @StateObject private var viewModel = AuthViewModel()
+    
     @State private var email: String = ""
     @State private var password: String = ""
     @State private var shouldNavigate: Bool = false
@@ -61,19 +73,11 @@ struct LoginView: View {
                         .padding()
                     
                     Button(action: {
-                        if !email.isEmpty, !password.isEmpty {
-                            Auth.auth().signIn(withEmail: email, password: password) { authResult, error in
-                                if let error = error {
-                                    // Handle the login error
-                                    print("Error loggin in: \(error.localizedDescription)")
-                                } else {
-                                    // If login is successful, navigate to UserFirstView
-                                    print("Login successful!")
-                                    UserDefaults.standard.set(true, forKey: "emailLoggedIn")
-                                    shouldNavigate = true
-                                }
-                            }
-                        }
+                        
+                        print("Login Aettmpt")
+                        viewModel.login(email: email, password: password)
+                        print($viewModel.shouldNavigateToAdmin)
+                        
                     }) {
                         Text("Log In")
                             .font(.title3)
@@ -87,8 +91,10 @@ struct LoginView: View {
                     .disabled(email.isEmpty || password.isEmpty)
                     .shadow(color: Color.gray.opacity(0.3), radius: 5, x: 0, y: 2)
                     
-                    NavigationLink("", destination: EmptyView(), isActive: $shouldNavigate)
-                        .hidden() // Hide the navigation link
+                    NavigationLink(destination: AdminTabView(), isActive: $viewModel.shouldNavigateToAdmin) { EmptyView() }
+                    NavigationLink(destination: LibrarianFirstScreenView(), isActive: $viewModel.shouldNavigateToLibrarian) { EmptyView() }
+                    NavigationLink(destination: MemberFirstScreenView(), isActive: $viewModel.shouldNavigateToMember) { EmptyView() }
+                    NavigationLink(destination: LoginView(), isActive: $viewModel.shouldNavigateToGeneral) { EmptyView() }
                     
                     
                 }.padding()
@@ -104,6 +110,7 @@ struct LoginView: View {
                 }
                 .padding([.leading, .trailing, .top])
                 .navigationBarHidden(true)
+                .navigationBarBackButtonHidden(true)
                 
             }
         }
