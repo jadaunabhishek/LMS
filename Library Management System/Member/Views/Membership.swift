@@ -138,7 +138,7 @@ struct Membership: View {
                 .padding(.horizontal)
                 .padding(.bottom)
                 
-            }
+            }.padding(.bottom,35)
         }
     }
     private func statusIndicator(imageName: String, text: String, status: MembershipStatus) -> some View {
