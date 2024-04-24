@@ -39,6 +39,7 @@
 		D55820F62BD61BCC005A00F9 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = D55820F52BD61BCC005A00F9 /* GoogleService-Info.plist */; };
 		D55821062BD63AF4005A00F9 /* LibrarianFirstScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D55821052BD63AF4005A00F9 /* LibrarianFirstScreenView.swift */; };
 		D55821082BD63AFC005A00F9 /* MemberFirstScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D55821072BD63AFC005A00F9 /* MemberFirstScreenView.swift */; };
+		D5E597162BD97F1E007622E4 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5E597152BD97F1E007622E4 /* HomeView.swift */; };
 		DC1D402C2BD6EB4A00970C7B /* BookSchema.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC1D402B2BD6EB4A00970C7B /* BookSchema.swift */; };
 		DC1D402E2BD76BF000970C7B /* AddBookPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC1D402D2BD76BF000970C7B /* AddBookPage.swift */; };
 		DC1D40302BD77E4B00970C7B /* AdminHomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC1D402F2BD77E4B00970C7B /* AdminHomeView.swift */; };
@@ -127,6 +128,7 @@
 		D55820F52BD61BCC005A00F9 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		D55821052BD63AF4005A00F9 /* LibrarianFirstScreenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibrarianFirstScreenView.swift; sourceTree = "<group>"; };
 		D55821072BD63AFC005A00F9 /* MemberFirstScreenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemberFirstScreenView.swift; sourceTree = "<group>"; };
+		D5E597152BD97F1E007622E4 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		DC1D402B2BD6EB4A00970C7B /* BookSchema.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookSchema.swift; sourceTree = "<group>"; };
 		DC1D402D2BD76BF000970C7B /* AddBookPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddBookPage.swift; sourceTree = "<group>"; };
 		DC1D402F2BD77E4B00970C7B /* AdminHomeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AdminHomeView.swift; sourceTree = "<group>"; };
@@ -348,6 +350,8 @@
 		D55821012BD637CB005A00F9 /* Member */ = {
 			isa = PBXGroup;
 			children = (
+				D5E597132BD97E71007622E4 /* ViewModels */,
+				D5E597122BD97E5C007622E4 /* Schemas */,
 				D55821042BD63A66005A00F9 /* Views */,
 			);
 			path = Member;
@@ -379,11 +383,34 @@
 			isa = PBXGroup;
 			children = (
 				D55821072BD63AFC005A00F9 /* MemberFirstScreenView.swift */,
-				845F7D712BD8E0BD006831F8 /* Filter.swift */,
-				845F7D6F2BD8DFD9006831F8 /* Membership.swift */,
-				841045A82BD8D7D400E801D0 /* UserViewModel.swift */,
+				D5E597142BD97ED1007622E4 /* MemberTabs */,
 			);
 			path = Views;
+			sourceTree = "<group>";
+		};
+		D5E597122BD97E5C007622E4 /* Schemas */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Schemas;
+			sourceTree = "<group>";
+		};
+		D5E597132BD97E71007622E4 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				841045A82BD8D7D400E801D0 /* UserViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		D5E597142BD97ED1007622E4 /* MemberTabs */ = {
+			isa = PBXGroup;
+			children = (
+				845F7D712BD8E0BD006831F8 /* Filter.swift */,
+				845F7D6F2BD8DFD9006831F8 /* Membership.swift */,
+				D5E597152BD97F1E007622E4 /* HomeView.swift */,
+			);
+			path = MemberTabs;
 			sourceTree = "<group>";
 		};
 		DC1D402A2BD6EB3300970C7B /* Schemas */ = {
@@ -579,6 +606,7 @@
 				84E87D5F2BD7D52900FAD5DC /* EditCategoriesView.swift in Sources */,
 				845F7D702BD8DFD9006831F8 /* Membership.swift in Sources */,
 				1F7C0E522BD7B3B2007D5221 /* AddStaffView.swift in Sources */,
+				D5E597162BD97F1E007622E4 /* HomeView.swift in Sources */,
 				D55820F22BD61ADE005A00F9 /* LoginView.swift in Sources */,
 				DC48E7222BD6E78000794A7C /* LibrarianViewModel.swift in Sources */,
 				DC1D402E2BD76BF000970C7B /* AddBookPage.swift in Sources */,
