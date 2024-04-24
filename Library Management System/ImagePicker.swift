@@ -5,13 +5,12 @@
 //  Created by Manvi Singhal on 23/04/24.
 //
 
-import Foundation
 import SwiftUI
 import UIKit
 
 struct ImagePicker: UIViewControllerRepresentable {
     @Binding var image: UIImage?
-    let defaultUserImage: UIImage?
+    let defaultImage: UIImage?
 
     @Environment(\.presentationMode) private var presentationMode
 
@@ -30,7 +29,7 @@ struct ImagePicker: UIViewControllerRepresentable {
         }
 
         func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
-            parent.image = parent.defaultUserImage
+            parent.image = parent.defaultImage
             parent.presentationMode.wrappedValue.dismiss()
         }
     }

@@ -15,11 +15,11 @@ class StaffViewModel: ObservableObject {
     private let dbInstance = Firestore.firestore()
     
     func addStaff(
-        staffName: String,
-        staffEmail: String,
-        staffMobile: String,
-        staffAadhar: String,
-        staffRole: Staff.StaffRole,
+        name: String,
+        email: String,
+        mobile: String,
+        aadhar: String,
+        role: Staff.Role,
         profilePhoto: UIImage,
         completion: @escaping (Bool, Error?) -> Void
     ) {
@@ -40,27 +40,34 @@ class StaffViewModel: ObservableObject {
                     return
                 }
                 
-                let password = "\(staffName.prefix(4))123$"
+                let password = "\(name.prefix(4))123$"
                 
-                let newStaff = Staff(
-                    staffID: addNewStaff.documentID,
-                    staffName: staffName,
-                    staffEmail: staffEmail,
-                    staffMobile: staffMobile,
-                    staffImageURL: imageURL,
-                    staffAadhar: staffAadhar,
-                    staffRole: staffRole,
-                    staffPassword: password,
-                    createdOn: Date(),
-                    updatedOn: Date(),
-                    status: .active
-                )
-                
-                addNewStaff.setData(newStaff.getDictionaryOfStruct()) { error in
-                    if let error = error {
-                        completion(false, error)
-                    } else {
-                        completion(true, nil)
+                Auth.auth().createUser(withEmail: email, password: password) { authResult, authError in
+                    guard authError == nil, let _ = authResult else {
+                        completion(false, authError)
+                        return
+                    }
+                    
+                    let newStaff = Staff(
+                        userID: authResult!.user.uid,
+                        name: name,
+                        email: email,
+                        mobile: mobile,
+                        profileImageURL: imageURL,
+                        aadhar: aadhar,
+                        role: .librarian,
+                        password: password,
+                        createdOn: Date(),
+                        updatedOn: Date(),
+                        status: .active
+                    )
+                    
+                    addNewStaff.setData(newStaff.getDictionaryOfStruct()) { error in
+                        if let error = error {
+                            completion(false, error)
+                        } else {
+                            completion(true, nil)
+                        }
                     }
                 }
             }
