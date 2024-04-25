@@ -23,7 +23,7 @@ struct AdminTabView: View {
                         Image(systemName: "square.split.2x2.fill")
                         Text("categorys")
                     }
-                AddStaffView()
+                AdminStaffView()
                     .tabItem {
                         Image(systemName: "person.3.fill")
                         Text("Staff")
