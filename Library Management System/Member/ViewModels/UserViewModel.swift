@@ -60,7 +60,7 @@ class AuthViewModel: ObservableObject {
                 switch role {
                 case "admin":
                     self.shouldNavigateToAdmin = true
-                case "Librarian":
+                case "librarian":
                     self.shouldNavigateToLibrarian = true
                 case "member":
                     self.shouldNavigateToMember = true
