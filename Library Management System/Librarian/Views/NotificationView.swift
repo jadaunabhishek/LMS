@@ -1,38 +1,109 @@
 import SwiftUI
+import FirebaseFirestore
+
+
+struct User: Identifiable {
+    var id: String
+    var email: String
+    var role: String
+    var name: String
+}
+
 
 enum NotificationType {
     case membershipRequest, grievance
 }
 
 struct NotificationItem: Identifiable {
-    var id = UUID()
+    var id : String
     var name: String
     var message: String
     var type: NotificationType
-    var date: String
+    var email: String
     var detail: String? // Only for grievances
 }
 
 class NotificationsViewModel: ObservableObject {
-    @Published var notifications: [NotificationItem] = [
-        // Populate with initial data
-        NotificationItem(name: "John Doe", message: "Membership Request", type: .membershipRequest, date: "23:35"),
-        NotificationItem(name: "John Doe", message: "GRIEVANCE", type: .grievance, date: "23:35", detail: "Detailed grievance text here"),
-        // More notifications...
-    ]
-    
-    func approve(notification: NotificationItem) {
-        // Handle approval
-        if let index = notifications.firstIndex(where: { $0.id == notification.id }) {
-            notifications[index].message = "Approved" // Update the UI
+    @Published var users = [User]()
+    @Published var notifications = [NotificationItem]()
+
+    private var db = Firestore.firestore()
+
+    init() {
+        fetchData()
+    }
+
+    func fetchData() {
+        db.collection("users").whereField("role", isEqualTo: "user").whereField("status", isEqualTo: "applied")
+          .addSnapshotListener { [weak self] querySnapshot, error in
+            guard let documents = querySnapshot?.documents else {
+                print("Error fetching documents: \(error?.localizedDescription ?? "Unknown error")")
+                return
+            }
+
+            self?.users = documents.map { doc -> User in
+                let data = doc.data()
+                let email = data["email"] as? String ?? ""
+                let name = data["name"] as? String ?? ""
+                return User(id: doc.documentID, email: email, role: "user", name: name)
+            }
+
+            self?.createNotifications()
+        }
+
+    }
+
+    private func createNotifications() {
+        notifications = users.map { user in
+            NotificationItem(
+                id: user.id,
+                name: user.name,
+                message: "Role: \(user.role)",
+                type: user.role == "grievance" ? .grievance : .membershipRequest,
+                email:user.email,
+                detail: user.role == "grievance" ? "Needs immediate attention" : nil
+            )
         }
     }
-    
+
+
+    func approve(notification: NotificationItem) {
+        let db = Firestore.firestore()
+        let userDocRef = db.collection("users").document(notification.id)
+        // Update logic if needed in Firestore or locally
+        userDocRef.updateData([
+                "role": "member",
+                "status" : "approved"
+            ]) { error in
+                if let error = error {
+                    print("Error updating user role: \(error.localizedDescription)")
+                } else {
+                    print("User role successfully updated to 'member'")
+                    // Optionally update local notifications array if needed
+                    if let index = self.notifications.firstIndex(where: { $0.id == notification.id }) {
+                        self.notifications[index].message = "Approved"
+                    }
+                }
+            }
+    }
+
     func reject(notification: NotificationItem) {
-        // Handle rejection
-        if let index = notifications.firstIndex(where: { $0.id == notification.id }) {
-            notifications[index].message = "Rejected" // Update the UI
-        }
+        let db = Firestore.firestore()
+        let userDocRef = db.collection("users").document(notification.id)
+        // Update logic if needed in Firestore or locally
+        userDocRef.updateData([
+            "status" : "rejected"
+            ]) { error in
+                if let error = error {
+                    print("Error updating user role: \(error.localizedDescription)")
+                } else {
+                    print("User role successfully updated to 'member'")
+                    // Optionally update local notifications array if needed
+                    if let index = self.notifications.firstIndex(where: { $0.id == notification.id }) {
+                        self.notifications[index].message = "Approved"
+                    }
+                }
+            }
     }
 }
 
@@ -54,7 +125,7 @@ struct NotificationRow: View {
                 VStack(alignment: .leading, spacing: 4) {
                     Text(notification.name).font(.headline)
                     Text(notification.message).font(.subheadline)
-                    Text(notification.date).font(.footnote).foregroundColor(.gray)
+                    Text(notification.email).font(.footnote).foregroundColor(.gray)
                 }
                 
                 Spacer()
@@ -98,6 +169,9 @@ struct NotificationRow: View {
         }
         .sheet(isPresented: $isShowingGrievanceDetail) { // Use the corrected state variable name
             GrievanceDetailView(grievance: notification.detail ?? "No details provided", viewModel: viewModel, notification: notification)
+        }
+        .onAppear {
+            self.viewModel.fetchData()
         }
     }
 }
@@ -174,36 +248,14 @@ struct NotificationsView: View {
     }
 }
 
-
-
-
 struct NotificationsView_Previews: PreviewProvider {
     static var previews: some View {
         // You can create a mock NotificationsViewModel with sample data for the preview
         let viewModel = NotificationsViewModel()
         viewModel.notifications = [
-            NotificationItem(name: "John Doe", message: "Membership Request", type: .membershipRequest, date: "23:35"),
-            NotificationItem(name: "Jane Smith", message: "GRIEVANCE", type: .grievance, date: "23:40", detail: "Lorem ipsum dolor sit amet...")
+            NotificationItem(id: "1" ,name: "John Doe", message: "Membership Request", type: .membershipRequest, email:"john@gmail.com")
         ]
 
         return NotificationsView(viewModel: viewModel)
-    }
-}
-
-
-struct NotificationRow_Previews: PreviewProvider {
-    static var previews: some View {
-        // Create a preview instance of your NotificationsViewModel
-        let viewModel = NotificationsViewModel()
-
-        // Add preview data for a single notification
-        let membershipRequest = NotificationItem(name: "John Doe", message: "Membership Request", type: .membershipRequest, date: "23:35")
-        let grievance = NotificationItem(name: "Jane Smith", message: "GRIEVANCE", type: .grievance, date: "23:40", detail: "Lorem ipsum dolor sit amet...")
-
-        Group {
-            NotificationRow(viewModel: viewModel, notification: membershipRequest)
-            NotificationRow(viewModel: viewModel, notification: grievance)
-        }
-        .previewLayout(.sizeThatFits)
     }
 }
