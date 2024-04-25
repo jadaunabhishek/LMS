@@ -9,7 +9,7 @@ import SwiftUI
 
 struct CardListView: View {
     
-    var books: [Bok]
+    var books: [Book]
 
     var body: some View {
         
@@ -22,7 +22,7 @@ struct CardListView: View {
                                     .frame(width: 100, height: 150)
                                     .cornerRadius(12)
                                     .padding(.vertical,6)
-                                Text(books[index].name)
+                                Text(books[index].bookName)
                                     .font(.caption)
                                     .multilineTextAlignment(.center)
                                     .padding(8)

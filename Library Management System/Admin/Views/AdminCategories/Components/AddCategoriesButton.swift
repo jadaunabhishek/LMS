@@ -10,6 +10,7 @@ import SwiftUI
 struct AddCategories: View {
     
     @State private var isSheetPresented = false
+    @StateObject var ConfiModel = ConfigViewModel()
     
     var body: some View {
         ZStack(alignment: .trailing) {
@@ -27,7 +28,7 @@ struct AddCategories: View {
             .sheet(isPresented: $isSheetPresented ) {
                 
                 NavigationView {
-                    AddCategoriesView(isSheetPresented: $isSheetPresented)
+                    AddCategoriesView(isSheetPresented: $isSheetPresented, configViewModel: ConfiModel)
                         .background(.gray)
                         .navigationBarItems(
                             trailing:  Button(action:{isSheetPresented.toggle()}){
