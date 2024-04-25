@@ -10,19 +10,17 @@ import SwiftUI
 struct AdminTabView: View {
     @EnvironmentObject var themeManager: ThemeManager
     var body: some View {
-        NavigationView{
-            TabView {
-                AdminHomeView()
-                    .tabItem {
-                        Image(systemName: "house")
-                        Text("Home")
-                    }
-                AddStaffView()
-                    .tabItem {
-                        Image(systemName: "person.3.fill")
-                        Text("Staff")
-                    }
-            }
+        TabView {
+            AdminHomeView()
+                .tabItem {
+                    Image(systemName: "house")
+                    Text("Home")
+                }
+            AdminStaffView()
+                .tabItem {
+                    Image(systemName: "person.3.fill")
+                    Text("Staff")
+                }
         }
         .accentColor(themeManager.selectedTheme.primaryThemeColor)
         .navigationBarHidden(true)

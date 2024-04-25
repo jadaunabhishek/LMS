@@ -8,22 +8,17 @@
 import Foundation
 
 struct Staff {
-    var staffID: String
-    var staffName: String
-    var staffEmail: String
-    var staffMobile: String
-    var staffImageURL: String
-    var staffAadhar: String
-    var staffRole: StaffRole
-    var staffPassword: String
+    var userID: String
+    var name: String
+    var email: String
+    var mobile: String
+    var profileImageURL: String
+    var aadhar: String
+    var role: String
+    var password: String
     var createdOn: Date
     var updatedOn: Date
     var status: Status
-    
-    enum StaffRole: String {
-        case librarian = "Librarian"
-        case staff = "Staff"
-    }
     
     enum Status: String {
         case active = "Active"
@@ -32,14 +27,14 @@ struct Staff {
     
     func getDictionaryOfStruct() -> [String: Any] {
         return [
-            "staffID": staffID,
-            "staffName": staffName,
-            "staffEmail": staffEmail,
-            "staffMobile": staffMobile,
-            "staffImageURL": staffImageURL,
-            "staffAadhar": staffAadhar,
-            "staffRole": staffRole.rawValue,
-            "staffPassword": staffPassword,
+            "userID": userID,
+            "name": name,
+            "email": email,
+            "mobile": mobile,
+            "profileImageURL": profileImageURL,
+            "aadhar": aadhar,
+            "role": role,
+            "password": password,
             "createdOn": createdOn,
             "updatedOn": updatedOn,
             "status": status.rawValue
