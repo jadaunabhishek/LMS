@@ -3,7 +3,7 @@ import Foundation
 import FirebaseFirestore
 import FirebaseStorage
 
-class LibrarianViewModel: ObservableObject {
+class LibrarianViewModel: ObservableObject{
     
     let dbInstance = Firestore.firestore()
     
@@ -11,58 +11,39 @@ class LibrarianViewModel: ObservableObject {
     @Published var responseMessage = ""
     
     @Published var currentBook: [Book] = []
+    @Published var allBooks: [Book] = []
     
-    func addBook(
-        bookISBN: String,
-        bookName: String,
-        bookAuthor: String,
-        bookDescription: String,
-        bookCategory: String,
-        bookSubCategory: [String],
-        bookPublishingDate: String,
-        bookStatus: String,
-        bookImage: UIImage
-    ) {
+    func addBook(bookISBN: String, bookName: String, bookAuthor: String, bookDescription: String, bookCategory: String, bookSubCategories: [String], bookPublishingDate: String, bookStatus: String, bookImage: UIImage){
+        
+        self.responseStatus = 0
+        self.responseMessage = ""
+        
         let addNewBook = dbInstance.collection("Books").document()
         let storageRef = Storage.storage().reference()
         let imageData  = bookImage.jpegData(compressionQuality: 0.9)!
         let fileRef = storageRef.child("bookImages/\(addNewBook.documentID).jpeg")
         
-        var uploadDone  = false
-        fileRef.putData(imageData, metadata: nil) { metadata, error in
-            if (error == nil && metadata != nil) {
-                fileRef.downloadURL { url, error1 in
-                    if (error1 == nil && url != nil) {
-                        var imageURL = url?.absoluteString
-                        let newBook = Book(
-                            id: addNewBook.documentID,
-                            bookISBN: bookISBN,
-                            bookImageURL: imageURL!,
-                            bookName: bookName,
-                            bookAuthor: bookAuthor,
-                            bookDescription: bookDescription,
-                            bookCategory: bookCategory,
-                            bookSubCategory: bookSubCategory,
-                            bookPublishingDate: bookPublishingDate,
-                            bookStatus: bookStatus,
-                            bookIssuedTo: "",
-                            bookIssuedOn: "",
-                            bookExpectedReturnOn: "",
-                            bookRating: 0.0,
-                            bookReviews: [],
-                            bookHistory: [],
-                            createdOn: "\(Date.now)",
-                            updayedOn: "\(Date.now)"
-                        )
+        //var uploadDone  = false
+        fileRef.putData(imageData, metadata: nil){
+            metadata,error in
+            
+            if(error == nil && metadata != nil){
+                fileRef.downloadURL{ url,error1 in
+                    if(error1 == nil && url != nil){
+                        let imageURL = url?.absoluteString
+                        let newBook = Book(id: addNewBook.documentID, bookISBN: bookISBN, bookImageURL: imageURL!, bookName: bookName, bookAuthor: bookAuthor, bookDescription: bookDescription, bookCategory: bookCategory, bookSubCategories: bookSubCategories, bookPublishingDate: bookPublishingDate, bookStatus: bookStatus, bookIssuedTo: "", bookIssuedToName: "", bookIssuedOn: "", bookExpectedReturnOn: "", bookRating: 0.0, bookReviews: [], bookHistory: [], createdOn: "\(Date.now)", updayedOn: "\(Date.now)")
                         addNewBook.setData(newBook.getDictionaryOfStruct()) { error in
-                            if let error = error {
+                            
+                            if let error = error{
                                 self.responseStatus = 400
                                 self.responseMessage = "Something went wrong, Unable to add book. Check console for errors."
                                 print("Unable to add book. Error: \(error)")
-                            } else {
-                                self.responseStatus = 200
-                                self.responseMessage = "Added book successfully."
                             }
+                            else{
+                                self.responseStatus = 200
+                                self.responseMessage = "Added book successfuly."
+                            }
+                            
                         }
                     }
                 }
@@ -70,142 +51,172 @@ class LibrarianViewModel: ObservableObject {
         }
     }
     
-    func updateBook(
-        bookId: String,
-        bookISBN: String,
-        bookImageURL: String,
-        bookName: String,
-        bookAuthor: String,
-        bookDescription: String,
-        bookCategory: String,
-        bookSubCategory: [String],
-        bookPublishingDate: String,
-        bookStatus: String,
-        bookImage: UIImage,
-        isImageUpdated: Bool
-    ) {
-        if (isImageUpdated) {
+    func updateBook(bookId: String, bookISBN: String, bookImageURL: String, bookName: String, bookAuthor: String, bookDescription: String, bookCategory: String, bookSubCategories: [String], bookPublishingDate: String, bookStatus: String, bookImage: UIImage, isImageUpdated: Bool, bookIssuedTo: String, bookIssuedToName: String, bookIssuedOn: String, bookExpectedReturnOn: String, bookRating: Float, bookReviews: [String], bookHistory: [History], createdOn: String, updatedOn: String){
+        
+        self.responseStatus = 0
+        self.responseMessage = ""
+        
+        if(isImageUpdated){
             let storageRef = Storage.storage().reference()
             let imageData  = bookImage.jpegData(compressionQuality: 0.9)!
             let fileRef = storageRef.child("bookImages/\(bookId).jpeg")
             
-            var uploadDone  = false
-            fileRef.putData(imageData, metadata: nil) { metadata, error in
-                if (error == nil && metadata != nil) {
-                    fileRef.downloadURL { url, error1 in
-                        if (error1 == nil && url != nil) {
-                            var imageURL = url?.absoluteString
-                            let newBook = Book(
-                                id: bookId,
-                                bookISBN: bookISBN,
-                                bookImageURL: imageURL!,
-                                bookName: bookName,
-                                bookAuthor: bookAuthor,
-                                bookDescription: bookDescription,
-                                bookCategory: bookCategory,
-                                bookSubCategory: bookSubCategory,
-                                bookPublishingDate: bookPublishingDate,
-                                bookStatus: bookStatus,
-                                bookIssuedTo: "",
-                                bookIssuedOn: "",
-                                bookExpectedReturnOn: "",
-                                bookRating: 0.0,
-                                bookReviews: [],
-                                bookHistory: [],
-                                createdOn: "\(Date.now)",
-                                updayedOn: "\(Date.now)"
-                            )
-                            self.dbInstance.collection("Books").document(bookId).setData(newBook.getDictionaryOfStruct()) { error in
-                                if let error = error {
+            fileRef.putData(imageData, metadata: nil){
+                metadata,error in
+                
+                if(error == nil && metadata != nil){
+                    fileRef.downloadURL{ url,error1 in
+                        if(error1 == nil && url != nil){
+                            let imageURL = url?.absoluteString
+//                            let newBook = Book(id: bookId, bookISBN: bookISBN, bookImageURL: imageURL!, bookName: bookName, bookAuthor: bookAuthor, bookDescription: bookDescription, bookCategory: bookCategory, bookSubCategories: bookSubCategories, bookPublishingDate: bookPublishingDate, bookStatus: bookStatus, bookIssuedTo: bookIssuedTo, bookIssuedToName: bookIssuedToName, bookIssuedOn: bookIssuedOn, bookExpectedReturnOn: bookExpectedReturnOn, bookRating: bookRating, bookReviews: bookReviews, bookHistory: [History(userId: bookHistory[0].userId, userName: bookHistory[0].userName, issuedOn: bookHistory[0].issuedOn, returnedOn: bookHistory[0].returnedOn).getDictionaryOfStruct()], createdOn: createdOn, updayedOn: updatedOn)
+                            self.dbInstance.collection("Books").document(bookId).updateData(["bookISBN":bookISBN,"bookName":bookName,"bookAuthor":bookAuthor,"bookStatus": bookStatus, "bookImageURL": imageURL as Any, "bookDescription": bookDescription, "bookCategory": bookCategory, "bookSubcategories": bookSubCategories]) { error in
+                                
+                                if let error = error{
                                     self.responseStatus = 400
                                     self.responseMessage = "Something went wrong, Unable to update book. Check console for errors."
                                     print("Unable to update book. Error: \(error)")
-                                } else {
-                                    self.responseStatus = 200
-                                    self.responseMessage = "Updated book successfully."
                                 }
+                                else{
+                                    self.responseStatus = 200
+                                    self.responseMessage = "Updated book successfuly."
+                                }
+                                
                             }
                         }
                     }
                 }
             }
-        } else {
-            let newBook = Book(
-                id: bookId,
-                bookISBN: bookISBN,
-                bookImageURL: bookImageURL,
-                bookName: bookName,
-                bookAuthor: bookAuthor,
-                bookDescription: bookDescription,
-                bookCategory: bookCategory,
-                bookSubCategory: bookSubCategory,
-                bookPublishingDate: bookPublishingDate,
-                bookStatus: bookStatus,
-                bookIssuedTo: "",
-                bookIssuedOn: "",
-                bookExpectedReturnOn: "",
-                bookRating: 0.0,
-                bookReviews: [],
-                bookHistory: [],
-                createdOn: "\(Date.now)",
-                updayedOn: "\(Date.now)"
-            )
-            self.dbInstance.collection("Books").document(bookId).setData(newBook.getDictionaryOfStruct()) { error in
-                if let error = error {
+        }
+        else{
+            let newBook = Book(id: bookId, bookISBN: bookISBN, bookImageURL: bookImageURL, bookName: bookName, bookAuthor: bookAuthor, bookDescription: bookDescription, bookCategory: bookCategory, bookSubCategories: bookSubCategories, bookPublishingDate: bookPublishingDate, bookStatus: bookStatus, bookIssuedTo: bookIssuedTo, bookIssuedToName: bookIssuedToName, bookIssuedOn: bookIssuedOn, bookExpectedReturnOn: bookExpectedReturnOn, bookRating: bookRating, bookReviews: bookReviews, bookHistory: bookHistory, createdOn: createdOn, updayedOn: updatedOn)
+            print(newBook)
+            self.dbInstance.collection("Books").document(bookId).updateData(["bookISBN":bookISBN,"bookName":bookName,"bookAuthor":bookAuthor,"bookStatus": bookStatus, "bookImageURL": bookImageURL, "bookDescription": bookDescription, "bookCategory": bookCategory, "bookSubcategories": bookSubCategories])  { error in
+                
+                if let error = error{
                     self.responseStatus = 400
                     self.responseMessage = "Something went wrong, Unable to update book. Check console for errors."
                     print("Unable to update book. Error: \(error)")
-                } else {
-                    self.responseStatus = 200
-                    self.responseMessage = "Updated book successfully."
                 }
+                else{
+                    self.responseStatus = 200
+                    self.responseMessage = "Updated book successfuly."
+                }
+                
             }
         }
     }
     
-    func getBook(
-        bookId: String
-    ) {
-        self.dbInstance.collection("Books").document(bookId).getDocument { document, error in
-            if error == nil {
-                if document != nil && document!.exists {
-                    self.currentBook = [ Book(
-                        id: document!["id"] as! String,
-                        bookISBN: document!["bookISBN"] as! String,
-                        bookImageURL: document!["bookImageURL"] as! String,
-                        bookName: document!["bookName"] as! String,
-                        bookAuthor: document!["bookAuthor"] as! String,
-                        bookDescription: document!["bookDescription"] as! String,
-                        bookCategory: document!["bookCategory"] as! String,
-                        bookSubCategory: document!["bookSubCategory"] as! [String],
-                        bookPublishingDate: document!["bookPublishingDate"] as! String,
-                        bookStatus: document!["bookStatus"] as! String,
-                        bookIssuedTo: document!["bookIssuedTo"] as! String,
-                        bookIssuedOn: document!["bookIssuedOn"] as! String,
-                        bookExpectedReturnOn: document!["bookExpectedReturnOn"] as! String,
-                        bookRating: document!["bookRating"] as! Float,
-                        bookReviews: document!["bookReviews"] as! [String],
-                        bookHistory: document!["bookHistory"] as! [History],
-                        createdOn: document!["createdOn"] as! String,
-                        updayedOn: document!["updatedOn"] as! String
-                    ) ]
+    func deleteBook(bookId: String){
+        
+        self.responseStatus = 0
+        self.responseMessage = ""
+        
+        self.dbInstance.collection("Books").document(bookId).delete { error in
+            if let error = error{
+                self.responseStatus = 400
+                self.responseMessage = "Something went wrong, Unable to delete book. Check console for errors."
+                print("Unable to delete book. Error: \(error)")
+            }
+            else{
+                self.responseStatus = 200
+                self.responseMessage = "Deleted book successfuly."
+            }
+        }
+    }
+    
+    func getBook(bookId: String){
+        
+        self.responseStatus = 0
+        self.responseMessage = ""
+        
+        self.dbInstance.collection("Books").document(bookId).getDocument { (document, error) in
+            if error == nil{
+                if (document != nil && document!.exists){
+                    
+                    guard let bookHistoryDictArray = document!["bookHistory"] as? [[String: Any]] else {
+                        print("Error: Unable to parse fineDetails array from Firestore document")
+                        return
+                    }
+
+                    var bookHistoryArray: [History] = []
+                    for bookHistoryDict in bookHistoryDictArray {
+                        guard let userId = bookHistoryDict["userId"] as? String,
+                              let userName = bookHistoryDict["userName"] as? String,
+                              let issuedOn = bookHistoryDict["issuedOn"] as? String,
+                              let returnedOn = bookHistoryDict["returnedOn"] as? String
+                        else {
+                            print("Error: Unable to parse fineDetail from dictionary")
+                            continue
+                        }
+                        
+                        let bookHistory = History(userId: userId, userName: userName, issuedOn: issuedOn, returnedOn: returnedOn)
+                        bookHistoryArray.append(bookHistory)
+                    }
+
+                    
+                    self.currentBook = [ Book(id: document!["id"] as! String, bookISBN: document!["bookISBN"] as! String, bookImageURL: document!["bookImageURL"] as! String, bookName: document!["bookName"] as! String, bookAuthor: document!["bookAuthor"] as! String, bookDescription: document!["bookDescription"] as! String, bookCategory: document!["bookCategory"] as! String, bookSubCategories: document!["bookSubCategories"] as! [String], bookPublishingDate: document!["bookPublishingDate"] as! String, bookStatus: document!["bookStatus"] as! String, bookIssuedTo: document!["bookIssuedTo"] as! String, bookIssuedToName: document!["bookIssuedToName"] as! String as Any as! String, bookIssuedOn: document!["bookIssuedOn"] as! String, bookExpectedReturnOn: document!["bookExpectedReturnOn"] as! String, bookRating: document!["bookRating"] as! Float, bookReviews: document!["bookReviews"] as! [String], bookHistory: bookHistoryArray, createdOn: document!["createdOn"] as! String, updayedOn: document!["updatedOn"] as! String) ]
                     self.responseStatus = 200
-                    self.responseMessage = "Book fetched successfully"
-                } else {
+                    self.responseMessage = "Book fetched successfuly"
+                }
+                else{
                     self.responseStatus = 200
-                    self.responseMessage = "Something went wrong, Unable to get book. Check console for error"
+                    self.responseMessage = "Something went wrong, Unable to get book. Chek console for error"
                     print("Unable to get updated document. May be this could be the error: Book does not exist or db returned nil.")
                 }
-            } else {
+            }
+            else{
                 self.responseStatus = 200
-                self.responseMessage = "Something went wrong, Unable to book. Check console for error"
+                self.responseMessage = "Something went wrong, Unable to book. Chek console for error"
                 print("Unable to get book. Error: \(String(describing: error)).")
             }
         }
     }
     
-    //    func filterBook(){
-    //
-    //        let allBooks = self.dbInstance.collection("Books")
-    //    }
+    func getBooks(){
+        
+        self.responseStatus = 0
+        self.responseMessage = ""
+        self.allBooks = []
+        
+        dbInstance.collection("Books").getDocuments{ (snapshot, error) in
+            
+            if(error == nil && snapshot != nil){
+                for document in snapshot!.documents{
+                    let documentData = document.data()
+                    
+                    guard let bookHistoryDictArray = documentData["bookHistory"] as? [[String: Any]] else {
+                        print("Error: Unable to parse fineDetails array from Firestore document")
+                        return
+                    }
+
+                    var bookHistoryArray: [History] = []
+                    for bookHistoryDict in bookHistoryDictArray {
+                        guard let userId = bookHistoryDict["userId"] as? String,
+                              let userName = bookHistoryDict["userName"] as? String,
+                              let issuedOn = bookHistoryDict["issuedOn"] as? String,
+                              let returnedOn = bookHistoryDict["returnedOn"] as? String
+                        else {
+                            print("Error: Unable to parse fineDetail from dictionary")
+                            continue
+                        }
+                        
+                        let bookHistory = History(userId: userId, userName: userName, issuedOn: issuedOn, returnedOn: returnedOn)
+                        bookHistoryArray.append(bookHistory)
+                    }
+                    
+                    let book = Book(id: documentData["id"] as! String as Any as! String, bookISBN: documentData["bookISBN"] as! String as Any as! String, bookImageURL: documentData["bookImageURL"] as! String as Any as! String, bookName: documentData["bookName"] as! String as Any as! String, bookAuthor: documentData["bookAuthor"] as! String as Any as! String, bookDescription: documentData["bookDescription"] as! String as Any as! String, bookCategory: documentData["bookCategory"] as! String as Any as! String, bookSubCategories: documentData["bookSubCategories"] as! [String] as Any as! [String], bookPublishingDate: documentData["bookPublishingDate"] as! String as Any as! String, bookStatus: documentData["bookStatus"] as! String as Any as! String, bookIssuedTo: documentData["bookIssuedTo"] as! String as Any as! String, bookIssuedToName: documentData["bookIssuedToName"] as! String as Any as! String, bookIssuedOn: documentData["bookIssuedOn"] as! String as Any as! String, bookExpectedReturnOn: documentData["bookExpectedReturnOn"] as! String as Any as! String, bookRating: Float(documentData["bookRating"] as! Int as Any as! Int), bookReviews: documentData["bookReviews"] as! [String] as Any as! [String], bookHistory: bookHistoryArray, createdOn: documentData["createdOn"] as! String as Any as! String, updayedOn: documentData["updatedOn"] as! String as Any as! String)
+                    self.allBooks.append(book)
+                }
+                print(self.allBooks)
+            }
+            
+        }
+        
+    }
+    
+//    func filterBook(){
+//
+//        let allBooks = self.dbInstance.collection("Books")
+//    }
+    
 }
