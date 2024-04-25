@@ -14,9 +14,9 @@ struct Library_Management_SystemApp: App {
     @StateObject var confiModel = ConfigViewModel()
     var body: some Scene {
         WindowGroup {
-//            ContentView()
-//                .environmentObject(themeManager)
-            AdminCategoriesView(configViewModel: confiModel)
+            ContentView()
+                .environmentObject(themeManager)
+           // AdminCategoriesView(configViewModel: confiModel)
         }
     }
     init(){
