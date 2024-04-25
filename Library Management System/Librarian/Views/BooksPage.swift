@@ -3,6 +3,7 @@ import SwiftUI
 struct BooksPage: View {
     
     @ObservedObject var LibViewModel: LibrarianViewModel
+    @ObservedObject var ConfiViewMmodel: ConfigViewModel
     
     @State var isPageLoading: Bool = true
     
@@ -14,7 +15,7 @@ struct BooksPage: View {
                     VStack(spacing: 26){
                         HStack{
                             Spacer()
-                            NavigationLink( destination: AddBookPage(LibViewModel: LibViewModel) ){
+                            NavigationLink( destination: AddBookPage(LibViewModel: LibViewModel, ConfiViewModel: ConfiViewMmodel) ){
                                 Image(systemName: "plus")
                                     .symbolRenderingMode(.hierarchical)
                                     .font(.system(size: 22, weight: .medium))
@@ -23,7 +24,7 @@ struct BooksPage: View {
                         VStack{
                             if(!LibViewModel.allBooks.isEmpty){
                                 ForEach(LibViewModel.allBooks, id: \..id){ book in
-                                    NavigationLink(destination:UpdateBookPage(LibViewModel: LibViewModel, currentBookId: book.id)){
+                                    NavigationLink(destination:UpdateBookPage(LibViewModel: LibViewModel, ConfiViewModel: ConfiViewMmodel, currentBookId: book.id)){
                                         HStack(){
                                             AsyncImage(url: URL(string: book.bookImageURL)) { image in
                                                     image.resizable()
@@ -75,9 +76,10 @@ struct BooksPage: View {
 struct BPPrev: View {
     
     @StateObject var LibViewModel = LibrarianViewModel()
+    @StateObject var ConfiViewModel = ConfigViewModel()
     
     var body: some View {
-        BooksPage(LibViewModel: LibViewModel)
+        BooksPage(LibViewModel: LibViewModel, ConfiViewMmodel: ConfiViewModel)
     }
 }
 
