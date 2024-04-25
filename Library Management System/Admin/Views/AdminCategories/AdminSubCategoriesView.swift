@@ -6,19 +6,48 @@
 //
 
 import SwiftUI
+class AdminSubCategoriesViewModel: ObservableObject {
+    @ObservedObject var librarianViewModel = LibrarianViewModel()
+    init(){
+    }
+}
 
 struct AdminSubCategoriesView: View {
-    @State var groupedBooks: [Bok]
+    @State var category: String
     @State private var isEditing = false
     @State private var editedSubcategory = ""
+    @ObservedObject var librarianViewModel = LibrarianViewModel()
     
-    var body: some View {
-        let subGroupedBooks = Dictionary(grouping: groupedBooks, by: { $0.subcategory })
+    var groupedBooks: [String: [Book]] {
+        let filteredBooks = librarianViewModel.currentBook.filter { book in
+            book.bookCategory.contains(category)
+        }
         
+        var groupedBooks: [String: [Book]] = [:]
+        for book in filteredBooks {
+            for subcategory in book.bookSubCategories {
+                if var booksInSubcategory = groupedBooks[subcategory] {
+                    booksInSubcategory.append(book)
+                    groupedBooks[subcategory] = booksInSubcategory
+                } else {
+                    groupedBooks[subcategory] = [book]
+                }
+            }
+        }
+        print(category)
+        print(librarianViewModel.currentBook)
+        print(filteredBooks)
+    
+        print(groupedBooks)
+        return groupedBooks
+    }
+
+    var body: some View {
         NavigationStack {
             VStack(spacing: 10) {
                 ScrollView{
-                    ForEach(subGroupedBooks.sorted(by: { $0.key < $1.key }), id: \.key) { subcategory, books in
+                    
+                    ForEach(groupedBooks.sorted(by: { $0.key < $1.key }), id: \.key) { subcategory,books in
                         VStack(alignment: .leading) {
                             HStack {
                                 if isEditing {
@@ -27,14 +56,11 @@ struct AdminSubCategoriesView: View {
                                         .padding(.bottom, 2)
                                     
                                     Button("Done") {
-                                        updateSubcategory(oldSubcategory: subcategory, newSubcategory: editedSubcategory)
+                                        // updateSubcategory(oldSubcategory: subcategory, newSubcategory: editedSubcategory)
                                         isEditing.toggle()
                                         editedSubcategory = ""
                                     }
-                                    
-                                }
-                                
-                                else {
+                                } else {
                                     Text(subcategory)
                                         .font(.title2)
                                         .fontWeight(.bold)
@@ -57,13 +83,14 @@ struct AdminSubCategoriesView: View {
                                     
                                 }
                                 else{
-                                    NavigationLink(destination: CardListDetailView(books: books)){
-                                        Text("See All")
+                                    NavigationLink(destination: CardListDetailView(books: groupedBooks[subcategory]!)) {
+                                            Text("See All")
                                     }
+
                                 }
                                 
                             }
-                            CardListView(books: books)
+                            CardListView(books: groupedBooks[subcategory]!)
                         }
                     }
                 }
@@ -73,13 +100,13 @@ struct AdminSubCategoriesView: View {
     }
     
     
-    private func updateSubcategory(oldSubcategory: String, newSubcategory: String) {
-        for index in 0..<groupedBooks.count {
-            if groupedBooks[index].subcategory == oldSubcategory {
-                groupedBooks[index].subcategory = newSubcategory
-            }
-        }
-    }
+    //    private func updateSubcategory(oldSubcategory: String, newSubcategory: String) {
+    //        for index in 0..<categories.count {
+    //            if categories[index].subcategory == oldSubcategory {
+    //                categories[index].subcategory = newSubcategory
+    //            }
+    //        }
+    //    }
 }
 
 
@@ -88,7 +115,7 @@ struct AdminSubCategoriesView: View {
 
 
 struct CardView: View {
-    var books: [Bok]
+    var books: [Book]
     
     var body: some View {
         ScrollView(.horizontal){
@@ -100,7 +127,7 @@ struct CardView: View {
                             .frame(width: 100, height: 150)
                             .cornerRadius(12)
                             .padding(.vertical,6)
-                        Text(books[index].name)
+                        Text(books[index].bookName)
                             .font(.caption)
                             .multilineTextAlignment(.center)
                             .padding(8)
@@ -123,11 +150,5 @@ struct CardView: View {
 
 
 #Preview {
-    AdminSubCategoriesView(groupedBooks:
-                            [ Bok(id: 1, isbn: "978-0-553-57340-4", name: "The Great Adventure", author: "Emily Smith", description: "A thrilling adventure novel filled with mystery and excitement.", publishingDate: "2023-05-15", category: "Fiction", subcategory: "Action", status: "Available"),
-                              Bok(id: 2, isbn: "978-0-439-02348-6", name: "Secrets of the Lost City", author: "John Johnson", description: "An archaeological thriller uncovering the secrets of an ancient civilization.", publishingDate: "2022-09-20", category: "Fiction", subcategory: "Mystery", status: "Available"),
-                              Bok(id: 3, isbn: "978-0-06-288180-3", name: "The Art of Cooking", author: "Linda Martinez", description: "A comprehensive guide to mastering the culinary arts.", publishingDate: "2023-02-10", category: "Non-Fiction", subcategory: "Cookbooks", status: "Available"),
-                              Bok(id: 4, isbn: "978-0-306-40615-7", name: "The Universe Within", author: "David Thompson", description: "Exploring the mysteries of the cosmos and the human mind.", publishingDate: "2023-08-28", category: "Non-Fiction", subcategory: "Science", status: "Available"),
-                              Bok(id: 5, isbn: "978-0-307-95614-7", name: "The Silent Observer", author: "Rachel Green", description: "A gripping psychological thriller that will keep you on the edge of your seat.", publishingDate: "2023-11-05", category: "Fiction", subcategory: "Thriller", status: "Available")
-                            ])
+    AdminSubCategoriesView(category: "Sci-Fi")
 }

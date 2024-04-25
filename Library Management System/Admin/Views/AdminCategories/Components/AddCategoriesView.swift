@@ -9,6 +9,7 @@ import SwiftUI
 
 struct AddCategoriesView: View {
     @Binding var isSheetPresented: Bool
+    @ObservedObject var configViewModel: ConfigViewModel
     @State private var newCategoryName = ""
     
     var body: some View {
@@ -28,7 +29,10 @@ struct AddCategoriesView: View {
         
                             Button{
                                 // MARK: Function Calling
-                                isSheetPresented = false
+                                Task{
+                                    configViewModel.addCategory(configId: "HJ9L6mDbi01TJvX3ja7Z", categories: addCategories(newCategory:newCategoryName))
+                                    isSheetPresented = false
+                                }
                             } label: {
                                 Text("Add Categories")
                                     .font(.title3)
@@ -48,7 +52,23 @@ struct AddCategoriesView: View {
                     }
                 }
     
+    func addCategories(newCategory: String) -> [String] {
+        var newCategoriesList = configViewModel.currentConfig[0].categories
+        newCategoriesList.append(newCategory)
+        return newCategoriesList
+    }
+    
 }
+
+struct ACPrev: View {
+
+    @StateObject var ConfigrationViewModel = ConfigViewModel()
+
+    var body: some View {
+        AddCategoriesView(isSheetPresented: .constant(false), configViewModel: ConfigrationViewModel)
+    }
+}
+
 #Preview {
-    AddCategoriesView(isSheetPresented: .constant(false))
+    ACPrev()
 }

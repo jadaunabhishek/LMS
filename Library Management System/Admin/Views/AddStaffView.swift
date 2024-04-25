@@ -12,7 +12,7 @@ struct AddStaffView: View {
     @State var staffEmail = ""
     @State var staffMobile = ""
     @State var staffAadhar = ""
-    @State var selectedRole: String = "Librarian"
+    @State var selectedRole: String = "librarian"
     
     @State var selectedImage: UIImage = UIImage()
     @State var isShowingImagePicker = false

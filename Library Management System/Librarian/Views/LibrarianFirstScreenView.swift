@@ -3,10 +3,17 @@ import SwiftUI
 struct LibrarianFirstScreenView: View {
     @State private var showNotifications = false
     @EnvironmentObject var themeManager: ThemeManager
+    @ObservedObject var LibModelView: LibrarianViewModel
+    @ObservedObject var ConfiViewModel: ConfigViewModel
 
     var body: some View {
         NavigationView {
             TabView {
+                BooksPage(LibViewModel: LibModelView, ConfiViewMmodel: ConfiViewModel)
+                    .tabItem {
+                        Image(systemName: "book.closed")
+                        Text("Books")
+                    }
                 AdminHomeView()
                     .tabItem {
                         Image(systemName: "house")
@@ -36,10 +43,17 @@ struct LibrarianFirstScreenView: View {
     }
 }
 
-// Preview for SwiftUI Canvas
-struct LibrarianFirstScreenView_Previews: PreviewProvider {
-    static var previews: some View {
-        LibrarianFirstScreenView().environmentObject(ThemeManager())
+struct LFSPrev: View {
+    
+    @StateObject var LibViewModel = LibrarianViewModel()
+    @StateObject var ConfiViewModel = ConfigViewModel()
+    
+    var body: some View {
+        LibrarianFirstScreenView(LibModelView: LibViewModel, ConfiViewModel: ConfiViewModel)
     }
+}
+
+#Preview {
+    LFSPrev()
 }
 
