@@ -19,11 +19,10 @@ struct LibrarianFirstScreenView: View {
                         Image(systemName: "house")
                         Text("Home")
                     }
-
-                AdminStaffView()
+                MembersView()
                     .tabItem {
                         Image(systemName: "person.3.fill")
-                        Text("Staff")
+                        Text("Member")
                     }
             }
             .accentColor(themeManager.selectedTheme.primaryThemeColor)
@@ -53,7 +52,10 @@ struct LFSPrev: View {
     }
 }
 
-#Preview {
-    LFSPrev()
+struct LFSPrev_Previews: PreviewProvider {
+    static var previews: some View {
+        let themeManager = ThemeManager()
+        return LFSPrev()
+            .environmentObject(themeManager)
+    }
 }
-
