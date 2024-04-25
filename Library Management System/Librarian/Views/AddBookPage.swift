@@ -3,6 +3,7 @@ import SwiftUI
 struct AddBookPage: View {
     
     @ObservedObject var LibViewModel: LibrarianViewModel
+    @ObservedObject var ConfiViewModel: ConfigViewModel
     
     @State var bookISBN: String = ""
     @State var bookName: String = ""
@@ -62,6 +63,12 @@ struct AddBookPage: View {
         }
     }
     
+    func getData(){
+        ConfiViewModel.fetchConfig()
+        //try? await Task.sleep(nanoseconds: 3_000_000_000)
+        
+    }
+    
     var body: some View {
         NavigationView{
             ZStack{
@@ -69,7 +76,7 @@ struct AddBookPage: View {
                 ScrollView{
                     VStack(spacing: 26){
                         HStack(alignment: .center){
-                            NavigationLink( destination: BooksPage(LibViewModel: LibViewModel) ){
+                            NavigationLink( destination: BooksPage(LibViewModel: LibViewModel, ConfiViewMmodel: ConfiViewModel) ){
                                 VStack(alignment: .leading){
                                     HStack{
                                         Image(systemName: "chevron.left")
@@ -170,10 +177,11 @@ struct AddBookPage: View {
                                 Spacer()
                                 Picker("", selection: $bookCategory){
                                     Text("Choose").tag("Choose")
-                                    Text("Sci - Fi").tag("Sci-Fi")
-                                    Text("Adventure").tag("Adventure")
-                                    Text("Fantasy").tag("Fantasy")
-                                    Text("Thriller").tag("Thriller")
+                                    if(!ConfiViewModel.currentConfig.isEmpty){
+                                        ForEach(ConfiViewModel.currentConfig[0].categories, id: \.self){ category in
+                                            Text(category).tag(category)
+                                        }
+                                    }
                                 }
                                 .accentColor(.black)
                             }
@@ -186,10 +194,11 @@ struct AddBookPage: View {
                                     Spacer()
                                     Picker("", selection: $bookSubCategory){
                                         Text("Choose").tag("Choose")
-                                        Text("Sci - Fi").tag("Sci-Fi")
-                                        Text("Adventure").tag("Adventure")
-                                        Text("Fantasy").tag("Fantasy")
-                                        Text("Thriller").tag("Thriller")
+                                        if(!ConfiViewModel.currentConfig.isEmpty){
+                                            ForEach(ConfiViewModel.currentConfig[0].categories, id: \.self){ category in
+                                                Text(category).tag(category)
+                                            }
+                                        }
                                     }
                                     .accentColor(.black)
                                     .onChange(of: bookSubCategory, initial: true){ (oldValue,newValue)  in
@@ -228,7 +237,7 @@ struct AddBookPage: View {
                             VStack{
                                 Text("All fields are mandatory")
                                     .font(.system(size: 18, weight: .thin))
-                                NavigationLink(destination: BooksPage(LibViewModel: LibViewModel), tag: .ready, selection: $docState){
+                                NavigationLink(destination: BooksPage(LibViewModel: LibViewModel, ConfiViewMmodel: ConfiViewModel), tag: .ready, selection: $docState){
                                     Button(action:{
                                         Task{
                                             if(formValidation()){
@@ -300,6 +309,9 @@ struct AddBookPage: View {
                 }
             }
             .background(.black.opacity(0.05))
+            .task {
+                getData()
+            }
         }
         .navigationBarBackButtonHidden(true)
     }
@@ -308,9 +320,10 @@ struct AddBookPage: View {
 struct ABPreview: View {
     
     @StateObject var LibViewModel = LibrarianViewModel()
+    @StateObject var ConfiViewModel = ConfigViewModel()
     
     var body: some View {
-        AddBookPage(LibViewModel: LibViewModel)
+        AddBookPage(LibViewModel: LibViewModel, ConfiViewModel: ConfiViewModel)
     }
 }
 
