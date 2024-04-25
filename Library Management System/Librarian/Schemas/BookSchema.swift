@@ -1,15 +1,28 @@
 import Foundation
-import FirebaseFirestore
 
 struct History{
     
     var userId: String
+    var userName: String
     var issuedOn: String
     var returnedOn: String
     
+    func getDictionaryOfStruct() -> [String:Any]{
+        
+        return [
+            
+            "userId": userId,
+            "userName": userName,
+            "issuedOn": issuedOn,
+            "returnedOn": returnedOn
+            
+        ]
+        
+    }
+    
 }
 
-struct Book: Identifiable{
+struct Book{
     
     var id: String
     var bookISBN: String
@@ -18,10 +31,11 @@ struct Book: Identifiable{
     var bookAuthor: String
     var bookDescription: String
     var bookCategory: String
-    var bookSubCategory: [String]
+    var bookSubCategories: [String]
     var bookPublishingDate: String
     var bookStatus: String
     var bookIssuedTo: String
+    var bookIssuedToName: String
     var bookIssuedOn: String
     var bookExpectedReturnOn: String
     var bookRating: Float
@@ -41,9 +55,11 @@ struct Book: Identifiable{
             "bookAuthor": bookAuthor,
             "bookDescription": bookDescription,
             "bookCategory": bookCategory,
+            "bookSubCategories": bookSubCategories,
             "bookPublishingDate": bookPublishingDate,
             "bookStatus": bookStatus,
             "bookIssuedTo": bookIssuedTo,
+            "bookIssuedToName": bookIssuedToName,
             "bookIssuedOn": bookIssuedOn,
             "bookExpectedReturnOn": bookExpectedReturnOn,
             "bookRating": bookRating,
