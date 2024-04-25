@@ -10,6 +10,7 @@ import SwiftUI
 struct UpdateBookPage: View {
     
     @ObservedObject var LibViewModel: LibrarianViewModel
+    @ObservedObject var ConfiViewModel: ConfigViewModel
     @State var currentBookId: String = "H47KYrYF7tw60pDcxIzu"
     
     @State var bookISBN: String = "123-456-789"
@@ -55,6 +56,7 @@ struct UpdateBookPage: View {
         print(currentBookId)
         LibViewModel.getBook(bookId: currentBookId)
         try? await Task.sleep(nanoseconds: 3_000_000_000)
+        ConfiViewModel.fetchConfig()
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "dd/MM/yy"
         let date = dateFormatter.date(from:String(LibViewModel.currentBook[0].bookPublishingDate.split(separator: ",")[0]))!
@@ -86,7 +88,7 @@ struct UpdateBookPage: View {
                 ScrollView{
                     VStack(spacing: 26){
                         HStack{
-                            NavigationLink( destination: BooksPage(LibViewModel: LibViewModel) ){
+                            NavigationLink( destination: BooksPage(LibViewModel: LibViewModel, ConfiViewMmodel: ConfiViewModel) ){
                                 VStack(alignment: .leading){
                                     HStack{
                                         Image(systemName: "chevron.left")
@@ -233,10 +235,11 @@ struct UpdateBookPage: View {
                                         if(canEdit){
                                             Picker("", selection: $bookCategory){
                                                 Text("Choose").tag("Choose")
-                                                Text("Sci - Fi").tag("Sci-Fi")
-                                                Text("Adventure").tag("Adventure")
-                                                Text("Fantasy").tag("Fantasy")
-                                                Text("Thriller").tag("Thriller")
+                                                if(!ConfiViewModel.currentConfig.isEmpty){
+                                                    ForEach(ConfiViewModel.currentConfig[0].categories, id: \.self){ category in
+                                                        Text(category).tag(category)
+                                                    }
+                                                }
                                             }
                                             .accentColor(.black)
                                             .labelsHidden()
@@ -260,10 +263,11 @@ struct UpdateBookPage: View {
                                         if(canEdit){
                                             Picker("", selection: $bookSubCategory){
                                                 Text("Choose").tag("Choose")
-                                                Text("Sci - Fi").tag("Sci-Fi")
-                                                Text("Adventure").tag("Adventure")
-                                                Text("Fantasy").tag("Fantasy")
-                                                Text("Thriller").tag("Thriller")
+                                                if(!ConfiViewModel.currentConfig.isEmpty){
+                                                    ForEach(ConfiViewModel.currentConfig[0].categories, id: \.self){ category in
+                                                        Text(category).tag(category)
+                                                    }
+                                                }
                                             }
                                             .accentColor(.black)
                                             .labelsHidden()
@@ -352,7 +356,7 @@ struct UpdateBookPage: View {
                                     }
                                 }
                                 else{
-                                    NavigationLink(destination: BooksPage(LibViewModel: LibViewModel), tag: .ready, selection: $docState){
+                                    NavigationLink(destination: BooksPage(LibViewModel: LibViewModel, ConfiViewMmodel: ConfiViewModel), tag: .ready, selection: $docState){
                                         Button(action:{
                                             Task{
                                                 isButtonLoading.toggle()
@@ -432,9 +436,10 @@ struct UpdateBookPage: View {
 struct UBPrev: View {
     
     @StateObject var LibViewModel = LibrarianViewModel()
+    @StateObject var ConfiViewModel = ConfigViewModel()
     
     var body: some View {
-        UpdateBookPage(LibViewModel: LibViewModel)
+        UpdateBookPage(LibViewModel: LibViewModel, ConfiViewModel: ConfiViewModel)
     }
 }
 
