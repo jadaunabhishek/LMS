@@ -170,9 +170,12 @@ struct NotificationRow: View {
         .sheet(isPresented: $isShowingGrievanceDetail) { // Use the corrected state variable name
             GrievanceDetailView(grievance: notification.detail ?? "No details provided", viewModel: viewModel, notification: notification)
         }
-        .onAppear {
-            self.viewModel.fetchData()
-        }
+        .onAppear(
+            perform: {
+                Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { time in
+                    self.viewModel.fetchData()
+                }
+            })
     }
 }
 
@@ -259,5 +262,3 @@ struct NotificationsView_Previews: PreviewProvider {
         return NotificationsView(viewModel: viewModel)
     }
 }
-
-
