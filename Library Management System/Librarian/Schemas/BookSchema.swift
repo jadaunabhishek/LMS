@@ -16,7 +16,8 @@ struct Book{
     var bookName: String
     var bookAuthor: String
     var bookDescription: String
-    var bookCategory: [String]
+    var bookCategory: String
+    var bookSubCategory: [String]
     var bookPublishingDate: String
     var bookStatus: String
     var bookIssuedTo: String

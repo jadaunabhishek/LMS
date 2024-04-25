@@ -17,6 +17,11 @@ struct AdminTabView: View {
                         Image(systemName: "house")
                         Text("Home")
                     }
+                AdminCategoriesView(configViewModel: ConfigViewModel())
+                    .tabItem {
+                        Image(systemName: "square.split.2x2.fill")
+                        Text("categorys")
+                    }
                 AddStaffView()
                     .tabItem {
                         Image(systemName: "person.3.fill")
