@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+
 struct AdminTabView: View {
     @EnvironmentObject var themeManager: ThemeManager
     var body: some View {
@@ -17,7 +18,12 @@ struct AdminTabView: View {
                         Image(systemName: "house")
                         Text("Home")
                     }
-                AddStaffView()
+                AdminCategoriesView(configViewModel: ConfigViewModel())
+                    .tabItem {
+                        Image(systemName: "square.split.2x2.fill")
+                        Text("Categories")
+                    }
+                AdminStaffView()
                     .tabItem {
                         Image(systemName: "person.3.fill")
                         Text("Staff")

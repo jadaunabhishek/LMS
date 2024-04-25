@@ -5,13 +5,6 @@
 //  Created by Abhishek Jadaun on 22/04/24.
 //
 
-//
-//  LoginView.swift
-//  Library Management System
-//
-//  Created by Abhishek Jadaun on 22/04/24.
-//
-
 import SwiftUI
 import FirebaseCore
 import FirebaseAuth
@@ -21,6 +14,7 @@ import FirebaseFirestore
 struct LoginView: View {
     private var db = Firestore.firestore()
     @StateObject private var viewModel = AuthViewModel()
+    @StateObject var LibViewModel = LibrarianViewModel()
     
     @State private var email: String = ""
     @State private var password: String = ""
@@ -92,9 +86,9 @@ struct LoginView: View {
                     .shadow(color: Color.gray.opacity(0.3), radius: 5, x: 0, y: 2)
                     
                     NavigationLink(destination: AdminTabView(), isActive: $viewModel.shouldNavigateToAdmin) { EmptyView() }
-                    NavigationLink(destination: LibrarianFirstScreenView(), isActive: $viewModel.shouldNavigateToLibrarian) { EmptyView() }
-                    NavigationLink(destination: MemberFirstScreenView(), isActive: $viewModel.shouldNavigateToMember) { EmptyView() }
-                    NavigationLink(destination: LoginView(), isActive: $viewModel.shouldNavigateToGeneral) { EmptyView() }
+                    NavigationLink(destination: LibrarianFirstScreenView(LibModelView: LibViewModel), isActive: $viewModel.shouldNavigateToLibrarian) { EmptyView() }
+                    NavigationLink(destination: MemberTabView(), isActive: $viewModel.shouldNavigateToMember) { EmptyView() }
+                    NavigationLink(destination: Membership(), isActive: $viewModel.shouldNavigateToGeneral) { EmptyView() }
                     
                     
                 }.padding()

@@ -8,113 +8,170 @@
 import SwiftUI
 
 struct AddStaffView: View {
-    @State private var staffName = ""
-    @State private var staffEmail = ""
-    @State private var staffMobile = ""
-    @State private var staffAadhar = ""
-    @State private var selectedRole: Staff.StaffRole = .librarian
-    @State private var selectedImage: UIImage?
-    @State private var isShowingImagePicker = false
+    @State var staffName = ""
+    @State var staffEmail = ""
+    @State var staffMobile = ""
+    @State var staffAadhar = ""
+    @State var selectedRole: String = "librarian"
+    
+    @State var selectedImage: UIImage = UIImage()
+    @State var isShowingImagePicker = false
+    @State var isImageSelected = false
+    
+    @State var showSuccessAlert = false
+    @State var showImageAlert = false
+    
     @StateObject var staffViewModel = StaffViewModel()
     @EnvironmentObject var themeManager: ThemeManager
+    @Environment(\.presentationMode) var presentationMode
     
     var body: some View {
         VStack {
-            TextField("Staff Name", text: $staffName)
-                .textFieldStyle(RoundedBorderTextFieldStyle())
-                .padding()
-            
-            TextField("Staff Email", text: $staffEmail)
-                .textFieldStyle(RoundedBorderTextFieldStyle())
-                .padding()
-            
-            TextField("Staff Mobile", text: $staffMobile)
-                .textFieldStyle(RoundedBorderTextFieldStyle())
-                .padding()
-            
-            TextField("Staff Aadhar", text: $staffAadhar)
-                .textFieldStyle(RoundedBorderTextFieldStyle())
-                .padding()
-            
-            
-            Picker("Staff Role", selection: $selectedRole) {
-                ForEach(Staff.StaffRole.allCases, id: \.self) { role in
-                    Text(role.rawValue).tag(role)
-                }
-            }
-            .pickerStyle(SegmentedPickerStyle())
-            .padding()
-            
-            if let image = selectedImage {
-                Image(uiImage: image)
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 200, height: 200)
-                    .clipShape(Circle())
-                    .padding()
-            }
             
             Button(action: {
                 isShowingImagePicker.toggle()
             }) {
-                Text("Select Profile Photo")
+                if (isImageSelected) {
+                    Image(uiImage: selectedImage)
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                        .frame(width: 150, height: 150)
+                        .clipShape(Circle())
+                } else {
+                    ZStack {
+                        Circle()
+                            .frame(width: 150, height: 150)
+                            .foregroundColor(themeManager.selectedTheme.primaryThemeColor)
+                        Image(systemName: "person.fill")
+                            .font(.system(size: 80))
+                            .foregroundColor(.white)
+                    }
+                }
             }
             .padding()
             .sheet(isPresented: $isShowingImagePicker) {
-                ImagePicker(image: $selectedImage, defaultUserImage: nil)
+                ImagePicker(selectedImage: $selectedImage, isImageSelected: $isImageSelected, sourceType: .photoLibrary)
             }
             
+            TextField("Name", text: $staffName)
+                .modifier(CustomTextFieldStyle())
+                .padding()
+            
+            TextField("Email", text: $staffEmail)
+                .modifier(CustomTextFieldStyle())
+                .padding()
+                .autocapitalization(.none)
+            
+            TextField("Mobile Number", text: $staffMobile)
+                .modifier(CustomTextFieldStyle())
+                .padding()
+            
+            TextField("Aadhar Number", text: $staffAadhar)
+                .modifier(CustomTextFieldStyle())
+                .padding()
+                .alert(isPresented: $showImageAlert, content: imageAlert)
+            
             Button(action: {
-                addStaff()
+                if isImageSelected == true {
+                    addStaff()
+                } else {
+                    print("No Image Selected")
+                    showImageAlert = true
+                }
             }) {
                 Text("Add Staff")
                     .padding()
-                    .foregroundColor(themeManager.selectedTheme.bodyTextColor)
-                    .background(themeManager.selectedTheme.primaryThemeColor)
+                    .foregroundColor(.white)
+                    .fontWeight(.bold)
+                    .background(
+                        staffName.isEmpty || staffEmail.isEmpty || staffMobile.isEmpty || staffAadhar.isEmpty ?
+                        themeManager.selectedTheme.secondaryThemeColor :
+                            themeManager.selectedTheme.primaryThemeColor
+                    )
                     .cornerRadius(8)
             }
             .padding()
-            
+            .disabled(
+                staffName.isEmpty ||
+                staffEmail.isEmpty ||
+                staffMobile.isEmpty ||
+                staffAadhar.isEmpty
+            )
+            .alert(isPresented: $showSuccessAlert, content: successAlert)
+
             Spacer()
         }
-        .padding()
-        .navigationBarTitle("Add Staff")
     }
-    
     
     private func addStaff() {
-        guard !staffName.isEmpty, !staffEmail.isEmpty, !staffMobile.isEmpty, !staffAadhar.isEmpty, let selectedImage = selectedImage else {
-            // Handle empty fields or missing image
-            return
-        }
-        
         staffViewModel.addStaff(
-            staffName: staffName,
-            staffEmail: staffEmail,
-            staffMobile: staffMobile,
-            staffAadhar: staffAadhar,
-            staffRole: selectedRole,
-            profilePhoto: selectedImage
-        ) { success, error in
-            if success {
-                print("Staff added successfully!")
-            } else {
-                if let error = error {
-                    print("Error adding staff: \(error.localizedDescription)")
+            name: staffName,
+            email: staffEmail,
+            mobile: staffMobile,
+            aadhar: staffAadhar,
+            role: selectedRole,
+            profilePhoto: selectedImage,
+            completion: { success, error in
+                if success {
+                    DispatchQueue.main.async {
+                        print("Data added to Firebase successfully!")
+                        showSuccessAlert = true
+                    }
                 } else {
-                    print("Unknown error adding staff.")
+                    if let error = error {
+                        print("Error adding staff: \(error.localizedDescription)")
+                    } else {
+                        print("Unknown error adding staff.")
+                    }
                 }
             }
-        }
+        )
+    }
+    
+    private func successAlert() -> Alert {
+        Alert(title: Text("Success"),
+              message: Text("Staff Added Successfully!"),
+              dismissButton: .default(Text("OK")) {
+            presentationMode.wrappedValue.dismiss()
+        })
+    }
+    
+    private func imageAlert() -> Alert {
+        Alert(title: Text("Profile Photo Required"),
+              message: Text("Please select a profile photo."),
+              dismissButton: .default(Text("OK")))
     }
 }
 
-extension Staff.StaffRole {
-    static var allCases: [Staff.StaffRole] {
-        return [.librarian, .staff]
+
+struct CustomTextFieldStyle: ViewModifier {
+    @EnvironmentObject var themeManager: ThemeManager
+    @FocusState private var isEditing: Bool
+    
+    func body(content: Content) -> some View {
+        content
+            .padding(10)
+            .background(
+                RoundedRectangle(cornerRadius: 8)
+                    .stroke(
+                        isEditing || !content.getText().isEmpty ? themeManager.selectedTheme.primaryThemeColor : themeManager.selectedTheme.secondaryThemeColor,
+                        lineWidth: 1
+                    )
+            )
+            .padding(.horizontal)
+            .onChange(of: content.getText(), perform: { _ in
+                self.isEditing = true
+            })
+            .focused($isEditing)
     }
 }
 
+extension View {
+    func getText() -> String {
+        guard let view = self as? UITextField else { return "" }
+        return view.text ?? ""
+    }
+}
 
 struct AddStaffView_Previews: PreviewProvider {
     static var previews: some View {
