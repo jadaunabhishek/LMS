@@ -13,9 +13,9 @@ import FirebaseFirestore
 
 struct Membership: View {
     enum MembershipStatus {
-        case requested
+        case applied
         case rejected
-        case accepted
+        case approved
         case new
     }
     
@@ -29,11 +29,11 @@ struct Membership: View {
     
     private func colorForStatus(_ status: MembershipStatus) -> Color {
         switch status {
-        case .requested:
+        case .applied:
             return .green
         case .new:
             return .gray
-        case .accepted:
+        case .approved:
             return .green
         case .rejected:
             return .red
@@ -140,7 +140,7 @@ struct Membership: View {
                 VStack {
                     Spacer()
                     Button(action: {
-                        self.status_sent = .requested
+                        self.status_sent = .applied
                         self.status_received = .new
                         self.requestStatus = "Request Status"
                         updateCurrentUserDetails()
@@ -154,7 +154,7 @@ struct Membership: View {
                     .cornerRadius(20)
                     .padding(.horizontal)
                     .padding(.bottom)
-                    NavigationLink("", destination: MemberFirstScreenView(), isActive: $shouldNavigate)
+                    NavigationLink("", destination: MemberTabView(), isActive: $shouldNavigate)
                         .hidden() // Hide the navigation link
                     
                 }
@@ -189,8 +189,7 @@ struct Membership: View {
                         print("User status updated successfully")
                     }
                 }
-                self.status_sent = .requested
-        } else {
+                self.status_sent =  .applied
             print("No authenticated user")
         }
     }
@@ -217,20 +216,20 @@ struct Membership: View {
                     DispatchQueue.main.async {
                         switch status {
                         case "approved":
-                            self.status_received = .accepted
+                            self.status_received = .approved
                             self.requestStatus = "Request Approved"
-                            self.status_sent = .requested
+                            self.status_sent =  .applied
                             self.shouldNavigate = true
                         case "rejected":
                             self.status_received = .rejected
                             self.shouldNavigate = false
                             self.requestStatus = "Request Rejected"
-                            self.status_sent = .requested
+                            self.status_sent = .applied
                         case "applied":
                             self.status_received = .new
                             self.shouldNavigate = false
                             self.requestStatus = "Request Status"
-                            self.status_sent = .requested
+                            self.status_sent = .applied
                         default:
                             self.status_received = .new
                             self.shouldNavigate = false

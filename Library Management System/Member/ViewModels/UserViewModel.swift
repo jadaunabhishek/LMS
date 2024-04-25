@@ -1,11 +1,3 @@
-//
-//  Membership.swift
-//  Library Management System
-//
-//  Created by admin on 22/04/24.
-//
-
-
 import Foundation
 import FirebaseAuth
 import FirebaseFirestore
@@ -29,12 +21,14 @@ class AuthViewModel: ObservableObject {
                 // Login was successful, check for user role
                 print("Login successful!")
                 UserDefaults.standard.set(true, forKey: "emailLoggedIn")
-                
+                UserDefaults.standard.set(email, forKey: "email")
                 // Assume the UID is used as the document ID in `users` collection
                 self?.fetchUserRole(email: email)
             }
         }
     }
+    
+    
 
     private func fetchUserRole(email: String) {
         db.collection("users").whereField("email", isEqualTo: email).getDocuments { [weak self] (querySnapshot, error) in
@@ -49,6 +43,7 @@ class AuthViewModel: ObservableObject {
                     }
 
                     let role = document.data()["role"] as? String ?? ""
+            let id = document.data()[""]
                     // Check role and navigate based on it
                     DispatchQueue.main.async {
                         // Implement role-based navigation logic
@@ -65,7 +60,7 @@ class AuthViewModel: ObservableObject {
                 switch role {
                 case "admin":
                     self.shouldNavigateToAdmin = true
-                case "librarian":
+                case "Librarian":
                     self.shouldNavigateToLibrarian = true
                 case "member":
                     self.shouldNavigateToMember = true
@@ -74,4 +69,32 @@ class AuthViewModel: ObservableObject {
                 }
             }
     }
+    
+    func findAndUpdateUserStatus(email: String, newStatus: String, completion: @escaping (Bool) -> Void) {
+            db.collection("users").whereField("email", isEqualTo: email).getDocuments { snapshot, error in
+                if let error = error {
+                    print("Error fetching user: \(error)")
+                    completion(false)
+                    return
+                }
+                
+                guard let document = snapshot?.documents.first else {
+                    print("User not found")
+                    completion(false)
+                    return
+                }
+                
+                let documentID = document.documentID
+                
+//                db.collection("users").document(documentID).updateData(["status": newStatus]) { error in
+//                    if let error = error {
+//                        print("Error updating user status: \(error)")
+//                        completion(false)
+//                    } else {
+//                        print("User status updated successfully")
+//                        completion(true)
+//                    }
+//                }
+            }
+        }
 }

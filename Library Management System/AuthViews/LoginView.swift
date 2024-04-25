@@ -86,7 +86,7 @@ struct LoginView: View {
                     
                     NavigationLink(destination: AdminTabView(), isActive: $viewModel.shouldNavigateToAdmin) { EmptyView() }
                     NavigationLink(destination: LibrarianFirstScreenView(), isActive: $viewModel.shouldNavigateToLibrarian) { EmptyView() }
-                    NavigationLink(destination: MemberFirstScreenView(), isActive: $viewModel.shouldNavigateToMember) { EmptyView() }
+                    NavigationLink(destination: MemberTabView(), isActive: $viewModel.shouldNavigateToMember) { EmptyView() }
                     NavigationLink(destination: Membership(), isActive: $viewModel.shouldNavigateToGeneral) { EmptyView() }
                     
                     
