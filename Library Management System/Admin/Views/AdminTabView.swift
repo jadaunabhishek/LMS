@@ -21,9 +21,9 @@ struct AdminTabView: View {
                 AdminCategoriesView(configViewModel: ConfigViewModel())
                     .tabItem {
                         Image(systemName: "square.split.2x2.fill")
-                        Text("categorys")
+                        Text("Categories")
                     }
-                AddStaffView()
+                AdminStaffView()
                     .tabItem {
                         Image(systemName: "person.3.fill")
                         Text("Staff")

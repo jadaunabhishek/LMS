@@ -87,7 +87,7 @@ class StaffViewModel: ObservableObject {
     }
 
     func getStaff() {
-        self.dbInstance.collection("users").whereField("role", isEqualTo: "Librarian").getDocuments { querySnapshot, error in
+        self.dbInstance.collection("users").whereField("role", isEqualTo: "librarian").getDocuments { querySnapshot, error in
             guard let querySnapshot = querySnapshot else {
                 print("Error fetching librarians: \(error?.localizedDescription ?? "Unknown error")")
                 return

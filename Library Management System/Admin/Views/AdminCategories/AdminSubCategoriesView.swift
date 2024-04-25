@@ -25,7 +25,7 @@ struct AdminSubCategoriesView: View {
         
         var groupedBooks: [String: [Book]] = [:]
         for book in filteredBooks {
-            for subcategory in book.bookSubCategory {
+            for subcategory in book.bookSubCategories {
                 if var booksInSubcategory = groupedBooks[subcategory] {
                     booksInSubcategory.append(book)
                     groupedBooks[subcategory] = booksInSubcategory
