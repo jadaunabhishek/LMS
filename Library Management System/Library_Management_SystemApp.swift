@@ -11,10 +11,12 @@ import Firebase
 @main
 struct Library_Management_SystemApp: App {
     @StateObject var themeManager = ThemeManager()
+    @StateObject var confiModel = ConfigViewModel()
     var body: some Scene {
         WindowGroup {
             ContentView()
                 .environmentObject(themeManager)
+           // AdminCategoriesView(configViewModel: confiModel)
         }
     }
     init(){
