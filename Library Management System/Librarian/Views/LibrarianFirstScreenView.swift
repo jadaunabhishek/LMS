@@ -4,11 +4,12 @@ struct LibrarianFirstScreenView: View {
     @State private var showNotifications = false
     @EnvironmentObject var themeManager: ThemeManager
     @ObservedObject var LibModelView: LibrarianViewModel
+    @ObservedObject var ConfiViewModel: ConfigViewModel
 
     var body: some View {
         NavigationView {
             TabView {
-                BooksPage(LibViewModel: LibModelView)
+                BooksPage(LibViewModel: LibModelView, ConfiViewMmodel: ConfiViewModel)
                     .tabItem {
                         Image(systemName: "book.closed")
                         Text("Books")
@@ -45,9 +46,10 @@ struct LibrarianFirstScreenView: View {
 struct LFSPrev: View {
     
     @StateObject var LibViewModel = LibrarianViewModel()
+    @StateObject var ConfiViewModel = ConfigViewModel()
     
     var body: some View {
-        LibrarianFirstScreenView(LibModelView: LibViewModel)
+        LibrarianFirstScreenView(LibModelView: LibViewModel, ConfiViewModel: ConfiViewModel)
     }
 }
 
