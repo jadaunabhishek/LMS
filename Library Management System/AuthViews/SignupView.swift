@@ -17,6 +17,7 @@ struct SignupView: View {
     @State private var confirmPassword: String = ""
     @State private var isChecked = false
     @State private var shouldNavigate = false
+    @State private var showAlert = false
     
     var body: some View {
         ZStack {
@@ -33,7 +34,18 @@ struct SignupView: View {
                     Text("Sign Up")
                         .font(.largeTitle)
                         .fontWeight(.bold)
-                        .padding(.bottom, 30)
+                        .padding(.bottom)
+                    
+                    HStack{
+                        Spacer()
+                        
+                        Text("*All fields are mandatory")
+                            .font(.caption2)
+                            .foregroundColor(.gray)
+                            .padding(.horizontal)
+                        
+                    }
+                    
                     
                     TextField("Name", text: $name)
                         .font(.title3)
@@ -81,12 +93,27 @@ struct SignupView: View {
                         .padding(.bottom, 5)
                         .shadow(color: Color.gray.opacity(0.3), radius: 5, x: 0, y: 2)
                     
-                    Toggle(isOn: $isChecked) {
-                        Text("I have read and accept Terms of Service and Privacy Policy")
-                            .fixedSize(horizontal: false, vertical: true)
-                            .font(.system(size: UIFont.systemFontSize))
+                    HStack{
+                        Toggle(isOn: $isChecked) {
+                            Text("I have read and accept Terms of Service and Privacy Policy")
+                                .fixedSize(horizontal: false, vertical: true)
+                                .font(.system(size: UIFont.systemFontSize))
+                        }
+                        .toggleStyle(CheckboxToggleStyle())
+                        
+                        Spacer()
                     }
-                    .toggleStyle(CheckboxToggleStyle())
+                    .padding(.bottom)
+                    .padding(.leading)
+                    .alert(isPresented: $showAlert) {
+                        Alert(
+                            title: Text("Signup Failed"),
+                            message: Text("Failed to connect to the network, please check your internet connection and try again."),
+                            dismissButton: .default(Text("OK")) {
+                                showAlert = false // Dismiss the alert when OK is tapped
+                            }
+                        )
+                    }
                     
                     Button(action: {
                         if !email.isEmpty, !confirmPassword.isEmpty, !password.isEmpty,!name.isEmpty, password == confirmPassword, isChecked {
@@ -94,6 +121,9 @@ struct SignupView: View {
                                 if let error = error {
                                     // Handle the login error
                                     print("Error signing up in: \(error.localizedDescription)")
+                                    
+                                    self.showAlert = true
+                                    
                                 } else {
                                     // If login is successful, navigate to UserFirstView
                                     print("Signup successful!")

@@ -10,7 +10,6 @@ import FirebaseCore
 import FirebaseAuth
 import FirebaseFirestore
 
-
 struct LoginView: View {
     private var db = Firestore.firestore()
     @StateObject private var viewModel = AuthViewModel()
@@ -39,6 +38,16 @@ struct LoginView: View {
                         .padding(.bottom, 30)
                         .padding(.top)
                     
+                    HStack{
+                        Spacer()
+                        
+                        Text("*All fields are mandatory")
+                            .font(.caption2)
+                            .foregroundColor(.gray)
+                            .padding(.horizontal)
+                        
+                    }
+                    
                     TextField("Email Id", text: $email)
                         .font(.title3)
                         .padding(12)
@@ -62,10 +71,17 @@ struct LoginView: View {
                         .padding(.bottom, 5)
                         .shadow(color: Color.gray.opacity(0.3), radius: 5, x: 0, y: 2)
                     
-                    Text("Forgot your password?")
-                        .font(.caption)
-                        .frame(minWidth: 0, maxWidth: .infinity, alignment: .trailing)
-                        .padding()
+                    Button {
+                        Task{
+                            try? await resetPassword(email: email)
+                        }
+                    } label: {
+                        Text("Forgot your password?")
+                            .font(.caption)
+                            .frame(minWidth: 0, maxWidth: .infinity, alignment: .trailing)
+                            .padding(.horizontal)
+                            .padding(.bottom)
+                    }
                     
                     Button(action: {
                         
@@ -113,6 +129,16 @@ struct LoginView: View {
             }
         }
     }
+    // function to reset the password
+    func resetPassword(email: String) async throws {
+            do {
+                try await Auth.auth().sendPasswordReset(withEmail: email)
+                print("Password updated")
+            } catch let error as NSError {
+                print("error")
+                throw error
+            }
+        }
 }
 
 #Preview {
