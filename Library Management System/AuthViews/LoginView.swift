@@ -81,6 +81,7 @@ struct LoginView: View {
                             .frame(minWidth: 0, maxWidth: .infinity, alignment: .trailing)
                             .padding(.horizontal)
                             .padding(.bottom)
+                            .foregroundStyle(Color("PrimaryColor"))
                     }
                     
                     Button(action: {

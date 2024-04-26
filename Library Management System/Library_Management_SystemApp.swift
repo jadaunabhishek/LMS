@@ -15,11 +15,11 @@ struct Library_Management_SystemApp: App {
     @StateObject var confiModel = ConfigViewModel()
     var body: some Scene {
         WindowGroup {
-//            ContentView()
-//                .environmentObject(themeManager)
-           // AdminCategoriesView(configViewModel: confiModel)
-            LibrarianFirstScreenView(LibModelView: LibModel, ConfiViewModel: confiModel)
+            ContentView()
                 .environmentObject(themeManager)
+//             AdminCategoriesView(configViewModel: confiModel)
+//                        LibrarianFirstScreenView(LibModelView: LibModel, ConfiViewModel: confiModel)
+//                            .environmentObject(themeManager)
         }
     }
     init(){

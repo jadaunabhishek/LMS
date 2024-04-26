@@ -12,10 +12,10 @@ struct AdminCategoriesCard: View {
     @State var isEditSheetPresented: Bool = false
     var body: some View {
         NavigationStack{
-
+            
             ZStack(alignment:.leading){
                 Rectangle()
-                    .fill(gradient())
+                    .fill(randomColor())
                     .frame(width: 150, height: 100)
                     .cornerRadius(12)
                     .padding(6)
@@ -40,8 +40,8 @@ struct AdminCategoriesCard: View {
                 }
                 .presentationDetents([.medium, .large])
             }
-                
-           
+            
+            
         }
     }
     func gradient() -> LinearGradient {
