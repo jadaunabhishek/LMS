@@ -19,7 +19,7 @@ struct NotificationItem: Identifiable {
     var name: String
     var message: String
     var type: NotificationType
-    var date: String
+    var email: String
     var detail: String? // Only for grievances
 }
 
@@ -34,7 +34,8 @@ class NotificationsViewModel: ObservableObject {
     }
 
     func fetchData() {
-        db.collection("users").addSnapshotListener { [weak self] querySnapshot, error in
+        db.collection("users").whereField("role", isEqualTo: "user").whereField("status", isEqualTo: "applied")
+          .addSnapshotListener { [weak self] querySnapshot, error in
             guard let documents = querySnapshot?.documents else {
                 print("Error fetching documents: \(error?.localizedDescription ?? "Unknown error")")
                 return
@@ -43,13 +44,13 @@ class NotificationsViewModel: ObservableObject {
             self?.users = documents.map { doc -> User in
                 let data = doc.data()
                 let email = data["email"] as? String ?? ""
-                let role = data["role"] as? String ?? ""
                 let name = data["name"] as? String ?? ""
-                return User(id: doc.documentID, email: email, role: role, name: name)
+                return User(id: doc.documentID, email: email, role: "user", name: name)
             }
 
-            self?.createNotifications() // Transform user data into notifications
+            self?.createNotifications()
         }
+
     }
 
     private func createNotifications() {
@@ -58,25 +59,51 @@ class NotificationsViewModel: ObservableObject {
                 id: user.id,
                 name: user.name,
                 message: "Role: \(user.role)",
-                type: user.role == "grievance" ? .grievance : .membershipRequest, // Example condition
-                date: Date().formatted(date: .numeric, time: .shortened),
+                type: user.role == "grievance" ? .grievance : .membershipRequest,
+                email:user.email,
                 detail: user.role == "grievance" ? "Needs immediate attention" : nil
             )
         }
     }
 
+
     func approve(notification: NotificationItem) {
+        let db = Firestore.firestore()
+        let userDocRef = db.collection("users").document(notification.id)
         // Update logic if needed in Firestore or locally
-        if let index = notifications.firstIndex(where: { $0.id == notification.id }) {
-            notifications[index].message = "Approved"
-        }
+        userDocRef.updateData([
+                "role": "member",
+                "status" : "approved"
+            ]) { error in
+                if let error = error {
+                    print("Error updating user role: \(error.localizedDescription)")
+                } else {
+                    print("User role successfully updated to 'member'")
+                    // Optionally update local notifications array if needed
+                    if let index = self.notifications.firstIndex(where: { $0.id == notification.id }) {
+                        self.notifications[index].message = "Approved"
+                    }
+                }
+            }
     }
 
     func reject(notification: NotificationItem) {
+        let db = Firestore.firestore()
+        let userDocRef = db.collection("users").document(notification.id)
         // Update logic if needed in Firestore or locally
-        if let index = notifications.firstIndex(where: { $0.id == notification.id }) {
-            notifications[index].message = "Rejected"
-        }
+        userDocRef.updateData([
+            "status" : "rejected"
+            ]) { error in
+                if let error = error {
+                    print("Error updating user role: \(error.localizedDescription)")
+                } else {
+                    print("User role successfully updated to 'member'")
+                    // Optionally update local notifications array if needed
+                    if let index = self.notifications.firstIndex(where: { $0.id == notification.id }) {
+                        self.notifications[index].message = "Approved"
+                    }
+                }
+            }
     }
 }
 
@@ -98,7 +125,7 @@ struct NotificationRow: View {
                 VStack(alignment: .leading, spacing: 4) {
                     Text(notification.name).font(.headline)
                     Text(notification.message).font(.subheadline)
-                    Text(notification.date).font(.footnote).foregroundColor(.gray)
+                    Text(notification.email).font(.footnote).foregroundColor(.gray)
                 }
                 
                 Spacer()
@@ -143,9 +170,12 @@ struct NotificationRow: View {
         .sheet(isPresented: $isShowingGrievanceDetail) { // Use the corrected state variable name
             GrievanceDetailView(grievance: notification.detail ?? "No details provided", viewModel: viewModel, notification: notification)
         }
-        .onAppear {
-            self.viewModel.fetchData()
-        }
+        .onAppear(
+            perform: {
+                Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { time in
+                    self.viewModel.fetchData()
+                }
+            })
     }
 }
 
@@ -221,52 +251,14 @@ struct NotificationsView: View {
     }
 }
 
-//struct NotificationsView: View {
-//    @StateObject var viewModel = NotificationsViewModel()
-//
-//    var body: some View {
-//        NavigationView {
-//            ScrollView {
-//                if viewModel.users.isEmpty {
-//                    Text("No users found or waiting for data...")
-//                        .padding()
-//                } else {
-//                    LazyVStack(spacing: 16) {
-//                        ForEach(viewModel.notifications) { notification in
-//                            NotificationRow(viewModel: viewModel, notification: notification)
-//                                .padding(.horizontal)
-//                        }
-//                    }
-//                    .padding(.top)
-//                }
-//            }
-//            .background(Color(UIColor.systemGroupedBackground))
-//            .navigationBarTitleDisplayMode(.inline)
-//            .toolbar {
-//                ToolbarItem(placement: .principal) {
-//                    HStack {
-//                        Image(systemName: "bell.fill").foregroundColor(.orange)
-//                        Text("Notifications").font(.headline)
-//                    }
-//                }
-//            }
-//        }
-//    }
-//}
-
-
-
-
 struct NotificationsView_Previews: PreviewProvider {
     static var previews: some View {
         // You can create a mock NotificationsViewModel with sample data for the preview
         let viewModel = NotificationsViewModel()
         viewModel.notifications = [
-            NotificationItem(id: "1" ,name: "John Doe", message: "Membership Request", type: .membershipRequest, date: "23:35")
+            NotificationItem(id: "1" ,name: "John Doe", message: "Membership Request", type: .membershipRequest, email:"john@gmail.com")
         ]
 
         return NotificationsView(viewModel: viewModel)
     }
 }
-
-

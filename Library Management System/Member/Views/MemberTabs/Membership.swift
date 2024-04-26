@@ -160,9 +160,12 @@ struct Membership: View {
                 }
             }
         }
-        .task{
-            fetchCurrentUserDetails()
-        }
+        .onAppear(perform: {
+            Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { time in
+                fetchCurrentUserDetails()
+            }
+        })
+        
         .ignoresSafeArea(.all)
     }
     private func statusIndicator(imageName: String, text: String, status: MembershipStatus) -> some View {
