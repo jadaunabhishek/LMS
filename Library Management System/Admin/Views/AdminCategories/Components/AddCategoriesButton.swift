@@ -36,9 +36,8 @@ struct AddCategories: View {
                                     .foregroundColor(.gray)
                             }
                         )
-//                        .environment(\.colorScheme, .dark)
                 }
-                .presentationDetents([.medium, .large])
+                .presentationDetents([.medium])
             }
         }
     }

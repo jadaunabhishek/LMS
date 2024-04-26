@@ -19,7 +19,7 @@ struct AdminSubCategoriesView: View {
     @ObservedObject var librarianViewModel = LibrarianViewModel()
     
     var groupedBooks: [String: [Book]] {
-        let filteredBooks = librarianViewModel.currentBook.filter { book in
+        let filteredBooks = librarianViewModel.allBooks.filter { book in
             book.bookCategory.contains(category)
         }
         
@@ -34,11 +34,6 @@ struct AdminSubCategoriesView: View {
                 }
             }
         }
-        print(category)
-        print(librarianViewModel.currentBook)
-        print(filteredBooks)
-    
-        print(groupedBooks)
         return groupedBooks
     }
 
@@ -96,6 +91,9 @@ struct AdminSubCategoriesView: View {
                 }
             }
             .padding()
+            .task {
+                librarianViewModel.getBooks()
+            }
         }
     }
     
@@ -108,45 +106,6 @@ struct AdminSubCategoriesView: View {
     //        }
     //    }
 }
-
-
-
-
-
-
-struct CardView: View {
-    var books: [Book]
-    
-    var body: some View {
-        ScrollView(.horizontal){
-            HStack{
-                ForEach(books.indices, id: \.self) { index in
-                    ZStack(alignment: .leading) {
-                        Rectangle()
-                            .fill(Color.red)
-                            .frame(width: 100, height: 150)
-                            .cornerRadius(12)
-                            .padding(.vertical,6)
-                        Text(books[index].bookName)
-                            .font(.caption)
-                            .multilineTextAlignment(.center)
-                            .padding(8)
-                            .foregroundColor(.white)
-                            .fixedSize(horizontal: false, vertical: true)
-                    }
-                    
-                    .frame(maxWidth: .infinity, alignment: .center)
-                    .offset(y: index > 0 ? CGFloat(index) * 50 : 0)
-                }
-                
-            }
-        }
-    }
-}
-
-
-
-
 
 
 #Preview {
