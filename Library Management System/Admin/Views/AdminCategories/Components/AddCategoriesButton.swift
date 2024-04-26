@@ -37,7 +37,7 @@ struct AddCategories: View {
                             }
                         )
                 }
-                .presentationDetents([.medium])
+                .presentationDetents([.height(300)])
             }
         }
     }
