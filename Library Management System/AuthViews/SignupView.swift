@@ -33,7 +33,7 @@ struct SignupView: View {
                     Text("Sign Up")
                         .font(.largeTitle)
                         .fontWeight(.bold)
-                        .padding(.bottom, 30)
+                        .padding(.bottom, 20)
                     
                     TextField("Name", text: $name)
                         .font(.title3)
@@ -81,13 +81,29 @@ struct SignupView: View {
                         .padding(.bottom, 5)
                         .shadow(color: Color.gray.opacity(0.3), radius: 5, x: 0, y: 2)
                     
+                    if !password.isEmpty && !confirmPassword.isEmpty {
+                        if password == confirmPassword {
+                            Image(systemName: "checkmark.circle.fill")
+                                .imageScale(.large)
+                                .fontWeight(.bold)
+                                .foregroundStyle(Color.green)
+                                .offset(x: 150,y:-46)
+                        }else{
+                            Image(systemName: "checkmark.circle.fill")
+                                .imageScale(.large)
+                                .fontWeight(.bold)
+                                .foregroundStyle(Color.red)
+                                .offset(x: 150,y:-46)
+                        }
+                    }
+                    
                     Toggle(isOn: $isChecked) {
                         Text("I have read and accept Terms of Service and Privacy Policy")
                             .fixedSize(horizontal: false, vertical: true)
                             .font(.system(size: UIFont.systemFontSize))
                     }
                     .toggleStyle(CheckboxToggleStyle())
-                    
+                    .padding(.bottom,12)
                     Button(action: {
                         if !email.isEmpty, !confirmPassword.isEmpty, !password.isEmpty,!name.isEmpty, password == confirmPassword, isChecked {
                             Auth.auth().createUser(withEmail: email, password: password) { authResult, error in
@@ -134,7 +150,14 @@ struct SignupView: View {
                     
                     NavigationLink("", destination: LoginView(), isActive: $shouldNavigate)
                         .hidden() // Hide the navigation link
-                    
+                    HStack {
+                    Text("Already have an account?")
+                    NavigationLink(destination: LoginView()) {
+                        Text("LOG IN")
+                            .foregroundColor(Color("PrimaryColor"))
+                    }
+                }
+                .padding([.leading, .trailing])
                     Divider()
                         .padding()
                     
@@ -155,14 +178,7 @@ struct SignupView: View {
                 .navigationBarHidden(true)
                 .padding()
                 
-                HStack {
-                    Text("Already have an account?")
-                    NavigationLink(destination: LoginView()) {
-                        Text("LOG IN")
-                            .foregroundColor(Color("PrimaryColor"))
-                    }
-                }
-                .padding([.leading, .trailing])
+                
             }
         }
     }
