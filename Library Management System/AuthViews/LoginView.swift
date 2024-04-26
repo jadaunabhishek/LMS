@@ -122,6 +122,9 @@ struct LoginView: View {
                 .padding([.leading, .trailing, .top])
                 .navigationBarHidden(true)
                 .navigationBarBackButtonHidden(true)
+                .task {
+                    LibViewModel.getBooks()
+                }
                 
             }
         }
