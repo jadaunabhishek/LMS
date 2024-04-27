@@ -27,17 +27,11 @@ struct CardListView: View {
                                     .frame(width: 120, height: 180)
                                     .cornerRadius(8)
                             case .failure(_):
-                                Image(systemName: "text.book.closed")
-                                    .resizable()
+                                ProgressView()
                                     .frame(width: 120, height: 180)
                             case .empty:
-                                ZStack{
-                                    Image(systemName: "text.book.closed")
-                                        .resizable()
-                                        .opacity(0.6)
-                                        
-                                    ProgressView()
-                                }.frame(width: 120, height: 180)
+                                ProgressView()
+                                    .frame(width: 120, height: 180)
                             @unknown default:
                                 EmptyView()
                             }

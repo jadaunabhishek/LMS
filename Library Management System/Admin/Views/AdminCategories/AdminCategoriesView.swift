@@ -53,16 +53,19 @@ struct AdminCategoriesView: View {
                                         VStack(alignment: .leading) {
                                             AdminCategoriesCard(category: category)
                                                 .foregroundStyle(.black)
+                                                
                                         }
-                                        .padding(.horizontal)
+                                        
                                     }
                                 }
                             }
                             .padding(.bottom,86)
                         }
+                        .scrollIndicators(.hidden)
+                        .padding()
                     }
                     else{
-                        Text("Loading........")
+                        ProgressView()
                     }
                 
                 }
