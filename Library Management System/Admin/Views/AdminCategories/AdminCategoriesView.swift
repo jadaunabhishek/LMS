@@ -81,8 +81,12 @@ struct AdminCategoriesView: View {
         }
         
         .overlay(
-            AddCategories()
-                .position(CGPoint(x: 350.0, y: 680.0))
+            ZStack {
+                    AddCategories()
+                        .position(CGPoint(x: 350.0, y: 680.0))
+                    UpdateCategoriesButton()
+                    .position(CGPoint(x: 290.0, y: 680.0)) // Adjust position as needed
+                }
         )
     }
 }

@@ -17,6 +17,8 @@
 		1F84616D2BD6563E008B7B3E /* ThemeProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F84616C2BD6563E008B7B3E /* ThemeProtocol.swift */; };
 		1F84616F2BD65679008B7B3E /* ThemeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F84616E2BD65679008B7B3E /* ThemeManager.swift */; };
 		1F8461712BD6583B008B7B3E /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1F8461702BD6583B008B7B3E /* Colors.xcassets */; };
+		84080F2D2BDE01A3005293B8 /* UpdateCategoriesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84080F2C2BDE01A3005293B8 /* UpdateCategoriesView.swift */; };
+		84080F2F2BDE01B6005293B8 /* UpdateCategoriesButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84080F2E2BDE01B6005293B8 /* UpdateCategoriesButton.swift */; };
 		841045A92BD8D7D400E801D0 /* MemViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 841045A82BD8D7D400E801D0 /* MemViewModel.swift */; };
 		84301CB52BDA126F004CF581 /* MemberHome.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84301CB42BDA126F004CF581 /* MemberHome.swift */; };
 		84301CB72BDA13C8004CF581 /* MemberTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84301CB62BDA13C8004CF581 /* MemberTabView.swift */; };
@@ -111,6 +113,8 @@
 		1F84616C2BD6563E008B7B3E /* ThemeProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeProtocol.swift; sourceTree = "<group>"; };
 		1F84616E2BD65679008B7B3E /* ThemeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeManager.swift; sourceTree = "<group>"; };
 		1F8461702BD6583B008B7B3E /* Colors.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Colors.xcassets; sourceTree = "<group>"; };
+		84080F2C2BDE01A3005293B8 /* UpdateCategoriesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateCategoriesView.swift; sourceTree = "<group>"; };
+		84080F2E2BDE01B6005293B8 /* UpdateCategoriesButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateCategoriesButton.swift; sourceTree = "<group>"; };
 		841045A82BD8D7D400E801D0 /* MemViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemViewModel.swift; sourceTree = "<group>"; };
 		84301CB42BDA126F004CF581 /* MemberHome.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemberHome.swift; sourceTree = "<group>"; };
 		84301CB62BDA13C8004CF581 /* MemberTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemberTabView.swift; sourceTree = "<group>"; };
@@ -252,6 +256,8 @@
 				84E87D5E2BD7D52900FAD5DC /* EditCategoriesView.swift */,
 				84E87D602BD7D5EA00FAD5DC /* CardListDetailView.swift */,
 				0F85ED862BDA71F800C48C75 /* BookDetailView.swift */,
+				84080F2C2BDE01A3005293B8 /* UpdateCategoriesView.swift */,
+				84080F2E2BDE01B6005293B8 /* UpdateCategoriesButton.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -619,11 +625,13 @@
 				DC48E7222BD6E78000794A7C /* LibrarianViewModel.swift in Sources */,
 				DC1D402E2BD76BF000970C7B /* AddBookPage.swift in Sources */,
 				84E87D5D2BD7D51400FAD5DC /* CardListView.swift in Sources */,
+				84080F2D2BDE01A3005293B8 /* UpdateCategoriesView.swift in Sources */,
 				84E87D552BD7D44800FAD5DC /* AdminSubCategoriesView.swift in Sources */,
 				84E87D572BD7D4C300FAD5DC /* AddCategoriesButton.swift in Sources */,
 				D57BFDAF2BDD233E0094A0B5 /* Books.swift in Sources */,
 				0F85ED832BD902B400C48C75 /* ConfigVIewModel.swift in Sources */,
 				DC1D40342BD77E9600970C7B /* AdminTabView.swift in Sources */,
+				84080F2F2BDE01B6005293B8 /* UpdateCategoriesButton.swift in Sources */,
 				1F84616D2BD6563E008B7B3E /* ThemeProtocol.swift in Sources */,
 				0F85ED812BD902A900C48C75 /* ConfigSchema.swift in Sources */,
 				DC1D40302BD77E4B00970C7B /* AdminHomeView.swift in Sources */,
