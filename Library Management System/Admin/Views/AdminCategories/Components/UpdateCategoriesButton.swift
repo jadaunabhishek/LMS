@@ -8,8 +8,38 @@
 import SwiftUI
 
 struct UpdateCategoriesButton: View {
+    @State private var isSheetPresented = false
+    @StateObject var ConfiModel = ConfigViewModel()
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        ZStack(alignment: .trailing) {
+            HStack {
+                Button{
+                    isSheetPresented.toggle()
+                }label:{
+                    Image(systemName: "pencil")
+                        .padding()
+                        .background(.pink)
+                        .cornerRadius(10)
+                        .foregroundColor(.white)
+                }
+            }
+            .sheet(isPresented: $isSheetPresented ) {
+                
+                NavigationView {
+                    UpdateCategoriesView(isSheetPresented: $isSheetPresented, configViewModel: ConfiModel)
+                        .background(.gray)
+                        .navigationBarItems(
+                            trailing:  Button(action:{isSheetPresented.toggle()}){
+                                Image(systemName: "xmark.circle.fill")
+                                    .foregroundColor(.gray)
+                            }
+                        )
+//                        .environment(\.colorScheme, .dark)
+                }
+                .presentationDetents([.medium, .large])
+            }
+        }
     }
 }
 
