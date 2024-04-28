@@ -11,7 +11,7 @@ struct BookDetailView: View {
     
     @ObservedObject var LibViewModel: LibrarianViewModel
     @ObservedObject var ConfiViewModel: ConfigViewModel
-    @State var currentBookId: String = "H47KYrYF7tw60pDcxIzu"
+    @State var currentBookId: String = "E5Jf4wPKbMlCK44HYz0p"
     
     @State var bookISBN: String = "123-456-789"
     @State var bookImage: UIImage = UIImage()
@@ -24,14 +24,9 @@ struct BookDetailView: View {
     @State var bookCategory: String = "Adventure"
     @State var bookSubCategory: String = ""
     @State var bookSubCategories: [String] = ["Sci-Fi","Fantasy"]
-    @State var bookIssuedTo: String = ""
-    @State var bookIssuedToName: String = ""
-    @State var bookIssuedOn: String = ""
-    @State var bookExpectedReturnOn: String = ""
-    @State var bookRating: Float = 0.0
-    @State var bookReviews: [String] = []
-    @State var bookHistory: [History] = []
-    @State var createdOn: String = ""
+    @State var bookCount: String = ""
+    @State var oldCount: Int = 0
+    @State var bookAvailableCount: Int = 0
     @State var updayedOn: String = ""
     
     @State var fileName: String = ""
@@ -69,14 +64,9 @@ struct BookDetailView: View {
         bookCategory = LibViewModel.currentBook[0].bookCategory
         bookSubCategories = LibViewModel.currentBook[0].bookSubCategories
         bookDescription = LibViewModel.currentBook[0].bookDescription
-        bookIssuedOn = LibViewModel.currentBook[0].bookIssuedOn
-        bookIssuedTo = LibViewModel.currentBook[0].bookIssuedTo
-        bookIssuedToName = LibViewModel.currentBook[0].bookIssuedToName
-        bookExpectedReturnOn = LibViewModel.currentBook[0].bookExpectedReturnOn
-        bookRating = LibViewModel.currentBook[0].bookRating
-        bookReviews = LibViewModel.currentBook[0].bookReviews
-        bookHistory = LibViewModel.currentBook[0].bookHistory
-        createdOn = LibViewModel.currentBook[0].createdOn
+        bookCount = String(LibViewModel.currentBook[0].bookCount)
+        oldCount = LibViewModel.currentBook[0].bookCount
+        bookAvailableCount = LibViewModel.currentBook[0].bookAvailableCount
         updayedOn = LibViewModel.currentBook[0].updayedOn
         isPageLoading.toggle()
     }
@@ -84,18 +74,13 @@ struct BookDetailView: View {
     var body: some View {
         ZStack{
             Color("BgColor")
-            
-            ScrollView{
-                VStack(spacing: 26){
-                    
-                    if(isPageLoading){
-                        Spacer()
-                        
-                        ProgressView()
-                            .font(.system(size: 24, weight: .regular))
-                        Spacer()
-                    }
-                    else{
+            VStack(spacing: 26){
+                
+                if(isPageLoading){
+                    LoadingAnimation()
+                }
+                else{
+                    ScrollView{
                         VStack(spacing: 20){
                             HStack{
                                 Button(action:{
@@ -270,18 +255,17 @@ struct BookDetailView: View {
                                 Text("Description")
                                     .font(.system(size: 18, weight: .bold))
                                 TextField(bookDescription, text: $bookDescription, axis: .vertical)
-                                    .lineLimit(3...7)
+                                    .lineLimit(5...5)
                                     .disabled(!canEdit)
                             }
                             .padding(10)
                             .background(.white)
                             .cornerRadius(8)
-                            Spacer()
                             if(canEdit){
                                 Button(action:{
                                     Task{
                                         isButtonLoading.toggle()
-                                        LibViewModel.updateBook(bookId: currentBookId, bookISBN: bookISBN, bookImageURL: bookImageURL, bookName: bookName, bookAuthor: bookAuthor, bookDescription: bookDescription, bookCategory: bookCategory, bookSubCategories: bookSubCategories, bookPublishingDate: bookPublishingDate.formatted(), bookStatus: bookStatus, bookImage: bookImage, isImageUpdated: isImageSelected, bookIssuedTo: bookIssuedTo, bookIssuedToName: bookIssuedToName, bookIssuedOn: bookIssuedOn, bookExpectedReturnOn: bookExpectedReturnOn, bookRating: bookRating, bookReviews: bookReviews, bookHistory: bookHistory, createdOn: createdOn, updatedOn: updayedOn)
+                                        LibViewModel.updateBook(bookId: currentBookId, bookISBN: bookISBN, bookImageURL: bookImageURL, bookName: bookName, bookAuthor: bookAuthor, bookDescription: bookDescription, bookCategory: bookCategory, bookSubCategories: bookSubCategories, bookPublishingDate: bookPublishingDate.formatted(), bookStatus: bookStatus, bookImage: bookImage, isImageUpdated: isImageSelected, oldCount: oldCount, bookCount: Int(bookCount)!, bookAvailableCount: bookAvailableCount)
                                         if(isImageSelected){
                                             try? await Task.sleep(nanoseconds: 5_000_000_000)
                                             isButtonLoading.toggle()
@@ -364,8 +348,8 @@ struct BookDetailView: View {
                         }
                     }
                 }
-                .padding(.horizontal,10)
             }
+            .padding(.horizontal,10)
             .fullScreenCover(isPresented: $openPhotoPicker) {
                 ImagePicker(selectedImage: $bookImage, isImageSelected: $isImageSelected, sourceType: .photoLibrary).frame(maxHeight: .infinity).ignoresSafeArea(.all)
             }
