@@ -21,7 +21,7 @@ struct MemberTabView: View {
             
             Filter()
                 .tabItem {
-                    Image(systemName: "person.3.fill")
+                    Image(systemName: "magnifyingglass.circle")
                     Text("Staff")
                 }
         }

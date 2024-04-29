@@ -2,7 +2,7 @@
 //  AdminStaffView.swift
 //  Library Management System
 //
-//  Created by Manvi Singhal on 22/04/24.
+//  Created by Ishan on 22/04/24.
 //
 
 import SwiftUI
@@ -14,42 +14,64 @@ struct AdminStaffView: View {
     
     var body: some View {
         NavigationView {
-            VStack {
-                if !staffViewModel.currentStaff.isEmpty {
-                    List(staffViewModel.currentStaff, id: \.userID) { staffMember in
+            ScrollView{
+                VStack {
+                    if !staffViewModel.currentStaff.isEmpty {
                         VStack(alignment: .leading) {
-                            Text(staffMember.name)
-                                .font(.headline)
-                            Text(staffMember.email)
-                                .font(.subheadline)
-                                .foregroundColor(.secondary)
+                            ForEach(staffViewModel.currentStaff, id: \.userID) { staffMember in
+                                NavigationLink(destination: StaffDetailsView(userID: staffMember.userID)) {
+                                    HStack {
+                                        AsyncImage(url: URL(string: staffMember.profileImageURL)) { image in
+                                            image.resizable()
+                                        } placeholder: {
+                                            ProgressView()
+                                        }
+                                        
+                                        .frame(width: 60, height: 60)
+                                        .aspectRatio(contentMode: .fit)
+                                        .clipShape(Circle())
+                                        
+                                        VStack(alignment: .leading) {
+                                            Text(staffMember.name)
+                                                .font(.headline)
+                                                .foregroundStyle(themeManager.selectedTheme.bodyTextColor)
+                                            
+                                            Text(staffMember.email)
+                                                .font(.subheadline)
+                                                .foregroundColor(.secondary)
+                                        }.padding(.leading, 20)
+                                        Spacer()
+                                        Image(systemName: "chevron.right")
+                                            .foregroundStyle(themeManager.selectedTheme.bodyTextColor)
+                                    }.padding()
+                                }
+
+                            }.padding(.horizontal)
                         }
-                        .padding()
+                        
+                    } else {
+                        Text("No staff members found.")
+                            .foregroundColor(.secondary)
                     }
-                } else {
-                    Text("No staff members found.")
-                        .foregroundColor(.secondary)
                 }
-                
-                Button(action: {
-                    isAddStaffViewPresented.toggle()
-                }) {
-                    Image(systemName: "plus")
-                        .padding()
-                        .background(themeManager.selectedTheme.primaryThemeColor)
-                        .foregroundColor(themeManager.selectedTheme.bodyTextColor)
-                        .clipShape(Circle())
+                .navigationBarTitle("Manage Staff")
+                .navigationBarBackButtonHidden()
+                .navigationBarItems(leading: Spacer(),trailing:
+                                    Button(action: {
+                                        isAddStaffViewPresented.toggle()
+                                    }) {
+                                        Image(systemName: "plus")
+                                            .font(.title3)
+                                            .foregroundColor(themeManager.selectedTheme.primaryThemeColor)
+                                    }
+                                )
+                .sheet(isPresented: $isAddStaffViewPresented) {
+                    AddStaffView()
+                        .presentationDetents([.fraction(0.85)])
                 }
-                .padding()
-            }
-            .navigationBarTitle("Manage Staff")
-            .navigationBarBackButtonHidden()
-            .sheet(isPresented: $isAddStaffViewPresented) {
-                AddStaffView()
-                    .presentationDetents([.fraction(0.85)])
-            }
-            .onAppear{
-                staffViewModel.getStaff()
+                .onAppear{
+                    staffViewModel.getStaff()
+                }
             }
         }
     }
