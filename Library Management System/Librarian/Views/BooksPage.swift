@@ -94,7 +94,7 @@ struct BooksPage: View {
                 }
                 .onAppear(
                     perform: {
-                        Timer.scheduledTimer(withTimeInterval: 10, repeats: true) { time in
+                        Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { time in
                             Task{
                                 LibViewModel.getBooks()
                             }
