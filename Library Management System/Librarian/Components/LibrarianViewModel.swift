@@ -192,6 +192,8 @@ class LibrarianViewModel: ObservableObject{
         self.responseStatus = 0
         self.responseMessage = ""
         
+        var tempBooks: [Book] = []
+        
         dbInstance.collection("Books").getDocuments{ (snapshot, error) in
             
             if(error == nil && snapshot != nil){
@@ -219,21 +221,9 @@ class LibrarianViewModel: ObservableObject{
                     }
                     
                     let book = Book(id: documentData["id"] as! String as Any as! String, bookISBN: documentData["bookISBN"] as! String as Any as! String, bookImageURL: documentData["bookImageURL"] as! String as Any as! String, bookName: documentData["bookName"] as! String as Any as! String, bookAuthor: documentData["bookAuthor"] as! String as Any as! String, bookDescription: documentData["bookDescription"] as! String as Any as! String, bookCategory: documentData["bookCategory"] as! String as Any as! String, bookSubCategories: documentData["bookSubCategories"] as! [String] as Any as! [String], bookPublishingDate: documentData["bookPublishingDate"] as! String as Any as! String, bookStatus: documentData["bookStatus"] as! String as Any as! String, bookCount: documentData["bookCount"] as! Int as Any as! Int, bookAvailableCount: documentData["bookAvailableCount"] as! Int as Any as! Int, bookPreBookedCount: documentData["bookPreBookedCount"] as! Int as Any as! Int, bookTakenCount: documentData["bookTakenCount"] as! Int as Any as! Int, bookIssuedTo: documentData["bookIssuedTo"] as! [String] as Any as! [String], bookIssuedToName: documentData["bookIssuedToName"] as! [String] as Any as! [String], bookIssuedOn: documentData["bookIssuedOn"] as! [String] as Any as! [String], bookExpectedReturnOn: documentData["bookExpectedReturnOn"] as! [String] as Any as! [String], bookRating: Float(documentData["bookRating"] as! Int as Any as! Int), bookReviews: documentData["bookReviews"] as! [String] as Any as! [String], bookHistory: bookHistoryArray, createdOn: documentData["createdOn"] as! String as Any as! String, updayedOn: documentData["updatedOn"] as! String as Any as! String)
-                    if(self.allBooks.count == 0){
-                        self.allBooks.append(book)
-                    }
-                    else{
-                        for i in 0..<self.allBooks.count{
-                            if(self.allBooks[i].id == book.id){
-                                 break
-                            }
-                            else if(self.allBooks[i].id != book.id && i == self.allBooks.count-1){
-                                self.allBooks.append(book)
-                            }
-                        }
-                    }
+                    tempBooks.append(book)
                 }
-                print(self.allBooks)
+                self.allBooks = tempBooks
             }
             
         }
