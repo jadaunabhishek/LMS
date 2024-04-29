@@ -85,14 +85,14 @@ class StaffViewModel: ObservableObject {
             }
         }
     }
-
+    
     func getStaff() {
         self.dbInstance.collection("users").whereField("role", isEqualTo: "librarian").getDocuments { querySnapshot, error in
             guard let querySnapshot = querySnapshot else {
                 print("Error fetching librarians: \(error?.localizedDescription ?? "Unknown error")")
                 return
             }
-
+            
             var librarians = [Staff]()
             for document in querySnapshot.documents {
                 let data = document.data()
@@ -111,9 +111,100 @@ class StaffViewModel: ObservableObject {
                 )
                 librarians.append(librarian)
             }
-
             self.currentStaff = librarians
         }
     }
-
+    
+    func updateStaff(
+        staffID: String,
+        name: String,
+        email: String,
+        mobile: String,
+        aadhar: String,
+        role: String,
+        profilePhoto: UIImage,
+        status: Staff.Status,
+        isImageUpdated: Bool,
+        completion: @escaping (Bool, Error?) -> Void
+    ) {
+        self.responseStatus = 0
+        self.responseMessage = ""
+        
+        if isImageUpdated {
+            let storageRef = Storage.storage().reference()
+            let imageData = profilePhoto.jpegData(compressionQuality: 0.9)!
+            let fileRef = storageRef.child("staffProfileImages/\(staffID).jpeg")
+            
+            fileRef.putData(imageData, metadata: nil) { metadata, error in
+                guard error == nil, metadata != nil else {
+                    completion(false, error)
+                    return
+                }
+                
+                fileRef.downloadURL { url, error in
+                    guard let imageURL = url?.absoluteString, error == nil else {
+                        completion(false, error)
+                        return
+                    }
+                    
+                    self.dbInstance.collection("users").document(staffID).updateData([
+                        "name": name,
+                        "email": email,
+                        "mobile": mobile,
+                        "aadhar": aadhar,
+                        "role": role,
+                        "status": status.rawValue,
+                        "profileImageURL": imageURL
+                    ]) { error in
+                        if let error = error {
+                            completion(false, error)
+                            self.responseStatus = 400
+                            self.responseMessage = "Something went wrong, Unable to update staff member. Check console for error."
+                            print("Unable to update staff member. Error: \(error)")
+                        } else {
+                            completion(true, nil)
+                            self.responseStatus = 200
+                            self.responseMessage = "Staff member updated successfully."
+                        }
+                    }
+                }
+            }
+        } else {
+            self.dbInstance.collection("users").document(staffID).updateData([
+                "name": name,
+                "email": email,
+                "mobile": mobile,
+                "aadhar": aadhar,
+                "role": role,
+                "status": status.rawValue
+            ]) { error in
+                if let error = error {
+                    completion(false, error)
+                    self.responseStatus = 400
+                    self.responseMessage = "Something went wrong, Unable to update staff member. Check console for error."
+                    print("Unable to update staff member. Error: \(error)")
+                } else {
+                    completion(true, nil)
+                    self.responseStatus = 200
+                    self.responseMessage = "Staff member updated successfully."
+                }
+            }
+        }
+    }
+    
+    func deleteStaff(staffID: String) {
+        self.responseStatus = 0
+        self.responseMessage = ""
+        
+        self.dbInstance.collection("users").document(staffID).updateData(["status": Staff.Status.revoked.rawValue]) { error in
+            if let error = error {
+                self.responseStatus = 400
+                self.responseMessage = "Something went wrong, Unable to revoke staff member. Check console for errors."
+                print("Unable to revoke staff member. Error: \(error)")
+            } else {
+                self.responseStatus = 200
+                self.responseMessage = "Revoked staff member successfully."
+            }
+        }
+    }
 }
