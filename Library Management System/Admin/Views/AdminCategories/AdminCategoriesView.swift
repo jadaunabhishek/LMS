@@ -22,47 +22,54 @@ struct AdminCategoriesView: View {
     var body: some View {
         
         NavigationStack {
-            VStack(){
-                if(!isPageLoading){
-                    Rectangle()
-                        .fill(.red)
-                        .frame(height: 80)
-                        .cornerRadius(5)
-                        .padding(.bottom)
-                    TextField("what are u looking for?", text: $searchKey)
-                        .foregroundStyle(.black)
-                    
-                        .padding(14)
-                        .background{
-                            RoundedRectangle(cornerRadius: 12)
-                                .stroke(Color.black, lineWidth: 1)
+            
+                VStack(){
+                    if(!isPageLoading){
+                        Rectangle()
+                            .fill(.red)
+                            .frame(height: 80)
+                            .cornerRadius(5)
+                            .padding(.bottom)
+                        
+                            TextField("what are u looking for?", text: $searchKey)
+                                .foregroundStyle(.black)
                             
-                        }
-                        .padding(.horizontal,34)
-                        .padding(.top,20)
-                    Image(systemName: "magnifyingglass")
-                        .offset(x:130,y:-35)
-                    Spacer()
-                    
-                    ScrollView {
-                        LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 20) {
-                            ForEach(filteredCategories, id: \.self) { category in
-                                NavigationLink(destination: AdminSubCategoriesView(category: category)) {
-                                    VStack(alignment: .leading) {
-                                        AdminCategoriesCard(category: category)
-                                            .foregroundStyle(.black)
+                                .padding(14)
+                                .background{
+                                    RoundedRectangle(cornerRadius: 12)
+                                        .stroke(Color.black, lineWidth: 1)
+                                    
+                                }
+                                .padding(.horizontal,34)
+                                .padding(.top,20)
+                            Image(systemName: "magnifyingglass")
+                                .offset(x:130,y:-35)
+                            Spacer()
+                        
+                        ScrollView {
+                            LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 20) {
+                                ForEach(filteredCategories, id: \.self) { category in
+                                    NavigationLink(destination: AdminSubCategoriesView(category: category)) {
+                                        VStack(alignment: .leading) {
+                                            AdminCategoriesCard(category: category)
+                                                .foregroundStyle(.black)
+                                                
+                                        }
+                                        
                                     }
-                                    .padding(.horizontal)
                                 }
                             }
+                            .padding(.bottom,86)
                         }
+                        .scrollIndicators(.hidden)
+                        .padding()
                     }
+                    else{
+                        ProgressView()
+                    }
+                
                 }
-                else{
-                    Text("Loading........")
-                }
-            }
-            .ignoresSafeArea(.all)
+                .ignoresSafeArea(.all)
             
         }
         .task {
@@ -74,8 +81,12 @@ struct AdminCategoriesView: View {
         }
         
         .overlay(
-            AddCategories()
-                .position(CGPoint(x: 350.0, y: 680.0))
+            ZStack {
+                    AddCategories()
+                        .position(CGPoint(x: 350.0, y: 680.0))
+                    UpdateCategoriesButton()
+                    .position(CGPoint(x: 290.0, y: 680.0)) // Adjust position as needed
+                }
         )
     }
 }

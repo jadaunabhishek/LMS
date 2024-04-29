@@ -1,14 +1,13 @@
 //
-//  AddCategories.swift
+//  UpdateCategoriesButton.swift
 //  Library Management System
 //
-//  Created by user2 on 23/04/24.
+//  Created by admin on 28/04/24.
 //
 
 import SwiftUI
 
-struct AddCategories: View {
-    
+struct UpdateCategoriesButton: View {
     @State private var isSheetPresented = false
     @StateObject var ConfiModel = ConfigViewModel()
     
@@ -18,7 +17,7 @@ struct AddCategories: View {
                 Button{
                     isSheetPresented.toggle()
                 }label:{
-                    Image(systemName: "plus")
+                    Image(systemName: "pencil")
                         .padding()
                         .background(.pink)
                         .cornerRadius(10)
@@ -28,7 +27,7 @@ struct AddCategories: View {
             .sheet(isPresented: $isSheetPresented ) {
                 
                 NavigationView {
-                    AddCategoriesView(isSheetPresented: $isSheetPresented, configViewModel: ConfiModel)
+                    UpdateCategoriesView(isSheetPresented: $isSheetPresented, configViewModel: ConfiModel)
                         .background(.gray)
                         .navigationBarItems(
                             trailing:  Button(action:{isSheetPresented.toggle()}){
@@ -36,13 +35,14 @@ struct AddCategories: View {
                                     .foregroundColor(.gray)
                             }
                         )
+//                        .environment(\.colorScheme, .dark)
                 }
-                .presentationDetents([.height(300)])
+                .presentationDetents([.medium, .large])
             }
         }
     }
 }
 
 #Preview {
-    AddCategories()
+    UpdateCategoriesButton()
 }

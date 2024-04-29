@@ -86,4 +86,18 @@ class ConfigViewModel: ObservableObject {
         }
         
     }
+    
+    
+    func updateCategory(configId:String, categories:[String]){
+        dbInstance.collection("configuration").document(configId).updateData(["categories":categories]){ (error) in
+            
+            if let error = error{
+                print("\(error)")
+            }
+            else{
+                self.fetchConfig()
+                print("Done")
+            }
+        }
+    }
 }

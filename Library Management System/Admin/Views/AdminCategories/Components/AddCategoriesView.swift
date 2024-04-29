@@ -15,6 +15,10 @@ struct AddCategoriesView: View {
     var body: some View {
                     NavigationView {
                         VStack {
+                            Text("ADD Category")
+                                .font(.title.bold())
+                                .padding()
+                                .padding(.bottom,16)
                             TextField("New Category Name", text: $newCategoryName)
                                 .font(.title3)
                                 .padding(12)
@@ -43,11 +47,9 @@ struct AddCategoriesView: View {
                                     .background(Color("PrimaryColor"))
                                     .cornerRadius(15)
                             }
-                            .padding()
                             .disabled(newCategoryName.isEmpty)
                         }
                         .padding()
-                        .navigationTitle("Add Category")
                         
                     }
                 }

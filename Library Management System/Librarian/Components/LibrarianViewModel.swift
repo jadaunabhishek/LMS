@@ -13,7 +13,7 @@ class LibrarianViewModel: ObservableObject{
     @Published var currentBook: [Book] = []
     @Published var allBooks: [Book] = []
     
-    func addBook(bookISBN: String, bookName: String, bookAuthor: String, bookDescription: String, bookCategory: String, bookSubCategories: [String], bookPublishingDate: String, bookStatus: String, bookImage: UIImage){
+    func addBook(bookISBN: String, bookName: String, bookAuthor: String, bookDescription: String, bookCategory: String, bookSubCategories: [String], bookPublishingDate: String, bookStatus: String, bookCount: Int, bookAvailableCount: Int, bookPreBookedCount: Int, bookTakenCount: Int, bookImage: UIImage){
         
         self.responseStatus = 0
         self.responseMessage = ""
@@ -31,7 +31,7 @@ class LibrarianViewModel: ObservableObject{
                 fileRef.downloadURL{ url,error1 in
                     if(error1 == nil && url != nil){
                         let imageURL = url?.absoluteString
-                        let newBook = Book(id: addNewBook.documentID, bookISBN: bookISBN, bookImageURL: imageURL!, bookName: bookName, bookAuthor: bookAuthor, bookDescription: bookDescription, bookCategory: bookCategory, bookSubCategories: bookSubCategories, bookPublishingDate: bookPublishingDate, bookStatus: bookStatus, bookIssuedTo: "", bookIssuedToName: "", bookIssuedOn: "", bookExpectedReturnOn: "", bookRating: 0.0, bookReviews: [], bookHistory: [], createdOn: "\(Date.now)", updayedOn: "\(Date.now)")
+                        let newBook = Book(id: addNewBook.documentID, bookISBN: bookISBN, bookImageURL: imageURL!, bookName: bookName, bookAuthor: bookAuthor, bookDescription: bookDescription, bookCategory: bookCategory, bookSubCategories: bookSubCategories, bookPublishingDate: bookPublishingDate, bookStatus: bookStatus, bookCount: bookCount, bookAvailableCount: bookAvailableCount, bookPreBookedCount: bookPreBookedCount, bookTakenCount: bookTakenCount, bookIssuedTo: [], bookIssuedToName: [], bookIssuedOn: [], bookExpectedReturnOn: [], bookRating: 0.0, bookReviews: [], bookHistory: [], createdOn: "\(Date.now)", updayedOn: "\(Date.now)")
                         addNewBook.setData(newBook.getDictionaryOfStruct()) { error in
                             
                             if let error = error{
@@ -51,7 +51,25 @@ class LibrarianViewModel: ObservableObject{
         }
     }
     
-    func updateBook(bookId: String, bookISBN: String, bookImageURL: String, bookName: String, bookAuthor: String, bookDescription: String, bookCategory: String, bookSubCategories: [String], bookPublishingDate: String, bookStatus: String, bookImage: UIImage, isImageUpdated: Bool, bookIssuedTo: String, bookIssuedToName: String, bookIssuedOn: String, bookExpectedReturnOn: String, bookRating: Float, bookReviews: [String], bookHistory: [History], createdOn: String, updatedOn: String){
+    func updateBook(bookId: String, bookISBN: String, bookImageURL: String, bookName: String, bookAuthor: String, bookDescription: String, bookCategory: String, bookSubCategories: [String], bookPublishingDate: String, bookStatus: String, bookImage: UIImage, isImageUpdated: Bool, oldCount: Int, bookCount: Int, bookAvailableCount: Int){
+        
+        print(bookCount, oldCount, bookAvailableCount)
+        
+        var bookAvailable: Int = bookAvailableCount
+        
+        if(oldCount > bookCount){
+            if(bookAvailable - (oldCount-bookCount) > 1){
+                bookAvailable = bookAvailableCount - (oldCount-bookCount)
+            }
+            else{
+                bookAvailable = 0
+            }
+        }
+        else if(oldCount < bookCount){
+            bookAvailable = bookAvailableCount + (bookCount-oldCount)
+        }
+        
+        print(bookCount, oldCount, bookAvailable)
         
         self.responseStatus = 0
         self.responseMessage = ""
@@ -68,8 +86,7 @@ class LibrarianViewModel: ObservableObject{
                     fileRef.downloadURL{ url,error1 in
                         if(error1 == nil && url != nil){
                             let imageURL = url?.absoluteString
-//                            let newBook = Book(id: bookId, bookISBN: bookISBN, bookImageURL: imageURL!, bookName: bookName, bookAuthor: bookAuthor, bookDescription: bookDescription, bookCategory: bookCategory, bookSubCategories: bookSubCategories, bookPublishingDate: bookPublishingDate, bookStatus: bookStatus, bookIssuedTo: bookIssuedTo, bookIssuedToName: bookIssuedToName, bookIssuedOn: bookIssuedOn, bookExpectedReturnOn: bookExpectedReturnOn, bookRating: bookRating, bookReviews: bookReviews, bookHistory: [History(userId: bookHistory[0].userId, userName: bookHistory[0].userName, issuedOn: bookHistory[0].issuedOn, returnedOn: bookHistory[0].returnedOn).getDictionaryOfStruct()], createdOn: createdOn, updayedOn: updatedOn)
-                            self.dbInstance.collection("Books").document(bookId).updateData(["bookISBN":bookISBN,"bookName":bookName,"bookAuthor":bookAuthor,"bookStatus": bookStatus, "bookImageURL": imageURL as Any, "bookDescription": bookDescription, "bookCategory": bookCategory, "bookSubcategories": bookSubCategories]) { error in
+                            self.dbInstance.collection("Books").document(bookId).updateData(["bookISBN":bookISBN,"bookName":bookName,"bookAuthor":bookAuthor,"bookStatus": bookStatus, "bookImageURL": imageURL as Any, "bookDescription": bookDescription, "bookCategory": bookCategory, "bookSubcategories": bookSubCategories, "bookCount": bookCount, "bookAvailableCount": bookAvailable, "updatedOn": Date.now.formatted()]) { error in
                                 
                                 if let error = error{
                                     self.responseStatus = 400
@@ -88,9 +105,7 @@ class LibrarianViewModel: ObservableObject{
             }
         }
         else{
-            let newBook = Book(id: bookId, bookISBN: bookISBN, bookImageURL: bookImageURL, bookName: bookName, bookAuthor: bookAuthor, bookDescription: bookDescription, bookCategory: bookCategory, bookSubCategories: bookSubCategories, bookPublishingDate: bookPublishingDate, bookStatus: bookStatus, bookIssuedTo: bookIssuedTo, bookIssuedToName: bookIssuedToName, bookIssuedOn: bookIssuedOn, bookExpectedReturnOn: bookExpectedReturnOn, bookRating: bookRating, bookReviews: bookReviews, bookHistory: bookHistory, createdOn: createdOn, updayedOn: updatedOn)
-            print(newBook)
-            self.dbInstance.collection("Books").document(bookId).updateData(["bookISBN":bookISBN,"bookName":bookName,"bookAuthor":bookAuthor,"bookStatus": bookStatus, "bookImageURL": bookImageURL, "bookDescription": bookDescription, "bookCategory": bookCategory, "bookSubcategories": bookSubCategories])  { error in
+            self.dbInstance.collection("Books").document(bookId).updateData(["bookISBN":bookISBN,"bookName":bookName,"bookAuthor":bookAuthor,"bookStatus": bookStatus, "bookImageURL": bookImageURL, "bookDescription": bookDescription, "bookCategory": bookCategory, "bookSubcategories": bookSubCategories, "bookCount": bookCount, "bookAvailableCount": bookAvailable, "updatedOn": Date.now.formatted()])  { error in
                 
                 if let error = error{
                     self.responseStatus = 400
@@ -154,7 +169,7 @@ class LibrarianViewModel: ObservableObject{
                     }
 
                     
-                    self.currentBook = [ Book(id: document!["id"] as! String, bookISBN: document!["bookISBN"] as! String, bookImageURL: document!["bookImageURL"] as! String, bookName: document!["bookName"] as! String, bookAuthor: document!["bookAuthor"] as! String, bookDescription: document!["bookDescription"] as! String, bookCategory: document!["bookCategory"] as! String, bookSubCategories: document!["bookSubCategories"] as! [String], bookPublishingDate: document!["bookPublishingDate"] as! String, bookStatus: document!["bookStatus"] as! String, bookIssuedTo: document!["bookIssuedTo"] as! String, bookIssuedToName: document!["bookIssuedToName"] as! String as Any as! String, bookIssuedOn: document!["bookIssuedOn"] as! String, bookExpectedReturnOn: document!["bookExpectedReturnOn"] as! String, bookRating: document!["bookRating"] as! Float, bookReviews: document!["bookReviews"] as! [String], bookHistory: bookHistoryArray, createdOn: document!["createdOn"] as! String, updayedOn: document!["updatedOn"] as! String) ]
+                    self.currentBook = [ Book(id: document!["id"] as! String, bookISBN: document!["bookISBN"] as! String, bookImageURL: document!["bookImageURL"] as! String, bookName: document!["bookName"] as! String, bookAuthor: document!["bookAuthor"] as! String, bookDescription: document!["bookDescription"] as! String, bookCategory: document!["bookCategory"] as! String, bookSubCategories: document!["bookSubCategories"] as! [String], bookPublishingDate: document!["bookPublishingDate"] as! String, bookStatus: document!["bookStatus"] as! String, bookCount: document!["bookCount"] as! Int, bookAvailableCount:  document!["bookAvailableCount"] as! Int, bookPreBookedCount:  document!["bookPreBookedCount"] as! Int, bookTakenCount:  document!["bookTakenCount"] as! Int, bookIssuedTo: document!["bookIssuedTo"] as! [String], bookIssuedToName: document!["bookIssuedToName"] as! [String] as Any as! [String], bookIssuedOn: document!["bookIssuedOn"] as! [String], bookExpectedReturnOn: document!["bookExpectedReturnOn"] as! [String], bookRating: document!["bookRating"] as! Float, bookReviews: document!["bookReviews"] as! [String], bookHistory: bookHistoryArray, createdOn: document!["createdOn"] as! String, updayedOn: document!["updatedOn"] as! String) ]
                     self.responseStatus = 200
                     self.responseMessage = "Book fetched successfuly"
                 }
@@ -176,7 +191,6 @@ class LibrarianViewModel: ObservableObject{
         
         self.responseStatus = 0
         self.responseMessage = ""
-        self.allBooks = []
         
         dbInstance.collection("Books").getDocuments{ (snapshot, error) in
             
@@ -204,8 +218,20 @@ class LibrarianViewModel: ObservableObject{
                         bookHistoryArray.append(bookHistory)
                     }
                     
-                    let book = Book(id: documentData["id"] as! String as Any as! String, bookISBN: documentData["bookISBN"] as! String as Any as! String, bookImageURL: documentData["bookImageURL"] as! String as Any as! String, bookName: documentData["bookName"] as! String as Any as! String, bookAuthor: documentData["bookAuthor"] as! String as Any as! String, bookDescription: documentData["bookDescription"] as! String as Any as! String, bookCategory: documentData["bookCategory"] as! String as Any as! String, bookSubCategories: documentData["bookSubCategories"] as! [String] as Any as! [String], bookPublishingDate: documentData["bookPublishingDate"] as! String as Any as! String, bookStatus: documentData["bookStatus"] as! String as Any as! String, bookIssuedTo: documentData["bookIssuedTo"] as! String as Any as! String, bookIssuedToName: documentData["bookIssuedToName"] as! String as Any as! String, bookIssuedOn: documentData["bookIssuedOn"] as! String as Any as! String, bookExpectedReturnOn: documentData["bookExpectedReturnOn"] as! String as Any as! String, bookRating: Float(documentData["bookRating"] as! Int as Any as! Int), bookReviews: documentData["bookReviews"] as! [String] as Any as! [String], bookHistory: bookHistoryArray, createdOn: documentData["createdOn"] as! String as Any as! String, updayedOn: documentData["updatedOn"] as! String as Any as! String)
-                    self.allBooks.append(book)
+                    let book = Book(id: documentData["id"] as! String as Any as! String, bookISBN: documentData["bookISBN"] as! String as Any as! String, bookImageURL: documentData["bookImageURL"] as! String as Any as! String, bookName: documentData["bookName"] as! String as Any as! String, bookAuthor: documentData["bookAuthor"] as! String as Any as! String, bookDescription: documentData["bookDescription"] as! String as Any as! String, bookCategory: documentData["bookCategory"] as! String as Any as! String, bookSubCategories: documentData["bookSubCategories"] as! [String] as Any as! [String], bookPublishingDate: documentData["bookPublishingDate"] as! String as Any as! String, bookStatus: documentData["bookStatus"] as! String as Any as! String, bookCount: documentData["bookCount"] as! Int as Any as! Int, bookAvailableCount: documentData["bookAvailableCount"] as! Int as Any as! Int, bookPreBookedCount: documentData["bookPreBookedCount"] as! Int as Any as! Int, bookTakenCount: documentData["bookTakenCount"] as! Int as Any as! Int, bookIssuedTo: documentData["bookIssuedTo"] as! [String] as Any as! [String], bookIssuedToName: documentData["bookIssuedToName"] as! [String] as Any as! [String], bookIssuedOn: documentData["bookIssuedOn"] as! [String] as Any as! [String], bookExpectedReturnOn: documentData["bookExpectedReturnOn"] as! [String] as Any as! [String], bookRating: Float(documentData["bookRating"] as! Int as Any as! Int), bookReviews: documentData["bookReviews"] as! [String] as Any as! [String], bookHistory: bookHistoryArray, createdOn: documentData["createdOn"] as! String as Any as! String, updayedOn: documentData["updatedOn"] as! String as Any as! String)
+                    if(self.allBooks.count == 0){
+                        self.allBooks.append(book)
+                    }
+                    else{
+                        for i in 0..<self.allBooks.count{
+                            if(self.allBooks[i].id == book.id){
+                                 break
+                            }
+                            else if(self.allBooks[i].id != book.id && i == self.allBooks.count-1){
+                                self.allBooks.append(book)
+                            }
+                        }
+                    }
                 }
                 print(self.allBooks)
             }

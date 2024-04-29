@@ -10,6 +10,8 @@ import SwiftUI
 struct MemberTabView: View {
     @EnvironmentObject var themeManager: ThemeManager
     @State private var applyMembership = false
+    @ObservedObject var memModelView: UserBooksModel
+    @ObservedObject var ConfiViewModel: ConfigViewModel
     
     var body: some View {
         TabView {
@@ -21,20 +23,43 @@ struct MemberTabView: View {
             
             Filter()
                 .tabItem {
-                    Image(systemName: "magnifyingglass.circle")
-                    Text("Staff")
+                    Image(systemName: "sparkle.magnifyingglass")
+                    Text("Search")
+                }
+            
+            Books(MemViewModel: memModelView, ConfiViewMmodel: ConfiViewModel)
+                .tabItem {
+                    Image(systemName: "books.vertical.fill")
+                    Text("Books")
+                }
+            
+            Support()
+                .tabItem {
+                    Image(systemName: "person.line.dotted.person.fill")
+                    Text("Support")
                 }
         }
-        .accentColor(themeManager.selectedTheme.primaryThemeColor)
         .navigationBarBackButtonHidden(true)
+        .accentColor(themeManager.selectedTheme.primaryThemeColor)
     }
 }
 
+
+
+struct MTVPrev: View {
+    @StateObject var memModelView = UserBooksModel()
+    @StateObject var ConfiViewModel = ConfigViewModel()
+    
+    var body: some View {
+        MemberTabView(memModelView: memModelView, ConfiViewModel: ConfiViewModel)
+    }
+}
 
 struct MemberTabView_Previews: PreviewProvider {
     static var previews: some View {
         let themeManager = ThemeManager()
-        return MemberTabView()
+        return MTVPrev()
             .environmentObject(themeManager)
     }
 }
+

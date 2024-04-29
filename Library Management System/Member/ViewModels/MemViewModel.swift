@@ -85,16 +85,7 @@ class AuthViewModel: ObservableObject {
                 }
                 
                 let documentID = document.documentID
-                
-//                db.collection("users").document(documentID).updateData(["status": newStatus]) { error in
-//                    if let error = error {
-//                        print("Error updating user status: \(error)")
-//                        completion(false)
-//                    } else {
-//                        print("User status updated successfully")
-//                        completion(true)
-//                    }
-//                }
+
             }
         }
 }

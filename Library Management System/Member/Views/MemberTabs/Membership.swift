@@ -25,6 +25,8 @@ struct Membership: View {
     @State private var shouldNavigate = false
     private var db = Firestore.firestore()
     @State private var requestStatus = "Request Status"
+    @StateObject var ConfiViewMOdel = ConfigViewModel()
+    @StateObject var memModelView = UserBooksModel()
     
     
     private func colorForStatus(_ status: MembershipStatus) -> Color {
@@ -154,15 +156,18 @@ struct Membership: View {
                     .cornerRadius(20)
                     .padding(.horizontal)
                     .padding(.bottom)
-                    NavigationLink("", destination: MemberTabView(), isActive: $shouldNavigate)
+                    NavigationLink("", destination: MemberTabView(memModelView: memModelView, ConfiViewModel: ConfiViewMOdel), isActive: $shouldNavigate)
                         .hidden() // Hide the navigation link
                     
                 }
             }
         }
-        .task{
-            fetchCurrentUserDetails()
-        }
+        .onAppear(perform: {
+            Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { time in
+                fetchCurrentUserDetails()
+            }
+        })
+        
         .ignoresSafeArea(.all)
     }
     private func statusIndicator(imageName: String, text: String, status: MembershipStatus) -> some View {

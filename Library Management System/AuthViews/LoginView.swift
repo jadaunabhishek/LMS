@@ -10,12 +10,12 @@ import FirebaseCore
 import FirebaseAuth
 import FirebaseFirestore
 
-
 struct LoginView: View {
     private var db = Firestore.firestore()
     @StateObject private var viewModel = AuthViewModel()
     @StateObject var LibViewModel = LibrarianViewModel()
     @StateObject var ConfiViewMOdel = ConfigViewModel()
+    @StateObject var memModelView = UserBooksModel()
     
     @State private var email: String = ""
     @State private var password: String = ""
@@ -38,6 +38,16 @@ struct LoginView: View {
                         .fontWeight(.bold)
                         .padding(.bottom, 30)
                         .padding(.top)
+                    
+                    HStack{
+                        Spacer()
+                        
+                        Text("*All fields are mandatory")
+                            .font(.caption2)
+                            .foregroundColor(.gray)
+                            .padding(.horizontal)
+                        
+                    }
                     
                     TextField("Email Id", text: $email)
                         .font(.title3)
@@ -62,10 +72,18 @@ struct LoginView: View {
                         .padding(.bottom, 5)
                         .shadow(color: Color.gray.opacity(0.3), radius: 5, x: 0, y: 2)
                     
-                    Text("Forgot your password?")
-                        .font(.caption)
-                        .frame(minWidth: 0, maxWidth: .infinity, alignment: .trailing)
-                        .padding()
+                    Button {
+                        Task{
+                            try? await resetPassword(email: email)
+                        }
+                    } label: {
+                        Text("Forgot your password?")
+                            .font(.caption)
+                            .frame(minWidth: 0, maxWidth: .infinity, alignment: .trailing)
+                            .padding(.horizontal)
+                            .padding(.bottom)
+                            .foregroundStyle(Color("PrimaryColor"))
+                    }
                     
                     Button(action: {
                         
@@ -88,7 +106,7 @@ struct LoginView: View {
                     
                     NavigationLink(destination: AdminTabView(), isActive: $viewModel.shouldNavigateToAdmin) { EmptyView() }
                     NavigationLink(destination: LibrarianFirstScreenView(LibModelView: LibViewModel, ConfiViewModel: ConfiViewMOdel), isActive: $viewModel.shouldNavigateToLibrarian) { EmptyView() }
-                    NavigationLink(destination: MemberTabView(), isActive: $viewModel.shouldNavigateToMember) { EmptyView() }
+                    NavigationLink(destination: MemberTabView(memModelView: memModelView, ConfiViewModel: ConfiViewMOdel), isActive: $viewModel.shouldNavigateToMember) { EmptyView() }
                     NavigationLink(destination: Membership(), isActive: $viewModel.shouldNavigateToGeneral) { EmptyView() }
                     
                     
@@ -106,10 +124,23 @@ struct LoginView: View {
                 .padding([.leading, .trailing, .top])
                 .navigationBarHidden(true)
                 .navigationBarBackButtonHidden(true)
+                .task {
+                    LibViewModel.getBooks()
+                }
                 
             }
         }
     }
+    // function to reset the password
+    func resetPassword(email: String) async throws {
+            do {
+                try await Auth.auth().sendPasswordReset(withEmail: email)
+                print("Password updated")
+            } catch let error as NSError {
+                print("error")
+                throw error
+            }
+        }
 }
 
 #Preview {

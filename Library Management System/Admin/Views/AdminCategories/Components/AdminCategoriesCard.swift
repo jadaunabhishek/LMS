@@ -12,19 +12,22 @@ struct AdminCategoriesCard: View {
     @State var isEditSheetPresented: Bool = false
     var body: some View {
         NavigationStack{
-
+            
             ZStack(alignment:.leading){
                 Rectangle()
-                    .fill(gradient())
-                    .frame(width: 150, height: 100)
+                    .fill(randomColor())
                     .cornerRadius(12)
-                    .padding(6)
-                Text(category)
-                    .font(.title3)
-                    .padding(.bottom, 8)
-                    .offset(x:16,y:30)
-                    .bold()
-            }
+                VStack(alignment:.leading){
+                    Spacer()
+                    Text(category)
+                        .font(.title3)
+                        .bold()
+                        .lineLimit(2)
+                        .truncationMode(.tail)
+                        .foregroundStyle(Color.white)
+                        .padding()
+                }
+            }.frame(width: 170, height: 120)
             .sheet(isPresented: $isEditSheetPresented ) {
                 
                 NavigationView {
@@ -40,8 +43,8 @@ struct AdminCategoriesCard: View {
                 }
                 .presentationDetents([.medium, .large])
             }
-                
-           
+            
+            
         }
     }
     func gradient() -> LinearGradient {
@@ -49,20 +52,20 @@ struct AdminCategoriesCard: View {
         return LinearGradient(gradient: Gradient(colors: colors), startPoint: .leading, endPoint: .trailing)
     }
     
-    //    func randomColor() -> Color {
-    //        let red = Double.random(in: 0.7...1)
-    //        let green = Double.random(in: 0.7...1)
-    //        let blue = Double.random(in: 0.7...1)
-    //        return Color(red: red, green: green, blue: blue)
-    //    }
-    
     func randomColor() -> Color {
-        let red = Double.random(in: 0.5...1)
-        let green = Double.random(in: 0.5...1)
-        let blue = Double.random(in: 0.5...1)
+        let red = Double.random(in: 0.0...0.6) // Adjusted range for darker red
+        let green = Double.random(in: 0.0...0.6) // Adjusted range for darker green
+        let blue = Double.random(in: 0.0...0.6) // Adjusted range for darker blue
         return Color(red: red, green: green, blue: blue)
     }
+
+//    func randomColor() -> Color {
+//        let red = Double.random(in: 0.5...1)
+//        let green = Double.random(in: 0.5...1)
+//        let blue = Double.random(in: 0.5...1)
+//        return Color(red: red, green: green, blue: blue)
+//    }
 }
 #Preview {
-    AdminCategoriesCard(category: "Cool-Day")
+    AdminCategoriesCard(category: "Cool-Dayejejdjwjejwuejwdujwuwj")
 }
