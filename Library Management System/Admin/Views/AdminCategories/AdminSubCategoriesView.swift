@@ -14,8 +14,6 @@ class AdminSubCategoriesViewModel: ObservableObject {
 
 struct AdminSubCategoriesView: View {
     @State var category: String
-    @State private var isEditing = false
-    @State private var editedSubcategory = ""
     @ObservedObject var librarianViewModel = LibrarianViewModel()
     
     var groupedBooks: [String: [Book]] {
@@ -40,53 +38,26 @@ struct AdminSubCategoriesView: View {
     var body: some View {
         NavigationStack {
             VStack(spacing: 10) {
-                ScrollView{
-                    
-                    ForEach(groupedBooks.sorted(by: { $0.key < $1.key }), id: \.key) { subcategory,books in
-                        VStack(alignment: .leading) {
-                            HStack {
-                                if isEditing {
-                                    TextField("", text: $editedSubcategory)
-                                        .font(.title2)
-                                        .padding(.bottom, 2)
-                                    
-                                    Button("Done") {
-                                        // updateSubcategory(oldSubcategory: subcategory, newSubcategory: editedSubcategory)
-                                        isEditing.toggle()
-                                        editedSubcategory = ""
-                                    }
-                                } else {
-                                    Text(subcategory)
-                                        .font(.title2)
-                                        .fontWeight(.bold)
-                                        .padding(.bottom, 2)
-                                    
-                                    Button(action: {
-                                        editedSubcategory = subcategory
-                                        isEditing.toggle()
-                                    }) {
-                                        Image(systemName: "pencil")
-                                            .font(.title2)
-                                    }
-                                    .padding(.trailing)
-                                }
-                                
+                ScrollView {
+                    ForEach(groupedBooks.sorted(by: { $0.key < $1.key }), id: \.key) { subcategory, books in
+                        VStack{
+                            HStack() {
+                                Text(subcategory)
+                                    .font(.title2)
+                                    .fontWeight(.bold)
+                                    .padding(.bottom, 2)
                                 
                                 Spacer()
                                 
-                                if isEditing{
-                                    
+                                NavigationLink(destination: CardListDetailView(books: groupedBooks[subcategory]!)) {
+                                    Text("See All")
                                 }
-                                else{
-                                    NavigationLink(destination: CardListDetailView(books: groupedBooks[subcategory]!)) {
-                                            Text("See All")
-                                    }
-
-                                }
-                                
                             }
+                            
+                            
                             CardListView(books: groupedBooks[subcategory]!)
                         }
+                        
                     }
                 }
             }
@@ -96,16 +67,8 @@ struct AdminSubCategoriesView: View {
             }
         }
     }
-    
-    
-    //    private func updateSubcategory(oldSubcategory: String, newSubcategory: String) {
-    //        for index in 0..<categories.count {
-    //            if categories[index].subcategory == oldSubcategory {
-    //                categories[index].subcategory = newSubcategory
-    //            }
-    //        }
-    //    }
 }
+
 
 
 #Preview {

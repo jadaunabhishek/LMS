@@ -15,6 +15,7 @@ struct LoginView: View {
     @StateObject private var viewModel = AuthViewModel()
     @StateObject var LibViewModel = LibrarianViewModel()
     @StateObject var ConfiViewMOdel = ConfigViewModel()
+    @StateObject var memModelView = UserBooksModel()
     
     @State private var email: String = ""
     @State private var password: String = ""
@@ -105,7 +106,7 @@ struct LoginView: View {
                     
                     NavigationLink(destination: AdminTabView(), isActive: $viewModel.shouldNavigateToAdmin) { EmptyView() }
                     NavigationLink(destination: LibrarianFirstScreenView(LibModelView: LibViewModel, ConfiViewModel: ConfiViewMOdel), isActive: $viewModel.shouldNavigateToLibrarian) { EmptyView() }
-                    NavigationLink(destination: MemberTabView(), isActive: $viewModel.shouldNavigateToMember) { EmptyView() }
+                    NavigationLink(destination: MemberTabView(memModelView: memModelView, ConfiViewModel: ConfiViewMOdel), isActive: $viewModel.shouldNavigateToMember) { EmptyView() }
                     NavigationLink(destination: Membership(), isActive: $viewModel.shouldNavigateToGeneral) { EmptyView() }
                     
                     

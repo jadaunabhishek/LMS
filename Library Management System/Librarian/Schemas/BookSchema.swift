@@ -34,10 +34,14 @@ struct Book{
     var bookSubCategories: [String]
     var bookPublishingDate: String
     var bookStatus: String
-    var bookIssuedTo: String
-    var bookIssuedToName: String
-    var bookIssuedOn: String
-    var bookExpectedReturnOn: String
+    var bookCount: Int
+    var bookAvailableCount: Int
+    var bookPreBookedCount: Int
+    var bookTakenCount: Int
+    var bookIssuedTo: [String]
+    var bookIssuedToName: [String]
+    var bookIssuedOn: [String]
+    var bookExpectedReturnOn: [String]
     var bookRating: Float
     var bookReviews: [String]
     var bookHistory: [History]
@@ -58,6 +62,10 @@ struct Book{
             "bookSubCategories": bookSubCategories,
             "bookPublishingDate": bookPublishingDate,
             "bookStatus": bookStatus,
+            "bookCount": bookCount,
+            "bookAvailableCount": bookAvailableCount,
+            "bookPreBookedCount": bookPreBookedCount,
+            "bookTakenCount": bookTakenCount,
             "bookIssuedTo": bookIssuedTo,
             "bookIssuedToName": bookIssuedToName,
             "bookIssuedOn": bookIssuedOn,

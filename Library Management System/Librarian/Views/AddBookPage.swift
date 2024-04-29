@@ -14,6 +14,7 @@ struct AddBookPage: View {
     @State var bookSubCategory: String = ""
     @State var bookPublishingDate: Date = Date.now
     @State var bookStatus: String = "Available"
+    @State var bookCount: String = ""
     @State var bookImage: UIImage = UIImage()
     
     @State var fileName: String = ""
@@ -43,6 +44,9 @@ struct AddBookPage: View {
             formValid = false
         }
         if(bookDescription.isEmpty){
+            formValid = false
+        }
+        if(bookCount.isEmpty){
             formValid = false
         }
         if(bookCategory.isEmpty || bookCategory == "Choose"){
@@ -124,24 +128,51 @@ struct AddBookPage: View {
                             }
                         }
                         VStack(spacing: 20){
-                            TextField("Book ISBN", text: $bookISBN)
-                                .padding(10)
-                                .background(.white)
-                                .cornerRadius(10)
-                                .autocorrectionDisabled()
-                                .autocapitalization(.none)
-                            TextField("Book Name", text: $bookName)
-                                .padding(10)
-                                .background(.white)
-                                .cornerRadius(10)
-                                .autocorrectionDisabled()
-                            TextField("Book Author", text: $bookAuthor)
-                                .padding(10)
-                                .background(.white)
-                                .cornerRadius(10)
-                                .autocorrectionDisabled()
+                            VStack(spacing:20){
+                                TextField("Book ISBN", text: $bookISBN)
+                                    .padding(5)
+                                    .autocorrectionDisabled()
+                                    .autocapitalization(.none)
+                                    .overlay(
+                                        Rectangle()
+                                            .frame(height: 1, alignment: .bottom)
+                                            .foregroundColor(.black.opacity(0.1)),
+                                        alignment: .bottom
+                                    )
+                                TextField("Book Name", text: $bookName)
+                                    .padding(5)
+                                    .autocorrectionDisabled()
+                                    .overlay(
+                                        Rectangle()
+                                            .frame(height: 1, alignment: .bottom)
+                                            .foregroundColor(.black.opacity(0.1)),
+                                        alignment: .bottom
+                                    )
+                                TextField("Book Author", text: $bookAuthor)
+                                    .padding(5)
+                                    .autocorrectionDisabled()
+                                    .overlay(
+                                        Rectangle()
+                                            .frame(height: 1, alignment: .bottom)
+                                            .foregroundColor(.black.opacity(0.1)),
+                                        alignment: .bottom
+                                    )
+                                TextField("No of Copies", text: $bookCount)
+                                    .padding(5)
+                                    .autocorrectionDisabled()
+                                    .keyboardType(.numberPad)
+                                    .overlay(
+                                        Rectangle()
+                                            .frame(height: 1, alignment: .bottom)
+                                            .foregroundColor(.black.opacity(0.1)),
+                                        alignment: .bottom
+                                    )
+                            }
+                            .padding(10)
+                            .background(.white)
+                            .cornerRadius(8)
                             TextField("Book Description", text: $bookDescription, axis: .vertical)
-                                .lineLimit(3...7)
+                                .lineLimit(5...5)
                                 .padding(10)
                                 .background(.white)
                                 .cornerRadius(10)
@@ -172,27 +203,11 @@ struct AddBookPage: View {
                                 .background(.white)
                                 .cornerRadius(10)
                             }
-                            HStack{
-                                Text("Categories")
-                                Spacer()
-                                Picker("", selection: $bookCategory){
-                                    Text("Choose").tag("Choose")
-                                    if(!ConfiViewModel.currentConfig.isEmpty){
-                                        ForEach(ConfiViewModel.currentConfig[0].categories, id: \.self){ category in
-                                            Text(category).tag(category)
-                                        }
-                                    }
-                                }
-                                .accentColor(.black)
-                            }
-                            .padding(10)
-                            .background(.white)
-                            .cornerRadius(8)
-                            VStack(spacing: 10){
+                            VStack(spacing:20){
                                 HStack{
-                                    Text("Sub Categories")
+                                    Text("Categories")
                                     Spacer()
-                                    Picker("", selection: $bookSubCategory){
+                                    Picker("", selection: $bookCategory){
                                         Text("Choose").tag("Choose")
                                         if(!ConfiViewModel.currentConfig.isEmpty){
                                             ForEach(ConfiViewModel.currentConfig[0].categories, id: \.self){ category in
@@ -201,39 +216,58 @@ struct AddBookPage: View {
                                         }
                                     }
                                     .accentColor(.black)
-                                    .onChange(of: bookSubCategory, initial: true){ (oldValue,newValue)  in
-                                        if(newValue != oldValue && newValue != "Choose" && !bookSubCategories.contains(newValue)){
-                                            bookSubCategories.append(bookSubCategory)
-                                        }
-                                    }
                                 }
-                                if(!bookSubCategories.isEmpty){
-                                    LazyVGrid(columns: [GridItem(.adaptive(minimum: 125))], content: {
-                                        ForEach(0..<bookSubCategories.count, id: \.self){ index in
-                                            HStack{
-                                                Text(bookSubCategories[index])
-                                                Spacer()
-                                                Button(action:{
-                                                    bookSubCategories.remove(at: bookSubCategories.firstIndex(of: bookSubCategories[index])!)
-                                                }){
-                                                    Image(systemName: "xmark")
+                                VStack(spacing: 10){
+                                    HStack{
+                                        Text("Sub Categories")
+                                        Spacer()
+                                        Picker("", selection: $bookSubCategory){
+                                            Text("Choose").tag("Choose")
+                                            if(!ConfiViewModel.currentConfig.isEmpty){
+                                                ForEach(ConfiViewModel.currentConfig[0].categories, id: \.self){ category in
+                                                    Text(category).tag(category)
                                                 }
                                             }
-                                            .padding(10)
-                                            .foregroundColor(.black)
-                                            .background(Color("PrimaryColor").opacity(0.25))
-                                            .cornerRadius(8)
                                         }
-                                    })
-                                }
-                                else{
-                                    Text("No categories added")
-                                        .font(.system(size: 14, weight: .light))
+                                        .accentColor(.black)
+                                        .onChange(of: bookSubCategory, initial: true){ (oldValue,newValue)  in
+                                            if(newValue != oldValue && newValue != "Choose" && !bookSubCategories.contains(newValue)){
+                                                bookSubCategories.append(bookSubCategory)
+                                            }
+                                        }
+                                    }
+                                    if(!bookSubCategories.isEmpty){
+                                        LazyVGrid(columns: [GridItem(.adaptive(minimum: 125))], content: {
+                                            ForEach(0..<bookSubCategories.count, id: \.self){ index in
+                                                HStack{
+                                                    Text(bookSubCategories[index])
+                                                    Spacer()
+                                                    Button(action:{
+                                                        bookSubCategories.remove(at: bookSubCategories.firstIndex(of: bookSubCategories[index])!)
+                                                    }){
+                                                        Image(systemName: "xmark")
+                                                    }
+                                                }
+                                                .padding(10)
+                                                .foregroundColor(.black)
+                                                .background(Color("PrimaryColor").opacity(0.25))
+                                                .cornerRadius(8)
+                                            }
+                                        })
+                                    }
+                                    else{
+                                        Text("No categories added")
+                                            .font(.system(size: 14, weight: .light))
+                                    }
                                 }
                             }
                             .padding(10)
                             .background(.white)
                             .cornerRadius(8)
+                            
+//                            .padding(10)
+//                            .background(.white)
+//                            .cornerRadius(8)
                             VStack{
                                 Text("All fields are mandatory")
                                     .font(.system(size: 18, weight: .thin))
@@ -242,7 +276,7 @@ struct AddBookPage: View {
                                         Task{
                                             if(formValidation()){
                                                 isPageLoading = true
-                                                LibViewModel.addBook(bookISBN: bookISBN, bookName: bookName, bookAuthor: bookAuthor, bookDescription: bookDescription, bookCategory: bookCategory, bookSubCategories: bookSubCategories, bookPublishingDate: bookPublishingDate.formatted(), bookStatus: bookStatus, bookImage: bookImage)
+                                                LibViewModel.addBook(bookISBN: bookISBN, bookName: bookName, bookAuthor: bookAuthor, bookDescription: bookDescription, bookCategory: bookCategory, bookSubCategories: bookSubCategories, bookPublishingDate: bookPublishingDate.formatted(), bookStatus: bookStatus, bookCount: Int(bookCount)!, bookAvailableCount: Int(bookCount)!, bookPreBookedCount: 0, bookTakenCount: 0, bookImage: bookImage)
                                                 try? await Task.sleep(nanoseconds: 3_000_000_000)
                                                 print(LibViewModel.responseStatus)
                                                 if(LibViewModel.responseStatus == 200){
