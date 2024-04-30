@@ -19,7 +19,7 @@ struct AdminStaffView: View {
                     if !staffViewModel.currentStaff.isEmpty {
                         VStack(alignment: .leading) {
                             ForEach(staffViewModel.currentStaff, id: \.userID) { staffMember in
-                                NavigationLink(destination: StaffDetailsView(userID: staffMember.userID)) {
+                                NavigationLink(destination: StaffDetailsView(staffMember: staffMember)) {
                                     HStack {
                                         AsyncImage(url: URL(string: staffMember.profileImageURL)) { image in
                                             image.resizable()
@@ -45,7 +45,7 @@ struct AdminStaffView: View {
                                             .foregroundStyle(themeManager.selectedTheme.bodyTextColor)
                                     }.padding()
                                 }
-
+                                
                             }.padding(.horizontal)
                         }
                         
@@ -57,14 +57,14 @@ struct AdminStaffView: View {
                 .navigationBarTitle("Manage Staff")
                 .navigationBarBackButtonHidden()
                 .navigationBarItems(leading: Spacer(),trailing:
-                                    Button(action: {
-                                        isAddStaffViewPresented.toggle()
-                                    }) {
-                                        Image(systemName: "plus")
-                                            .font(.title3)
-                                            .foregroundColor(themeManager.selectedTheme.primaryThemeColor)
-                                    }
-                                )
+                                        Button(action: {
+                    isAddStaffViewPresented.toggle()
+                }) {
+                    Image(systemName: "plus")
+                        .font(.title3)
+                        .foregroundColor(themeManager.selectedTheme.primaryThemeColor)
+                }
+                )
                 .sheet(isPresented: $isAddStaffViewPresented) {
                     AddStaffView()
                         .presentationDetents([.fraction(0.85)])

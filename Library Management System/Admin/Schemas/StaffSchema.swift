@@ -18,13 +18,7 @@ struct Staff {
     var password: String
     var createdOn: Date
     var updatedOn: Date
-    var status: Status
-    
-    enum Status: String {
-        case active = "Active"
-        case revoked = "Revoked"
-    }
-    
+
     func getDictionaryOfStruct() -> [String: Any] {
         return [
             "userID": userID,
@@ -37,7 +31,6 @@ struct Staff {
             "password": password,
             "createdOn": createdOn,
             "updatedOn": updatedOn,
-            "status": status.rawValue
         ]
     }
 }
