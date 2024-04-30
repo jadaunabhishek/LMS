@@ -1,21 +1,23 @@
+//
+//  StaffViewModel.swift
+//  Library Management System
+//
+//  Created by Manvi Singhal on 25/04/24.
+//
+
 import SwiftUI
 
 struct StaffDetailsView: View {
+    let staffMember: Staff
     @EnvironmentObject var themeManager: ThemeManager
-    let userID: String
     @StateObject var staffViewModel = StaffViewModel()
     
     var body: some View {
-        VStack {
-            if let staffMember = staffViewModel.currentStaff.first(where: { $0.userID == userID }) {
-    
-                if let profileURL = URL(string: staffMember.profileImageURL) {
-                    ZStack {
-                        Rectangle()
-                            .foregroundColor(themeManager.selectedTheme.secondaryThemeColor)
-                            .frame(height: 240)
-                            .cornerRadius(15)
-                        VStack{
+        NavigationView{
+            List {
+                Section(header: Text("Staff Details")) {
+                    VStack(alignment: .center){
+                        if let profileURL = URL(string: staffMember.profileImageURL) {
                             AsyncImage(url: profileURL) { image in
                                 image
                                     .resizable()
@@ -31,69 +33,80 @@ struct StaffDetailsView: View {
                                     .clipShape(Rectangle())
                                     .cornerRadius(10)
                             }
-                            VStack(alignment: .center, spacing: 10) {
-                                Text(staffMember.name)
-                                    .font(.title)
-                                    .fontWeight(.bold)
-                                Text(staffMember.role)
-                                    .font(.title2)
-                                    .fontWeight(.semibold)
-                                    .foregroundColor(.secondary)
-                            }
-                            .padding()
+                            Text(staffMember.name)
+                                .font(.title)
+                                .fontWeight(.bold)
                         }
-                        
                     }
-                    .padding(.bottom, 20)
+                    .frame(maxWidth: .infinity)
                 }
                 
-                // Staff member name and role
-                
-                
-                List {
-                    Section(header: Text("Details").font(.headline).foregroundColor(themeManager.selectedTheme.bodyTextColor)) {
-                        Text("Email: \(staffMember.email)").font(.subheadline)
-                        Text("Mobile: \(staffMember.mobile)").font(.subheadline)
-                        Text("Aadhar: \(staffMember.aadhar)").font(.subheadline)
-                        Text("Created On: \(staffMember.createdOn)").font(.subheadline)
-                        Text("Updated On: \(staffMember.updatedOn)").font(.subheadline)
-                        Text("Status: \(staffMember.status.rawValue)").font(.subheadline)
-                    }
+                Section(header: Text("Contact Information")) {
+                    Text(staffMember.email)
+                        .font(.subheadline)
+                    Text(staffMember.mobile)
+                        .font(.subheadline)
+                    Text(staffMember.aadhar)
+                        .font(.subheadline)
                 }
-                .listStyle(GroupedListStyle())
-                .foregroundColor(themeManager.selectedTheme.bodyTextColor)
-                .environment(\.horizontalSizeClass, .regular)
-                .navigationBarItems(
-                    leading: Spacer(),
-                    trailing:
-                        NavigationLink(
-                            destination: EditStaffDetailsView(staffMember: staffMember),
-                            label: {
-                                Image(systemName: "pencil")
-                                    .font(.title3)
-                                    .foregroundColor(themeManager.selectedTheme.primaryThemeColor)
-                            }
-                        )
-                )
-            } else {
-                Text("Staff member details not found.")
+                
+                Section(header: Text("Dates")) {
+                    Text("Created On: \(staffMember.createdOn)")
+                        .font(.subheadline)
+                    Text("Updated On: \(staffMember.updatedOn)")
+                        .font(.subheadline)
+                }
             }
+            .listStyle(InsetGroupedListStyle())
         }
-        
-        .padding()
-        .onAppear {
-            staffViewModel.getStaff()
-        }
-        .navigationTitle("Staff Details")
-      
+        .navigationBarItems(
+            leading: Spacer(),
+            trailing:
+                NavigationLink(
+                    destination: EditStaffDetailsView(staffMember: staffMember),
+                    label: {
+                        Text("Edit")
+                            .font(.title3)
+                            .foregroundColor(themeManager.selectedTheme.primaryThemeColor)
+                    }
+                )
+        )
+        .onAppear(
+            perform: {
+                Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { time in
+                    Task{
+                        staffViewModel.getStaff()
+                    }
+                }
+            }
+        )
+//        .onAppear{
+//            staffViewModel.getStaff()
+//        }
     }
 }
-
 
 struct StaffDetailsView_Previews: PreviewProvider {
     static var previews: some View {
         let themeManager = ThemeManager()
-        return StaffDetailsView(userID: "35PmRqJThks5zqXgn02g")
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "MMMM dd, yyyy 'at' hh:mm:ss a 'UTC'ZZZ"
+        let createdOnDate = dateFormatter.date(from: "April 24, 2024") ?? Date()
+        let updatedOnDate = dateFormatter.date(from: "April 24, 2024") ?? Date()
+        let sampleStaff = Staff(
+            userID: "VzCFTZhEjoMZpFuzBw1Kt1S1AGm1",
+            name: "Manvi Singhal",
+            email: "Manvi.Singhal",
+            mobile: "librarian",
+            profileImageURL: "https://firebasestorage.googleapis.com:443/v0/b/library-management-syste-6cc1e.appspot.com/o/staffProfileImages%2F35PmRqJThks5zqXgn02g.jpeg?alt=media&token=6334f513-e00e-4d77-83fe-e9be3dae9c5a",
+            aadhar: "6976927239",
+            role: "librarian",
+            password: "gyhg",
+            createdOn: createdOnDate,
+            updatedOn: updatedOnDate
+        )
+        
+        return StaffDetailsView(staffMember: sampleStaff)
             .environmentObject(themeManager)
     }
 }
