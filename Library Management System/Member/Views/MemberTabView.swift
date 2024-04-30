@@ -27,7 +27,7 @@ struct MemberTabView: View {
                     Text("Search")
                 }
             
-            Books(MemViewModel: memModelView, ConfiViewMmodel: ConfiViewModel)
+            Books()
                 .tabItem {
                     Image(systemName: "books.vertical.fill")
                     Text("Books")
