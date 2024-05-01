@@ -1,5 +1,41 @@
 import Foundation
 
+struct Loan{
+    
+    var loanId: String
+    var bookId: String
+    var bookName: String
+    var bookIssuedTo: String
+    var bookIssuedToName: String
+    var bookIssuedOn: String
+    var bookExpectedReturnOn: String
+    var bookReturnedOn: String
+    var loanStatus: String
+    var loanReminderStatus: String
+    var createdOn: String
+    var updatedOn: String
+    
+    func getDictionaryOfStruct() -> [String:Any]{
+        
+        return [
+            "loanId":loanId,
+            "bookId":bookId,
+            "bookName":bookName,
+            "bookIssuedTo":bookIssuedTo,
+            "bookIssuedToName":bookIssuedToName,
+            "bookIssuedOn":bookIssuedOn,
+            "bookExpectedReturnOn":bookExpectedReturnOn,
+            "bookReturnedOn":bookReturnedOn,
+            "loanStatus":loanStatus,
+            "loanReminderStatus": loanReminderStatus,
+            "createdOn":createdOn,
+            "updatedOn":updatedOn
+        ]
+        
+    }
+    
+}
+
 struct History{
     
     var userId: String
