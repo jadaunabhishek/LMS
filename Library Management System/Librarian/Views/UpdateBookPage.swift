@@ -14,17 +14,21 @@ struct LoadingAnimation: View {
     
     var body: some View {
         ZStack{
-            Circle()
-                .trim(from: 0, to: 0.7)
-                .stroke(Color("PrimaryColor"), lineWidth: 10)
-                .frame(width: 100, height: 100)
-                .rotationEffect(Angle(degrees: Double(degree)))
-                .animation(Animation.linear(duration: 1).repeatForever(autoreverses: false))
-                .onAppear{
-                    degree = 270 + 360
-                    spinnerLength = 0
-                }
-            Text("Loading")
+            VStack(spacing: 20){
+                ProgressView()
+                    .controlSize(.large)
+                Text("Loading")
+            }
+//            Circle()
+//                .trim(from: 0, to: 0.7)
+//                .stroke(Color("PrimaryColor"), lineWidth: 10)
+//                .frame(width: 100, height: 100)
+//                .rotationEffect(Angle(degrees: Double(degree)))
+//                .animation(Animation.linear(duration: 1).repeatForever(autoreverses: false))
+//                .onAppear{
+//                    degree = 270 + 360
+//                    spinnerLength = 0
+//                }
         }
         .ignoresSafeArea(.all)
         .frame(maxWidth: .infinity)
@@ -36,7 +40,7 @@ struct UpdateBookPage: View {
     
     @ObservedObject var LibViewModel: LibrarianViewModel
     @ObservedObject var ConfiViewModel: ConfigViewModel
-    @State var currentBookId: String = "E5Jf4wPKbMlCK44HYz0p"
+    @State var currentBookId: String = "ED4x3Tkc2OdiIUhACkGJ"
     
     @State var bookISBN: String = "123-456-789"
     @State var bookImage: UIImage = UIImage()
@@ -384,7 +388,6 @@ struct UpdateBookPage: View {
                                                 isButtonLoading.toggle()
                                                 LibViewModel.deleteBook(bookId: currentBookId)
                                                 try? await Task.sleep(nanoseconds: 3_000_000_000)
-                                                print(LibViewModel.responseStatus)
                                                 if(LibViewModel.responseStatus == 200){
                                                     docState = .ready
                                                 }

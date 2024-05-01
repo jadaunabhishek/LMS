@@ -10,16 +10,18 @@ import Firebase
 
 @main
 struct Library_Management_SystemApp: App {
-    @StateObject var themeManager = ThemeManager()
     @StateObject var LibModel = LibrarianViewModel()
     @StateObject var confiModel = ConfigViewModel()
+    @StateObject var themeManager = ThemeManager()
     var body: some Scene {
         WindowGroup {
             ContentView()
                 .environmentObject(themeManager)
-//             AdminCategoriesView(configViewModel: confiModel)
-//                        LibrarianFirstScreenView(LibModelView: LibModel, ConfiViewModel: confiModel)
-//                            .environmentObject(themeManager)
+                .task {
+                    do{
+                        await themeManager.setBaseTheme()
+                    }
+                }
         }
     }
     init(){
