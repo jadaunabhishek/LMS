@@ -11,16 +11,16 @@ struct MemberBookDetailView: View {
     @State var book: Book
     var body: some View {
         NavigationStack{
-            VStack{
-                    ZStack{
-                        VStack{
-                            Rectangle()
-                                .fill(Color(red: 121/255, green: 218/255, blue: 232/255))
-                                .cornerRadius(45)
-                                .frame(height: 400)
-                                .offset(y:-100)
-                            Spacer()
-                        }
+            ScrollView{
+                ZStack(alignment: .top){
+                    VStack(spacing:0){
+                        Rectangle()
+                            .fill(Color(red: 121/255, green: 218/255, blue: 232/255))
+                            .cornerRadius(45)
+                            .frame(height: 800)
+                            .position(CGPoint(x: 196.0, y: -80.0))
+                    }
+                    VStack{
                         VStack{
                             
                             Text(book.bookName)
@@ -31,6 +31,10 @@ struct MemberBookDetailView: View {
                             }
                             .frame(width: 200,height: 300)
                             .cornerRadius(8)
+                            
+                        }
+                        
+                        VStack{
                             Text("By \(book.bookAuthor)")
                                 .font(.system(size: 18, weight: .regular))
                                 .padding(5)
@@ -79,8 +83,12 @@ struct MemberBookDetailView: View {
                             
                         }
                         
+                        
+                        
+                        
                     }
-                
+                    .padding(.top,90)
+                }
                 
             }
         }

@@ -15,7 +15,7 @@ struct Library_Management_SystemApp: App {
     @StateObject var confiModel = ConfigViewModel()
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            MemberTabView()
                 .environmentObject(themeManager)
 //             AdminCategoriesView(configViewModel: confiModel)
 //                        LibrarianFirstScreenView(LibModelView: LibModel, ConfiViewModel: confiModel)
