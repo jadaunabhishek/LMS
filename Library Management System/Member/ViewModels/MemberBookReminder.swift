@@ -20,6 +20,7 @@ func getUserHistory(userId: String) async throws -> [Loan] {
             bookExpectedReturnOn: documentData["bookExpectedReturnOn"] as? String ?? "",
             bookReturnedOn: documentData["bookReturnedOn"] as? String ?? "",
             loanStatus: documentData["loanStatus"] as? String ?? "",
+            loanReminderStatus: documentData["loanReminderStatus"] as? String ?? "",
             createdOn: documentData["createdOn"] as? String ?? "",
             updatedOn: documentData["updatedOn"] as? String ?? ""
         )
