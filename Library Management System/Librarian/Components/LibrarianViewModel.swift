@@ -395,7 +395,7 @@ class LibrarianViewModel: ObservableObject{
     }
     
     func getUserHistory(userId: String){
-        
+            
         var tempUserHistory: [Loan] = []
         
         self.dbInstance.collection("Loans").getDocuments{ (snapshot, error) in
@@ -433,5 +433,11 @@ class LibrarianViewModel: ObservableObject{
         }
         
     }
+
+    
+//    func filterBook(){
+//
+//        let allBooks = self.dbInstance.collection("Books")
+//    }
     
 }

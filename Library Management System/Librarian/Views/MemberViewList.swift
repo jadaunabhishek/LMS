@@ -1,7 +1,8 @@
 import SwiftUI
 import FirebaseFirestore
 
-struct Member{
+// Define the Member struct to hold member information
+struct Member {
     let id: String
     var name: String
     var email: String
@@ -9,61 +10,15 @@ struct Member{
     var isToggled: Bool
 }
 
-struct MembersView: View {
-    @State private var members: [Member] = []
-    private var db = Firestore.firestore()
-
-    var body: some View {
-        NavigationView {
-            ScrollView {
-                LazyVStack(spacing: 16) {
-                    ForEach($members, id: \.id) { $member in
-                        MemberCard(member: $member)
-                            .frame(maxWidth: .infinity)
-                            .background(Color.white)
-                    }
-                }
-            }
-            .navigationTitle("MEMBERS")
-            .onAppear {
-                fetchData()
-            }
-        }
-    }
-
-    func fetchData() {
-        db.collection("users").whereField("role", isEqualTo: "member")
-          .addSnapshotListener { querySnapshot, error in
-            guard let documents = querySnapshot?.documents else {
-                print("Error fetching documents: \(error?.localizedDescription ?? "Unknown error")")
-                return
-            }
-
-            self.members = documents.map { doc -> Member in
-                let data = doc.data()
-                let email = data["email"] as? String ?? ""
-                let name = data["name"] as? String ?? ""
-                let status = data["status"] as? String ?? ""
-                if(status == "approved"){
-                    return Member(id: doc.documentID, name: name, email: email, status: status, isToggled: true)
-                }
-                else{
-                    return Member(id: doc.documentID, name: name, email: email, status: status, isToggled: false)
-                }
-            }
-        }
-    }
-}
-
+// View for displaying individual member cards
 struct MemberCard: View {
-    
     var db = Firestore.firestore()
-    
-    func updateData(memberId: String, status: String){
-        db.collection("users").document(memberId).updateData(["status":status])
-    }
-    
     @Binding var member: Member
+
+    // Update member status in Firestore
+    func updateData(memberId: String, status: String) {
+        db.collection("users").document(memberId).updateData(["status": status])
+    }
 
     var body: some View {
         VStack(alignment: .leading) {
@@ -80,7 +35,7 @@ struct MemberCard: View {
                 VStack(alignment: .leading, spacing: 4) {
                     Text(member.name)
                         .font(.headline)
-                    Text("\(member.email)")
+                    Text(member.email)
                         .font(.subheadline)
                         .foregroundColor(.gray)
                     Text("Status: \(member.status)")
@@ -93,14 +48,11 @@ struct MemberCard: View {
                 Toggle("", isOn: $member.isToggled)
                     .labelsHidden()
                     .toggleStyle(SwitchToggleStyle(tint: .green))
-                    .onChange(of: member.isToggled, initial: true){ (oldValue,newValue) in
-                        if(newValue != oldValue){
-                            if(newValue){
-                                updateData(memberId: member.id, status: "approved")
-                            }
-                            else{
-                                updateData(memberId: member.id, status: "revoked")
-                            }
+                    .onChange(of: member.isToggled) { newValue in
+                        let newStatus = newValue ? "approved" : "revoked"
+                        if member.status != newStatus {
+                            updateData(memberId: member.id, status: newStatus)
+                            member.status = newStatus
                         }
                     }
             }
@@ -113,6 +65,76 @@ struct MemberCard: View {
     }
 }
 
+// Main view for displaying members
+struct MembersView: View {
+    @State private var members: [Member] = []
+    @State private var searchText = ""
+    private var db = Firestore.firestore()
+
+    var body: some View {
+        NavigationView {
+            ScrollView {
+                TextField("Search", text: $searchText)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                    .padding()
+                    .cornerRadius(10)
+                    .shadow(radius: 2)
+                    .overlay(
+                        HStack {
+                            Image(systemName: "magnifyingglass")
+                                .foregroundColor(.gray)
+                                .padding(.leading, 320)
+                        }
+                    )
+
+
+                LazyVStack(spacing: 16) {
+                    ForEach(filteredMembers, id: \.id) { member in
+                        MemberCard(member: .constant(member))  // Binding for toggling
+                            .frame(maxWidth: .infinity)
+                            .background(Color.white)
+                    }
+                }
+            }
+            .navigationTitle("MEMBERS")
+            .onAppear {
+                fetchData()
+            }
+        }
+    }
+
+    var filteredMembers: [Member] {
+        if searchText.isEmpty {
+            return members
+        } else {
+            return members.filter {
+                $0.name.lowercased().contains(searchText.lowercased()) ||
+                $0.email.lowercased().contains(searchText.lowercased())
+            }
+        }
+    }
+
+    // Fetch data from Firestore
+    func fetchData() {
+        db.collection("users").whereField("role", isEqualTo: "member")
+          .addSnapshotListener { querySnapshot, error in
+            guard let documents = querySnapshot?.documents else {
+                print("Error fetching documents: \(error?.localizedDescription ?? "Unknown error")")
+                return
+            }
+
+            self.members = documents.map { doc -> Member in
+                let data = doc.data()
+                let email = data["email"] as? String ?? ""
+                let name = data["name"] as? String ?? ""
+                let status = data["status"] as? String ?? ""
+                return Member(id: doc.documentID, name: name, email: email, status: status, isToggled: status == "approved")
+            }
+        }
+    }
+}
+
+// Preview provider for SwiftUI previews
 struct MembersView_Previews: PreviewProvider {
     static var previews: some View {
         MembersView()
