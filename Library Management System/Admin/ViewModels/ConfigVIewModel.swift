@@ -44,7 +44,7 @@ class ConfigViewModel: ObservableObject {
                         fineDetailsArray.append(fineDetail)
                     }
                     
-                    self.currentConfig.append(Config(
+                    var newConfig = Config(
                         configID: document!["configID"] as! String,
                         adminID: document!["adminID"] as! String,
                         logo: document!["logo"] as! String,
@@ -54,8 +54,8 @@ class ConfigViewModel: ObservableObject {
                         maxFine: document!["maxFine"] as! Double,
                         maxPenalties: document!["maxPenalties"] as! Int,
                         categories: document!["categories"] as! [String]
-                                                ))
-                    print(self.currentConfig)
+                                                )
+                    self.currentConfig.append(newConfig)
                     self.responseStatus = 200
                     self.responseMessage = "Book fetched successfully"
                 } else {
@@ -100,4 +100,55 @@ class ConfigViewModel: ObservableObject {
             }
         }
     }
+    
+    func updateLibraryLogo(libraryLogo: UIImage, configId: String){
+        
+        let storageRef = Storage.storage().reference()
+        let imageData  = libraryLogo.jpegData(compressionQuality: 0.9)!
+        let fileRef = storageRef.child("libraryLogos/\(configId).jpeg")
+        
+        //var uploadDone  = false
+        fileRef.putData(imageData, metadata: nil){
+            metadata,error in
+            
+            if(error == nil && metadata != nil){
+                fileRef.downloadURL{ url,error1 in
+                    if(error1 == nil && url != nil){
+                        let imageURL = url?.absoluteString
+                        self.dbInstance.collection("configuration").document(configId).updateData(["logo":imageURL as Any]){ error in
+                            if let error = error{
+                                print("Unable to update Logo")
+                            }
+                            else{
+                                print("Logo updated")
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    func updateLibraryTheme(configId: String, acentColor: String){
+        self.dbInstance.collection("configuration").document(configId).updateData(["accentColor": acentColor]){ error in
+            if let error = error{
+                print("Unable to update theme")
+            }
+            else{
+                print("Logo updated")
+            }
+        }
+    }
+    
+    func updateLibraryFineDetails(configId: String, loanPeriod: Int, maxFine: Int, maxPenalties: Int, fineDetails: [[String: Any]]){
+        self.dbInstance.collection("configuration").document(configId).updateData(["loanPeriod": loanPeriod, "maxFine": maxFine, "maxPenalties": maxPenalties, "fineDetails": fineDetails]){ error in
+            if let error = error{
+                print("Unable to update fine Details")
+            }
+            else{
+                print("Logo updated")
+            }
+        }
+    }
+    
 }

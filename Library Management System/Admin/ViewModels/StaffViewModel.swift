@@ -56,7 +56,7 @@ class StaffViewModel: ObservableObject {
                     }
                     
                     let newStaff = Staff(
-                        userID: authResult!.user.uid,
+                        userID: addNewStaff.documentID ,
                         name: name,
                         email: email,
                         mobile: mobile,
@@ -65,8 +65,7 @@ class StaffViewModel: ObservableObject {
                         role: role,
                         password: password,
                         createdOn: Date(),
-                        updatedOn: Date(),
-                        status: .active
+                        updatedOn: Date()
                     )
                     
                     addNewStaff.setData(newStaff.getDictionaryOfStruct()) { error in
@@ -106,8 +105,7 @@ class StaffViewModel: ObservableObject {
                     role: data["role"] as? String ?? "",
                     password: data["password"] as? String ?? "",
                     createdOn: (data["createdOn"] as? Timestamp)?.dateValue() ?? Date(),
-                    updatedOn: (data["updatedOn"] as? Timestamp)?.dateValue() ?? Date(),
-                    status: Staff.Status(rawValue: data["status"] as? String ?? "") ?? .active
+                    updatedOn: (data["updatedOn"] as? Timestamp)?.dateValue() ?? Date()
                 )
                 librarians.append(librarian)
             }
@@ -121,9 +119,7 @@ class StaffViewModel: ObservableObject {
         email: String,
         mobile: String,
         aadhar: String,
-        role: String,
         profilePhoto: UIImage,
-        status: Staff.Status,
         isImageUpdated: Bool,
         completion: @escaping (Bool, Error?) -> Void
     ) {
@@ -152,10 +148,8 @@ class StaffViewModel: ObservableObject {
                         "email": email,
                         "mobile": mobile,
                         "aadhar": aadhar,
-                        "role": role,
-                        "status": status.rawValue,
                         "profileImageURL": imageURL
-                    ]) { error in
+                    ]) { [self] error in
                         if let error = error {
                             completion(false, error)
                             self.responseStatus = 400
@@ -163,6 +157,7 @@ class StaffViewModel: ObservableObject {
                             print("Unable to update staff member. Error: \(error)")
                         } else {
                             completion(true, nil)
+                            self.getStaff()
                             self.responseStatus = 200
                             self.responseMessage = "Staff member updated successfully."
                         }
@@ -175,8 +170,6 @@ class StaffViewModel: ObservableObject {
                 "email": email,
                 "mobile": mobile,
                 "aadhar": aadhar,
-                "role": role,
-                "status": status.rawValue
             ]) { error in
                 if let error = error {
                     completion(false, error)
@@ -185,6 +178,7 @@ class StaffViewModel: ObservableObject {
                     print("Unable to update staff member. Error: \(error)")
                 } else {
                     completion(true, nil)
+                    self.getStaff()
                     self.responseStatus = 200
                     self.responseMessage = "Staff member updated successfully."
                 }
@@ -196,14 +190,14 @@ class StaffViewModel: ObservableObject {
         self.responseStatus = 0
         self.responseMessage = ""
         
-        self.dbInstance.collection("users").document(staffID).updateData(["status": Staff.Status.revoked.rawValue]) { error in
+        self.dbInstance.collection("users").document(staffID).delete { error in
             if let error = error {
                 self.responseStatus = 400
-                self.responseMessage = "Something went wrong, Unable to revoke staff member. Check console for errors."
-                print("Unable to revoke staff member. Error: \(error)")
+                self.responseMessage = "Something went wrong, Unable to delete staff member. Check console for errors."
+                print("Unable to delete staff member. Error: \(error)")
             } else {
                 self.responseStatus = 200
-                self.responseMessage = "Revoked staff member successfully."
+                self.responseMessage = "Deleted staff member successfully."
             }
         }
     }

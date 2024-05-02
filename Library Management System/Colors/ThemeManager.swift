@@ -10,6 +10,8 @@ import SwiftUI
 
 class ThemeManager: ObservableObject {
     @Published var selectedTheme: ThemeProtocol = Red()
+    @ObservedObject var configModel = ConfigViewModel()
+    
     let themes: [ThemeProtocol] = [Red(), Blue(), Green()]
     
     init() {
@@ -18,6 +20,22 @@ class ThemeManager: ObservableObject {
     
     func setTheme(_ theme: ThemeProtocol) {
         selectedTheme = theme
+    }
+    
+    func setBaseTheme()async{
+        
+        configModel.fetchConfig()
+        try? await Task.sleep(nanoseconds: 1_000_000_000)
+        
+        if(configModel.currentConfig[0].accentColor == "Red"){
+            selectedTheme = Red()
+        }
+        else if(configModel.currentConfig[0].accentColor == "Blue"){
+            selectedTheme = Blue()
+        }
+        else if(configModel.currentConfig[0].accentColor == "Green"){
+            selectedTheme = Green()
+        }
     }
 }
 

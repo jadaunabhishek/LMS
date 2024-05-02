@@ -7,7 +7,8 @@
 
 import Foundation
 
-struct Staff {
+struct Staff: Identifiable {
+    var id: String
     var userID: String
     var name: String
     var email: String
@@ -18,11 +19,19 @@ struct Staff {
     var password: String
     var createdOn: Date
     var updatedOn: Date
-    var status: Status
     
-    enum Status: String {
-        case active = "Active"
-        case revoked = "Revoked"
+    init(userID: String, name: String, email: String, mobile: String, profileImageURL: String, aadhar: String, role: String, password: String, createdOn: Date, updatedOn: Date) {
+        self.id = userID
+        self.userID = userID
+        self.name = name
+        self.email = email
+        self.mobile = mobile
+        self.profileImageURL = profileImageURL
+        self.aadhar = aadhar
+        self.role = role
+        self.password = password
+        self.createdOn = createdOn
+        self.updatedOn = updatedOn
     }
     
     func getDictionaryOfStruct() -> [String: Any] {
@@ -37,7 +46,6 @@ struct Staff {
             "password": password,
             "createdOn": createdOn,
             "updatedOn": updatedOn,
-            "status": status.rawValue
         ]
     }
 }

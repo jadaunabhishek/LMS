@@ -7,19 +7,55 @@
 
 import SwiftUI
 
+struct StaffSearchBar: View {
+    @Binding var text: String
+    
+    var body: some View {
+        HStack {
+            TextField("Search", text: $text)
+                .padding(.horizontal)
+                .padding(.vertical, 8)
+                .background(Color(.systemGray6))
+                .cornerRadius(8)
+                .padding(.horizontal)
+            
+            if !text.isEmpty {
+                Button(action: {
+                    text = ""
+                }) {
+                    Image(systemName: "xmark.circle.fill")
+                        .foregroundColor(.gray)
+                }
+                .padding(.trailing, 8)
+            }
+        }
+    }
+}
+
 struct AdminStaffView: View {
     @State private var isAddStaffViewPresented = false
+    @State private var searchText = ""
     @StateObject var staffViewModel = StaffViewModel()
     @EnvironmentObject var themeManager: ThemeManager
+    
+    var filteredStaff: [Staff] {
+        if searchText.isEmpty {
+            return staffViewModel.currentStaff
+        } else {
+            return staffViewModel.currentStaff.filter { $0.name.localizedCaseInsensitiveContains(searchText) }
+        }
+    }
     
     var body: some View {
         NavigationView {
             ScrollView{
                 VStack {
-                    if !staffViewModel.currentStaff.isEmpty {
+                    StaffSearchBar(text: $searchText)
+                    
+                    if !filteredStaff.isEmpty {
                         VStack(alignment: .leading) {
-                            ForEach(staffViewModel.currentStaff, id: \.userID) { staffMember in
-                                NavigationLink(destination: StaffDetailsView(userID: staffMember.userID)) {
+                            ForEach(filteredStaff, id: \.userID) { staffMember in
+                                NavigationLink(destination: StaffDetailsView(staffMember: staffMember)) {
                                     HStack {
                                         AsyncImage(url: URL(string: staffMember.profileImageURL)) { image in
                                             image.resizable()
@@ -45,7 +81,7 @@ struct AdminStaffView: View {
                                             .foregroundStyle(themeManager.selectedTheme.bodyTextColor)
                                     }.padding()
                                 }
-
+                                
                             }.padding(.horizontal)
                         }
                         
@@ -57,14 +93,14 @@ struct AdminStaffView: View {
                 .navigationBarTitle("Manage Staff")
                 .navigationBarBackButtonHidden()
                 .navigationBarItems(leading: Spacer(),trailing:
-                                    Button(action: {
-                                        isAddStaffViewPresented.toggle()
-                                    }) {
-                                        Image(systemName: "plus")
-                                            .font(.title3)
-                                            .foregroundColor(themeManager.selectedTheme.primaryThemeColor)
-                                    }
-                                )
+                                        Button(action: {
+                    isAddStaffViewPresented.toggle()
+                }) {
+                    Image(systemName: "plus")
+                        .font(.title3)
+                        .foregroundColor(themeManager.selectedTheme.primaryThemeColor)
+                }
+                )
                 .sheet(isPresented: $isAddStaffViewPresented) {
                     AddStaffView()
                         .presentationDetents([.fraction(0.85)])

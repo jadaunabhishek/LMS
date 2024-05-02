@@ -11,6 +11,7 @@ struct Loan{
     var bookExpectedReturnOn: String
     var bookReturnedOn: String
     var loanStatus: String
+    var loanReminderStatus: String
     var createdOn: String
     var updatedOn: String
     
@@ -26,6 +27,7 @@ struct Loan{
             "bookExpectedReturnOn":bookExpectedReturnOn,
             "bookReturnedOn":bookReturnedOn,
             "loanStatus":loanStatus,
+            "loanReminderStatus": loanReminderStatus,
             "createdOn":createdOn,
             "updatedOn":updatedOn
         ]

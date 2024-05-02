@@ -10,10 +10,10 @@ import Firebase
 
 @main
 struct Library_Management_SystemApp: App {
-    @StateObject var themeManager = ThemeManager()
     @StateObject var LibModel = LibrarianViewModel()
     @StateObject var confiModel = ConfigViewModel()
     @State private var hasCalendarAccess = false
+    @StateObject var themeManager = ThemeManager()
     var body: some Scene {
         WindowGroup {
             ContentView()
@@ -26,6 +26,9 @@ struct Library_Management_SystemApp: App {
                 .onAppear {
                     requestAccessToCalendar { granted in
                         self.hasCalendarAccess = granted
+                .task {
+                    do{
+                        await themeManager.setBaseTheme()
                     }
                 }
 //             AdminCategoriesView(configViewModel: confiModel)
