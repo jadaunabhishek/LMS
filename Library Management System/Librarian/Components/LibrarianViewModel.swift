@@ -11,6 +11,7 @@ class LibrarianViewModel: ObservableObject{
     @Published var responseMessage = ""
     
     @Published var currentBook: [Book] = []
+    @Published var currentUserHistory: [Loan] = []
     @Published var allBooks: [Book] = []
     
     func addBook(bookISBN: String, bookName: String, bookAuthor: String, bookDescription: String, bookCategory: String, bookSubCategories: [String], bookPublishingDate: String, bookStatus: String, bookCount: Int, bookAvailableCount: Int, bookPreBookedCount: Int, bookTakenCount: Int, bookImage: UIImage){
@@ -229,6 +230,31 @@ class LibrarianViewModel: ObservableObject{
         }
         
     }
+    
+    func getUserHistory(userId: String){
+            
+        var tempUserHistory: [Loan] = []
+        
+        self.dbInstance.collection("Loans").getDocuments{ (snapshot, error) in
+            
+            if(error == nil && snapshot != nil){
+                for document in snapshot!.documents{
+                    let documentData = document.data()
+                    
+                    let tempLoan = Loan(loanId: documentData["loanId"] as! String as Any as! String, bookId: documentData["bookId"] as! String as Any as! String, bookName: documentData["bookName"] as! String as Any as! String, bookIssuedTo: documentData["bookIssuedTo"] as! String as Any as! String, bookIssuedToName: documentData["bookIssuedToName"] as! String as Any as! String, bookIssuedOn: documentData["bookIssuedOn"] as! String as Any as! String, bookExpectedReturnOn: documentData["bookExpectedReturnOn"] as! String as Any as! String, bookReturnedOn: documentData["bookReturnedOn"] as! String as Any as! String, loanStatus: documentData["loanStatus"] as! String as Any as! String, createdOn: documentData["createdOn"] as! String as Any as! String, updatedOn: documentData["updatedOn"] as! String as Any as! String)
+                    
+                    if(tempLoan.bookIssuedTo == userId){
+                        tempUserHistory.append(tempLoan)
+                    }
+                    
+                }
+                
+                self.currentUserHistory = tempUserHistory
+                
+            }
+        }
+    }
+
     
 //    func filterBook(){
 //

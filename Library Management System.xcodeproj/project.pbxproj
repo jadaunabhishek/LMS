@@ -21,6 +21,7 @@
 		84080F2F2BDE01B6005293B8 /* UpdateCategoriesButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84080F2E2BDE01B6005293B8 /* UpdateCategoriesButton.swift */; };
 		840A18ED2BE03F2700B9ED91 /* UserProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 840A18EC2BE03F2700B9ED91 /* UserProfileView.swift */; };
 		840A18EF2BE040F700B9ED91 /* TextFieldComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 840A18EE2BE040F700B9ED91 /* TextFieldComponent.swift */; };
+		840A18F12BE0E84D00B9ED91 /* MemberBookReminder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 840A18F02BE0E84D00B9ED91 /* MemberBookReminder.swift */; };
 		841045A92BD8D7D400E801D0 /* AuthViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 841045A82BD8D7D400E801D0 /* AuthViewModel.swift */; };
 		84301CB52BDA126F004CF581 /* MemberHome.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84301CB42BDA126F004CF581 /* MemberHome.swift */; };
 		84301CB72BDA13C8004CF581 /* MemberTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84301CB62BDA13C8004CF581 /* MemberTabView.swift */; };
@@ -121,6 +122,8 @@
 		84080F2E2BDE01B6005293B8 /* UpdateCategoriesButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateCategoriesButton.swift; sourceTree = "<group>"; };
 		840A18EC2BE03F2700B9ED91 /* UserProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileView.swift; sourceTree = "<group>"; };
 		840A18EE2BE040F700B9ED91 /* TextFieldComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldComponent.swift; sourceTree = "<group>"; };
+		840A18F02BE0E84D00B9ED91 /* MemberBookReminder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemberBookReminder.swift; sourceTree = "<group>"; };
+		840A18F22BE0E8C200B9ED91 /* Library-Management-System-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "Library-Management-System-Info.plist"; sourceTree = SOURCE_ROOT; };
 		841045A82BD8D7D400E801D0 /* AuthViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewModel.swift; sourceTree = "<group>"; };
 		84301CB42BDA126F004CF581 /* MemberHome.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemberHome.swift; sourceTree = "<group>"; };
 		84301CB62BDA13C8004CF581 /* MemberTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemberTabView.swift; sourceTree = "<group>"; };
@@ -294,6 +297,7 @@
 		D55820C52BD61AB0005A00F9 /* Library Management System */ = {
 			isa = PBXGroup;
 			children = (
+				840A18F22BE0E8C200B9ED91 /* Library-Management-System-Info.plist */,
 				D55820F52BD61BCC005A00F9 /* GoogleService-Info.plist */,
 				D55820FF2BD637BD005A00F9 /* Admin */,
 				D55821002BD637C4005A00F9 /* Librarian */,
@@ -423,6 +427,7 @@
 			children = (
 				841045A82BD8D7D400E801D0 /* AuthViewModel.swift */,
 				D57BFDB22BDD24FD0094A0B5 /* UserBooksModel.swift */,
+				840A18F02BE0E84D00B9ED91 /* MemberBookReminder.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -636,6 +641,7 @@
 				84301CB52BDA126F004CF581 /* MemberHome.swift in Sources */,
 				D55820F22BD61ADE005A00F9 /* LoginView.swift in Sources */,
 				DC48E7222BD6E78000794A7C /* LibrarianViewModel.swift in Sources */,
+				840A18F12BE0E84D00B9ED91 /* MemberBookReminder.swift in Sources */,
 				DC1D402E2BD76BF000970C7B /* AddBookPage.swift in Sources */,
 				84E87D5D2BD7D51400FAD5DC /* CardListView.swift in Sources */,
 				84080F2D2BDE01A3005293B8 /* UpdateCategoriesView.swift in Sources */,
@@ -831,6 +837,8 @@
 				DEVELOPMENT_TEAM = GP2US6Q3RD;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Library-Management-System-Info.plist";
+				INFOPLIST_KEY_NSCalendarsUsageDescription = "This app requires access to your calendar to add reminders for returning books.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -860,6 +868,8 @@
 				DEVELOPMENT_TEAM = GP2US6Q3RD;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Library-Management-System-Info.plist";
+				INFOPLIST_KEY_NSCalendarsUsageDescription = "This app requires access to your calendar to add reminders for returning books.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
