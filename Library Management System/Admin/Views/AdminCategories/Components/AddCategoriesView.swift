@@ -8,51 +8,34 @@
 import SwiftUI
 
 struct AddCategoriesView: View {
+    @EnvironmentObject var themeManager: ThemeManager
     @Binding var isSheetPresented: Bool
     @ObservedObject var configViewModel: ConfigViewModel
     @State private var newCategoryName = ""
     
     var body: some View {
-                    NavigationView {
-                        VStack {
-                            Text("ADD Category")
-                                .font(.title.bold())
-                                .padding()
-                                .padding(.bottom,16)
-                            TextField("New Category Name", text: $newCategoryName)
-                                .font(.title3)
-                                .padding(12)
-                                .autocapitalization(.none)
-                                .foregroundColor(Color("TextColor"))
-                                .frame(maxWidth: .infinity)
-                                .background(Color.white)
-                                .cornerRadius(15)
-                                .padding(.horizontal, 5)
-                                .padding(.bottom, 5)
-                                .shadow(color: Color.gray.opacity(0.3), radius: 5, x: 0, y: 2)
-        
-                            Button{
-                                // MARK: Function Calling
-                                Task{
-                                    configViewModel.addCategory(configId: "HJ9L6mDbi01TJvX3ja7Z", categories: addCategories(newCategory:newCategoryName))
-                                    isSheetPresented = false
-                                }
-                            } label: {
-                                Text("Add Categories")
-                                    .font(.title3)
-                                    .fontWeight(.bold)
-                                    .foregroundColor(.white)
-                                    .frame(maxWidth: .infinity)
-                                    .padding()
-                                    .background(Color("PrimaryColor"))
-                                    .cornerRadius(15)
-                            }
-                            .disabled(newCategoryName.isEmpty)
-                        }
+        NavigationView {
+            VStack {
+                VStack{
+                    Text("Add Category")
+                        .font(.title.bold())
                         .padding()
-                        
-                    }
+                        .padding(.bottom,16)
+                    CustomTextField(text: $newCategoryName)
+                   
                 }
+                PrimaryCustomButton(action: {
+                    configViewModel.addCategory(configId: "HJ9L6mDbi01TJvX3ja7Z", categories: addCategories(newCategory:newCategoryName))
+                    isSheetPresented = false
+                    
+                }, label: "Add Category")
+                .disabled(newCategoryName.isEmpty)
+
+            }
+            .padding()
+            
+        }
+    }
     
     func addCategories(newCategory: String) -> [String] {
         var newCategoriesList = configViewModel.currentConfig[0].categories
@@ -63,14 +46,18 @@ struct AddCategoriesView: View {
 }
 
 struct ACPrev: View {
-
+    
     @StateObject var ConfigrationViewModel = ConfigViewModel()
-
+    
     var body: some View {
         AddCategoriesView(isSheetPresented: .constant(false), configViewModel: ConfigrationViewModel)
     }
 }
 
-#Preview {
-    ACPrev()
+struct  ACPrev_Previews: PreviewProvider {
+    static var previews: some View {
+        let themeManager = ThemeManager()
+        return  ACPrev()
+            .environmentObject(themeManager)
+    }
 }

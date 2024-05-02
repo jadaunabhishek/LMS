@@ -8,8 +8,11 @@
 import SwiftUI
 
 struct AdminCategoriesView: View {
+    @EnvironmentObject var themeManager: ThemeManager
     @ObservedObject var configViewModel: ConfigViewModel
+    @StateObject var ConfiModel = ConfigViewModel()
     @State private var searchKey = ""
+    @State private var isSheetPresented = false
     
     @State var isPageLoading: Bool = true
     var filteredCategories: [String] {
@@ -25,31 +28,10 @@ struct AdminCategoriesView: View {
             
                 VStack(){
                     if(!isPageLoading){
-                        Rectangle()
-                            .fill(.red)
-                            .frame(height: 80)
-                            .cornerRadius(5)
-                            .padding(.bottom)
-                        
-                            TextField("what are u looking for?", text: $searchKey)
-                                .foregroundStyle(.black)
-                            
-                                .padding(14)
-                                .background{
-                                    RoundedRectangle(cornerRadius: 12)
-                                        .stroke(Color.black, lineWidth: 1)
-                                    
-                                }
-                                .padding(.horizontal,34)
-                                .padding(.top,20)
-                            Image(systemName: "magnifyingglass")
-                                .offset(x:130,y:-35)
-                            Spacer()
-                        
                         ScrollView {
                             LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 20) {
                                 ForEach(filteredCategories, id: \.self) { category in
-                                    NavigationLink(destination: AdminSubCategoriesView(category: category)) {
+                                    NavigationLink(destination: AdminSubCategoriesView(configViewModel: ConfigViewModel(), category: category)) {
                                         VStack(alignment: .leading) {
                                             AdminCategoriesCard(category: category)
                                                 .foregroundStyle(.black)
@@ -69,7 +51,19 @@ struct AdminCategoriesView: View {
                     }
                 
                 }
-                .ignoresSafeArea(.all)
+                .navigationTitle("Categories")
+                .navigationBarItems(leading: Spacer(),trailing:
+                                        Button(action: {
+                                            isSheetPresented.toggle()
+                                        }) {
+                                            Image(systemName: "plus")
+                                                .font(.title3)
+                                                .foregroundColor(themeManager.selectedTheme.primaryThemeColor)
+                                        }
+                                        .sheet(isPresented: $isSheetPresented, content: {
+                                            AddCategoriesView(isSheetPresented: $isSheetPresented, configViewModel: ConfiModel).presentationDetents([.fraction(0.35)])
+                                        })
+                                )
             
         }
         .task {
@@ -79,15 +73,7 @@ struct AdminCategoriesView: View {
                 isPageLoading = false
             }
         }
-        
-        .overlay(
-            ZStack {
-                    AddCategories()
-                        .position(CGPoint(x: 350.0, y: 680.0))
-                    UpdateCategoriesButton()
-                    .position(CGPoint(x: 290.0, y: 680.0)) // Adjust position as needed
-                }
-        )
+        .searchable(text: $searchKey)
     }
 }
 
@@ -99,7 +85,11 @@ struct ACPre: View {
     }
 }
 
-#Preview {
-    ACPre()
-    
+
+struct ACPre_Previews: PreviewProvider {
+    static var previews: some View {
+        let themeManager = ThemeManager()
+        return ACPre()
+            .environmentObject(themeManager)
+    }
 }

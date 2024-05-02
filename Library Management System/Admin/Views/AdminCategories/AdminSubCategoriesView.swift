@@ -13,6 +13,11 @@ class AdminSubCategoriesViewModel: ObservableObject {
 }
 
 struct AdminSubCategoriesView: View {
+    @EnvironmentObject var themeManager: ThemeManager
+    @State var configViewModel: ConfigViewModel
+    @State var ConfiModel = ConfigViewModel()
+    @State private var searchKey = ""
+    @State private var isSheetPresented = false
     @State var category: String
     @ObservedObject var librarianViewModel = LibrarianViewModel()
     
@@ -59,7 +64,20 @@ struct AdminSubCategoriesView: View {
                         }
                         
                     }
-                }
+                }.navigationTitle("Sub Categories")
+                    .navigationBarItems(leading: Spacer(),trailing:
+                                            Button(action: {
+                                                isSheetPresented.toggle()
+                                            }) {
+                                                Image(systemName: "square.and.pencil")
+                                                    .font(.title3)
+                                                    .foregroundColor(themeManager.selectedTheme.primaryThemeColor)
+                                            }
+                                            .sheet(isPresented: $isSheetPresented, content: {
+                                                UpdateCategoriesView(isSheetPresented: $isSheetPresented, configViewModel: ConfiModel, category: category)
+                                                        .presentationDetents([.fraction(0.40)])
+                                            })
+                                    )
             }
             .padding()
             .task {
@@ -71,6 +89,10 @@ struct AdminSubCategoriesView: View {
 
 
 
-#Preview {
-    AdminSubCategoriesView(category: "Sci-Fi")
+struct AdminSubCategoriesView_Previews: PreviewProvider {
+    static var previews: some View {
+        let themeManager = ThemeManager()
+        return AdminSubCategoriesView(configViewModel: ConfigViewModel(), category: "Fantasy")
+            .environmentObject(themeManager)
+    }
 }
