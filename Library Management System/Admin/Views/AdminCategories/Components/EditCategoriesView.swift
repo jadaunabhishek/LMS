@@ -12,7 +12,7 @@ struct EditCategoriesView: View {
     
     var body: some View {
                     NavigationView {
-                        VStack {
+                        VStack(alignment: .leading) {
                             TextField("Edit Category", text: $editCategoryName)
                                 .font(.title3)
                                 .padding(12)
@@ -51,3 +51,4 @@ struct EditCategoriesView: View {
 #Preview {
     EditCategoriesView(isSheetPresented: .constant(false))
 }
+

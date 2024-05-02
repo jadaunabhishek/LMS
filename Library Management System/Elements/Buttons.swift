@@ -17,7 +17,7 @@ struct PrimaryCustomButton: View {
             Text(label)
                 .font(.title3)
                 .fontWeight(.bold)
-//                .frame(maxWidth: .infinity)
+                .frame(maxWidth: .infinity)
                 .padding()
                 .background(themeManager.selectedTheme.primaryThemeColor)
                 .cornerRadius(15)
