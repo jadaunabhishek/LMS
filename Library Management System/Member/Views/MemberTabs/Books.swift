@@ -10,48 +10,50 @@ import SwiftUI
 
 struct Books: View {
     
-    @ObservedObject var MemViewModel: UserBooksModel
-    @ObservedObject var ConfiViewMmodel: ConfigViewModel
+    @ObservedObject var MemViewModel = UserBooksModel()
+    @ObservedObject var ConfiViewMmodel = ConfigViewModel()
     
     @State var isPageLoading: Bool = true
     
     var body: some View {
-        NavigationView{
+        NavigationStack{
             ZStack{
                 Color("BgColor").edgesIgnoringSafeArea(.all)
                 ScrollView{
                     VStack{
                         if(!MemViewModel.allBooks.isEmpty){
                             ForEach(MemViewModel.allBooks, id: \..id){ book in
-                                HStack(){
-                                    AsyncImage(url: URL(string: book.bookImageURL)) { image in
-                                        image.resizable()
-                                    } placeholder: {
-                                        ProgressView()
+                                NavigationLink(destination: MemberBookDetailView(book: book)){
+                                    HStack(){
+                                        AsyncImage(url: URL(string: book.bookImageURL)) { image in
+                                            image.resizable()
+                                        } placeholder: {
+                                            ProgressView()
+                                        }
+                                        .frame(width: 60,height: 80)
+                                        .navigationBarBackButtonHidden(true)
+                                        .navigationTitle("Books")
+                                        .cornerRadius(8)
+                                        VStack(alignment: .leading, spacing: 5){
+                                            Text("\(book.bookName)")
+                                                .font(.system(size: 18, weight: .bold))
+                                            Text("\(book.bookAuthor)")
+                                                .font(.system(size: 18, weight: .regular))
+                                        }
+                                        .padding(5)
+                                        Spacer()
+                                        VStack{
+                                            Image(systemName: "chevron.right")
+                                                .symbolRenderingMode(.hierarchical)
+                                                .font(.system(size: 25))
+                                        }
                                     }
-                                    .frame(width: 60,height: 80)
-                                    .navigationBarBackButtonHidden(true)
-                                    .navigationTitle("Books")
+                                    .padding(10)
+                                    .background(.white)
                                     .cornerRadius(8)
-                                    VStack(alignment: .leading, spacing: 5){
-                                        Text("\(book.bookName)")
-                                            .font(.system(size: 18, weight: .bold))
-                                        Text("\(book.bookAuthor)")
-                                            .font(.system(size: 18, weight: .regular))
-                                    }
-                                    .padding(5)
-                                    Spacer()
-                                    VStack{
-                                        Image(systemName: "chevron.right")
-                                            .symbolRenderingMode(.hierarchical)
-                                            .font(.system(size: 25))
-                                    }
+                                    
+                                    .foregroundColor(.black)
                                 }
-                                .padding(10)
-                                .background(.white)
-                                .cornerRadius(8)
-                                
-                                .foregroundColor(.black)
                             }
                         }
                         else{

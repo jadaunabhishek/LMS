@@ -10,8 +10,8 @@ import SwiftUI
 struct MemberTabView: View {
     @EnvironmentObject var themeManager: ThemeManager
     @State private var applyMembership = false
-    @ObservedObject var memModelView: UserBooksModel
-    @ObservedObject var ConfiViewModel: ConfigViewModel
+    @ObservedObject var memModelView = UserBooksModel()
+    @ObservedObject var ConfiViewModel = ConfigViewModel()
     
     var body: some View {
         TabView {
@@ -27,7 +27,7 @@ struct MemberTabView: View {
                     Text("Search")
                 }
             
-            Books(MemViewModel: memModelView, ConfiViewMmodel: ConfiViewModel)
+            Books()
                 .tabItem {
                     Image(systemName: "books.vertical.fill")
                     Text("Books")
