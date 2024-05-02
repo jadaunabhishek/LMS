@@ -23,6 +23,7 @@ struct AdminCategoriesCard: View {
                         .font(.title3)
                         .bold()
                         .lineLimit(2)
+                        .multilineTextAlignment(.leading)
                         .truncationMode(.tail)
                         .foregroundStyle(Color.white)
                         .padding()
@@ -48,9 +49,14 @@ struct AdminCategoriesCard: View {
         }
     }
     func gradient() -> LinearGradient {
-        let colors: [Color] = [randomColor(), randomColor()]
+        let numberOfColors = Int.random(in: 2...5) // Generate random number of colors between 2 and 5
+        var colors: [Color] = []
+        for _ in 0..<numberOfColors {
+            colors.append(randomColor()) // Add random colors to the array
+        }
         return LinearGradient(gradient: Gradient(colors: colors), startPoint: .leading, endPoint: .trailing)
     }
+
     
     func randomColor() -> Color {
         let red = Double.random(in: 0.0...0.6) // Adjusted range for darker red
