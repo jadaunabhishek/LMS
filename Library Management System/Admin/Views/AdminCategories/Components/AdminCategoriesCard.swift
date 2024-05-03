@@ -10,68 +10,43 @@ import SwiftUI
 struct AdminCategoriesCard: View {
     @State var category: String
     @State var isEditSheetPresented: Bool = false
+    @EnvironmentObject var themeManager: ThemeManager
+    
     var body: some View {
-        NavigationStack{
+        NavigationStack {
             
             ZStack(alignment:.leading){
                 Rectangle()
                     .fill(randomColor())
                     .cornerRadius(12)
+                
+                
                 VStack(alignment:.leading){
                     Spacer()
                     Text(category)
                         .font(.title3)
-                        .bold()
-                        .lineLimit(2)
+                        .lineLimit(1)
                         .multilineTextAlignment(.leading)
                         .truncationMode(.tail)
-                        .foregroundStyle(Color.white)
+                        .foregroundStyle(themeManager.selectedTheme.bodyTextColor)
                         .padding()
                 }
-            }.frame(width: 170, height: 120)
-            .sheet(isPresented: $isEditSheetPresented ) {
-                
-                NavigationView {
-                    EditCategoriesView(isSheetPresented: $isEditSheetPresented)
-                        .background(.gray)
-                        .navigationBarItems(
-                            trailing:  Button(action:{isEditSheetPresented.toggle()}){
-                                Image(systemName: "xmark.circle.fill")
-                                    .foregroundColor(.gray)
-                            }
-                        )
-                    //                        .environment(\.colorScheme, .dark)
-                }
-                .presentationDetents([.medium, .large])
             }
-            
-            
+            .frame(width: 170, height: 120)
         }
     }
-    func gradient() -> LinearGradient {
-        let numberOfColors = Int.random(in: 2...5) // Generate random number of colors between 2 and 5
-        var colors: [Color] = []
-        for _ in 0..<numberOfColors {
-            colors.append(randomColor()) // Add random colors to the array
-        }
-        return LinearGradient(gradient: Gradient(colors: colors), startPoint: .leading, endPoint: .trailing)
-    }
-
     
     func randomColor() -> Color {
-        let red = Double.random(in: 0.0...0.6) // Adjusted range for darker red
-        let green = Double.random(in: 0.0...0.6) // Adjusted range for darker green
-        let blue = Double.random(in: 0.0...0.6) // Adjusted range for darker blue
-        return Color(red: red, green: green, blue: blue)
+        let systemColors: [Color] = [.red, .green, .blue, .orange, .yellow, .pink, .purple, .teal, .cyan, .indigo, .brown, .gray, .mint]
+        return systemColors.randomElement() ?? .red
     }
-
-//    func randomColor() -> Color {
-//        let red = Double.random(in: 0.5...1)
-//        let green = Double.random(in: 0.5...1)
-//        let blue = Double.random(in: 0.5...1)
-//        return Color(red: red, green: green, blue: blue)
-//    }
 }
-#Preview {
-    AdminCategoriesCard(category: "Cool-Dayejejdjwjejwuejwdujwuwj")
+
+
+struct AdminCategoriesCard_Previews: PreviewProvider {
+    static var previews: some View {
+        let themeManager = ThemeManager()
+        return AdminCategoriesCard(category: "Cool-Dayejejdjwjejwuejwdujwuwj")
+            .environmentObject(themeManager)
+    }
 }

@@ -25,7 +25,7 @@ class ThemeManager: ObservableObject {
     func setBaseTheme() async{
         
         configModel.fetchConfig()
-        try? await Task.sleep(nanoseconds: 1_000_000_000)
+        try? await Task.sleep(nanoseconds: 2_000_000_000)
         
         if(configModel.currentConfig[0].accentColor == "Red"){
             selectedTheme = Red()
@@ -71,4 +71,3 @@ struct Green: ThemeProtocol {
     var secondaryThemeColor: Color { return Color("grSecondaryThemeColor") }
     var bodyTextColor: Color { return Color("grBodyTextColor") }
 }
-
