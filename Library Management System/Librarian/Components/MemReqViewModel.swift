@@ -46,32 +46,28 @@ class NotificationsViewModel: ObservableObject {
     }
 
     func fetchData() {
-        db.collection("users").order(by: "createdOn", descending: false).whereField("role", isEqualTo: "user").whereField("status", isEqualTo: "applied")
-          .addSnapshotListener { [weak self] querySnapshot, error in
-            guard let documents = querySnapshot?.documents else {
-                print("Error fetching documents: \(error?.localizedDescription ?? "Unknown error")")
-                return
-            }
+        db.collection("users").order(by: "createdOn", descending: false).whereField("role", isEqualTo: "user").whereField("status", isEqualTo: "applied").getDocuments { (snapshot, error) in
 
             var newNotifications = [NotificationItem]()
             let formatter = DateFormatter()
             formatter.dateFormat = "yyyy/MM/dd HH:mm"
 
-            for document in documents {
-                let data = document.data()
-                let email = data["email"] as? String ?? ""
-                let name = data["name"] as? String ?? ""
-                let role = data["role"] as? String ?? "Unknown Role"
-                let id = document.documentID
-                let type: NotificationType = (role == "book") ? .bookBooking : .membershipApproval
-                let detail = (type == .bookBooking) ? "Book Request: \(name)" : "Membership Approval for \(name)"
+              if(error == nil && snapshot != nil){
+                  for document in snapshot!.documents {
+                      let data = document.data()
+                      let email = data["email"] as? String ?? ""
+                      let name = data["name"] as? String ?? ""
+                      let role = data["role"] as? String ?? "Unknown Role"
+                      let id = document.documentID
+                      let type: NotificationType = (role == "book") ? .bookBooking : .membershipApproval
+                      let detail = (type == .bookBooking) ? "Book Request: \(name)" : "Membership Approval for \(name)"
 
-                let item = NotificationItem(id: id, name: name, message: "Notification for \(role)", type: type, detail: detail, email: email, role: role, date: Date())
-                newNotifications.append(item)
-            }
-
-            self!.notifications = newNotifications
-            self?.updateFilteredNotifications()
+                      let item = NotificationItem(id: id, name: name, message: "Notification for \(role)", type: type, detail: detail, email: email, role: role, date: Date())
+                      newNotifications.append(item)
+                  }
+              }
+            self.notifications = newNotifications
+            self.updateFilteredNotifications()
         }
     }
 
@@ -104,6 +100,7 @@ class NotificationsViewModel: ObservableObject {
             if let error = error {
                 print("Error updating user role: \(error.localizedDescription)")
             } else {
+                //self.fetchData()
                 print("User role successfully updated to 'member'")
                 if let index = self.notifications.firstIndex(where: { $0.id == notification.id }) {
                     self.notifications[index].message = "Approved"
@@ -121,6 +118,7 @@ class NotificationsViewModel: ObservableObject {
             if let error = error {
                 print("Error updating user status: \(error.localizedDescription)")
             } else {
+                //self.fetchData()
                 print("User status successfully updated to 'rejected'")
                 if let index = self.notifications.firstIndex(where: { $0.id == notification.id }) {
                     self.notifications[index].message = "Rejected"

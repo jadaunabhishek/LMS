@@ -17,9 +17,11 @@ class LibrarianViewModel: ObservableObject{
     @Published var currentUserHistory: [Loan] = []
     @Published var allBooks: [Book] = []
     @Published var requestedLoans: [Loan] = []
+    @Published var issuedLoans: [Loan] = []
     @Published var activeLoans: [Loan] = []
     @Published var overDueLoans: [Loan] = []
     @Published var returnedLoans: [Loan] = []
+    @Published var preBookedLoans: [Loan] = []
     @Published var allLoans: [Loan] = []
     
     func addBook(bookISBN: String, bookName: String, bookAuthor: String, bookDescription: String, bookCategory: String, bookSubCategories: [String], bookPublishingDate: String, bookStatus: String, bookCount: Int, bookAvailableCount: Int, bookPreBookedCount: Int, bookTakenCount: Int, bookImage: UIImage){
@@ -292,11 +294,8 @@ class LibrarianViewModel: ObservableObject{
 
                             
                             currenBook = [ Book(id: document!["id"] as! String, bookISBN: document!["bookISBN"] as! String, bookImageURL: document!["bookImageURL"] as! String, bookName: document!["bookName"] as! String, bookAuthor: document!["bookAuthor"] as! String, bookDescription: document!["bookDescription"] as! String, bookCategory: document!["bookCategory"] as! String, bookSubCategories: document!["bookSubCategories"] as! [String], bookPublishingDate: document!["bookPublishingDate"] as! String, bookStatus: document!["bookStatus"] as! String, bookCount: document!["bookCount"] as! Int, bookAvailableCount:  document!["bookAvailableCount"] as! Int, bookPreBookedCount:  document!["bookPreBookedCount"] as! Int, bookTakenCount:  document!["bookTakenCount"] as! Int, bookIssuedTo: document!["bookIssuedTo"] as! [String], bookIssuedToName: document!["bookIssuedToName"] as! [String] as Any as! [String], bookIssuedOn: document!["bookIssuedOn"] as! [String], bookExpectedReturnOn: document!["bookExpectedReturnOn"] as! [String], bookRating: document!["bookRating"] as! Float, bookReviews: document!["bookReviews"] as! [String], bookHistory: bookHistoryArray, createdOn: document!["createdOn"] as! String, updayedOn: document!["updatedOn"] as! String) ]
-                            print(currenBook)
                             if(currenBook[0].bookPreBookedCount > 0){
-                                print("Into the Prebook Allocation Code")
                                 self.dbInstance.collection("Loans").order(by: "timeStamp", descending: false).getDocuments{ (snapshot, error) in
-                                    print("Fetching started")
                                     if(error == nil && snapshot != nil){
                                         for document in snapshot!.documents{
                                             let documentData = document.data()
@@ -305,13 +304,10 @@ class LibrarianViewModel: ObservableObject{
                                             dateFormatter.dateFormat = "dd/MM/yy"
                                             
                                             let tempLoan = Loan(loanId: documentData["loanId"] as! String as Any as! String, bookId: documentData["bookId"] as! String as Any as! String, bookName: documentData["bookName"] as! String as Any as! String, bookIssuedTo: documentData["bookIssuedTo"] as! String as Any as! String, bookIssuedToName: documentData["bookIssuedToName"] as! String as Any as! String, bookIssuedOn: documentData["bookIssuedOn"] as! String as Any as! String, bookExpectedReturnOn: documentData["bookExpectedReturnOn"] as! String as Any as! String, bookReturnedOn: documentData["bookReturnedOn"] as! String as Any as! String, loanStatus: documentData["loanStatus"] as! String as Any as! String, loanReminderStatus: documentData["loanReminderStatus"] as! String as Any as! String, createdOn:  documentData["createdOn"] as! String as Any as! String, updatedOn: documentData["updatedOn"] as! String as Any as! String, timeStamp: documentData["timeStamp"] as! Int as Any as! Int)
-                                            print("tempLoan: ")
-                                            print(tempLoan)
                                             if(tempLoan.bookId == bookId && tempLoan.loanStatus == "PreBooked"){
                                                 preBookings.append(tempLoan)
                                             }
                                         }
-                                        print("Completed Fetching")
                                         self.dbInstance.collection("Books").document(bookId).updateData(["bookPreBookedCount": currenBook[0].bookPreBookedCount-1, "updatedOn":Date.now.formatted()]){ error in
                                             if let error = error{
                                                 print("Unable to update book")
@@ -408,11 +404,8 @@ class LibrarianViewModel: ObservableObject{
 
                             
                             currenBook = [ Book(id: document!["id"] as! String, bookISBN: document!["bookISBN"] as! String, bookImageURL: document!["bookImageURL"] as! String, bookName: document!["bookName"] as! String, bookAuthor: document!["bookAuthor"] as! String, bookDescription: document!["bookDescription"] as! String, bookCategory: document!["bookCategory"] as! String, bookSubCategories: document!["bookSubCategories"] as! [String], bookPublishingDate: document!["bookPublishingDate"] as! String, bookStatus: document!["bookStatus"] as! String, bookCount: document!["bookCount"] as! Int, bookAvailableCount:  document!["bookAvailableCount"] as! Int, bookPreBookedCount:  document!["bookPreBookedCount"] as! Int, bookTakenCount:  document!["bookTakenCount"] as! Int, bookIssuedTo: document!["bookIssuedTo"] as! [String], bookIssuedToName: document!["bookIssuedToName"] as! [String] as Any as! [String], bookIssuedOn: document!["bookIssuedOn"] as! [String], bookExpectedReturnOn: document!["bookExpectedReturnOn"] as! [String], bookRating: document!["bookRating"] as! Float, bookReviews: document!["bookReviews"] as! [String], bookHistory: bookHistoryArray, createdOn: document!["createdOn"] as! String, updayedOn: document!["updatedOn"] as! String) ]
-                            print(currenBook)
                             if(currenBook[0].bookPreBookedCount > 0){
-                                print("Into the Prebook Allocation Code")
                                 self.dbInstance.collection("Loans").order(by: "timeStamp", descending: false).getDocuments{ (snapshot, error) in
-                                    print("Fetching started")
                                     if(error == nil && snapshot != nil){
                                         for document in snapshot!.documents{
                                             let documentData = document.data()
@@ -421,13 +414,10 @@ class LibrarianViewModel: ObservableObject{
                                             dateFormatter.dateFormat = "dd/MM/yy"
                                             
                                             let tempLoan = Loan(loanId: documentData["loanId"] as! String as Any as! String, bookId: documentData["bookId"] as! String as Any as! String, bookName: documentData["bookName"] as! String as Any as! String, bookIssuedTo: documentData["bookIssuedTo"] as! String as Any as! String, bookIssuedToName: documentData["bookIssuedToName"] as! String as Any as! String, bookIssuedOn: documentData["bookIssuedOn"] as! String as Any as! String, bookExpectedReturnOn: documentData["bookExpectedReturnOn"] as! String as Any as! String, bookReturnedOn: documentData["bookReturnedOn"] as! String as Any as! String, loanStatus: documentData["loanStatus"] as! String as Any as! String, loanReminderStatus: documentData["loanReminderStatus"] as! String as Any as! String, createdOn:  documentData["createdOn"] as! String as Any as! String, updatedOn: documentData["updatedOn"] as! String as Any as! String, timeStamp: documentData["timeStamp"] as! Int as Any as! Int)
-                                            print("tempLoan: ")
-                                            print(tempLoan)
                                             if(tempLoan.bookId == bookId && tempLoan.loanStatus == "PreBooked"){
                                                 preBookings.append(tempLoan)
                                             }
                                         }
-                                        print("Completed Fetching")
                                         self.dbInstance.collection("Books").document(bookId).updateData(["bookPreBookedCount": currenBook[0].bookPreBookedCount-1, "updatedOn":Date.now.formatted()]){ error in
                                             if let error = error{
                                                 print("Unable to update book")
@@ -491,6 +481,8 @@ class LibrarianViewModel: ObservableObject{
     func getLoans(){
         
         var tempRequestedLoans: [Loan] = []
+        var tempIssuedLoans: [Loan] = []
+        var tempPreBookedLoans: [Loan] = []
         var tempActiveLoans: [Loan] = []
         var tempOverDueLoans: [Loan] = []
         var tempReturnedLoans: [Loan] = []
@@ -510,7 +502,8 @@ class LibrarianViewModel: ObservableObject{
                     
                     tempAllLoans.append(tempLoan)
                     
-                    if(tempLoan.loanStatus == "Active"){
+                    if(tempLoan.loanStatus == "Issued"){
+                        tempIssuedLoans.append(tempLoan)
                         if(date < Date.now){
                             tempOverDueLoans.append(tempLoan)
                         }
@@ -521,16 +514,21 @@ class LibrarianViewModel: ObservableObject{
                     else if(tempLoan.loanStatus == "Requested"){
                         tempRequestedLoans.append(tempLoan)
                     }
+                    else if(tempLoan.loanStatus == "PreBooked"){
+                        tempPreBookedLoans.append(tempLoan)
+                    }
                     else{
                         tempReturnedLoans.append(tempLoan)
                     }
                     
                 }
                 
+                self.issuedLoans = tempIssuedLoans
                 self.requestedLoans = tempRequestedLoans
                 self.activeLoans = tempActiveLoans
                 self.overDueLoans = tempOverDueLoans
                 self.returnedLoans = tempReturnedLoans
+                self.preBookedLoans = tempPreBookedLoans
                 self.allLoans = tempAllLoans
                 
             }

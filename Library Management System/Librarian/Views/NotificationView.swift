@@ -13,7 +13,9 @@ struct NotificationsView: View {
     @StateObject var viewModel = NotificationsViewModel()
     @State private var selectedOption: Option = .CheckOut
     @State var searchText = ""
-    @State var Bol: Bool = false
+    @State var notifications: [NotificationItem] = []
+    @State var requestedLoans: [Loan] = []
+    @State var issuedLoans: [Loan] = []
     
     enum Option {
         case CheckIn
@@ -41,27 +43,50 @@ struct NotificationsView: View {
                 .padding([.bottom, .leading, .trailing])
 //                SearchBar(text: $searchText, isFilterButtonTapped: $Bol, showFilterOptions: $Bol)
                 
-                if selectedOption == .CheckOut {
-                    if LibViewModel.requestedLoans.isEmpty {
+                if (selectedOption == .CheckOut){
+                    if (requestedLoans.isEmpty){
                         EmptySection()
                     } else {
-                        BooksSections(LibViewModel: LibViewModel)
+                        BooksSections(LibViewModel: LibViewModel, issue: $issuedLoans, request: $requestedLoans)
                     }
-                } else {
-                    if viewModel.notifications.isEmpty {
+                } 
+                else if( selectedOption == .CheckIn){
+                    if (issuedLoans.isEmpty) {
                         EmptySection()
                     } else {
-                        MembershipSections()
+                        checkInSections(LibViewModel: LibViewModel)
+                    }
+                }
+                else if( selectedOption == .Membership){
+                    if (notifications.isEmpty) {
+                        EmptySection()
+                    } else {
+                        MembershipSections(notifs: $notifications)
                     }
                 }
             }
-            
-            .onAppear {
+            .onAppear(perform: {
+                Timer.scheduledTimer(withTimeInterval: 3, repeats: true) { time in
+                    Task{
+                        LibViewModel.getLoans()
+                        try? await Task.sleep(nanoseconds: 1_000_000_000)
+                        issuedLoans = LibViewModel.issuedLoans
+                        requestedLoans = LibViewModel.requestedLoans
+                        viewModel.fetchData()
+                        try? await Task.sleep(nanoseconds: 1_000_000_000)
+                        notifications = viewModel.notifications
+                    }
+                }
+            })
+            .task{
                 Task{
                     LibViewModel.getLoans()
                     try? await Task.sleep(nanoseconds: 1_000_000_000)
+                    issuedLoans = LibViewModel.issuedLoans
+                    requestedLoans = LibViewModel.requestedLoans
                     viewModel.fetchData()
                     try? await Task.sleep(nanoseconds: 1_000_000_000)
+                    notifications = viewModel.notifications
                 }
             }
         }
@@ -95,6 +120,7 @@ struct EmptySection: View {
 struct MembershipSections: View {
     
     @StateObject var viewModel = NotificationsViewModel()
+    @Binding var notifs: [NotificationItem]
     
     var body: some View {
         List {
@@ -102,8 +128,14 @@ struct MembershipSections: View {
                 MemberRequestCustomBox(viewModel: viewModel, notification: viewModel.notifications[key])
                     .swipeActions(edge: .trailing){
                         
-                        Button {
-                        } label: {
+                        Button(action:{
+                            viewModel.approve(notification: viewModel.notifications[key])
+                            viewModel.fetchData()
+                            Task{
+                                try? await Task.sleep(nanoseconds: 1_000_000_000/2)
+                                notifs = viewModel.notifications
+                            }
+                        }){
                             Label("Accept", systemImage: "checkmark")
                         }
                         .tint(.green)
@@ -111,8 +143,10 @@ struct MembershipSections: View {
                     }
                     .swipeActions(edge: .leading){
                         
-                        Button {
-                        } label: {
+                        Button(action:{
+                            viewModel.reject(notification: viewModel.notifications[key])
+                            viewModel.fetchData()
+                        }){
                             Label("Reject", systemImage: "xmark")
                         }
                         .tint(.red)
@@ -123,18 +157,54 @@ struct MembershipSections: View {
     }
 }
 
-
+struct checkInSections: View {
+    @ObservedObject var LibViewModel: LibrarianViewModel
+    
+    var body: some View {
+        List {
+            ForEach(0..<LibViewModel.issuedLoans.count, id: \.self) { key in
+                    BookRequestCustomBox(bookRequestData: LibViewModel.issuedLoans[key])
+//                    .swipeActions(edge: .trailing){
+//                        Button {
+//                        } label: {
+//                            Label("Accept", systemImage: "checkmark")
+//                        }
+//                        .tint(.green)
+//                        
+//                    }
+//                    .swipeActions(edge: .leading){
+//                        
+//                        Button {
+//                        } label: {
+//                            Label("Reject", systemImage: "xmark")
+//                        }
+//                        .tint(.red)
+//                    }
+            }
+        }
+        .listStyle(.inset)
+    }
+}
 
 struct BooksSections: View {
     @ObservedObject var LibViewModel: LibrarianViewModel
+    @Binding var issue: [Loan]
+    @Binding var request: [Loan]
     
     var body: some View {
         List {
             ForEach(0..<LibViewModel.requestedLoans.count, id: \.self) { key in
                     BookRequestCustomBox(bookRequestData: LibViewModel.requestedLoans[key])
                     .swipeActions(edge: .trailing){
-                        Button {
-                        } label: {
+                        Button(action:{
+                            LibViewModel.checkOutBook(loanId: LibViewModel.requestedLoans[key].loanId)
+                            LibViewModel.getLoans()
+                            Task{
+                                try? await Task.sleep(nanoseconds: 1_000_000_000/2)
+                                issue = LibViewModel.issuedLoans
+                                request = LibViewModel.requestedLoans
+                            }
+                        }){
                             Label("Accept", systemImage: "checkmark")
                         }
                         .tint(.green)
@@ -142,8 +212,17 @@ struct BooksSections: View {
                     }
                     .swipeActions(edge: .leading){
                         
-                        Button {
-                        } label: {
+                        Button(action:{
+                            Task{
+                                await LibViewModel.rejectRequest(loanId:LibViewModel.requestedLoans[key].loanId ,bookId:LibViewModel.requestedLoans[key].bookId)
+                                LibViewModel.getLoans()
+                                Task{
+                                    try? await Task.sleep(nanoseconds: 1_000_000_000/2)
+                                    issue = LibViewModel.issuedLoans
+                                    request = LibViewModel.requestedLoans
+                                }
+                            }
+                        }){
                             Label("Reject", systemImage: "xmark")
                         }
                         .tint(.red)

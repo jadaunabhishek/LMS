@@ -48,7 +48,6 @@ struct BookDetailView: View {
     }
     
     func dataLoader() async{
-        print(currentBookId)
         LibViewModel.getBook(bookId: currentBookId)
         try? await Task.sleep(nanoseconds: 3_000_000_000)
         ConfiViewModel.fetchConfig()

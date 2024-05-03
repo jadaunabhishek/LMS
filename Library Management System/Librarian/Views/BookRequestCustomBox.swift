@@ -44,7 +44,6 @@ struct BookRequestCustomBox: View {
     }
     
     func formatDate(_ dateString: String) -> String {
-        print(dateString)
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "MM/dd/yyyy, h:mm a"
         if let date = dateFormatter.date(from: dateString) {
