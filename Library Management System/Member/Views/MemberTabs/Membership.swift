@@ -163,7 +163,7 @@ struct Membership: View {
             }
         }
         .onAppear(perform: {
-            Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { time in
+            Timer.scheduledTimer(withTimeInterval: 15, repeats: true) { time in
                 fetchCurrentUserDetails()
             }
         })
@@ -217,7 +217,7 @@ struct Membership: View {
                 
                 if let userData = document.data(),
                    let status = userData["status"] as? String {
-                    print(status)
+//                    print(status)
                     DispatchQueue.main.async {
                         switch status {
                         case "approved":

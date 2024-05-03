@@ -37,6 +37,7 @@ struct MemberHome: View {
                             .frame(height: 230)
                             .navigationBarBackButtonHidden(true)
                             .navigationTitle("Home")
+                            .navigationBarHidden(true)
                         HStack {
                             VStack(alignment: .leading, spacing: 10) {
                                 Text("DATE")

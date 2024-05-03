@@ -14,6 +14,7 @@ struct Loan{
     var loanReminderStatus: String
     var createdOn: String
     var updatedOn: String
+    let timeStamp: Int
     
     func getDictionaryOfStruct() -> [String:Any]{
         
@@ -29,7 +30,8 @@ struct Loan{
             "loanStatus":loanStatus,
             "loanReminderStatus": loanReminderStatus,
             "createdOn":createdOn,
-            "updatedOn":updatedOn
+            "updatedOn":updatedOn,
+            "timeStamp":timeStamp
         ]
         
     }

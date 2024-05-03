@@ -111,4 +111,104 @@ class UserBooksModel: ObservableObject{
         }
         
     }
+    
+    func requestBook(bookId: String, bookName: String, userId: String, userName: String, bookAvailableCount: Int, bookTakenCount: Int, loanPeriod: Int){
+        
+        let timeStamp = Int(Date().timeIntervalSince1970)
+        let retrievedSort = timeStamp
+        self.responseStatus = 0
+        
+        if(bookAvailableCount == 1){
+            self.dbInstance.collection("Books").document(bookId).updateData(["bookStatus":"PreBook", "bookAvailableCount": bookAvailableCount-1, "bookTakenCount":bookTakenCount+1, "updatedOn": Date.now.formatted()]){ error in
+                
+                if let error = error{
+                    self.responseStatus = 400
+                    self.responseMessage = "Something went wrong, Unable to update book. Check console for errors."
+                    print("Unable to update book. Error: \(error)")
+                }
+                else{
+                    let addNewLoan = self.dbInstance.collection("Loans").document()
+                    
+                    let newLoan = Loan(loanId: addNewLoan.documentID, bookId: bookId, bookName: bookName, bookIssuedTo: userId, bookIssuedToName: userName, bookIssuedOn: Date.now.formatted(), bookExpectedReturnOn: (Calendar.current.date(byAdding: .day, value: loanPeriod, to: Date.now)?.formatted())!, bookReturnedOn: "", loanStatus: "Requested", loanReminderStatus: "notSet", createdOn: Date.now.formatted(), updatedOn: Date.now.formatted(), timeStamp: retrievedSort)
+                    
+                    addNewLoan.setData(newLoan.getDictionaryOfStruct()){ error in
+                        
+                        if let error = error{
+                            self.responseStatus = 400
+                            self.responseMessage = "Something went wrong, Unable to add loan. Check console for errors."
+                            print("Unable to add book. Error: \(error)")
+                        }
+                        else{
+                            self.responseStatus = 200
+                            self.responseMessage = "Added loan successfuly."
+                        }
+                    }
+                }
+            }
+        }
+        else{
+            self.dbInstance.collection("Books").document(bookId).updateData(["bookAvailableCount": bookAvailableCount-1, "bookTakenCount":bookTakenCount+1, "updatedOn": Date.now.formatted()]){ error in
+                
+                if let error = error{
+                    self.responseStatus = 400
+                    self.responseMessage = "Something went wrong, Unable to update book. Check console for errors."
+                    print("Unable to update book. Error: \(error)")
+                }
+                else{
+                    let addNewLoan = self.dbInstance.collection("Loans").document()
+                    
+                    let newLoan = Loan(loanId: addNewLoan.documentID, bookId: bookId, bookName: bookName, bookIssuedTo: userId, bookIssuedToName: userName, bookIssuedOn: Date.now.formatted(), bookExpectedReturnOn: (Calendar.current.date(byAdding: .day, value: loanPeriod, to: Date.now)?.formatted())!, bookReturnedOn: "", loanStatus: "Requested", loanReminderStatus: "notSet", createdOn: Date.now.formatted(), updatedOn: Date.now.formatted(), timeStamp: retrievedSort)
+                    
+                    addNewLoan.setData(newLoan.getDictionaryOfStruct()){ error in
+                        
+                        if let error = error{
+                            self.responseStatus = 400
+                            self.responseMessage = "Something went wrong, Unable to add loan. Check console for errors."
+                            print("Unable to add book. Error: \(error)")
+                        }
+                        else{
+                            self.responseStatus = 200
+                            self.responseMessage = "Added loan successfuly."
+                        }
+                    }
+                }
+            }
+        }
+        
+    }
+    
+    func preBook(bookId: String, bookName: String, userId: String, userName: String, bookPreBookedCount: Int, loanPeriod: Int){
+        
+        let timeStamp = Int(Date().timeIntervalSince1970)
+        let retrievedSort = timeStamp
+        self.responseStatus = 0
+        
+        self.dbInstance.collection("Books").document(bookId).updateData(["bookPreBookedCount": bookPreBookedCount+1, "updatedOn": Date.now.formatted()]){ error in
+            
+            if let error = error{
+                self.responseStatus = 400
+                self.responseMessage = "Something went wrong, Unable to update book. Check console for errors."
+                print("Unable to update book. Error: \(error)")
+            }
+            else{
+                let addNewLoan = self.dbInstance.collection("Loans").document()
+                
+                let newLoan = Loan(loanId: addNewLoan.documentID, bookId: bookId, bookName: bookName, bookIssuedTo: userId, bookIssuedToName: userName, bookIssuedOn: Date.now.formatted(), bookExpectedReturnOn: (Calendar.current.date(byAdding: .day, value: loanPeriod, to: Date.now)?.formatted())!, bookReturnedOn: "", loanStatus: "PreBooked", loanReminderStatus: "notSet", createdOn: Date.now.formatted(), updatedOn: Date.now.formatted(), timeStamp: retrievedSort)
+                
+                addNewLoan.setData(newLoan.getDictionaryOfStruct()){ error in
+                    
+                    if let error = error{
+                        self.responseStatus = 400
+                        self.responseMessage = "Something went wrong, Unable to add loan. Check console for errors."
+                        print("Unable to add book. Error: \(error)")
+                    }
+                    else{
+                        self.responseStatus = 200
+                        self.responseMessage = "Added loan successfuly."
+                    }
+                }
+            }
+        }
+        
+    }
 }
