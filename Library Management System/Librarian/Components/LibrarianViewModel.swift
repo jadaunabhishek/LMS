@@ -261,291 +261,232 @@ class LibrarianViewModel: ObservableObject{
         var currenBook: [Book] = []
         var preBookings: [Loan] = []
         
-        self.dbInstance.collection("Books").document(bookId).getDocument { (document, error) in
-            if error == nil{
-                if (document != nil && document!.exists){
-                    
-                    guard let bookHistoryDictArray = document!["bookHistory"] as? [[String: Any]] else {
-                        print("Error: Unable to parse fineDetails array from Firestore document")
-                        return
-                    }
-
-                    var bookHistoryArray: [History] = []
-                    for bookHistoryDict in bookHistoryDictArray {
-                        guard let userId = bookHistoryDict["userId"] as? String,
-                              let userName = bookHistoryDict["userName"] as? String,
-                              let issuedOn = bookHistoryDict["issuedOn"] as? String,
-                              let returnedOn = bookHistoryDict["returnedOn"] as? String
-                        else {
-                            print("Error: Unable to parse fineDetail from dictionary")
-                            continue
-                        }
-                        
-                        let bookHistory = History(userId: userId, userName: userName, issuedOn: issuedOn, returnedOn: returnedOn)
-                        bookHistoryArray.append(bookHistory)
-                    }
-
-                    
-                    currenBook = [ Book(id: document!["id"] as! String, bookISBN: document!["bookISBN"] as! String, bookImageURL: document!["bookImageURL"] as! String, bookName: document!["bookName"] as! String, bookAuthor: document!["bookAuthor"] as! String, bookDescription: document!["bookDescription"] as! String, bookCategory: document!["bookCategory"] as! String, bookSubCategories: document!["bookSubCategories"] as! [String], bookPublishingDate: document!["bookPublishingDate"] as! String, bookStatus: document!["bookStatus"] as! String, bookCount: document!["bookCount"] as! Int, bookAvailableCount:  document!["bookAvailableCount"] as! Int, bookPreBookedCount:  document!["bookPreBookedCount"] as! Int, bookTakenCount:  document!["bookTakenCount"] as! Int, bookIssuedTo: document!["bookIssuedTo"] as! [String], bookIssuedToName: document!["bookIssuedToName"] as! [String] as Any as! [String], bookIssuedOn: document!["bookIssuedOn"] as! [String], bookExpectedReturnOn: document!["bookExpectedReturnOn"] as! [String], bookRating: document!["bookRating"] as! Float, bookReviews: document!["bookReviews"] as! [String], bookHistory: bookHistoryArray, createdOn: document!["createdOn"] as! String, updayedOn: document!["updatedOn"] as! String) ]
-                    
-                    if(currenBook[0].bookPreBookedCount != 0){
-                        self.dbInstance.collection("Loans").order(by: "timeStamp").getDocuments{ (snapshot, error) in
+        self.dbInstance.collection("Loans").document(loanId).updateData(["loanStatus":"Returned"]){ error in
+            if let error = error{
+                print("Loan updateion Error")
+            }
+            else{
+                self.dbInstance.collection("Books").document(bookId).getDocument { (document, error) in
+                    if error == nil{
+                        if (document != nil && document!.exists){
                             
-                            if(error == nil && snapshot != nil){
-                                for document in snapshot!.documents{
-                                    let documentData = document.data()
-                                    
-                                    let dateFormatter = DateFormatter()
-                                    dateFormatter.dateFormat = "dd/MM/yy"
-                                    
-                                    let tempLoan = Loan(loanId: documentData["loanId"] as! String as Any as! String, bookId: documentData["bookId"] as! String as Any as! String, bookName: documentData["bookName"] as! String as Any as! String, bookIssuedTo: documentData["bookIssuedTo"] as! String as Any as! String, bookIssuedToName: documentData["bookIssuedToName"] as! String as Any as! String, bookIssuedOn: documentData["bookIssuedOn"] as! String as Any as! String, bookExpectedReturnOn: documentData["bookExpectedReturnOn"] as! String as Any as! String, bookReturnedOn: documentData["bookReturnedOn"] as! String as Any as! String, loanStatus: documentData["loanStatus"] as! String as Any as! String, loanReminderStatus: documentData["loanReminderStatus"] as! String as Any as! String, createdOn:  documentData["createdOn"] as! String as Any as! String, updatedOn: documentData["updatedOn"] as! String as Any as! String, timeStamp: documentData["timeStamp"] as! Int as Any as! Int)
-                                    
-                                    if(tempLoan.bookId == bookId && tempLoan.loanStatus == "PreBooked"){
-                                        preBookings.append(tempLoan)
+                            guard let bookHistoryDictArray = document!["bookHistory"] as? [[String: Any]] else {
+                                print("Error: Unable to parse fineDetails array from Firestore document")
+                                return
+                            }
+
+                            var bookHistoryArray: [History] = []
+                            for bookHistoryDict in bookHistoryDictArray {
+                                guard let userId = bookHistoryDict["userId"] as? String,
+                                      let userName = bookHistoryDict["userName"] as? String,
+                                      let issuedOn = bookHistoryDict["issuedOn"] as? String,
+                                      let returnedOn = bookHistoryDict["returnedOn"] as? String
+                                else {
+                                    print("Error: Unable to parse fineDetail from dictionary")
+                                    continue
+                                }
+                                
+                                let bookHistory = History(userId: userId, userName: userName, issuedOn: issuedOn, returnedOn: returnedOn)
+                                bookHistoryArray.append(bookHistory)
+                            }
+
+                            
+                            currenBook = [ Book(id: document!["id"] as! String, bookISBN: document!["bookISBN"] as! String, bookImageURL: document!["bookImageURL"] as! String, bookName: document!["bookName"] as! String, bookAuthor: document!["bookAuthor"] as! String, bookDescription: document!["bookDescription"] as! String, bookCategory: document!["bookCategory"] as! String, bookSubCategories: document!["bookSubCategories"] as! [String], bookPublishingDate: document!["bookPublishingDate"] as! String, bookStatus: document!["bookStatus"] as! String, bookCount: document!["bookCount"] as! Int, bookAvailableCount:  document!["bookAvailableCount"] as! Int, bookPreBookedCount:  document!["bookPreBookedCount"] as! Int, bookTakenCount:  document!["bookTakenCount"] as! Int, bookIssuedTo: document!["bookIssuedTo"] as! [String], bookIssuedToName: document!["bookIssuedToName"] as! [String] as Any as! [String], bookIssuedOn: document!["bookIssuedOn"] as! [String], bookExpectedReturnOn: document!["bookExpectedReturnOn"] as! [String], bookRating: document!["bookRating"] as! Float, bookReviews: document!["bookReviews"] as! [String], bookHistory: bookHistoryArray, createdOn: document!["createdOn"] as! String, updayedOn: document!["updatedOn"] as! String) ]
+                            print(currenBook)
+                            if(currenBook[0].bookPreBookedCount > 0){
+                                print("Into the Prebook Allocation Code")
+                                self.dbInstance.collection("Loans").order(by: "timeStamp", descending: false).getDocuments{ (snapshot, error) in
+                                    print("Fetching started")
+                                    if(error == nil && snapshot != nil){
+                                        for document in snapshot!.documents{
+                                            let documentData = document.data()
+                                            
+                                            let dateFormatter = DateFormatter()
+                                            dateFormatter.dateFormat = "dd/MM/yy"
+                                            
+                                            let tempLoan = Loan(loanId: documentData["loanId"] as! String as Any as! String, bookId: documentData["bookId"] as! String as Any as! String, bookName: documentData["bookName"] as! String as Any as! String, bookIssuedTo: documentData["bookIssuedTo"] as! String as Any as! String, bookIssuedToName: documentData["bookIssuedToName"] as! String as Any as! String, bookIssuedOn: documentData["bookIssuedOn"] as! String as Any as! String, bookExpectedReturnOn: documentData["bookExpectedReturnOn"] as! String as Any as! String, bookReturnedOn: documentData["bookReturnedOn"] as! String as Any as! String, loanStatus: documentData["loanStatus"] as! String as Any as! String, loanReminderStatus: documentData["loanReminderStatus"] as! String as Any as! String, createdOn:  documentData["createdOn"] as! String as Any as! String, updatedOn: documentData["updatedOn"] as! String as Any as! String, timeStamp: documentData["timeStamp"] as! Int as Any as! Int)
+                                            print("tempLoan: ")
+                                            print(tempLoan)
+                                            if(tempLoan.bookId == bookId && tempLoan.loanStatus == "PreBooked"){
+                                                preBookings.append(tempLoan)
+                                            }
+                                        }
+                                        print("Completed Fetching")
+                                        self.dbInstance.collection("Books").document(bookId).updateData(["bookPreBookedCount": currenBook[0].bookPreBookedCount-1, "updatedOn":Date.now.formatted()]){ error in
+                                            if let error = error{
+                                                print("Unable to update book")
+                                            }
+                                            else{
+                                                self.dbInstance.collection("Loans").document(preBookings[0].loanId).updateData(["loanStatus":"Requested"]){ error in
+                                                    if let error = error{
+                                                        print("Loan updateion Error")
+                                                    }
+                                                    else{
+                                                        print("Updated loan successfully")
+                                                    }
+                                                }
+                                            }
+                                        }
                                     }
                                 }
-                            }
-                        }
-                        print(preBookings)
-                        self.dbInstance.collection("Books").document(bookId).updateData(["bookPreBookedCount": currenBook[0].bookPreBookedCount-1, "updatedOn":Date.now.formatted()]){ error in
-                            if let error = error{
-                                print("Unable to update book")
+                                //preBookings = preBookings.sorted(by: {$0.timeStamp < $1.timeStamp})
                             }
                             else{
-                                self.dbInstance.collection("Loans").document(preBookings[0].loanId).updateData(["loanStatus":"Requested"]){ error in
-                                    if let error = error{
-                                        print("Loan updateion Error")
-                                    }
-                                    else{
-                                        print("Updated loan successfully")
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    else{
-                        self.dbInstance.collection("Books").document(bookId).updateData(["bookStatus":"Available", "bookAvailableCount": currenBook[0].bookAvailableCount+1, "bookTakenCount": currenBook[0].bookTakenCount-1, "updatedOn":Date.now.formatted()]){ error in
-                            
-                            if let error = error{
-                                self.responseStatus = 400
-                                self.responseMessage = "Something went wrong, Unable to update book. Check console for errors."
-                                print("Unable to update book. Error: \(error)")
-                            }
-                            else{
-                                self.dbInstance.collection("Loans").document(loanId).updateData(["bookReturnedOn":Date.now.formatted(), "loanStatus": "Returned", "updatedOn": Date.now.formatted()]){ error in
+                                self.dbInstance.collection("Books").document(bookId).updateData(["bookStatus":"Available", "bookAvailableCount": currenBook[0].bookAvailableCount+1, "bookTakenCount": currenBook[0].bookTakenCount-1, "updatedOn":Date.now.formatted()]){ error in
+                                    
                                     if let error = error{
                                         self.responseStatus = 400
-                                        self.responseMessage = "Something went wrong, Unable to complete loan. Check console for errors."
-                                        print("Unable to update loan. Error: \(error)")
+                                        self.responseMessage = "Something went wrong, Unable to update book. Check console for errors."
+                                        print("Unable to update book. Error: \(error)")
                                     }
                                     else{
-                                        self.responseStatus = 200
-                                        self.responseMessage = "Completed loan successfuly."
+                                        self.dbInstance.collection("Loans").document(loanId).updateData(["bookReturnedOn":Date.now.formatted(), "loanStatus": "Returned", "updatedOn": Date.now.formatted()]){ error in
+                                            if let error = error{
+                                                self.responseStatus = 400
+                                                self.responseMessage = "Something went wrong, Unable to complete loan. Check console for errors."
+                                                print("Unable to update loan. Error: \(error)")
+                                            }
+                                            else{
+                                                self.responseStatus = 200
+                                                self.responseMessage = "Completed loan successfuly."
+                                            }
+                                        }
                                     }
                                 }
                             }
                         }
-                    }
-                }
-                else{
-                    self.responseStatus = 400
-                    self.responseMessage = "Something went wrong, Unable to get book. Chek console for error"
-                    print("Unable to get updated document. May be this could be the error: Book does not exist or db returned nil.")
-                }
-            }
-            else{
-                self.responseStatus = 200
-                self.responseMessage = "Something went wrong, Unable to book. Chek console for error"
-                print("Unable to get book. Error: \(String(describing: error)).")
-            }
-        }
-    }
-    
-    func requestBook(bookId: String, bookName: String, userId: String, userName: String, bookAvailableCount: Int, bookTakenCount: Int, loanPeriod: Int){
-        
-        let timeStamp = Int(Date().timeIntervalSince1970)
-        let retrievedSort = timeStamp
-        
-        if(bookAvailableCount == 1){
-            self.dbInstance.collection("Books").document(bookId).updateData(["bookStatus":"PreBook", "bookAvailableCount": bookAvailableCount-1, "bookTakenCount":bookTakenCount+1, "updatedOn": Date.now.formatted()]){ error in
-                
-                if let error = error{
-                    self.responseStatus = 400
-                    self.responseMessage = "Something went wrong, Unable to update book. Check console for errors."
-                    print("Unable to update book. Error: \(error)")
-                }
-                else{
-                    let addNewLoan = self.dbInstance.collection("Loans").document()
-                    
-                    let newLoan = Loan(loanId: addNewLoan.documentID, bookId: bookId, bookName: bookName, bookIssuedTo: userId, bookIssuedToName: userName, bookIssuedOn: Date.now.formatted(), bookExpectedReturnOn: (Calendar.current.date(byAdding: .day, value: loanPeriod, to: Date.now)?.formatted())!, bookReturnedOn: "", loanStatus: "Requested", loanReminderStatus: "notSet", createdOn: Date.now.formatted(), updatedOn: Date.now.formatted(), timeStamp: retrievedSort)
-                    
-                    addNewLoan.setData(newLoan.getDictionaryOfStruct()){ error in
-                        
-                        if let error = error{
-                            self.responseStatus = 400
-                            self.responseMessage = "Something went wrong, Unable to add loan. Check console for errors."
-                            print("Unable to add book. Error: \(error)")
-                        }
                         else{
-                            self.responseStatus = 200
-                            self.responseMessage = "Added loan successfuly."
-                        }
-                    }
-                }
-            }
-        }
-        else{
-            self.dbInstance.collection("Books").document(bookId).updateData(["bookAvailableCount": bookAvailableCount-1, "bookTakenCount":bookTakenCount+1, "updatedOn": Date.now.formatted()]){ error in
-                
-                if let error = error{
-                    self.responseStatus = 400
-                    self.responseMessage = "Something went wrong, Unable to update book. Check console for errors."
-                    print("Unable to update book. Error: \(error)")
-                }
-                else{
-                    let addNewLoan = self.dbInstance.collection("Loans").document()
-                    
-                    let newLoan = Loan(loanId: addNewLoan.documentID, bookId: bookId, bookName: bookName, bookIssuedTo: userId, bookIssuedToName: userName, bookIssuedOn: Date.now.formatted(), bookExpectedReturnOn: (Calendar.current.date(byAdding: .day, value: loanPeriod, to: Date.now)?.formatted())!, bookReturnedOn: "", loanStatus: "Active", loanReminderStatus: "notSet", createdOn: Date.now.formatted(), updatedOn: Date.now.formatted(), timeStamp: retrievedSort)
-                    
-                    addNewLoan.setData(newLoan.getDictionaryOfStruct()){ error in
-                        
-                        if let error = error{
                             self.responseStatus = 400
-                            self.responseMessage = "Something went wrong, Unable to add loan. Check console for errors."
-                            print("Unable to add book. Error: \(error)")
+                            self.responseMessage = "Something went wrong, Unable to get book. Chek console for error"
+                            print("Unable to get updated document. May be this could be the error: Book does not exist or db returned nil.")
                         }
-                        else{
-                            self.responseStatus = 200
-                            self.responseMessage = "Added loan successfuly."
-                        }
-                    }
-                }
-            }
-        }
-        
-    }
-    
-    func preBook(bookId: String, bookName: String, userId: String, userName: String, bookPreBookedCount: Int, loanPeriod: Int){
-        
-        let timeStamp = Int(Date().timeIntervalSince1970)
-        let retrievedSort = timeStamp
-        
-        self.dbInstance.collection("Books").document(bookId).updateData(["bookPreBookedCount": bookPreBookedCount+1, "updatedOn": Date.now.formatted()]){ error in
-            
-            if let error = error{
-                self.responseStatus = 400
-                self.responseMessage = "Something went wrong, Unable to update book. Check console for errors."
-                print("Unable to update book. Error: \(error)")
-            }
-            else{
-                let addNewLoan = self.dbInstance.collection("Loans").document()
-                
-                let newLoan = Loan(loanId: addNewLoan.documentID, bookId: bookId, bookName: bookName, bookIssuedTo: userId, bookIssuedToName: userName, bookIssuedOn: Date.now.formatted(), bookExpectedReturnOn: (Calendar.current.date(byAdding: .day, value: loanPeriod, to: Date.now)?.formatted())!, bookReturnedOn: "", loanStatus: "PreBooked", loanReminderStatus: "notSet", createdOn: Date.now.formatted(), updatedOn: Date.now.formatted(), timeStamp: retrievedSort)
-                
-                addNewLoan.setData(newLoan.getDictionaryOfStruct()){ error in
-                    
-                    if let error = error{
-                        self.responseStatus = 400
-                        self.responseMessage = "Something went wrong, Unable to add loan. Check console for errors."
-                        print("Unable to add book. Error: \(error)")
                     }
                     else{
                         self.responseStatus = 200
-                        self.responseMessage = "Added loan successfuly."
+                        self.responseMessage = "Something went wrong, Unable to book. Chek console for error"
+                        print("Unable to get book. Error: \(String(describing: error)).")
                     }
                 }
             }
         }
-        
     }
     
-//    func checkOutBook(bookId: String, bookName: String, userId: String, userName: String, bookAvailableCount: Int, bookTakenCount: Int, loanPeriod: Int){
-//
-//        if(bookAvailableCount == 1){
-//            self.dbInstance.collection("Books").document(bookId).updateData(["bookStatus":"Taken", "bookAvailableCount": bookAvailableCount-1, "bookTakenCount":bookTakenCount+1, "updatedOn": Date.now.formatted()]){ error in
-//
-//                if let error = error{
-//                    self.responseStatus = 400
-//                    self.responseMessage = "Something went wrong, Unable to update book. Check console for errors."
-//                    print("Unable to update book. Error: \(error)")
-//                }
-//                else{
-//                    let addNewLoan = self.dbInstance.collection("Loans").document()
-//
-//                    let newLoan = Loan(loanId: addNewLoan.documentID, bookId: bookId, bookName: bookName, bookIssuedTo: userId, bookIssuedToName: userName, bookIssuedOn: Date.now.formatted(), bookExpectedReturnOn: (Calendar.current.date(byAdding: .day, value: loanPeriod, to: Date.now)?.formatted())!, bookReturnedOn: "", loanStatus: "Requested", loanReminderStatus: "notSet", createdOn: Date.now.formatted(), updatedOn: Date.now.formatted())
-//
-//                    addNewLoan.setData(newLoan.getDictionaryOfStruct()){ error in
-//
-//                        if let error = error{
-//                            self.responseStatus = 400
-//                            self.responseMessage = "Something went wrong, Unable to add loan. Check console for errors."
-//                            print("Unable to add book. Error: \(error)")
-//                        }
-//                        else{
-//                            self.responseStatus = 200
-//                            self.responseMessage = "Added loan successfuly."
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//        else{
-//            self.dbInstance.collection("Books").document(bookId).updateData(["bookAvailableCount": bookAvailableCount-1, "bookTakenCount":bookTakenCount+1, "updatedOn": Date.now.formatted()]){ error in
-//
-//                if let error = error{
-//                    self.responseStatus = 400
-//                    self.responseMessage = "Something went wrong, Unable to update book. Check console for errors."
-//                    print("Unable to update book. Error: \(error)")
-//                }
-//                else{
-//                    let addNewLoan = self.dbInstance.collection("Loans").document()
-//
-//                    let newLoan = Loan(loanId: addNewLoan.documentID, bookId: bookId, bookName: bookName, bookIssuedTo: userId, bookIssuedToName: userName, bookIssuedOn: Date.now.formatted(), bookExpectedReturnOn: (Calendar.current.date(byAdding: .day, value: loanPeriod, to: Date.now)?.formatted())!, bookReturnedOn: "", loanStatus: "Active", loanReminderStatus: "notSet", createdOn: Date.now.formatted(), updatedOn: Date.now.formatted())
-//
-//                    addNewLoan.setData(newLoan.getDictionaryOfStruct()){ error in
-//
-//                        if let error = error{
-//                            self.responseStatus = 400
-//                            self.responseMessage = "Something went wrong, Unable to add loan. Check console for errors."
-//                            print("Unable to add book. Error: \(error)")
-//                        }
-//                        else{
-//                            self.responseStatus = 200
-//                            self.responseMessage = "Added loan successfuly."
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//
-//    }
-    
-//    func checkInBook(loanId: String, bookId: String, bookAvailableCount: Int, bookTakenCount: Int){
-//
-//        self.dbInstance.collection("Books").document(bookId).updateData(["bookStatus":"Available", "bookAvailableCount": bookAvailableCount+1, "bookTakenCount": bookTakenCount-1, "updatedOn":Date.now.formatted()]){ error in
-//
-//            if let error = error{
-//                self.responseStatus = 400
-//                self.responseMessage = "Something went wrong, Unable to update book. Check console for errors."
-//                print("Unable to update book. Error: \(error)")
-//            }
-//            else{
-//                self.dbInstance.collection("Loans").document(loanId).updateData(["bookReturnedOn":Date.now.formatted(), "loanStatus": "Returned", "updatedOn": Date.now.formatted()]){ error in
-//                    if let error = error{
-//                        self.responseStatus = 400
-//                        self.responseMessage = "Something went wrong, Unable to complete loan. Check console for errors."
-//                        print("Unable to update loan. Error: \(error)")
-//                    }
-//                    else{
-//                        self.responseStatus = 200
-//                        self.responseMessage = "Completed loan successfuly."
-//                    }
-//                }
-//            }
-//
-//        }
-//
-//    }
+    func rejectRequest(loanId: String, bookId:String) async{
+        
+        
+        var currenBook: [Book] = []
+        var preBookings: [Loan] = []
+        
+        self.dbInstance.collection("Loans").document(loanId).updateData(["loanStatus":"Rejected"]){ error in
+            if let error = error{
+                print("Loan updateion Error")
+            }
+            else{
+                self.dbInstance.collection("Books").document(bookId).getDocument { (document, error) in
+                    if error == nil{
+                        if (document != nil && document!.exists){
+                            
+                            guard let bookHistoryDictArray = document!["bookHistory"] as? [[String: Any]] else {
+                                print("Error: Unable to parse fineDetails array from Firestore document")
+                                return
+                            }
+
+                            var bookHistoryArray: [History] = []
+                            for bookHistoryDict in bookHistoryDictArray {
+                                guard let userId = bookHistoryDict["userId"] as? String,
+                                      let userName = bookHistoryDict["userName"] as? String,
+                                      let issuedOn = bookHistoryDict["issuedOn"] as? String,
+                                      let returnedOn = bookHistoryDict["returnedOn"] as? String
+                                else {
+                                    print("Error: Unable to parse fineDetail from dictionary")
+                                    continue
+                                }
+                                
+                                let bookHistory = History(userId: userId, userName: userName, issuedOn: issuedOn, returnedOn: returnedOn)
+                                bookHistoryArray.append(bookHistory)
+                            }
+
+                            
+                            currenBook = [ Book(id: document!["id"] as! String, bookISBN: document!["bookISBN"] as! String, bookImageURL: document!["bookImageURL"] as! String, bookName: document!["bookName"] as! String, bookAuthor: document!["bookAuthor"] as! String, bookDescription: document!["bookDescription"] as! String, bookCategory: document!["bookCategory"] as! String, bookSubCategories: document!["bookSubCategories"] as! [String], bookPublishingDate: document!["bookPublishingDate"] as! String, bookStatus: document!["bookStatus"] as! String, bookCount: document!["bookCount"] as! Int, bookAvailableCount:  document!["bookAvailableCount"] as! Int, bookPreBookedCount:  document!["bookPreBookedCount"] as! Int, bookTakenCount:  document!["bookTakenCount"] as! Int, bookIssuedTo: document!["bookIssuedTo"] as! [String], bookIssuedToName: document!["bookIssuedToName"] as! [String] as Any as! [String], bookIssuedOn: document!["bookIssuedOn"] as! [String], bookExpectedReturnOn: document!["bookExpectedReturnOn"] as! [String], bookRating: document!["bookRating"] as! Float, bookReviews: document!["bookReviews"] as! [String], bookHistory: bookHistoryArray, createdOn: document!["createdOn"] as! String, updayedOn: document!["updatedOn"] as! String) ]
+                            print(currenBook)
+                            if(currenBook[0].bookPreBookedCount > 0){
+                                print("Into the Prebook Allocation Code")
+                                self.dbInstance.collection("Loans").order(by: "timeStamp", descending: false).getDocuments{ (snapshot, error) in
+                                    print("Fetching started")
+                                    if(error == nil && snapshot != nil){
+                                        for document in snapshot!.documents{
+                                            let documentData = document.data()
+                                            
+                                            let dateFormatter = DateFormatter()
+                                            dateFormatter.dateFormat = "dd/MM/yy"
+                                            
+                                            let tempLoan = Loan(loanId: documentData["loanId"] as! String as Any as! String, bookId: documentData["bookId"] as! String as Any as! String, bookName: documentData["bookName"] as! String as Any as! String, bookIssuedTo: documentData["bookIssuedTo"] as! String as Any as! String, bookIssuedToName: documentData["bookIssuedToName"] as! String as Any as! String, bookIssuedOn: documentData["bookIssuedOn"] as! String as Any as! String, bookExpectedReturnOn: documentData["bookExpectedReturnOn"] as! String as Any as! String, bookReturnedOn: documentData["bookReturnedOn"] as! String as Any as! String, loanStatus: documentData["loanStatus"] as! String as Any as! String, loanReminderStatus: documentData["loanReminderStatus"] as! String as Any as! String, createdOn:  documentData["createdOn"] as! String as Any as! String, updatedOn: documentData["updatedOn"] as! String as Any as! String, timeStamp: documentData["timeStamp"] as! Int as Any as! Int)
+                                            print("tempLoan: ")
+                                            print(tempLoan)
+                                            if(tempLoan.bookId == bookId && tempLoan.loanStatus == "PreBooked"){
+                                                preBookings.append(tempLoan)
+                                            }
+                                        }
+                                        print("Completed Fetching")
+                                        self.dbInstance.collection("Books").document(bookId).updateData(["bookPreBookedCount": currenBook[0].bookPreBookedCount-1, "updatedOn":Date.now.formatted()]){ error in
+                                            if let error = error{
+                                                print("Unable to update book")
+                                            }
+                                            else{
+                                                self.dbInstance.collection("Loans").document(preBookings[0].loanId).updateData(["loanStatus":"Requested"]){ error in
+                                                    if let error = error{
+                                                        print("Loan updateion Error")
+                                                    }
+                                                    else{
+                                                        print("Updated loan successfully")
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                //preBookings = preBookings.sorted(by: {$0.timeStamp < $1.timeStamp})
+                            }
+                            else{
+                                self.dbInstance.collection("Books").document(bookId).updateData(["bookStatus":"Available", "bookAvailableCount": currenBook[0].bookAvailableCount+1, "bookTakenCount": currenBook[0].bookTakenCount-1, "updatedOn":Date.now.formatted()]){ error in
+                                    
+                                    if let error = error{
+                                        self.responseStatus = 400
+                                        self.responseMessage = "Something went wrong, Unable to update book. Check console for errors."
+                                        print("Unable to update book. Error: \(error)")
+                                    }
+                                    else{
+                                        self.dbInstance.collection("Loans").document(loanId).updateData(["bookReturnedOn":Date.now.formatted(), "loanStatus": "Rejected", "updatedOn": Date.now.formatted()]){ error in
+                                            if let error = error{
+                                                self.responseStatus = 400
+                                                self.responseMessage = "Something went wrong, Unable to complete loan. Check console for errors."
+                                                print("Unable to update loan. Error: \(error)")
+                                            }
+                                            else{
+                                                self.responseStatus = 200
+                                                self.responseMessage = "Completed loan successfuly."
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        else{
+                            self.responseStatus = 400
+                            self.responseMessage = "Something went wrong, Unable to get book. Chek console for error"
+                            print("Unable to get updated document. May be this could be the error: Book does not exist or db returned nil.")
+                        }
+                    }
+                    else{
+                        self.responseStatus = 200
+                        self.responseMessage = "Something went wrong, Unable to book. Chek console for error"
+                        print("Unable to get book. Error: \(String(describing: error)).")
+                    }
+                }
+            }
+        }
+    }
+
     
     func getLoans(){
         
@@ -555,7 +496,7 @@ class LibrarianViewModel: ObservableObject{
         var tempReturnedLoans: [Loan] = []
         var tempAllLoans: [Loan] = []
         
-        self.dbInstance.collection("Loans").getDocuments{ (snapshot, error) in
+        self.dbInstance.collection("Loans").order(by: "timeStamp", descending: false).getDocuments{ (snapshot, error) in
             
             if(error == nil && snapshot != nil){
                 for document in snapshot!.documents{
