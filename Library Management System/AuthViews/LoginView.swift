@@ -61,7 +61,7 @@ struct LoginView: View {
                             .frame(minWidth: 0, maxWidth: .infinity, alignment: .trailing)
                             .padding(.horizontal)
                             .padding(.bottom)
-                            .foregroundStyle(themeManager.selectedTheme.secondaryThemeColor)
+                            .foregroundStyle(themeManager.selectedTheme.primaryThemeColor)
                     }
                     
                     PrimaryCustomButton(action: {
@@ -84,7 +84,7 @@ struct LoginView: View {
                     Text("Don't have an account?")
                     NavigationLink(destination: SignupView()){
                         Text("REGISTER NOW")
-                            .foregroundColor(themeManager.selectedTheme.secondaryThemeColor)
+                            .foregroundColor(themeManager.selectedTheme.primaryThemeColor)
                     }
                 }
                 .padding([.leading, .trailing, .top])
