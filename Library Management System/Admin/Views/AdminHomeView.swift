@@ -11,6 +11,7 @@ struct AdminHomeView: View {
     @EnvironmentObject var themeManager: ThemeManager
     @ObservedObject var librarianViewModel = LibrarianViewModel()
     @ObservedObject var staffViewModel = StaffViewModel()
+    @State var isThemeSelecterSheetPresented: Bool = false
     var body: some View {
         VStack(spacing:0){
             ZStack(alignment:.bottomLeading){
@@ -34,10 +35,10 @@ struct AdminHomeView: View {
                         ZStack{
                             RoundedRectangle(cornerRadius: 10)
                                 .fill(Color(.systemGray4).opacity(0.5))
-//                                .colorInvert()
+                            //                                .colorInvert()
                                 .frame(height: 150)
                                 .padding(.horizontal)
-                                
+                            
                             VStack(alignment: .leading){
                                 Text("Total Revenue")
                                     .font(.system(size: 20))
@@ -51,7 +52,7 @@ struct AdminHomeView: View {
                                         .font(.system(size: 40))
                                         .bold()
                                 }
-                                    
+                                
                                 Text("per month")
                                     .font(.callout.bold())
                                     .offset(x:160,y:10)
@@ -63,7 +64,7 @@ struct AdminHomeView: View {
                         ZStack{
                             RoundedRectangle(cornerRadius: 10)
                                 .fill(Color(.systemGray4).opacity(0.5))
-//                                .stroke(Color(.systemGray3))
+                            //                                .stroke(Color(.systemGray3))
                                 .padding([.leading])
                                 .frame(height: 100)
                             VStack(alignment: .leading){
@@ -82,7 +83,7 @@ struct AdminHomeView: View {
                         ZStack{
                             RoundedRectangle(cornerRadius: 10)
                                 .fill(Color(.systemGray4).opacity(0.5))
-//                                .stroke(Color(.systemGray3))
+                            //                                .stroke(Color(.systemGray3))
                                 .padding([.trailing])
                                 .frame(height: 100)
                             VStack(alignment: .leading){
@@ -129,8 +130,8 @@ struct AdminHomeView: View {
                                     .frame(height: 124)
                                 VStack(alignment:.leading){
                                     
-                                        Text("Fine Remaining")
-                                            .foregroundStyle(Color.gray)
+                                    Text("Fine Remaining")
+                                        .foregroundStyle(Color.gray)
                                     
                                     Text("$ 124")
                                         .font(.title.bold())
@@ -140,36 +141,47 @@ struct AdminHomeView: View {
                                 
                             }
                         }
-                        ZStack(alignment:.topLeading){
-                            RoundedRectangle(cornerRadius: 10)
-                                .fill(Color(.systemGray4).opacity(0.5))
-                                .padding([.trailing,.bottom])
-                                .frame(height: 236)
-                            VStack(alignment:.leading){
-                                Text("Theme Color")
-                                    .foregroundStyle(Color.gray)
-                                    .padding(.bottom)
-                                VStack{
-                                    Text("Hi")
+                        Button{
+                            isThemeSelecterSheetPresented = true
+                        }label: {
+                            ZStack(alignment:.topLeading){
+                                RoundedRectangle(cornerRadius: 10)
+                                    .fill(Color(.systemGray4).opacity(0.5))
+                                    .padding([.trailing,.bottom])
+                                    .frame(height: 236)
+                                VStack(alignment:.leading){
+                                    Text("Theme Color")
+                                        .foregroundStyle(Color.gray)
+                                        .padding(.bottom)
+                                    VStack{
+                                        Text("LOGO")
+                                    }
+                                    .frame(height: 60)
+                                    
+                                    HStack(spacing:0){
+                                        Rectangle()
+                                            .fill(themeManager.selectedTheme.primaryThemeColor)
+                                        
+                                        Rectangle()
+                                            .fill(themeManager.selectedTheme.secondaryThemeColor)
+                                        
+                                        Rectangle()
+                                            .fill(themeManager.selectedTheme.secondaryThemeColor.opacity(0.5))
+                                            .background(Color.white)
+                                        
+                                    }
+                                    .frame(width: 130, height: 40)
+                                    .cornerRadius(5)
+                                    .padding(.leading,6)
+                                    
+                                    
                                 }
-                                .frame(height: 60)
-                                VStack(spacing:0){
-                                    Rectangle()
-                                        .fill(themeManager.selectedTheme.primaryThemeColor)
-                                        .frame(width: 130)
-                                    Rectangle()
-                                        .fill(themeManager.selectedTheme.secondaryThemeColor)
-                                        .frame(width: 130)
-                                    Rectangle()
-                                        .fill(themeManager.selectedTheme.bodyTextColor)
-                                        .frame(width: 130)
-                                }
-                                .frame(height: 60)
-                                .cornerRadius(5)
-                                .padding(.leading,6)
-                                
+                                .padding()
                             }
-                            .padding()
+                            .sheet(isPresented: $isThemeSelecterSheetPresented) {
+                                colorSelecterView(isSheetPresented: $isThemeSelecterSheetPresented)
+                                    .presentationDetents([.fraction(0.45)])
+                            }
                         }
                     }
                 }
@@ -189,7 +201,7 @@ struct AdminHomeView: View {
                 
                 Spacer()
             }
-//            .background(Color(.systemGray3).opacity(0.4))
+            //            .background(Color(.systemGray3).opacity(0.4))
             Spacer()
         }
         .ignoresSafeArea(.all)
@@ -222,24 +234,55 @@ struct AdminHomeView_Previews: PreviewProvider {
             .environmentObject(themeManager)
     }
 }
+struct colorSelecterView: View {
+    @EnvironmentObject var themeManager: ThemeManager
+    @ObservedObject var configManager = ConfigViewModel()
+    @Binding var isSheetPresented: Bool
+    @State var selectedTheme: ThemeProtocol?
+    
+    var body: some View {
+        VStack {
+            HStack{
+                Spacer()
+                Button(action: {
+                    guard let selectedTheme = selectedTheme else { return }
+                    themeManager.setTheme(selectedTheme)
+                    themeManager.updateTheme(selectedTheme)
+                    isSheetPresented = false
+                }) {
+                    Text("Save")
+                        .foregroundStyle(themeManager.selectedTheme.bodyTextColor)
+                }
+                .padding([.top,.trailing])
+            }
+            .padding([.top,.trailing])
+            Text("Select Theme")
+                .foregroundStyle(themeManager.selectedTheme.bodyTextColor)
+                .font(.headline)
+                .padding()
+            
+            HStack {
+                ForEach(themeManager.themes, id: \.primaryThemeColor) { theme in
+                    Button(action: {
+                        selectedTheme = theme
+                    }) {
+                        ThemeView(theme: theme)
+                    }
+                }
+            }
+            
+            Text("Selected Theme:")
+                .foregroundStyle(themeManager.selectedTheme.bodyTextColor)
+                .font(.headline)
+                .padding()
+            ThemeView(theme: selectedTheme ?? themeManager.selectedTheme)
+            Spacer()
+        }
+    }
+}
 
 
-
-//            Text("Select Theme")
-//                .font(.headline)
-//                .padding()
-
-//            HStack{
-//                ForEach(themeManager.themes, id: \.primaryThemeColor) { theme in
-//                    Button(action: {
-//                        themeManager.setTheme(theme)
-//                    }) {
-//                        ThemeView(theme: theme)
-//                    }
-//                }
-//            }
-//
-//            Text("Selected Theme:")
-//                .font(.headline)
-//                .padding()
-//            ThemeView(theme: themeManager.selectedTheme)
+#Preview{
+    colorSelecterView(isSheetPresented: .constant(true))
+        .environmentObject(ThemeManager())
+}
