@@ -25,10 +25,7 @@ struct LoginView: View {
     var body: some View {
         ZStack {
             VStack {
-                Spacer()
-                
                 VStack {
-                    
                     Image("AppLogo")
                         .resizable()
                         .frame(width: 300, height: 150, alignment: .center)
@@ -49,9 +46,10 @@ struct LoginView: View {
                             .padding(.horizontal)
                         
                     }
-                    LoginTextField(text: $email, placeholder: "E-mail ")
+                    
+                    CustomTextField(text: $email, placeholder: "E-mail")
+                    
                     SecTextField(text: $password, placeholder: "Password")
-
                     
                     Button {
                         Task{
@@ -70,24 +68,17 @@ struct LoginView: View {
                         print("Login Attempt")
                         viewModel.login(email: email, password: password)
                         print($viewModel.shouldNavigateToAdmin)
-
+                        
                     }, label: "Log In")
                     .disabled(email.isEmpty || password.isEmpty)
-                    
-                    
-                    
-                    
-                    
                     
                     NavigationLink(destination: AdminTabView(), isActive: $viewModel.shouldNavigateToAdmin) { EmptyView() }
                     NavigationLink(destination: LibrarianFirstScreenView(LibModelView: LibViewModel, ConfiViewModel: ConfiViewMOdel), isActive: $viewModel.shouldNavigateToLibrarian) { EmptyView() }
                     NavigationLink(destination: MemberTabView(memModelView: memModelView, ConfiViewModel: ConfiViewMOdel), isActive: $viewModel.shouldNavigateToMember) { EmptyView() }
                     NavigationLink(destination: Membership(), isActive: $viewModel.shouldNavigateToGeneral) { EmptyView() }
-                    
-                    
-                }.padding()
+                }
                 
-                Spacer()
+                .padding()
                 
                 HStack{
                     Text("Don't have an account?")
@@ -102,19 +93,19 @@ struct LoginView: View {
                 .task {
                     LibViewModel.getBooks()
                 }
-                
             }
         }
     }
+    
     func resetPassword(email: String) async throws {
-            do {
-                try await Auth.auth().sendPasswordReset(withEmail: email)
-                print("Password updated")
-            } catch let error as NSError {
-                print("error")
-                throw error
-            }
+        do {
+            try await Auth.auth().sendPasswordReset(withEmail: email)
+            print("Password updated")
+        } catch let error as NSError {
+            print("error")
+            throw error
         }
+    }
 }
 
 struct LoginView_Previews: PreviewProvider {
@@ -124,4 +115,3 @@ struct LoginView_Previews: PreviewProvider {
             .environmentObject(themeManager)
     }
 }
-

@@ -10,10 +10,11 @@ import SwiftUI
 struct CustomTextField: View {
     @EnvironmentObject var themeManager: ThemeManager
     @Binding var text: String
+    var placeholder: String
     @Environment(\.colorScheme) var colorScheme
-
+    
     var body: some View {
-        TextField("", text: $text)
+        TextField(placeholder.isEmpty ? " " : placeholder, text: $text)
             .font(.title3)
             .padding(12)
             .autocapitalization(.none)
@@ -21,32 +22,8 @@ struct CustomTextField: View {
             .frame(maxWidth: .infinity)
             .background(Color(.systemGray5))
             .cornerRadius(15)
-            .padding(.horizontal, 5)
-            .padding(.bottom, 5)
-    }
-    
-}
-
-
-struct LoginTextField: View {
-    @EnvironmentObject var themeManager: ThemeManager
-    @Binding var text: String
-    var placeholder: String
-    @Environment(\.colorScheme) var colorScheme
-
-    var body: some View {
-        TextField(placeholder, text: $text)
-            .font(.title3)
-            .padding(12)
-            .autocapitalization(.none)
-            .foregroundColor(themeManager.selectedTheme.bodyTextColor)
-            .frame(maxWidth: .infinity)
-            .background(Color(.systemGray6))
-            .cornerRadius(20)
             .padding(5)
-  
     }
-    
 }
 
 struct SecTextField: View {
@@ -54,7 +31,7 @@ struct SecTextField: View {
     @Binding var text: String
     var placeholder: String
     @Environment(\.colorScheme) var colorScheme
-
+    
     var body: some View {
         SecureField(placeholder, text: $text)
             .font(.title3)
@@ -62,10 +39,8 @@ struct SecTextField: View {
             .autocapitalization(.none)
             .foregroundColor(themeManager.selectedTheme.bodyTextColor)
             .frame(maxWidth: .infinity)
-            .background(Color(.systemGray6))
-            .cornerRadius(20)
+            .background(Color(.systemGray5))
+            .cornerRadius(15)
             .padding(5)
-  
     }
-    
 }
