@@ -28,7 +28,7 @@ struct UpdateCategoriesView: View {
         NavigationView {
             VStack {
                 HStack{
-                    CustomTextField(text: $newCategoryName)
+                    CustomTextField(text: $newCategoryName, placeholder: "")
                     Button(action: {
                         deleteCategory()
                     }) {

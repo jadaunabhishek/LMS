@@ -42,9 +42,9 @@ struct SignupView: View {
                     
                 }
                 
-                LoginTextField(text: $name, placeholder: "Name")
+                CustomTextField(text: $name, placeholder: "Name")
                 
-                LoginTextField(text: $email, placeholder: "E-mail Id")
+                CustomTextField(text: $email, placeholder: "E-mail Id")
                 
                 SecTextField(text: $password, placeholder: "Password")
                 
