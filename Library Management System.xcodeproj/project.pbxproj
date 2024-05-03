@@ -19,7 +19,6 @@
 		1F84616F2BD65679008B7B3E /* ThemeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F84616E2BD65679008B7B3E /* ThemeManager.swift */; };
 		1F8461712BD6583B008B7B3E /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1F8461702BD6583B008B7B3E /* Colors.xcassets */; };
 		84080F2D2BDE01A3005293B8 /* UpdateCategoriesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84080F2C2BDE01A3005293B8 /* UpdateCategoriesView.swift */; };
-		84080F2F2BDE01B6005293B8 /* UpdateCategoriesButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84080F2E2BDE01B6005293B8 /* UpdateCategoriesButton.swift */; };
 		840A18ED2BE03F2700B9ED91 /* UserProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 840A18EC2BE03F2700B9ED91 /* UserProfileView.swift */; };
 		840A18EF2BE040F700B9ED91 /* TextFieldComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 840A18EE2BE040F700B9ED91 /* TextFieldComponent.swift */; };
 		840A18F12BE0E84D00B9ED91 /* MemberBookReminder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 840A18F02BE0E84D00B9ED91 /* MemberBookReminder.swift */; };
@@ -27,17 +26,17 @@
 		84301CB52BDA126F004CF581 /* MemberHome.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84301CB42BDA126F004CF581 /* MemberHome.swift */; };
 		84301CB72BDA13C8004CF581 /* MemberTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84301CB62BDA13C8004CF581 /* MemberTabView.swift */; };
 		84301CB92BDA4B87004CF581 /* StaffDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84301CB82BDA4B87004CF581 /* StaffDetailsView.swift */; };
+		843CB5862BE399E5008CFAFC /* Buttons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 843CB5852BE399E5008CFAFC /* Buttons.swift */; };
+		843CB5882BE399F2008CFAFC /* Textfields.swift in Sources */ = {isa = PBXBuildFile; fileRef = 843CB5872BE399F2008CFAFC /* Textfields.swift */; };
 		845F7D702BD8DFD9006831F8 /* Membership.swift in Sources */ = {isa = PBXBuildFile; fileRef = 845F7D6F2BD8DFD9006831F8 /* Membership.swift */; };
 		845F7D722BD8E0BD006831F8 /* Filter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 845F7D712BD8E0BD006831F8 /* Filter.swift */; };
 		848B46722BD78DF900143E7A /* NotificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 848B46712BD78DF900143E7A /* NotificationView.swift */; };
 		84D3293E2BDE707000E75F81 /* EditStaffDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84D3293D2BDE707000E75F81 /* EditStaffDetailsView.swift */; };
 		84E87D512BD7D40C00FAD5DC /* AdminCategoriesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84E87D502BD7D40C00FAD5DC /* AdminCategoriesView.swift */; };
 		84E87D552BD7D44800FAD5DC /* AdminSubCategoriesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84E87D542BD7D44800FAD5DC /* AdminSubCategoriesView.swift */; };
-		84E87D572BD7D4C300FAD5DC /* AddCategoriesButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84E87D562BD7D4C300FAD5DC /* AddCategoriesButton.swift */; };
 		84E87D592BD7D4E200FAD5DC /* AddCategoriesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84E87D582BD7D4E200FAD5DC /* AddCategoriesView.swift */; };
 		84E87D5B2BD7D4FB00FAD5DC /* AdminCategoriesCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84E87D5A2BD7D4FB00FAD5DC /* AdminCategoriesCard.swift */; };
 		84E87D5D2BD7D51400FAD5DC /* CardListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84E87D5C2BD7D51400FAD5DC /* CardListView.swift */; };
-		84E87D5F2BD7D52900FAD5DC /* EditCategoriesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84E87D5E2BD7D52900FAD5DC /* EditCategoriesView.swift */; };
 		84E87D612BD7D5EA00FAD5DC /* CardListDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84E87D602BD7D5EA00FAD5DC /* CardListDetailView.swift */; };
 		84E96EE02BDA2A2700A572BC /* MemberViewList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84E96EDF2BDA2A2700A572BC /* MemberViewList.swift */; };
 		D50EA9C72BE38DEA0079C1AB /* UserSchema.swift in Sources */ = {isa = PBXBuildFile; fileRef = D50EA9C62BE38DEA0079C1AB /* UserSchema.swift */; };
@@ -122,7 +121,6 @@
 		1F84616E2BD65679008B7B3E /* ThemeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeManager.swift; sourceTree = "<group>"; };
 		1F8461702BD6583B008B7B3E /* Colors.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Colors.xcassets; sourceTree = "<group>"; };
 		84080F2C2BDE01A3005293B8 /* UpdateCategoriesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateCategoriesView.swift; sourceTree = "<group>"; };
-		84080F2E2BDE01B6005293B8 /* UpdateCategoriesButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateCategoriesButton.swift; sourceTree = "<group>"; };
 		840A18EC2BE03F2700B9ED91 /* UserProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileView.swift; sourceTree = "<group>"; };
 		840A18EE2BE040F700B9ED91 /* TextFieldComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldComponent.swift; sourceTree = "<group>"; };
 		840A18F02BE0E84D00B9ED91 /* MemberBookReminder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemberBookReminder.swift; sourceTree = "<group>"; };
@@ -131,17 +129,17 @@
 		84301CB42BDA126F004CF581 /* MemberHome.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemberHome.swift; sourceTree = "<group>"; };
 		84301CB62BDA13C8004CF581 /* MemberTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemberTabView.swift; sourceTree = "<group>"; };
 		84301CB82BDA4B87004CF581 /* StaffDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaffDetailsView.swift; sourceTree = "<group>"; };
+		843CB5852BE399E5008CFAFC /* Buttons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Buttons.swift; sourceTree = "<group>"; };
+		843CB5872BE399F2008CFAFC /* Textfields.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Textfields.swift; sourceTree = "<group>"; };
 		845F7D6F2BD8DFD9006831F8 /* Membership.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Membership.swift; sourceTree = "<group>"; };
 		845F7D712BD8E0BD006831F8 /* Filter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Filter.swift; sourceTree = "<group>"; };
 		848B46712BD78DF900143E7A /* NotificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationView.swift; sourceTree = "<group>"; };
 		84D3293D2BDE707000E75F81 /* EditStaffDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditStaffDetailsView.swift; sourceTree = "<group>"; };
 		84E87D502BD7D40C00FAD5DC /* AdminCategoriesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdminCategoriesView.swift; sourceTree = "<group>"; };
 		84E87D542BD7D44800FAD5DC /* AdminSubCategoriesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdminSubCategoriesView.swift; sourceTree = "<group>"; };
-		84E87D562BD7D4C300FAD5DC /* AddCategoriesButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCategoriesButton.swift; sourceTree = "<group>"; };
 		84E87D582BD7D4E200FAD5DC /* AddCategoriesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCategoriesView.swift; sourceTree = "<group>"; };
 		84E87D5A2BD7D4FB00FAD5DC /* AdminCategoriesCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdminCategoriesCard.swift; sourceTree = "<group>"; };
 		84E87D5C2BD7D51400FAD5DC /* CardListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardListView.swift; sourceTree = "<group>"; };
-		84E87D5E2BD7D52900FAD5DC /* EditCategoriesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditCategoriesView.swift; sourceTree = "<group>"; };
 		84E87D602BD7D5EA00FAD5DC /* CardListDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardListDetailView.swift; sourceTree = "<group>"; };
 		84E96EDF2BDA2A2700A572BC /* MemberViewList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemberViewList.swift; sourceTree = "<group>"; };
 		D50EA9C62BE38DEA0079C1AB /* UserSchema.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSchema.swift; sourceTree = "<group>"; };
@@ -251,6 +249,15 @@
 			path = Colors;
 			sourceTree = "<group>";
 		};
+		843CB5842BE399C9008CFAFC /* Elements */ = {
+			isa = PBXGroup;
+			children = (
+				843CB5852BE399E5008CFAFC /* Buttons.swift */,
+				843CB5872BE399F2008CFAFC /* Textfields.swift */,
+			);
+			path = Elements;
+			sourceTree = "<group>";
+		};
 		84E87D4E2BD7D3D700FAD5DC /* AdminCategories */ = {
 			isa = PBXGroup;
 			children = (
@@ -264,15 +271,12 @@
 		84E87D4F2BD7D3E000FAD5DC /* Components */ = {
 			isa = PBXGroup;
 			children = (
-				84E87D562BD7D4C300FAD5DC /* AddCategoriesButton.swift */,
 				84E87D582BD7D4E200FAD5DC /* AddCategoriesView.swift */,
 				84E87D5A2BD7D4FB00FAD5DC /* AdminCategoriesCard.swift */,
 				84E87D5C2BD7D51400FAD5DC /* CardListView.swift */,
-				84E87D5E2BD7D52900FAD5DC /* EditCategoriesView.swift */,
 				84E87D602BD7D5EA00FAD5DC /* CardListDetailView.swift */,
 				0F85ED862BDA71F800C48C75 /* BookDetailView.swift */,
 				84080F2C2BDE01A3005293B8 /* UpdateCategoriesView.swift */,
-				84080F2E2BDE01B6005293B8 /* UpdateCategoriesButton.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -319,6 +323,7 @@
 				D55820C82BD61AB0005A00F9 /* ContentView.swift */,
 				D55820CA2BD61AB2005A00F9 /* Assets.xcassets */,
 				1F8461702BD6583B008B7B3E /* Colors.xcassets */,
+				843CB5842BE399C9008CFAFC /* Elements */,
 				1F84616B2BD6561C008B7B3E /* Colors */,
 				D55820CC2BD61AB2005A00F9 /* Preview Content */,
 				1F7C0E532BD7B62A007D5221 /* ImagePicker.swift */,
@@ -649,7 +654,6 @@
 				84E87D592BD7D4E200FAD5DC /* AddCategoriesView.swift in Sources */,
 				DC79BDC42BDA23710048F1DE /* UpdateBookPage.swift in Sources */,
 				840A18ED2BE03F2700B9ED91 /* UserProfileView.swift in Sources */,
-				84E87D5F2BD7D52900FAD5DC /* EditCategoriesView.swift in Sources */,
 				845F7D702BD8DFD9006831F8 /* Membership.swift in Sources */,
 				0F85ED892BE0E32900C48C75 /* MemberBookDetailView.swift in Sources */,
 				1F7C0E522BD7B3B2007D5221 /* AddStaffView.swift in Sources */,
@@ -661,10 +665,11 @@
 				84E87D5D2BD7D51400FAD5DC /* CardListView.swift in Sources */,
 				84080F2D2BDE01A3005293B8 /* UpdateCategoriesView.swift in Sources */,
 				84E87D552BD7D44800FAD5DC /* AdminSubCategoriesView.swift in Sources */,
-				84E87D572BD7D4C300FAD5DC /* AddCategoriesButton.swift in Sources */,
 				D57BFDAF2BDD233E0094A0B5 /* Books.swift in Sources */,
 				0F85ED832BD902B400C48C75 /* ConfigVIewModel.swift in Sources */,
 				DC1D40342BD77E9600970C7B /* AdminTabView.swift in Sources */,
+				843CB5862BE399E5008CFAFC /* Buttons.swift in Sources */,
+				843CB5882BE399F2008CFAFC /* Textfields.swift in Sources */,
 				84080F2F2BDE01B6005293B8 /* UpdateCategoriesButton.swift in Sources */,
 				D50EA9C72BE38DEA0079C1AB /* UserSchema.swift in Sources */,
 				1F84616D2BD6563E008B7B3E /* ThemeProtocol.swift in Sources */,

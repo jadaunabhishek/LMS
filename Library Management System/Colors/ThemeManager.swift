@@ -71,4 +71,3 @@ struct Green: ThemeProtocol {
     var secondaryThemeColor: Color { return Color("grSecondaryThemeColor") }
     var bodyTextColor: Color { return Color("grBodyTextColor") }
 }
-

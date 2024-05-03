@@ -2,7 +2,7 @@
 //  LoginView.swift
 //  Library Management System
 //
-//  Created by Abhishek Jadaun on 22/04/24.
+//  Created by Ishan Joshi on 22/04/24.
 //
 
 import SwiftUI
@@ -12,6 +12,7 @@ import FirebaseFirestore
 
 struct LoginView: View {
     private var db = Firestore.firestore()
+    @EnvironmentObject var themeManager: ThemeManager
     @StateObject private var viewModel = AuthViewModel()
     @StateObject var LibViewModel = LibrarianViewModel()
     @StateObject var ConfiViewMOdel = ConfigViewModel()
@@ -23,7 +24,6 @@ struct LoginView: View {
     
     var body: some View {
         ZStack {
-            Color("BgColor").edgesIgnoringSafeArea(.all)
             VStack {
                 Spacer()
                 
@@ -38,6 +38,7 @@ struct LoginView: View {
                         .fontWeight(.bold)
                         .padding(.bottom, 30)
                         .padding(.top)
+                        .foregroundColor(themeManager.selectedTheme.bodyTextColor)
                     
                     HStack{
                         Spacer()
@@ -48,29 +49,9 @@ struct LoginView: View {
                             .padding(.horizontal)
                         
                     }
-                    
-                    TextField("Email Id", text: $email)
-                        .font(.title3)
-                        .padding(12)
-                        .autocapitalization(.none)
-                        .foregroundColor(Color("TextColor"))
-                        .frame(maxWidth: .infinity)
-                        .background(Color.white)
-                        .cornerRadius(20)
-                        .padding(.horizontal, 5)
-                        .padding(.bottom, 5)
-                        .shadow(color: Color.gray.opacity(0.3), radius: 5, x: 0, y: 2)
-                    
-                    SecureField("Password", text: $password)
-                        .font(.title3)
-                        .padding(12)
-                        .autocapitalization(.none)
-                        .frame(maxWidth: .infinity)
-                        .background(Color.white)
-                        .cornerRadius(20)
-                        .padding(.horizontal, 5)
-                        .padding(.bottom, 5)
-                        .shadow(color: Color.gray.opacity(0.3), radius: 5, x: 0, y: 2)
+                    LoginTextField(text: $email, placeholder: "E-mail ")
+                    SecTextField(text: $password, placeholder: "Password")
+
                     
                     Button {
                         Task{
@@ -82,27 +63,21 @@ struct LoginView: View {
                             .frame(minWidth: 0, maxWidth: .infinity, alignment: .trailing)
                             .padding(.horizontal)
                             .padding(.bottom)
-                            .foregroundStyle(Color("PrimaryColor"))
+                            .foregroundStyle(themeManager.selectedTheme.secondaryThemeColor)
                     }
                     
-                    Button(action: {
-                        
-                        print("Login Aettmpt")
+                    PrimaryCustomButton(action: {
+                        print("Login Attempt")
                         viewModel.login(email: email, password: password)
                         print($viewModel.shouldNavigateToAdmin)
-                        
-                    }) {
-                        Text("Log In")
-                            .font(.title3)
-                            .fontWeight(.bold)
-                            .foregroundColor(.white)
-                            .frame(maxWidth: .infinity)
-                            .padding()
-                            .background(Color("PrimaryColor"))
-                            .cornerRadius(50)
-                    }
+
+                    }, label: "Log In")
                     .disabled(email.isEmpty || password.isEmpty)
-                    .shadow(color: Color.gray.opacity(0.3), radius: 5, x: 0, y: 2)
+                    
+                    
+                    
+                    
+                    
                     
                     NavigationLink(destination: AdminTabView(), isActive: $viewModel.shouldNavigateToAdmin) { EmptyView() }
                     NavigationLink(destination: LibrarianFirstScreenView(LibModelView: LibViewModel, ConfiViewModel: ConfiViewMOdel), isActive: $viewModel.shouldNavigateToLibrarian) { EmptyView() }
@@ -118,7 +93,7 @@ struct LoginView: View {
                     Text("Don't have an account?")
                     NavigationLink(destination: SignupView()){
                         Text("REGISTER NOW")
-                            .foregroundColor(Color("PrimaryColor"))
+                            .foregroundColor(themeManager.selectedTheme.secondaryThemeColor)
                     }
                 }
                 .padding([.leading, .trailing, .top])
@@ -131,7 +106,6 @@ struct LoginView: View {
             }
         }
     }
-    // function to reset the password
     func resetPassword(email: String) async throws {
             do {
                 try await Auth.auth().sendPasswordReset(withEmail: email)
@@ -143,8 +117,11 @@ struct LoginView: View {
         }
 }
 
-#Preview {
-    LoginView()
+struct LoginView_Previews: PreviewProvider {
+    static var previews: some View {
+        let themeManager = ThemeManager()
+        return LoginView()
+            .environmentObject(themeManager)
+    }
 }
-
 

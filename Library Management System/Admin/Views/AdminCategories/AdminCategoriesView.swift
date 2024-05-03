@@ -8,10 +8,12 @@
 import SwiftUI
 
 struct AdminCategoriesView: View {
-    @ObservedObject var configViewModel: ConfigViewModel
+    @EnvironmentObject var themeManager: ThemeManager
+    @StateObject var configViewModel = ConfigViewModel()
     @State private var searchKey = ""
-    
+    @State private var isSheetPresented = false
     @State var isPageLoading: Bool = true
+    
     var filteredCategories: [String] {
         if searchKey.isEmpty {
             return configViewModel.currentConfig[0].categories
@@ -19,58 +21,47 @@ struct AdminCategoriesView: View {
             return configViewModel.currentConfig[0].categories.filter { $0.localizedCaseInsensitiveContains(searchKey) }
         }
     }
+    
     var body: some View {
-        
         NavigationStack {
-            
-                VStack(){
-                    if(!isPageLoading){
-                        Rectangle()
-                            .fill(.red)
-                            .frame(height: 80)
-                            .cornerRadius(5)
-                            .padding(.bottom)
-                        
-                            TextField("what are u looking for?", text: $searchKey)
-                                .foregroundStyle(.black)
-                            
-                                .padding(14)
-                                .background{
-                                    RoundedRectangle(cornerRadius: 12)
-                                        .stroke(Color.black, lineWidth: 1)
-                                    
-                                }
-                                .padding(.horizontal,34)
-                                .padding(.top,20)
-                            Image(systemName: "magnifyingglass")
-                                .offset(x:130,y:-35)
-                            Spacer()
-                        
-                        ScrollView {
-                            LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 20) {
-                                ForEach(filteredCategories, id: \.self) { category in
-                                    NavigationLink(destination: AdminSubCategoriesView(category: category)) {
-                                        VStack(alignment: .leading) {
-                                            AdminCategoriesCard(category: category)
-                                                .foregroundStyle(.black)
-                                                
-                                        }
-                                        
+            VStack {
+                if(!isPageLoading){
+                    ScrollView {
+                        LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 20) {
+                            ForEach(filteredCategories, id: \.self) { category in
+                                NavigationLink(destination: AdminSubCategoriesView(configViewModel: ConfigViewModel(), category: category)) {
+                                    VStack(alignment: .leading) {
+                                        AdminCategoriesCard(category: category)
+                                            .foregroundStyle(themeManager.selectedTheme.bodyTextColor)
                                     }
                                 }
                             }
-                            .padding(.bottom,86)
                         }
-                        .scrollIndicators(.hidden)
-                        .padding()
+                        .padding(.bottom,86)
                     }
-                    else{
-                        ProgressView()
-                    }
-                
+                    .scrollIndicators(.hidden)
+                    .padding()
                 }
-                .ignoresSafeArea(.all)
-            
+                else
+                {
+                    ProgressView()
+                }
+            }
+            .navigationTitle("Categories")
+            .foregroundStyle(themeManager.selectedTheme.primaryThemeColor)
+            .navigationBarItems(leading: Spacer(),trailing:
+                                    Button(action: {
+                isSheetPresented.toggle()
+            }) {
+                Image(systemName: "plus")
+                    .font(.title3)
+                    .foregroundColor(themeManager.selectedTheme.primaryThemeColor)
+            }
+                .sheet(isPresented: $isSheetPresented) {
+                    AddCategoriesView()
+                        .presentationDetents([.fraction(0.35)])
+                }
+            )
         }
         .task {
             do{
@@ -79,27 +70,14 @@ struct AdminCategoriesView: View {
                 isPageLoading = false
             }
         }
-        
-        .overlay(
-            ZStack {
-                    AddCategories()
-                        .position(CGPoint(x: 350.0, y: 680.0))
-                    UpdateCategoriesButton()
-                    .position(CGPoint(x: 290.0, y: 680.0)) // Adjust position as needed
-                }
-        )
+        .searchable(text: $searchKey)
     }
 }
 
-struct ACPre: View {
-    
-    @StateObject var ConfiModel = ConfigViewModel()
-    var body: some View {
-        AdminCategoriesView(configViewModel: ConfiModel)
+struct AdminCategoriesView_Previews: PreviewProvider {
+    static var previews: some View {
+        let themeManager = ThemeManager()
+        return AdminCategoriesView()
+            .environmentObject(themeManager)
     }
-}
-
-#Preview {
-    ACPre()
-    
 }

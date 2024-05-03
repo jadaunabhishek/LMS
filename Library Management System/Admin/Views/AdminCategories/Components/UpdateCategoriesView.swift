@@ -8,82 +8,48 @@
 import SwiftUI
 
 struct UpdateCategoriesView: View {
-    
+    @EnvironmentObject var themeManager: ThemeManager
     @Binding var isSheetPresented: Bool
     @ObservedObject var configViewModel: ConfigViewModel
-    @State private var newCategoryName = ""
-    //
+    @State private var newCategoryName : String
+    @State var category: String
     @State private var selectedCategoryIndex = 0
     @State private var categories: [String] = []
     @State private var isFetchingCategories = true
 
-    
-    
-    
-    
+    init(isSheetPresented: Binding<Bool>, configViewModel: ConfigViewModel, category: String) {
+        _isSheetPresented = isSheetPresented
+        self.configViewModel = configViewModel
+        self._category = State(initialValue: category)
+        _newCategoryName = State(initialValue: category)
+    }
     
     var body: some View {
         NavigationView {
             VStack {
-                
-                
-                if isFetchingCategories {
-                    ProgressView()
-                } else {
-                    Picker(selection: $selectedCategoryIndex, label: Text("Select a Category")) {
-                        ForEach(0..<categories.count, id: \.self) { index in
-                            Text(categories[index])
-                        }
+                HStack{
+                    CustomTextField(text: $newCategoryName)
+                    Button(action: {
+                        deleteCategory()
+                    }) {
+                        Image(systemName: "trash")
+                            .font(.title3)
+                            .foregroundColor(.red)
+                            .padding(.all ,14)
+                            .background(Color.white)
+                            .clipShape(Circle())
+                            .shadow(radius: 5)
                     }
-                    .font(.title3)
-                    .padding(12)
-                    .pickerStyle(MenuPickerStyle())
-                    .frame(maxWidth: .infinity)
-                    .background(Color.white)
-                    .cornerRadius(15)
-                    .padding(.horizontal, 5)
-                    .padding(.bottom, 10)
-                    .shadow(color: Color.gray.opacity(0.3), radius: 5, x: 0, y: 2)
                 }
                 
                 
                 
-                
-                
-                
-                TextField("New Category Name", text: $newCategoryName)
-                    .font(.title3)
-                    .padding(12)
-                    .autocapitalization(.none)
-                    .foregroundColor(Color("TextColor"))
-                    .frame(maxWidth: .infinity)
-                    .background(Color.white)
-                    .cornerRadius(15)
-                    .padding(.horizontal, 5)
-                    .padding(.bottom, 5)
-                    .shadow(color: Color.gray.opacity(0.3), radius: 5, x: 0, y: 2)
-                
-                
-                
-                
-                
-                Button{
-                    Task{
-                        let oldCategoryName = categories[selectedCategoryIndex]
-                        configViewModel.updateCategory(configId: "HJ9L6mDbi01TJvX3ja7Z", categories: updateCategories(oldCategory: oldCategoryName, newCategory: newCategoryName))
-                        isSheetPresented = false
-                    }
-                } label: {
-                    Text("Update Category")
-                        .font(.title3)
-                        .fontWeight(.bold)
-                        .foregroundColor(.white)
-                        .frame(maxWidth: .infinity)
-                        .padding()
-                        .background(Color("PrimaryColor"))
-                        .cornerRadius(15)
-                }
-                .padding()
+                PrimaryCustomButton(action: {
+                    let oldCategoryName = category
+                    configViewModel.updateCategory(configId: "HJ9L6mDbi01TJvX3ja7Z", categories: updateCategories(oldCategory: oldCategoryName, newCategory: newCategoryName))
+                    isSheetPresented = false
+
+                }, label: "Update Category")
                 .disabled(newCategoryName.isEmpty)
             }
             .padding()
@@ -103,9 +69,18 @@ struct UpdateCategoriesView: View {
         }
     }
     
-    
+    func deleteCategory() {
+        guard let index = categories.firstIndex(of: category) else {
+            return
+        }
+        categories.remove(at: index)
+        
+        configViewModel.updateCategory(configId: "HJ9L6mDbi01TJvX3ja7Z", categories: categories)
+        isSheetPresented = false
+    }
+
     func updateCategories(oldCategory: String, newCategory: String) -> [String] {
-        var newCategoriesList = configViewModel.currentConfig[0].categories.map { $0 == oldCategory ? newCategory : $0 }
+        let newCategoriesList = configViewModel.currentConfig[0].categories.map { $0 == oldCategory ? newCategory : $0 }
         //        newCategoriesList.append(newCategory)
         return newCategoriesList
     }
@@ -117,10 +92,14 @@ struct UCPrev: View {
     @StateObject var ConfigrationViewModel = ConfigViewModel()
     
     var body: some View {
-        UpdateCategoriesView(isSheetPresented: .constant(false), configViewModel: ConfigrationViewModel)
+        UpdateCategoriesView(isSheetPresented: .constant(false), configViewModel: ConfigrationViewModel, category: "Fantasy")
     }
 }
 
-#Preview {
-    UCPrev()
+struct UCPrev_Previews: PreviewProvider {
+    static var previews: some View {
+        let themeManager = ThemeManager()
+        return UCPrev()
+            .environmentObject(themeManager)
+    }
 }
