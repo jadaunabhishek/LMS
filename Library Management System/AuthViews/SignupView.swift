@@ -2,7 +2,7 @@
 //  SignupView.swift
 //  Library Management System
 //
-//  Created by Abhishek Jadaun on 22/04/24.
+//  Created by Ishan Joshi on 22/04/24.
 //
 
 import SwiftUI
@@ -11,6 +11,7 @@ import FirebaseAuth
 import FirebaseFirestore
 
 struct SignupView: View {
+    @EnvironmentObject var themeManager: ThemeManager
     @State private var email: String = ""
     @State private var name: String = ""
     @State private var password: String = ""
@@ -20,7 +21,6 @@ struct SignupView: View {
     
     var body: some View {
         ZStack {
-            Color("BgColor").edgesIgnoringSafeArea(.all)
             VStack {
                 Image("AppLogo")
                     .resizable()
@@ -30,6 +30,7 @@ struct SignupView: View {
                     .font(.largeTitle)
                     .fontWeight(.bold)
                     .padding(.bottom)
+                    .foregroundColor(themeManager.selectedTheme.bodyTextColor)
                 
                 HStack{
                     Spacer()
@@ -41,52 +42,15 @@ struct SignupView: View {
                     
                 }
                 
+                LoginTextField(text: $name, placeholder: "Name")
                 
-                TextField("Name", text: $name)
-                    .font(.title3)
-                    .padding(12)
-                    .autocapitalization(.none)
-                    .foregroundColor(Color("TextColor"))
-                    .frame(maxWidth: .infinity)
-                    .background(Color.white)
-                    .cornerRadius(15)
-                    .padding(.horizontal, 5)
-                    .padding(.bottom, 5)
-                    .shadow(color: Color.gray.opacity(0.3), radius: 5, x: 0, y: 2)
+                LoginTextField(text: $email, placeholder: "E-mail Id")
                 
-                TextField("Email Id", text: $email)
-                    .font(.title3)
-                    .padding(12)
-                    .autocapitalization(.none)
-                    .foregroundColor(Color("TextColor"))
-                    .frame(maxWidth: .infinity)
-                    .background(Color.white)
-                    .cornerRadius(15)
-                    .padding(.horizontal, 5)
-                    .padding(.bottom, 5)
-                    .shadow(color: Color.gray.opacity(0.3), radius: 5, x: 0, y: 2)
+                SecTextField(text: $password, placeholder: "Password")
                 
-                SecureField("Password", text: $password)
-                    .font(.title3)
-                    .padding(12)
-                    .autocapitalization(.none)
-                    .frame(maxWidth: .infinity)
-                    .background(Color.white)
-                    .cornerRadius(15)
-                    .padding(.horizontal, 5)
-                    .padding(.bottom, 5)
-                    .shadow(color: Color.gray.opacity(0.3), radius: 5, x: 0, y: 2)
                 ZStack{
-                    SecureField("Confirm Password", text: $confirmPassword)
-                        .font(.title3)
-                        .padding(12)
-                        .autocapitalization(.words)
-                        .frame(maxWidth: .infinity)
-                        .background(Color.white)
-                        .cornerRadius(15)
-                        .padding(.horizontal, 5)
-                        .padding(.bottom, 5)
-                        .shadow(color: Color.gray.opacity(0.3), radius: 5, x: 0, y: 2)
+                    SecTextField(text: $confirmPassword, placeholder: "Confirm Password")
+                    
                     if !password.isEmpty && !confirmPassword.isEmpty {
                         if password == confirmPassword {
                             Image(systemName: "checkmark.circle.fill")
@@ -105,7 +69,7 @@ struct SignupView: View {
                 }
                 .padding(.bottom)
                 
-                Button(action: {
+                PrimaryCustomButton(action: {
                     if !email.isEmpty, !confirmPassword.isEmpty, !password.isEmpty,!name.isEmpty, password == confirmPassword {
                         Auth.auth().createUser(withEmail: email, password: password) { authResult, error in
                             if let error = error {
@@ -139,36 +103,22 @@ struct SignupView: View {
                             }
                         }
                     }
-                }) {
-                    Text("Sign Up")
-                        .font(.title3)
-                        .fontWeight(.bold)
-                        .foregroundColor(.white)
-                        .frame(maxWidth: .infinity)
-                        .padding()
-                        .background(Color("PrimaryColor"))
-                        .cornerRadius(50)
-                }
+                    
+                }, label: "Sign Up")
                 .disabled(email.isEmpty || confirmPassword.isEmpty || password.isEmpty || password != confirmPassword )
-                .shadow(color: Color.gray.opacity(0.3), radius: 5, x: 0, y: 2)
+                
                 
                 NavigationLink("", destination: LoginView(), isActive: $shouldNavigate)
                     .hidden()
                 
                 HStack {
-                    Button(action: {
-                    }) {
-                        HStack{
-                            Image("google")
-                            Text("Sign up with Google")
-                        }
-                        .frame(maxWidth: .infinity)
-                        .foregroundColor(Color("PrimaryColor"))
-                        .padding()
-                        .background(Color.white)
-                        .cornerRadius(50.0)
-                    }
-                    .shadow(color: Color.gray.opacity(0.3), radius: 5, x: 0, y: 2)
+                    
+                    SignupCustomButton(action: {
+                        print("Login Attempt")
+                        
+                    }, label: "Sign Up with Google",imageName: "google")
+                    
+                    
                 }
                 
                 Spacer()
@@ -177,7 +127,7 @@ struct SignupView: View {
                     Text("Already have an account?")
                     NavigationLink(destination: LoginView()) {
                         Text("LOG IN")
-                            .foregroundColor(Color("PrimaryColor"))
+                            .foregroundColor(themeManager.selectedTheme.primaryThemeColor)
                     }
                 }
             }
@@ -189,6 +139,12 @@ struct SignupView: View {
 }
 
 
-#Preview {
-    SignupView()
+
+struct SignupView_Previews: PreviewProvider {
+    static var previews: some View {
+        let themeManager = ThemeManager()
+        return SignupView()
+            .environmentObject(themeManager)
+    }
 }
+

@@ -47,4 +47,30 @@ struct SecondaryCustomButton: View {
     }
 }
 
+struct SignupCustomButton: View {
+    @EnvironmentObject var themeManager: ThemeManager
+    let action: () -> Void
+    let label: String
+    let imageName: String 
 
+    var body: some View {
+        Button(action: action) {
+            HStack {
+                Image(imageName)
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 25, height: 25)
+
+                Text(label)
+                    .font(.title3)
+                    .fontWeight(.bold)
+                    .foregroundColor(themeManager.selectedTheme.bodyTextColor)
+            }
+            .frame(maxWidth: .infinity)
+            .padding()
+            .background(Color(.systemGray4))
+            .cornerRadius(15)
+        }
+        .buttonStyle(PlainButtonStyle())
+    }
+}
