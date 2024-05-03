@@ -39,6 +39,7 @@ struct MemberTabView: View {
                     Text("Support")
                 }
         }
+        .navigationBarHidden(true)
         .navigationBarBackButtonHidden(true)
         .accentColor(themeManager.selectedTheme.primaryThemeColor)
     }
