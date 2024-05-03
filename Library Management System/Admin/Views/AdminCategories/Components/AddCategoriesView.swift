@@ -8,10 +8,10 @@
 import SwiftUI
 
 struct AddCategoriesView: View {
-    @EnvironmentObject var themeManager: ThemeManager
-    @Binding var isSheetPresented: Bool
-    @ObservedObject var configViewModel: ConfigViewModel
     @State private var newCategoryName = ""
+    @EnvironmentObject var themeManager: ThemeManager
+    @StateObject var configViewModel = ConfigViewModel()
+    @Environment(\.presentationMode) var presentationMode
     
     var body: some View {
         NavigationView {
@@ -22,18 +22,15 @@ struct AddCategoriesView: View {
                         .padding()
                         .padding(.bottom,16)
                     CustomTextField(text: $newCategoryName)
-                   
                 }
+                
                 PrimaryCustomButton(action: {
                     configViewModel.addCategory(configId: "HJ9L6mDbi01TJvX3ja7Z", categories: addCategories(newCategory:newCategoryName))
-                    isSheetPresented = false
-                    
+                    presentationMode.wrappedValue.dismiss()
                 }, label: "Add Category")
                 .disabled(newCategoryName.isEmpty)
-
             }
             .padding()
-            
         }
     }
     
@@ -42,22 +39,12 @@ struct AddCategoriesView: View {
         newCategoriesList.append(newCategory)
         return newCategoriesList
     }
-    
 }
 
-struct ACPrev: View {
-    
-    @StateObject var ConfigrationViewModel = ConfigViewModel()
-    
-    var body: some View {
-        AddCategoriesView(isSheetPresented: .constant(false), configViewModel: ConfigrationViewModel)
-    }
-}
-
-struct  ACPrev_Previews: PreviewProvider {
+struct  AddCategoriesView_Previews: PreviewProvider {
     static var previews: some View {
         let themeManager = ThemeManager()
-        return  ACPrev()
+        return  AddCategoriesView()
             .environmentObject(themeManager)
     }
 }
