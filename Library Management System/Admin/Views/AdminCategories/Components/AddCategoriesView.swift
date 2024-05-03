@@ -21,7 +21,7 @@ struct AddCategoriesView: View {
                         .font(.title.bold())
                         .padding()
                         .padding(.bottom,16)
-                    CustomTextField(text: $newCategoryName)
+                    CustomTextField(text: $newCategoryName, placeholder: "Category Name")
                 }
                 
                 PrimaryCustomButton(action: {

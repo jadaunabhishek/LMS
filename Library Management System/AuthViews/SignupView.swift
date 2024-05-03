@@ -42,9 +42,9 @@ struct SignupView: View {
                     
                 }
                 
-                LoginTextField(text: $name, placeholder: "Name")
+                CustomTextField(text: $name, placeholder: "Name")
                 
-                LoginTextField(text: $email, placeholder: "E-mail Id")
+                CustomTextField(text: $email, placeholder: "E-mail Id")
                 
                 SecTextField(text: $password, placeholder: "Password")
                 
@@ -84,13 +84,10 @@ struct SignupView: View {
                                 
                                 
                                 if let userId = authResult?.user.uid {
+                                    let userSchema = UserSchema(userID: userId, name: name, email: email, mobile: "", profileImage: "", role: "user", activeFine: 0, totalFined: 0, penaltiesCount: 0, createdOn: Date.now, updateOn: Date.now, status: "registered")
+                                    
                                     let db = Firestore.firestore()
-                                    db.collection("users").document(userId).setData([
-                                        "email": email,
-                                        "role": "user",
-                                        "name": name,
-                                        "status" : "registered"
-                                    ]) { err in
+                                    db.collection("users").document(userId).setData(userSchema.getDictionaryOfUserSchema()) { err in
                                         if let err = err {
                                             print("Error setting user data: \(err.localizedDescription)")
                                         } else {
