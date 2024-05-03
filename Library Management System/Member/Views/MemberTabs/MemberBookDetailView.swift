@@ -139,6 +139,7 @@ struct MemberBookDetailView: View {
                 }
             }
         }
+        .padding(.bottom)
     }
 }
 
