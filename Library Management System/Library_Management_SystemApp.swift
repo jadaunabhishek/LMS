@@ -15,7 +15,7 @@ struct Library_Management_SystemApp: App {
     @StateObject var themeManager = ThemeManager()
     var body: some Scene {
         WindowGroup {
-            MemberTabView()
+            ContentView()
                 .environmentObject(themeManager)
                 .task {
                     do{

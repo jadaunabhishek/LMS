@@ -8,6 +8,10 @@ class AuthViewModel: ObservableObject {
     @Published var shouldNavigateToLibrarian = false
     @Published var shouldNavigateToMember = false
     @Published var shouldNavigateToGeneral = false
+    @Published var userName = ""
+    @Published var userEmail = ""
+    @Published var userID = ""
+    
     private var db = Firestore.firestore()
 
     func login(email: String, password: String) {
@@ -30,7 +34,7 @@ class AuthViewModel: ObservableObject {
     
     
 
-    private func fetchUserRole(email: String) {
+    func fetchUserRole(email: String) {
         db.collection("users").whereField("email", isEqualTo: email).getDocuments { [weak self] (querySnapshot, error) in
                     if let error = error {
                         print("Error fetching user by email: \(error.localizedDescription)")
@@ -51,6 +55,35 @@ class AuthViewModel: ObservableObject {
                     }
                 }
     }
+    
+    func fetchUserData(userID: String) {
+        db.collection("users").document(userID).getDocument { [weak self] (documentSnapshot, error) in
+            if let error = error {
+                print("Error fetching user data: \(error.localizedDescription)")
+                return
+            }
+            
+            guard let document = documentSnapshot, document.exists else {
+                print("User document not found")
+                return
+            }
+            
+            // Extract user data from the document
+            let userData = document.data()
+            self!.userEmail = userData?["email"] as? String ?? ""
+            self!.userName = userData?["name"] as? String ?? ""
+            self!.userID = userID
+            
+            // Do something with the retrieved user data
+            print("User email: \(self!.userEmail), name: \(self!.userName)")
+            
+            // Example: Update UI or perform further actions based on user data
+            DispatchQueue.main.async {
+                // Update UI or perform further actions
+            }
+        }
+    }
+
 
     private func navigateBasedOnRole(role: String){
         // Implement your role-based navigation here

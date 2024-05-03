@@ -22,7 +22,8 @@ func getUserHistory(userId: String) async throws -> [Loan] {
             loanStatus: documentData["loanStatus"] as? String ?? "",
             loanReminderStatus: documentData["loanReminderStatus"] as? String ?? "",
             createdOn: documentData["createdOn"] as? String ?? "",
-            updatedOn: documentData["updatedOn"] as? String ?? ""
+            updatedOn: documentData["updatedOn"] as? String ?? "", 
+            timeStamp: documentData["timeStamp"] as? Int ?? 0
         )
         
         if tempLoan.bookIssuedTo == userId {
@@ -59,31 +60,6 @@ func calculateLoanDuration(issuedOn: String, expectedReturn: String, dateFormatt
     }
     return Calendar.current.dateComponents([.day], from: startDate, to: endDate).day ?? 0
 }
-
-//func addSingleDayReturnReminder(for book: String, dueDate: Date, duration: Int) {
-//    let eventStore = EKEventStore()
-//    let event = EKEvent(eventStore: eventStore)
-//    event.title = "Return \(book)"
-//    event.startDate = dueDate
-//    event.endDate = dueDate.addingTimeInterval(60 * 60)
-//    event.calendar = eventStore.defaultCalendarForNewEvents
-//
-//    // Set alarms based on the loan duration
-//    event.alarms = [EKAlarm(relativeOffset: 0)]
-//    if duration > 1 {
-//        event.alarms?.append(EKAlarm(relativeOffset: -86400))
-//    }
-//    if duration > 2 {
-//        event.alarms?.append(EKAlarm(relativeOffset: -259200))
-//    }
-//
-//    do {
-//        try eventStore.save(event, span: .thisEvent)
-//        print("Event created for the book \(book) on its return date: \(dueDate)")
-//    } catch {
-//        print("Failed to save the event with error: \(error)")
-//    }
-//}
 
 
 func eventAlreadyExists(title: String, dueDate: Date, eventStore: EKEventStore) -> Bool {
@@ -130,4 +106,3 @@ func addSingleDayReturnReminder(for book: String, dueDate: Date, duration: Int) 
         print("Failed to save the event with error: \(error)")
     }
 }
-

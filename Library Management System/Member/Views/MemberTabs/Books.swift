@@ -23,7 +23,12 @@ struct Books: View {
                     VStack{
                         if(!MemViewModel.allBooks.isEmpty){
                             ForEach(MemViewModel.allBooks, id: \..id){ book in
-                                NavigationLink(destination: MemberBookDetailView(book: book)){
+                                NavigationLink(destination: MemberBookDetailView(
+                                    book: book,
+                                    userData: AuthViewModel(),
+                                    bookRequest: UserBooksModel(),
+                                    prebookRequest: UserBooksModel()
+                                )){
                                     HStack(){
                                         AsyncImage(url: URL(string: book.bookImageURL)) { image in
                                             image.resizable()
@@ -51,7 +56,6 @@ struct Books: View {
                                     .padding(10)
                                     .background(.white)
                                     .cornerRadius(8)
-                                    
                                     .foregroundColor(.black)
                                 }
                             }
