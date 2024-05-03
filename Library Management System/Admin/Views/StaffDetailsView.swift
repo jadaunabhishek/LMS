@@ -15,7 +15,7 @@ struct StaffDetailsView: View {
     var body: some View {
         NavigationView{
             List {
-                Section(header: Text("Staff Details")) {
+                Section(header: Text("Staff Details").font(.callout)) {
                     VStack(alignment: .center){
                         if let profileURL = URL(string: staffMember.profileImageURL) {
                             AsyncImage(url: profileURL) { image in
@@ -36,25 +36,47 @@ struct StaffDetailsView: View {
                             Text(staffMember.name)
                                 .font(.title)
                                 .fontWeight(.bold)
+                                .foregroundColor(themeManager.selectedTheme.secondaryThemeColor)
                         }
                     }
                     .frame(maxWidth: .infinity)
                 }
                 
-                Section(header: Text("Contact Information")) {
-                    Text(staffMember.email)
-                        .font(.subheadline)
-                    Text(staffMember.mobile)
-                        .font(.subheadline)
-                    Text(staffMember.aadhar)
-                        .font(.subheadline)
+                Section(header: Text("Contact Information").font(.callout)) {
+                    HStack{
+                        Text("Email:")
+                            .font(.callout)
+                        Text(staffMember.email)
+                            .font(.callout)
+                    }
+                    HStack{
+                        Text("Mobile:")
+                            .font(.callout)
+                        Text(staffMember.mobile)
+                            .font(.callout)
+                    }
+                    HStack{
+                        Text("Aadhar:")
+                            .font(.callout)
+                        Text(staffMember.aadhar)
+                            .font(.callout)
+                    }
                 }
                 
-                Section(header: Text("Dates")) {
-                    Text("Created On: \(staffMember.createdOn)")
-                        .font(.subheadline)
-                    Text("Updated On: \(staffMember.updatedOn)")
-                        .font(.subheadline)
+                Section(header: Text("Dates").font(.callout)) {
+                    HStack {
+                        Text("Created On:")
+                            .font(.callout)
+                        Text("\(formattedDate(from: staffMember.createdOn))")
+                            .font(.callout)
+                    }
+                    HStack{
+                        Text("Updated On:")
+                            .font(.callout)
+                        Text("\(formattedDate(from: staffMember.updatedOn))")
+                            .font(.callout)
+                    }
+                    
                 }
             }
             .listStyle(InsetGroupedListStyle())
@@ -80,12 +102,15 @@ struct StaffDetailsView: View {
                 }
             }
         )
-//        .onAppear{
-//            staffViewModel.getStaff()
-//        }
+ 
     }
 }
 
+func formattedDate(from date: Date) -> String {
+    let dateFormatter = DateFormatter()
+    dateFormatter.dateFormat = "dd-MM-yyyy HH:mm" // Customize the date format here
+    return dateFormatter.string(from: date)
+}
 struct StaffDetailsView_Previews: PreviewProvider {
     static var previews: some View {
         let themeManager = ThemeManager()
