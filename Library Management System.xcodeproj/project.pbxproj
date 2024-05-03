@@ -28,7 +28,6 @@
 		84301CB92BDA4B87004CF581 /* StaffDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84301CB82BDA4B87004CF581 /* StaffDetailsView.swift */; };
 		843CB5862BE399E5008CFAFC /* Buttons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 843CB5852BE399E5008CFAFC /* Buttons.swift */; };
 		843CB5882BE399F2008CFAFC /* Textfields.swift in Sources */ = {isa = PBXBuildFile; fileRef = 843CB5872BE399F2008CFAFC /* Textfields.swift */; };
-		8441F12E2BE3A8A800C0AB5B /* EditCategoriesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8441F12D2BE3A8A800C0AB5B /* EditCategoriesView.swift */; };
 		845F7D702BD8DFD9006831F8 /* Membership.swift in Sources */ = {isa = PBXBuildFile; fileRef = 845F7D6F2BD8DFD9006831F8 /* Membership.swift */; };
 		845F7D722BD8E0BD006831F8 /* Filter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 845F7D712BD8E0BD006831F8 /* Filter.swift */; };
 		848B46722BD78DF900143E7A /* NotificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 848B46712BD78DF900143E7A /* NotificationView.swift */; };
@@ -131,7 +130,6 @@
 		84301CB82BDA4B87004CF581 /* StaffDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaffDetailsView.swift; sourceTree = "<group>"; };
 		843CB5852BE399E5008CFAFC /* Buttons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Buttons.swift; sourceTree = "<group>"; };
 		843CB5872BE399F2008CFAFC /* Textfields.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Textfields.swift; sourceTree = "<group>"; };
-		8441F12D2BE3A8A800C0AB5B /* EditCategoriesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditCategoriesView.swift; sourceTree = "<group>"; };
 		845F7D6F2BD8DFD9006831F8 /* Membership.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Membership.swift; sourceTree = "<group>"; };
 		845F7D712BD8E0BD006831F8 /* Filter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Filter.swift; sourceTree = "<group>"; };
 		848B46712BD78DF900143E7A /* NotificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationView.swift; sourceTree = "<group>"; };
@@ -275,7 +273,6 @@
 				84E87D5A2BD7D4FB00FAD5DC /* AdminCategoriesCard.swift */,
 				84E87D5C2BD7D51400FAD5DC /* CardListView.swift */,
 				84E87D602BD7D5EA00FAD5DC /* CardListDetailView.swift */,
-				8441F12D2BE3A8A800C0AB5B /* EditCategoriesView.swift */,
 				0F85ED862BDA71F800C48C75 /* BookDetailView.swift */,
 				84080F2C2BDE01A3005293B8 /* UpdateCategoriesView.swift */,
 			);
@@ -645,7 +642,6 @@
 				DC1D402C2BD6EB4A00970C7B /* BookSchema.swift in Sources */,
 				84E87D592BD7D4E200FAD5DC /* AddCategoriesView.swift in Sources */,
 				DC79BDC42BDA23710048F1DE /* UpdateBookPage.swift in Sources */,
-				8441F12E2BE3A8A800C0AB5B /* EditCategoriesView.swift in Sources */,
 				840A18ED2BE03F2700B9ED91 /* UserProfileView.swift in Sources */,
 				845F7D702BD8DFD9006831F8 /* Membership.swift in Sources */,
 				0F85ED892BE0E32900C48C75 /* MemberBookDetailView.swift in Sources */,
