@@ -23,12 +23,7 @@ struct Books: View {
                     VStack{
                         if(!MemViewModel.allBooks.isEmpty){
                             ForEach(MemViewModel.allBooks, id: \..id){ book in
-                                NavigationLink(destination: MemberBookDetailView(
-                                    book: book,
-                                    userData: AuthViewModel(),
-                                    bookRequest: UserBooksModel(),
-                                    prebookRequest: UserBooksModel()
-                                )){
+                                NavigationLink(destination: MemberBookDetailView(themeManager: ThemeManager(), book: book)){
                                     HStack(){
                                         AsyncImage(url: URL(string: book.bookImageURL)) { image in
                                             image.resizable()
