@@ -34,7 +34,7 @@ struct SecondaryCustomButton: View {
     var body: some View {
         Button(action: action) {
             Text(label)
-                .font(.title3)
+                .font(.headline)
                 .fontWeight(.bold)
                 .foregroundColor(.white)
                 .frame(maxWidth: .infinity)

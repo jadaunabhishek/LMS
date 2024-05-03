@@ -56,16 +56,15 @@ struct EditStaffDetailsView: View {
                                     image
                                         .resizable()
                                         .aspectRatio(contentMode: .fill)
-                                        .frame(width: 120, height: 120)
+                                        .frame(width: 140, height: 140)
                                         .clipShape(Circle())
                                         .padding(.top, 20)
                                 } placeholder: {
                                     Image(systemName: "person.circle.fill")
                                         .resizable()
                                         .aspectRatio(contentMode: .fit)
-                                        .frame(width: 120, height: 120)
-                                        .clipShape(Rectangle())
-                                        .cornerRadius(10)
+                                        .frame(width: 140, height: 140)
+                                        .clipShape(Circle())
                                 }
                             }
                         }
@@ -76,34 +75,47 @@ struct EditStaffDetailsView: View {
                     }
                 }
             }
-            Form {
-                Section(header: Text("Staff Details").font(.headline).foregroundColor(themeManager.selectedTheme.bodyTextColor)) {
-                    TextField("Name", text: $name)
-                    TextField("Email", text: $email)
-                        .keyboardType(.emailAddress)
-                    TextField("Mobile", text: $mobile)
-                        .keyboardType(.phonePad)
-                    TextField("Aadhar", text: $aadhar)
-                        .keyboardType(.numberPad)
-                }
-                
-                Button(action: {
-                    showConfirmationAlert = true
-                }) {
-                    Text("Delete Staff")
-                        .foregroundColor(themeManager.selectedTheme.primaryThemeColor)
-                }
-                .alert(isPresented: $showConfirmationAlert, content: {
-                    Alert(
-                        title: Text("Confirm Deletion"),
-                        message: Text("Are you sure you want to delete this staff member?"),
-                        primaryButton: .destructive(Text("Delete"), action: {
-                            deleteStaff()
-                        }),
-                        secondaryButton: .cancel()
-                    )
-                })
+            VStack(alignment: .leading) {
+                Text("Staff Details:")
+                    .font(.title3)
+                    .foregroundColor(themeManager.selectedTheme.bodyTextColor)
+                    .padding(.bottom, 15)
+                Text("Name:")
+                    .font(.callout)
+                    .foregroundColor(themeManager.selectedTheme.bodyTextColor)
+                CustomTextField(text: $name)
+                Text("Email:")
+                    .font(.callout)
+                    .foregroundColor(themeManager.selectedTheme.bodyTextColor)
+                CustomTextField(text: $email)
+                    .keyboardType(.emailAddress)
+                Text("Mobile:")
+                    .font(.callout)
+                    .foregroundColor(themeManager.selectedTheme.bodyTextColor)
+                CustomTextField(text: $mobile)
+                    .keyboardType(.phonePad)
+                Text("Aadhar:")
+                    .font(.callout)
+                    .foregroundColor(themeManager.selectedTheme.bodyTextColor)
+                CustomTextField(text: $aadhar)
+                    .keyboardType(.numberPad)
             }
+            .padding()
+
+            SecondaryCustomButton(action: {
+                showConfirmationAlert = true
+            }, label: "Delete Staff")
+            .alert(isPresented: $showConfirmationAlert, content: {
+                Alert(
+                    title: Text("Confirm Deletion"),
+                    message: Text("Are you sure you want to delete this staff member?"),
+                    primaryButton: .destructive(Text("Delete"), action: {
+                        deleteStaff()
+                    }),
+                    secondaryButton: .cancel()
+                )
+            }).padding()
+            
             NavigationLink(
                 destination: AdminStaffView(),
                 isActive: $navigateToAdminStaffView,
