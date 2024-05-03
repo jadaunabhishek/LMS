@@ -151,4 +151,20 @@ class ConfigViewModel: ObservableObject {
         }
     }
     
+    func updateFineAndLoan(configId: String, fineDetails: [fineDetails], loanPeriod: Int, maxFine: Double, maxPenalty: Int) {
+        let fineDetailsArray = fineDetails.map { $0.getDictionary() }
+        dbInstance.collection("configuration").document(configId).updateData([
+            "fineDetails": fineDetailsArray,
+            "loanPeriod": loanPeriod,
+            "maxFine": maxFine,
+            "maxPenalties": maxPenalty
+        ]) { error in
+            if let error = error {
+                print("Error updating configuration: \(error)")
+            } else {
+                self.fetchConfig()
+                print("Configuration updated successfully")
+            }
+        }
+    }
 }
