@@ -375,6 +375,7 @@ struct UpdateBookPage: View {
                     }
                 }
             }
+            .navigationBarTitle("Book details", displayMode: .inline)
             .navigationBarItems(trailing: Button(action:{
                 canEdit.toggle()
             }){

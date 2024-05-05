@@ -15,13 +15,20 @@ struct CheckInDetailsView: View {
     var body: some View {
         List {
             Section(header: Text("Member Details")) {
-                Image(systemName: "person.circle.fill")
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .frame(width: 60, height: 60)
-                    .clipShape(Rectangle())
-                    .cornerRadius(10)
-                    .padding(.vertical, 5)
+                
+                HStack{
+                    Spacer()
+                    
+                    Image(systemName: "person.circle.fill")
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: 60, height: 60)
+                        .clipShape(Rectangle())
+                        .cornerRadius(10)
+                        .padding(.vertical, 5)
+                    
+                    Spacer()
+                }
                 
                 HStack{
                     Text("Name: ")
@@ -30,7 +37,6 @@ struct CheckInDetailsView: View {
                     Spacer()
                     
                     Text(checkInDetails.bookIssuedToName)
-                        .fontWeight(.semibold)
                 }
                 
                 
@@ -41,7 +47,6 @@ struct CheckInDetailsView: View {
                     Spacer()
                     
                     Text("Member")
-                        .fontWeight(.semibold)
                 }
                 
             }
@@ -55,7 +60,6 @@ struct CheckInDetailsView: View {
                     Spacer()
                     
                     Text(checkInDetails.bookName)
-                        .fontWeight(.semibold)
                 }
                 
                 HStack{
@@ -65,7 +69,6 @@ struct CheckInDetailsView: View {
                     Spacer()
                     
                     Text(formatDate(checkInDetails.bookIssuedOn))
-                        .font(.subheadline)
                 }
                 
                 HStack{
@@ -75,7 +78,6 @@ struct CheckInDetailsView: View {
                     Spacer()
                     
                     Text(formatDate(checkInDetails.bookExpectedReturnOn))
-                        .font(.subheadline)
                 }
                 
                 HStack{
@@ -85,11 +87,11 @@ struct CheckInDetailsView: View {
                     Spacer()
                     
                     Text(checkInDetails.loanStatus)
-                        .font(.subheadline)
                 }
             }
+            Spacer()
         }
-        .listStyle(InsetGroupedListStyle())
+        .navigationBarTitle("Checkin details", displayMode: .inline)
         .navigationBarItems(trailing: Button(action: {
             Task {
                 do {
