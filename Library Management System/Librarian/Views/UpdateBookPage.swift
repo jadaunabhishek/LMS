@@ -19,16 +19,6 @@ struct LoadingAnimation: View {
                     .controlSize(.large)
                 Text("Loading")
             }
-//            Circle()
-//                .trim(from: 0, to: 0.7)
-//                .stroke(Color("PrimaryColor"), lineWidth: 10)
-//                .frame(width: 100, height: 100)
-//                .rotationEffect(Angle(degrees: Double(degree)))
-//                .animation(Animation.linear(duration: 1).repeatForever(autoreverses: false))
-//                .onAppear{
-//                    degree = 270 + 360
-//                    spinnerLength = 0
-//                }
         }
         .ignoresSafeArea(.all)
         .frame(maxWidth: .infinity)
@@ -70,7 +60,7 @@ struct UpdateBookPage: View {
     @State var canEdit: Bool = false
     
     @State private var docState: DocState? = .setup
-        
+    
     enum DocState: Int {
         case setup = 0
         case ready = 1
@@ -100,267 +90,267 @@ struct UpdateBookPage: View {
     }
     
     var body: some View {
-        NavigationView{
-            ZStack{
-                Color("BgColor").edgesIgnoringSafeArea(.all)
-                VStack(spacing: 26){
-                    HStack{
-                        NavigationLink( destination: BooksPage(LibViewModel: LibViewModel, ConfiViewMmodel: ConfiViewModel) ){
-                            VStack(alignment: .leading){
-                                HStack{
-                                    Image(systemName: "chevron.left")
-                                        .symbolRenderingMode(.hierarchical)
-                                        .font(.system(size: 18, weight: .medium))
-                                    Spacer()
-                                }
-                            }
-                            .frame(maxWidth: .infinity)
-                        }
-                        Text("Update Book")
-                            .font(.system(size: 18, weight: .bold))
-                            .frame(maxWidth: .infinity)
-                        Button(action:{
-                            canEdit.toggle()
-                        }){
-                            if(!canEdit){
-                                VStack{
-                                    HStack{
-                                        Spacer()
-                                        Text("Edit")
-                                            .font(.system(size: 18, weight: .regular))
-                                    }
-                                }
-                                .frame(maxWidth: .infinity)
-                            }
-                            else{
-                                VStack{
-                                    HStack{
-                                        Spacer()
-                                        Text("Cancel")
-                                            .font(.system(size: 18, weight: .regular))
-                                    }
-                                }
-                                .frame(maxWidth: .infinity)
-                            }
-                        }
-                    }
-                    if(isPageLoading){
-                        LoadingAnimation()
-                    }
-                    else{
-                        ScrollView{
-                            VStack(spacing: 20){
-                                HStack{
-                                    Button(action:{
-                                        openPhotoPicker.toggle()
-                                    }){
-                                        if(!isImageSelected){
-                                            AsyncImage(url: URL(string: bookImageURL)) { image in
-                                                image.resizable()
-                                            } placeholder: {
+        ZStack{
+            Color("BgColor").edgesIgnoringSafeArea(.all)
+            VStack(spacing: 26){                    if(isPageLoading){
+                LoadingAnimation()
+            }
+                else{
+                    ScrollView{
+                        VStack(spacing: 20){
+                            HStack{
+                                Button(action:{
+                                    openPhotoPicker.toggle()
+                                }){
+                                    if(!isImageSelected){
+                                        AsyncImage(url: URL(string: bookImageURL)) { image in
+                                            image.resizable()
+                                        } placeholder: {
                                             ProgressView()
                                         }
-                                                .frame(width: 120,height: 180)
-                                                .cornerRadius(8)
-                                        }
-                                        else{
-                                            Image(uiImage: bookImage)
-                                                .resizable()
-                                                .frame(width: 120,height: 180)
-                                                .cornerRadius(8)
-                                        }
+                                        .frame(width: 120,height: 180)
+                                        .cornerRadius(8)
                                     }
-                                    .disabled(!canEdit)
-                                    VStack(spacing: 20){
-                                        HStack{
-                                            Text("ISBN")
-                                                .font(.system(size: 18, weight: .bold))
-                                            Spacer()
-                                            TextField(bookISBN,text: $bookISBN)
-                                                .font(.system(size: 18, weight: .regular))
-                                                .scaledToFit()
-                                                .disabled(!canEdit)
-                                        }
-                                        .frame(maxWidth: .infinity)
-                                        HStack{
-                                            Text("Name")
-                                                .font(.system(size: 18, weight: .bold))
-                                            Spacer()
-                                            TextField(bookName,text: $bookName)
-                                                .font(.system(size: 18, weight: .regular))
-                                                .scaledToFit()
-                                                .disabled(!canEdit)
-                                        }
-                                        .frame(maxWidth: .infinity)
-                                        HStack{
-                                            Text("Author")
-                                                .font(.system(size: 18, weight: .bold))
-                                            Spacer()
-                                            TextField(bookAuthor,text: $bookAuthor)
-                                                .font(.system(size: 18, weight: .regular))
-                                                .scaledToFit()
-                                                .disabled(!canEdit)
-                                        }
-                                        .frame(maxWidth: .infinity)
-                                        HStack{
-                                            Text("Status")
-                                                .font(.system(size: 18, weight: .bold))
-                                            Spacer()
-                                            if(canEdit){
-                                                Picker("",selection: $bookStatus){
-                                                    Text("Available").tag("Available")
-                                                    Text("PreBooked").tag("PreBooked")
-                                                    Text("Taken").tag("Taken")
-                                                }
-                                                .padding(0)
-                                                .accentColor(.black)
-                                                .labelsHidden()
-                                                .disabled(!canEdit)
-                                            }
-                                            else{
-                                                Text("\(bookStatus)")
-                                                    .font(.system(size: 18, weight: .regular))
-                                            }
-                                        }
-                                        .frame(maxWidth: .infinity)
+                                    else{
+                                        Image(uiImage: bookImage)
+                                            .resizable()
+                                            .frame(width: 120,height: 180)
+                                            .cornerRadius(8)
                                     }
-                                    .padding(10)
-                                    .background(.white)
-                                    .cornerRadius(8)
                                 }
+                                .disabled(!canEdit)
                                 VStack(spacing: 20){
                                     HStack{
-                                        Text("Publishing Date")
+                                        Text("ISBN")
                                             .font(.system(size: 18, weight: .bold))
                                         Spacer()
-                                        if(canEdit){
-                                            DatePicker("", selection: $bookPublishingDate, displayedComponents: .date)
-                                                .disabled(!canEdit)
-                                        }
-                                        else{
-                                            Text("\(bookPublishingDate.formatted(date: .abbreviated,time: .omitted))")
-                                                .font(.system(size: 18, weight: .regular))
-                                        }
-                                    }
-                                    .frame(maxWidth: .infinity)
-                                    HStack{
-                                        Text("Coppies")
-                                            .font(.system(size: 18, weight: .bold))
-                                        Spacer()
-                                        TextField(bookCount,text: $bookCount)
+                                        TextField(bookISBN,text: $bookISBN)
                                             .font(.system(size: 18, weight: .regular))
                                             .scaledToFit()
-                                            .keyboardType(.numberPad)
                                             .disabled(!canEdit)
                                     }
                                     .frame(maxWidth: .infinity)
-                                }
-                                .padding(10)
-                                .background(.white)
-                                .cornerRadius(8)
-                                VStack(spacing: 20){
                                     HStack{
-                                        Text("Category")
+                                        Text("Name")
+                                            .font(.system(size: 18, weight: .bold))
+                                        Spacer()
+                                        TextField(bookName,text: $bookName)
+                                            .font(.system(size: 18, weight: .regular))
+                                            .scaledToFit()
+                                            .disabled(!canEdit)
+                                    }
+                                    .frame(maxWidth: .infinity)
+                                    HStack{
+                                        Text("Author")
+                                            .font(.system(size: 18, weight: .bold))
+                                        Spacer()
+                                        TextField(bookAuthor,text: $bookAuthor)
+                                            .font(.system(size: 18, weight: .regular))
+                                            .scaledToFit()
+                                            .disabled(!canEdit)
+                                    }
+                                    .frame(maxWidth: .infinity)
+                                    HStack{
+                                        Text("Status")
                                             .font(.system(size: 18, weight: .bold))
                                         Spacer()
                                         if(canEdit){
-                                            Picker("", selection: $bookCategory){
-                                                Text("Choose").tag("Choose")
-                                                if(!ConfiViewModel.currentConfig.isEmpty){
-                                                    ForEach(ConfiViewModel.currentConfig[0].categories, id: \.self){ category in
-                                                        Text(category).tag(category)
-                                                    }
-                                                }
+                                            Picker("",selection: $bookStatus){
+                                                Text("Available").tag("Available")
+                                                Text("PreBooked").tag("PreBooked")
+                                                Text("Taken").tag("Taken")
                                             }
+                                            .padding(0)
                                             .accentColor(.black)
                                             .labelsHidden()
                                             .disabled(!canEdit)
                                         }
                                         else{
-                                            Text("\(bookCategory)")
+                                            Text("\(bookStatus)")
                                                 .font(.system(size: 18, weight: .regular))
                                         }
                                     }
                                     .frame(maxWidth: .infinity)
-                                    HStack{
-                                        Text("Sub Category")
-                                            .font(.system(size: 18, weight: .bold))
-                                        Spacer()
-                                        if(canEdit){
-                                            Picker("", selection: $bookSubCategory){
-                                                Text("Choose").tag("Choose")
-                                                if(!ConfiViewModel.currentConfig.isEmpty){
-                                                    ForEach(ConfiViewModel.currentConfig[0].categories, id: \.self){ category in
-                                                        Text(category).tag(category)
-                                                    }
-                                                }
-                                            }
-                                            .accentColor(.black)
-                                            .labelsHidden()
+                                }
+                                .padding(10)
+                                .background(.white)
+                                .cornerRadius(8)
+                            }
+                            VStack(spacing: 20){
+                                HStack{
+                                    Text("Publishing Date")
+                                        .font(.system(size: 18, weight: .bold))
+                                    Spacer()
+                                    if(canEdit){
+                                        DatePicker("", selection: $bookPublishingDate, displayedComponents: .date)
                                             .disabled(!canEdit)
-                                            .onChange(of: bookSubCategory, initial: true){ (oldValue,newValue)  in
-                                                if(newValue != oldValue && newValue != "Choose" && !bookSubCategories.contains(newValue)){
-                                                    bookSubCategories.append(bookSubCategory)
+                                    }
+                                    else{
+                                        Text("\(bookPublishingDate.formatted(date: .abbreviated,time: .omitted))")
+                                            .font(.system(size: 18, weight: .regular))
+                                    }
+                                }
+                                .frame(maxWidth: .infinity)
+                                HStack{
+                                    Text("Coppies")
+                                        .font(.system(size: 18, weight: .bold))
+                                    Spacer()
+                                    TextField(bookCount,text: $bookCount)
+                                        .font(.system(size: 18, weight: .regular))
+                                        .scaledToFit()
+                                        .keyboardType(.numberPad)
+                                        .disabled(!canEdit)
+                                }
+                                .frame(maxWidth: .infinity)
+                            }
+                            .padding(10)
+                            .background(.white)
+                            .cornerRadius(8)
+                            VStack(spacing: 20){
+                                HStack{
+                                    Text("Category")
+                                        .font(.system(size: 18, weight: .bold))
+                                    Spacer()
+                                    if(canEdit){
+                                        Picker("", selection: $bookCategory){
+                                            Text("Choose").tag("Choose")
+                                            if(!ConfiViewModel.currentConfig.isEmpty){
+                                                ForEach(ConfiViewModel.currentConfig[0].categories, id: \.self){ category in
+                                                    Text(category).tag(category)
                                                 }
                                             }
                                         }
-                                    }
-                                    .frame(maxWidth: .infinity)
-                                    if(!bookSubCategories.isEmpty){
-                                        LazyVGrid(columns: [GridItem(.adaptive(minimum: 120))], content: {
-                                            ForEach(0..<bookSubCategories.count, id: \.self){ index in
-                                                HStack{
-                                                    Text(bookSubCategories[index])
-                                                    Spacer()
-                                                    Button(action:{
-                                                        bookSubCategories.remove(at: bookSubCategories.firstIndex(of: bookSubCategories[index])!)
-                                                    }){
-                                                        Image(systemName: "xmark")
-                                                    }
-                                                    .disabled(!canEdit)
-                                                }
-                                                .padding(10)
-                                                .foregroundColor(.black)
-                                                .background(Color("PrimaryColor").opacity(0.25))
-                                                .cornerRadius(8)
-                                            }
-                                        })
-                                    }
-                                }
-                                .padding(10)
-                                .background(.white)
-                                .cornerRadius(8)
-                                VStack(alignment: .leading,spacing: 20){
-                                    Text("Description")
-                                        .font(.system(size: 18, weight: .bold))
-                                    TextField(bookDescription, text: $bookDescription, axis: .vertical)
-                                        .lineLimit(5...5)
+                                        .accentColor(.black)
+                                        .labelsHidden()
                                         .disabled(!canEdit)
+                                    }
+                                    else{
+                                        Text("\(bookCategory)")
+                                            .font(.system(size: 18, weight: .regular))
+                                    }
                                 }
-                                .padding(10)
-                                .background(.white)
-                                .cornerRadius(8)
-                                if(canEdit){
+                                .frame(maxWidth: .infinity)
+                                HStack{
+                                    Text("Sub Category")
+                                        .font(.system(size: 18, weight: .bold))
+                                    Spacer()
+                                    if(canEdit){
+                                        Picker("", selection: $bookSubCategory){
+                                            Text("Choose").tag("Choose")
+                                            if(!ConfiViewModel.currentConfig.isEmpty){
+                                                ForEach(ConfiViewModel.currentConfig[0].categories, id: \.self){ category in
+                                                    Text(category).tag(category)
+                                                }
+                                            }
+                                        }
+                                        .accentColor(.black)
+                                        .labelsHidden()
+                                        .disabled(!canEdit)
+                                        .onChange(of: bookSubCategory, initial: true){ (oldValue,newValue)  in
+                                            if(newValue != oldValue && newValue != "Choose" && !bookSubCategories.contains(newValue)){
+                                                bookSubCategories.append(bookSubCategory)
+                                            }
+                                        }
+                                    }
+                                }
+                                .frame(maxWidth: .infinity)
+                                if(!bookSubCategories.isEmpty){
+                                    LazyVGrid(columns: [GridItem(.adaptive(minimum: 120))], content: {
+                                        ForEach(0..<bookSubCategories.count, id: \.self){ index in
+                                            HStack{
+                                                Text(bookSubCategories[index])
+                                                Spacer()
+                                                Button(action:{
+                                                    bookSubCategories.remove(at: bookSubCategories.firstIndex(of: bookSubCategories[index])!)
+                                                }){
+                                                    Image(systemName: "xmark")
+                                                }
+                                                .disabled(!canEdit)
+                                            }
+                                            .padding(10)
+                                            .foregroundColor(.black)
+                                            .background(Color("PrimaryColor").opacity(0.25))
+                                            .cornerRadius(8)
+                                        }
+                                    })
+                                }
+                            }
+                            .padding(10)
+                            .background(.white)
+                            .cornerRadius(8)
+                            VStack(alignment: .leading,spacing: 20){
+                                Text("Description")
+                                    .font(.system(size: 18, weight: .bold))
+                                TextField(bookDescription, text: $bookDescription, axis: .vertical)
+                                    .lineLimit(5...5)
+                                    .disabled(!canEdit)
+                            }
+                            .padding(10)
+                            .background(.white)
+                            .cornerRadius(8)
+                            if(canEdit){
+                                Button(action:{
+                                    Task{
+                                        isButtonLoading.toggle()
+                                        LibViewModel.updateBook(bookId: currentBookId, bookISBN: bookISBN, bookImageURL: bookImageURL, bookName: bookName, bookAuthor: bookAuthor, bookDescription: bookDescription, bookCategory: bookCategory, bookSubCategories: bookSubCategories, bookPublishingDate: bookPublishingDate.formatted(), bookStatus: bookStatus, bookImage: bookImage, isImageUpdated: isImageSelected, oldCount: oldCount, bookCount: Int(bookCount)!, bookAvailableCount: bookAvailableCount)
+                                        if(isImageSelected){
+                                            try? await Task.sleep(nanoseconds: 5_000_000_000)
+                                            isButtonLoading.toggle()
+                                            isPageLoading.toggle()
+                                            await dataLoader()
+                                        }
+                                        else{
+                                            try? await Task.sleep(nanoseconds: 2_000_000_000)
+                                            isButtonLoading.toggle()
+                                            isPageLoading.toggle()
+                                            await dataLoader()
+                                        }
+                                    }
+                                }){
+                                    if(isButtonLoading){
+                                        Text("Updating....")
+                                            .font(.system(size: 18, weight: .medium))
+                                            .foregroundColor(.white)
+                                            .padding(10)
+                                            .frame(maxWidth: .infinity)
+                                            .background(Color("PrimaryColor").opacity(0.5))
+                                            .cornerRadius(8)
+                                            .disabled(isButtonLoading)
+                                    }
+                                    else{
+                                        Text("Update Book")
+                                            .font(.system(size: 18, weight: .medium))
+                                            .foregroundColor(.white)
+                                            .padding(10)
+                                            .frame(maxWidth: .infinity)
+                                            .background(Color("PrimaryColor"))
+                                            .cornerRadius(8)
+                                    }
+                                }
+                            }
+                            else{
+                                NavigationLink(destination: BooksPage(LibViewModel: LibViewModel, ConfiViewMmodel: ConfiViewModel), tag: .ready, selection: $docState){
                                     Button(action:{
                                         Task{
                                             isButtonLoading.toggle()
-                                            LibViewModel.updateBook(bookId: currentBookId, bookISBN: bookISBN, bookImageURL: bookImageURL, bookName: bookName, bookAuthor: bookAuthor, bookDescription: bookDescription, bookCategory: bookCategory, bookSubCategories: bookSubCategories, bookPublishingDate: bookPublishingDate.formatted(), bookStatus: bookStatus, bookImage: bookImage, isImageUpdated: isImageSelected, oldCount: oldCount, bookCount: Int(bookCount)!, bookAvailableCount: bookAvailableCount)
-                                            if(isImageSelected){
-                                                try? await Task.sleep(nanoseconds: 5_000_000_000)
-                                                isButtonLoading.toggle()
-                                                isPageLoading.toggle()
-                                                await dataLoader()
+                                            LibViewModel.deleteBook(bookId: currentBookId)
+                                            try? await Task.sleep(nanoseconds: 3_000_000_000)
+                                            if(LibViewModel.responseStatus == 200){
+                                                docState = .ready
                                             }
                                             else{
+                                                isButtonLoading = false
+                                                popupMessage = LibViewModel.responseMessage
+                                                isPopupShown.toggle()
                                                 try? await Task.sleep(nanoseconds: 2_000_000_000)
-                                                isButtonLoading.toggle()
-                                                isPageLoading.toggle()
-                                                await dataLoader()
+                                                withAnimation{
+                                                    isPopupShown.toggle()
+                                                }
                                             }
                                         }
                                     }){
                                         if(isButtonLoading){
-                                            Text("Updating....")
+                                            Text("Deleting....")
                                                 .font(.system(size: 18, weight: .medium))
                                                 .foregroundColor(.white)
                                                 .padding(10)
@@ -370,7 +360,7 @@ struct UpdateBookPage: View {
                                                 .disabled(isButtonLoading)
                                         }
                                         else{
-                                            Text("Update Book")
+                                            Text("Delete Book")
                                                 .font(.system(size: 18, weight: .medium))
                                                 .foregroundColor(.white)
                                                 .padding(10)
@@ -380,79 +370,59 @@ struct UpdateBookPage: View {
                                         }
                                     }
                                 }
-                                else{
-                                    NavigationLink(destination: BooksPage(LibViewModel: LibViewModel, ConfiViewMmodel: ConfiViewModel), tag: .ready, selection: $docState){
-                                        Button(action:{
-                                            Task{
-                                                isButtonLoading.toggle()
-                                                LibViewModel.deleteBook(bookId: currentBookId)
-                                                try? await Task.sleep(nanoseconds: 3_000_000_000)
-                                                if(LibViewModel.responseStatus == 200){
-                                                    docState = .ready
-                                                }
-                                                else{
-                                                    isButtonLoading = false
-                                                    popupMessage = LibViewModel.responseMessage
-                                                    isPopupShown.toggle()
-                                                    try? await Task.sleep(nanoseconds: 2_000_000_000)
-                                                        withAnimation{
-                                                            isPopupShown.toggle()
-                                                        }
-                                                }
-                                            }
-                                        }){
-                                            if(isButtonLoading){
-                                                Text("Deleting....")
-                                                    .font(.system(size: 18, weight: .medium))
-                                                    .foregroundColor(.white)
-                                                    .padding(10)
-                                                    .frame(maxWidth: .infinity)
-                                                    .background(Color("PrimaryColor").opacity(0.5))
-                                                    .cornerRadius(8)
-                                                    .disabled(isButtonLoading)
-                                            }
-                                            else{
-                                                Text("Delete Book")
-                                                    .font(.system(size: 18, weight: .medium))
-                                                    .foregroundColor(.white)
-                                                    .padding(10)
-                                                    .frame(maxWidth: .infinity)
-                                                    .background(Color("PrimaryColor"))
-                                                    .cornerRadius(8)
-                                            }
-                                        }
-                                    }
-                                }
                             }
                         }
                     }
                 }
-                .padding(.horizontal,10)
-                .fullScreenCover(isPresented: $openPhotoPicker) {
-                    ImagePicker(selectedImage: $bookImage, isImageSelected: $isImageSelected, sourceType: .photoLibrary).frame(maxHeight: .infinity).ignoresSafeArea(.all)
-                }
-                if(isPopupShown){
-                    VStack{
-                        Text("\(popupMessage)")
-                            .font(.system(size: 18, weight: .light))
-                            .foregroundColor(.white)
-                            .padding(10)
-                            .background(Color("PrimaryColor").opacity(0.75))
-                            .cornerRadius(100)
-                    }
-                    .offset(y:-320)
-                }
             }
-            .background(.black.opacity(0.05))
-            .task {
-                do{
-                    isPageLoading.toggle()
-                    await dataLoader()
-                    
+            .navigationBarItems(trailing: Button(action:{
+                canEdit.toggle()
+            }){
+                if(!canEdit){
+                    VStack{
+                        HStack{
+                            Spacer()
+                            Text("Edit")
+                                .font(.system(size: 18, weight: .regular))
+                        }
+                    }
+                    .frame(maxWidth: .infinity)
                 }
+                else{
+                    VStack{
+                        HStack{
+                            Spacer()
+                            Text("Cancel")
+                                .font(.system(size: 18, weight: .regular))
+                        }
+                    }
+                    .frame(maxWidth: .infinity)
+                }
+            })
+            .padding(.horizontal,10)
+            .fullScreenCover(isPresented: $openPhotoPicker) {
+                ImagePicker(selectedImage: $bookImage, isImageSelected: $isImageSelected, sourceType: .photoLibrary).frame(maxHeight: .infinity).ignoresSafeArea(.all)
+            }
+            if(isPopupShown){
+                VStack{
+                    Text("\(popupMessage)")
+                        .font(.system(size: 18, weight: .light))
+                        .foregroundColor(.white)
+                        .padding(10)
+                        .background(Color("PrimaryColor").opacity(0.75))
+                        .cornerRadius(100)
+                }
+                .offset(y:-320)
             }
         }
-        .navigationBarBackButtonHidden(true)
+        .background(.black.opacity(0.05))
+        .task {
+            do{
+                isPageLoading.toggle()
+                await dataLoader()
+                
+            }
+        }
     }
 }
 

@@ -12,6 +12,7 @@ struct Books: View {
     
     @ObservedObject var MemViewModel = UserBooksModel()
     @ObservedObject var ConfiViewMmodel = ConfigViewModel()
+    @State private var searchText = ""
     
     @State var isPageLoading: Bool = true
     
@@ -67,6 +68,7 @@ struct Books: View {
                 }
                 .padding(10)
             }
+            .searchable(text: $searchText)
             .navigationTitle("Books")
             .background(.black.opacity(0.05))
             .task {

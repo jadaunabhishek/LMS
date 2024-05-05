@@ -7,34 +7,33 @@ struct LibrarianFirstScreenView: View {
     @ObservedObject var ConfiViewModel: ConfigViewModel
 
     var body: some View {
-        TabView {
-            AdminHomeView()
-                .tabItem {
-                    Image(systemName: "house")
-                    Text("Home")
-                }
-            
-            NotificationsView(LibViewModel: LibModelView)
-                .tabItem {
-                    Image(systemName: "person.bust.fill")
-                    Text("Actions")
-                }
-            
-            BooksPage(LibViewModel: LibModelView, ConfiViewMmodel: ConfiViewModel)
-                .tabItem {
-                    Image(systemName: "book.closed")
-                    Text("Books")
-                }
-            
-            MembersView()
-                .tabItem {
-                    Image(systemName: "person.3.fill")
-                    Text("Member")
-                }
-        }
-        .accentColor(themeManager.selectedTheme.primaryThemeColor)
-        .navigationBarHidden(true)
-        .navigationBarBackButtonHidden(true)
+            TabView {
+                LibrarianHomeView()
+                    .tabItem {
+                        Image(systemName: "house")
+                        Text("Home")
+                    }
+                
+                NotificationsView(LibViewModel: LibModelView)
+                    .tabItem {
+                        Image(systemName: "person.bust.fill")
+                        Text("Actions")
+                    }
+                
+                BooksPage(LibViewModel: LibModelView, ConfiViewMmodel: ConfiViewModel)
+                    .tabItem {
+                        Image(systemName: "book.closed")
+                        Text("Books")
+                    }
+                
+                MembersView()
+                    .tabItem {
+                        Image(systemName: "person.3.fill")
+                        Text("Member")
+                    }
+            }
+            .accentColor(themeManager.selectedTheme.primaryThemeColor)
+            .navigationBarHidden(true)
     }
 }
 

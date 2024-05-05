@@ -24,7 +24,7 @@ struct NotificationsView: View {
     }
     
     var body: some View {
-        NavigationStack{
+        NavigationView{
             VStack(){
                 HStack() {
                     
@@ -41,7 +41,6 @@ struct NotificationsView: View {
                     }
                 }
                 .padding([.bottom, .leading, .trailing])
-//                SearchBar(text: $searchText, isFilterButtonTapped: $Bol, showFilterOptions: $Bol)
                 
                 if (selectedOption == .CheckOut){
                     if (requestedLoans.isEmpty){
@@ -65,6 +64,8 @@ struct NotificationsView: View {
                     }
                 }
             }
+            .navigationTitle("Actions")
+            .navigationBarBackButtonHidden(true)
             .onAppear(perform: {
                 Timer.scheduledTimer(withTimeInterval: 3, repeats: true) { time in
                     Task{
@@ -89,8 +90,8 @@ struct NotificationsView: View {
                     notifications = viewModel.notifications
                 }
             }
+            .searchable(text: $searchText)
         }
-        .searchable(text: $searchText)
     }
 }
 
@@ -157,29 +158,17 @@ struct MembershipSections: View {
     }
 }
 
+
+
 struct checkInSections: View {
     @ObservedObject var LibViewModel: LibrarianViewModel
     
     var body: some View {
         List {
-            ForEach(0..<LibViewModel.issuedLoans.count, id: \.self) { key in
-                    BookRequestCustomBox(bookRequestData: LibViewModel.issuedLoans[key])
-//                    .swipeActions(edge: .trailing){
-//                        Button {
-//                        } label: {
-//                            Label("Accept", systemImage: "checkmark")
-//                        }
-//                        .tint(.green)
-//                        
-//                    }
-//                    .swipeActions(edge: .leading){
-//                        
-//                        Button {
-//                        } label: {
-//                            Label("Reject", systemImage: "xmark")
-//                        }
-//                        .tint(.red)
-//                    }
+            ForEach(0..<LibViewModel.issuedLoans.count, id: \.self) { userDetail in
+                NavigationLink(destination: CheckInDetailsView(checkInDetails: LibViewModel.issuedLoans[userDetail], LibViewModel: LibViewModel)){
+                    BookRequestCustomBox(bookRequestData: LibViewModel.issuedLoans[userDetail])
+                }
             }
         }
         .listStyle(.inset)

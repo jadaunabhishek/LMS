@@ -33,7 +33,7 @@ struct MemberBookDetailView: View {
                                         bookRequest.requestBook(bookId: book.id, bookName: book.bookName, userId: userData.userID, userName: userData.userName, bookAvailableCount: book.bookAvailableCount, bookTakenCount: book.bookTakenCount, loanPeriod: 1)
                                         try? await Task.sleep(nanoseconds: 2_000_000_000)
                                         if(bookRequest.responseStatus == 200){
-                                            navigateToHome = true
+                                            navigateToHome = false
                                         }
                                     }
                                     
@@ -49,7 +49,7 @@ struct MemberBookDetailView: View {
                                         prebookRequest.preBook(bookId: book.id, bookName: book.bookName, userId: userData.userID, userName: userData.userName, bookPreBookedCount: book.bookPreBookedCount, loanPeriod: 1)
                                         try? await Task.sleep(nanoseconds: 2_000_000_000)
                                         if(prebookRequest.responseStatus == 200){
-                                            navigateToHome = true
+                                            navigateToHome = false
                                         }
                                     }
                                     
@@ -60,8 +60,11 @@ struct MemberBookDetailView: View {
                             }
                         }())
                     
-                    NavigationLink(destination: MemberTabView(), isActive: $navigateToHome) { EmptyView() }
-                    
+                    NavigationLink(
+                        destination: MemberTabView(),
+                        isActive: $navigateToHome,
+                        label: { EmptyView() }
+                    )
                     
                 }
                 VStack{
