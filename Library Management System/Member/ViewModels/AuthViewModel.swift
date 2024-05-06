@@ -12,6 +12,10 @@ class AuthViewModel: ObservableObject {
     @Published var userEmail = ""
     @Published var userID = ""
     
+    @Published var allUsers: [UserSchema] = []
+    @Published var totalIncome: Int = 0
+    @Published var finesPending: Int = 0
+    
     private var db = Firestore.firestore()
 
     func login(email: String, password: String) {
@@ -32,8 +36,51 @@ class AuthViewModel: ObservableObject {
         }
     }
     
+    func fetchAllUsers(){
+        var tempAllUsers: [UserSchema] = []
+        var temtTotalFines: Int = 0
+        var totalFinesPending: Int = 0
+        
+        self.db.collection("users").whereField("role", isEqualTo: "member").getDocuments{ (snapshot, error) in
+            
+            if(error == nil && snapshot != nil){
+                for document in snapshot!.documents{
+                    let documentData = document.data()
+                    
+                    let tempUser = UserSchema(userID: documentData["userID"] as! String as Any as! String, name: documentData["name"] as! String as Any as! String, email: documentData["email"] as! String as Any as! String, mobile: documentData["mobile"] as! String as Any as! String, profileImage: documentData["profileImage"] as! String as Any as! String, role: documentData["role"] as! String as Any as! String, activeFine: documentData["activeFine"] as! Int as Any as! Int, totalFined: documentData["totalFined"] as! Int as Any as! Int, penaltiesCount: documentData["penaltiesCount"] as! Int as Any as! Int, createdOn: Date.now, updateOn: Date.now, status: documentData["status"] as! String as Any as! String)
+                    
+                    totalFinesPending += tempUser.activeFine
+                    temtTotalFines += tempUser.totalFined
+                    
+                    tempAllUsers.append(tempUser)
+                }
+                
+                self.totalIncome = temtTotalFines
+                self.finesPending = totalFinesPending
+                self.allUsers = tempAllUsers
+                print(tempAllUsers)
+            }
+        }
+    }
     
-
+//    func fetchData() {
+//        let db = Firestore.firestore()
+//        db.collection("users").whereField("role", isEqualTo: "member")
+//          .addSnapshotListener { querySnapshot, error in
+//            guard let documents = querySnapshot?.documents else {
+//                print("Error fetching documents: \(error?.localizedDescription ?? "Unknown error")")
+//                return
+//            }
+//
+//            self.members = documents.map { doc -> Member in
+//                let data = doc.data()
+//                let email = data["email"] as? String ?? ""
+//                let name = data["name"] as? String ?? ""
+//                let status = data["status"] as? String ?? ""
+//                return Member(id: doc.documentID, name: name, email: email, status: status, isToggled: status == "approved")
+//            }
+//        }
+//    }
     func fetchUserRole(email: String) {
         db.collection("users").whereField("email", isEqualTo: email).getDocuments { [weak self] (querySnapshot, error) in
                     if let error = error {
