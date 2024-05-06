@@ -88,7 +88,6 @@ class AuthViewModel: ObservableObject {
     private func navigateBasedOnRole(role: String){
         // Implement your role-based navigation here
         // For example:
-        print(role)
         DispatchQueue.main.async {
                 switch role {
                 case "admin":

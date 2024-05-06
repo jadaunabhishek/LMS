@@ -40,7 +40,13 @@
 		84E87D5D2BD7D51400FAD5DC /* CardListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84E87D5C2BD7D51400FAD5DC /* CardListView.swift */; };
 		84E87D612BD7D5EA00FAD5DC /* CardListDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84E87D602BD7D5EA00FAD5DC /* CardListDetailView.swift */; };
 		84E96EE02BDA2A2700A572BC /* MemberViewList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84E96EDF2BDA2A2700A572BC /* MemberViewList.swift */; };
+		D50A72292BE7DC9300C9BE05 /* CheckInDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D50A72282BE7DC9300C9BE05 /* CheckInDetailsView.swift */; };
+		D50A722B2BE7F8E700C9BE05 /* LibrarianHomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D50A722A2BE7F8E700C9BE05 /* LibrarianHomeView.swift */; };
 		D50EA9C72BE38DEA0079C1AB /* UserSchema.swift in Sources */ = {isa = PBXBuildFile; fileRef = D50EA9C62BE38DEA0079C1AB /* UserSchema.swift */; };
+		D50EA9CB2BE4B87E0079C1AB /* MemberRequestCustomBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = D50EA9CA2BE4B87E0079C1AB /* MemberRequestCustomBox.swift */; };
+		D50EA9CD2BE4B9910079C1AB /* BookRequestCustomBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = D50EA9CC2BE4B9910079C1AB /* BookRequestCustomBox.swift */; };
+		D50EA9CF2BE4BA7B0079C1AB /* MemReqViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D50EA9CE2BE4BA7B0079C1AB /* MemReqViewModel.swift */; };
+		D50EA9D32BE4D0870079C1AB /* Picker.swift in Sources */ = {isa = PBXBuildFile; fileRef = D50EA9D22BE4D0870079C1AB /* Picker.swift */; };
 		D55820C72BD61AB0005A00F9 /* Library_Management_SystemApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D55820C62BD61AB0005A00F9 /* Library_Management_SystemApp.swift */; };
 		D55820C92BD61AB0005A00F9 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D55820C82BD61AB0005A00F9 /* ContentView.swift */; };
 		D55820CB2BD61AB2005A00F9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D55820CA2BD61AB2005A00F9 /* Assets.xcassets */; };
@@ -144,7 +150,13 @@
 		84E87D5C2BD7D51400FAD5DC /* CardListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardListView.swift; sourceTree = "<group>"; };
 		84E87D602BD7D5EA00FAD5DC /* CardListDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardListDetailView.swift; sourceTree = "<group>"; };
 		84E96EDF2BDA2A2700A572BC /* MemberViewList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemberViewList.swift; sourceTree = "<group>"; };
+		D50A72282BE7DC9300C9BE05 /* CheckInDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckInDetailsView.swift; sourceTree = "<group>"; };
+		D50A722A2BE7F8E700C9BE05 /* LibrarianHomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibrarianHomeView.swift; sourceTree = "<group>"; };
 		D50EA9C62BE38DEA0079C1AB /* UserSchema.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSchema.swift; sourceTree = "<group>"; };
+		D50EA9CA2BE4B87E0079C1AB /* MemberRequestCustomBox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemberRequestCustomBox.swift; sourceTree = "<group>"; };
+		D50EA9CC2BE4B9910079C1AB /* BookRequestCustomBox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookRequestCustomBox.swift; sourceTree = "<group>"; };
+		D50EA9CE2BE4BA7B0079C1AB /* MemReqViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemReqViewModel.swift; sourceTree = "<group>"; };
+		D50EA9D22BE4D0870079C1AB /* Picker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Picker.swift; sourceTree = "<group>"; };
 		D55820C32BD61AB0005A00F9 /* Library Management System.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Library Management System.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D55820C62BD61AB0005A00F9 /* Library_Management_SystemApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Library_Management_SystemApp.swift; sourceTree = "<group>"; };
 		D55820C82BD61AB0005A00F9 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -256,6 +268,7 @@
 			children = (
 				843CB5852BE399E5008CFAFC /* Buttons.swift */,
 				843CB5872BE399F2008CFAFC /* Textfields.swift */,
+				D50EA9D22BE4D0870079C1AB /* Picker.swift */,
 			);
 			path = Elements;
 			sourceTree = "<group>";
@@ -428,6 +441,10 @@
 				DC79BDC52BDA23780048F1DE /* BooksPage.swift */,
 				848B46712BD78DF900143E7A /* NotificationView.swift */,
 				84E96EDF2BDA2A2700A572BC /* MemberViewList.swift */,
+				D50EA9CA2BE4B87E0079C1AB /* MemberRequestCustomBox.swift */,
+				D50EA9CC2BE4B9910079C1AB /* BookRequestCustomBox.swift */,
+				D50A72282BE7DC9300C9BE05 /* CheckInDetailsView.swift */,
+				D50A722A2BE7F8E700C9BE05 /* LibrarianHomeView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -478,6 +495,7 @@
 			isa = PBXGroup;
 			children = (
 				DC48E7212BD6E78000794A7C /* LibrarianViewModel.swift */,
+				D50EA9CE2BE4BA7B0079C1AB /* MemReqViewModel.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -648,10 +666,12 @@
 			files = (
 				D55820F42BD61AF2005A00F9 /* SignupView.swift in Sources */,
 				84E87D512BD7D40C00FAD5DC /* AdminCategoriesView.swift in Sources */,
+				D50EA9CD2BE4B9910079C1AB /* BookRequestCustomBox.swift in Sources */,
 				1F7C0E542BD7B62A007D5221 /* ImagePicker.swift in Sources */,
 				1F7C0E502BD7B142007D5221 /* StaffViewModel.swift in Sources */,
 				84080F3C2BE49E1B005293B8 /* AdminFineView.swift in Sources */,
 				0F85ED872BDA71F800C48C75 /* BookDetailView.swift in Sources */,
+				D50EA9D32BE4D0870079C1AB /* Picker.swift in Sources */,
 				841045A92BD8D7D400E801D0 /* AuthViewModel.swift in Sources */,
 				84E87D5B2BD7D4FB00FAD5DC /* AdminCategoriesCard.swift in Sources */,
 				DC1D402C2BD6EB4A00970C7B /* BookSchema.swift in Sources */,
@@ -663,6 +683,7 @@
 				1F7C0E522BD7B3B2007D5221 /* AddStaffView.swift in Sources */,
 				84301CB52BDA126F004CF581 /* MemberHome.swift in Sources */,
 				D55820F22BD61ADE005A00F9 /* LoginView.swift in Sources */,
+				D50EA9CB2BE4B87E0079C1AB /* MemberRequestCustomBox.swift in Sources */,
 				DC48E7222BD6E78000794A7C /* LibrarianViewModel.swift in Sources */,
 				840A18F12BE0E84D00B9ED91 /* MemberBookReminder.swift in Sources */,
 				DC1D402E2BD76BF000970C7B /* AddBookPage.swift in Sources */,
@@ -670,17 +691,19 @@
 				84080F2D2BDE01A3005293B8 /* UpdateCategoriesView.swift in Sources */,
 				84E87D552BD7D44800FAD5DC /* AdminSubCategoriesView.swift in Sources */,
 				D57BFDAF2BDD233E0094A0B5 /* Books.swift in Sources */,
+				D50A722B2BE7F8E700C9BE05 /* LibrarianHomeView.swift in Sources */,
+				D50A72292BE7DC9300C9BE05 /* CheckInDetailsView.swift in Sources */,
 				0F85ED832BD902B400C48C75 /* ConfigVIewModel.swift in Sources */,
 				DC1D40342BD77E9600970C7B /* AdminTabView.swift in Sources */,
 				843CB5862BE399E5008CFAFC /* Buttons.swift in Sources */,
 				843CB5882BE399F2008CFAFC /* Textfields.swift in Sources */,
-				84080F2F2BDE01B6005293B8 /* UpdateCategoriesButton.swift in Sources */,
 				D50EA9C72BE38DEA0079C1AB /* UserSchema.swift in Sources */,
 				1F84616D2BD6563E008B7B3E /* ThemeProtocol.swift in Sources */,
 				0F85ED812BD902A900C48C75 /* ConfigSchema.swift in Sources */,
 				DC1D40302BD77E4B00970C7B /* AdminHomeView.swift in Sources */,
 				D55820C92BD61AB0005A00F9 /* ContentView.swift in Sources */,
 				1F7C0E4D2BD7A920007D5221 /* StaffSchema.swift in Sources */,
+				D50EA9CF2BE4BA7B0079C1AB /* MemReqViewModel.swift in Sources */,
 				84301CB72BDA13C8004CF581 /* MemberTabView.swift in Sources */,
 				D57BFDB32BDD24FD0094A0B5 /* UserBooksModel.swift in Sources */,
 				840A18EF2BE040F700B9ED91 /* TextFieldComponent.swift in Sources */,

@@ -11,84 +11,128 @@ struct MemberBookDetailView: View {
     @ObservedObject var themeManager = ThemeManager()
     @State var book: Book
     var body: some View {
-        NavigationStack{
-            ScrollView{
-                ZStack(alignment: .top){
-                    VStack(spacing:0){
-                        Rectangle()
-                            .fill(themeManager.selectedTheme.secondaryThemeColor)
-                            .cornerRadius(45)
-                            .frame(height: 800)
-                            .position(CGPoint(x: 196.0, y: -80.0))
-                    }
-                    VStack{
-                        VStack{
-                            
-                            Text(book.bookName)
-                            AsyncImage(url: URL(string: book.bookImageURL)) { image in
-                                image.resizable()
-                            } placeholder: {
-                                ProgressView()
-                            }
-                            .frame(width: 200,height: 300)
-                            .cornerRadius(8)
-                            
-                        }
-                        
-                        VStack{
-                            Text("By \(book.bookAuthor)")
-                                .font(.system(size: 18, weight: .regular))
-                                .padding(5)
-                            HStack{
-                                VStack{
-                                    Text(book.bookStatus)
-                                    Text(String(book.bookCount))
-                                        .font(.title2)
-                                }
-                                Divider()
-                                    .background(Color.white)
-                                    .frame( height: 50)
-                                    .padding(.horizontal,4)
-                                VStack{
-                                    Text("Rating")
-                                    Text(String(book.bookRating))
-                                }
-                                Divider()
-                                    .background(Color.white)
-                                    .frame( height: 50)
-                                    .padding(.horizontal,4)
-                                VStack{
-                                    Text("Category")
+        ScrollView{
+            ZStack(alignment: .top){
+                VStack(spacing:0){
+                    Rectangle()
+                        .fill(Color(red: 121/255, green: 218/255, blue: 232/255))
+                        .cornerRadius(45)
+                        .frame(height: 600)
+                        .position(CGPoint(x: 196.0, y: -80.0))
+                        .navigationBarItems(trailing: {
+                            if book.bookAvailableCount != 0 {
+                                return Button(action: {
+                                    // Perform action for book count not equal to 0
+                                    Task{
+                                        bookRequest.requestBook(bookId: book.id, bookName: book.bookName, userId: userData.userID, userName: userData.userName, bookAvailableCount: book.bookAvailableCount, bookTakenCount: book.bookTakenCount, loanPeriod: 1)
+                                        try? await Task.sleep(nanoseconds: 2_000_000_000)
+                                        if(bookRequest.responseStatus == 200){
+                                            navigateToHome = false
+                                        }
+                                    }
                                     
-                                    Text(book.bookCategory)
+                                    
+                                }) {
+                                    Text("Book")
                                 }
-                                
-                                
+                            } else {
+                                return Button(action: {
+                                    // Perform action for book count not equal to 0
+                                    Task{
+                                        // Perform action for book count not equal to 0
+                                        prebookRequest.preBook(bookId: book.id, bookName: book.bookName, userId: userData.userID, userName: userData.userName, bookPreBookedCount: book.bookPreBookedCount, loanPeriod: 1)
+                                        try? await Task.sleep(nanoseconds: 2_000_000_000)
+                                        if(prebookRequest.responseStatus == 200){
+                                            navigateToHome = false
+                                        }
+                                    }
+                                    
+                                    
+                                }) {
+                                    Text("Pre-Book")
+                                }
                             }
-                            .padding(16)
-                            .background{
-                                Rectangle()
-                                    .fill(themeManager.selectedTheme.secondaryThemeColor)
-                                    .cornerRadius(24)
-                            }
-                            .padding(4)
-                            VStack(alignment:.leading){
-                                Text("Synopsis")
-                                    .font(.title.bold())
-                                    .padding(.horizontal)
-                                Text(book.bookDescription)
-                                    .padding(.top,8)
-                                    .padding(.horizontal)
-                                    .lineSpacing(10)
-                            }
-                            
+                        }())
+                    
+                    NavigationLink(
+                        destination: MemberTabView(),
+                        isActive: $navigateToHome,
+                        label: { EmptyView() }
+                    )
+                    
+                }
+                VStack{
+                    VStack{
+                        
+                        Text(book.bookName)
+                        AsyncImage(url: URL(string: book.bookImageURL)) { image in
+                            image.resizable()
+                        } placeholder: {
+                            ProgressView()
                         }
-                        
-                        
-                        
+                        .frame(width: 200,height: 300)
+                        .cornerRadius(8)
                         
                     }
-                    .padding(.top,90)
+                    
+                    VStack{
+                        Text("By \(book.bookAuthor)")
+                            .font(.system(size: 18, weight: .regular))
+                            .padding(5)
+                        HStack{
+                            VStack{
+                                Text(book.bookStatus)
+                                Text(String(book.bookCount))
+                                    .font(.title2)
+                            }
+                            Divider()
+                                .background(Color.white)
+                                .frame( height: 50)
+                                .padding(.horizontal,4)
+                            VStack{
+                                Text("Rating")
+                                Text(String(book.bookRating))
+                            }
+                            Divider()
+                                .background(Color.white)
+                                .frame( height: 50)
+                                .padding(.horizontal,4)
+                            VStack{
+                                Text("Category")
+                                
+                                Text(book.bookCategory)
+                            }
+                            
+                            
+                        }
+                        .padding(16)
+                        .background{
+                            Rectangle()
+                                .fill(Color(red: 121/255, green: 218/255, blue: 232/255))
+                                .cornerRadius(24)
+                        }
+                        .padding(4)
+                        VStack(alignment:.leading){
+                            Text("Synopsis")
+                                .font(.title.bold())
+                                .padding(.horizontal)
+                            Text(book.bookDescription)
+                                .padding(.top,8)
+                                .padding(.horizontal)
+                                .lineSpacing(10)
+                        }
+                        
+                    }
+                    
+                }
+            }
+            
+        }
+        .onAppear {
+            Task{
+                if let userID = Auth.auth().currentUser?.uid {
+                    userData.fetchUserData(userID: userID)
+                    try? await Task.sleep(nanoseconds: 1_000_000_000)
                 }
                 
             }

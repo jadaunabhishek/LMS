@@ -1,264 +1,234 @@
+//
+//  TestNotificationView.swift
+//  Library Management System
+//
+//  Created by Abhishek Jadaun on 03/05/24.
+//
+
 import SwiftUI
-import FirebaseFirestore
-
-
-struct User: Identifiable {
-    var id: String
-    var email: String
-    var role: String
-    var name: String
-}
-
-
-enum NotificationType {
-    case membershipRequest, grievance
-}
-
-struct NotificationItem: Identifiable {
-    var id : String
-    var name: String
-    var message: String
-    var type: NotificationType
-    var email: String
-    var detail: String? // Only for grievances
-}
-
-class NotificationsViewModel: ObservableObject {
-    @Published var users = [User]()
-    @Published var notifications = [NotificationItem]()
-
-    private var db = Firestore.firestore()
-
-    init() {
-        fetchData()
-    }
-
-    func fetchData() {
-        db.collection("users").whereField("role", isEqualTo: "user").whereField("status", isEqualTo: "applied")
-          .addSnapshotListener { [weak self] querySnapshot, error in
-            guard let documents = querySnapshot?.documents else {
-                print("Error fetching documents: \(error?.localizedDescription ?? "Unknown error")")
-                return
-            }
-
-            self?.users = documents.map { doc -> User in
-                let data = doc.data()
-                let email = data["email"] as? String ?? ""
-                let name = data["name"] as? String ?? ""
-                return User(id: doc.documentID, email: email, role: "user", name: name)
-            }
-
-            self?.createNotifications()
-        }
-
-    }
-
-    private func createNotifications() {
-        notifications = users.map { user in
-            NotificationItem(
-                id: user.id,
-                name: user.name,
-                message: "Role: \(user.role)",
-                type: user.role == "grievance" ? .grievance : .membershipRequest,
-                email:user.email,
-                detail: user.role == "grievance" ? "Needs immediate attention" : nil
-            )
-        }
-    }
-
-
-    func approve(notification: NotificationItem) {
-        let db = Firestore.firestore()
-        let userDocRef = db.collection("users").document(notification.id)
-        // Update logic if needed in Firestore or locally
-        userDocRef.updateData([
-                "role": "member",
-                "status" : "approved"
-            ]) { error in
-                if let error = error {
-                    print("Error updating user role: \(error.localizedDescription)")
-                } else {
-                    print("User role successfully updated to 'member'")
-                    // Optionally update local notifications array if needed
-                    if let index = self.notifications.firstIndex(where: { $0.id == notification.id }) {
-                        self.notifications[index].message = "Approved"
-                    }
-                }
-            }
-    }
-
-    func reject(notification: NotificationItem) {
-        let db = Firestore.firestore()
-        let userDocRef = db.collection("users").document(notification.id)
-        // Update logic if needed in Firestore or locally
-        userDocRef.updateData([
-            "status" : "rejected"
-            ]) { error in
-                if let error = error {
-                    print("Error updating user role: \(error.localizedDescription)")
-                } else {
-                    print("User role successfully updated to 'member'")
-                    // Optionally update local notifications array if needed
-                    if let index = self.notifications.firstIndex(where: { $0.id == notification.id }) {
-                        self.notifications[index].message = "Approved"
-                    }
-                }
-            }
-    }
-}
-
-struct NotificationRow: View {
-    @ObservedObject var viewModel: NotificationsViewModel
-    var notification: NotificationItem
-    @State private var isShowingGrievanceDetail = false // Here is the correct state variable declaration
-
-    var body: some View {
-        VStack(alignment: .leading) {
-            HStack {
-                Image(systemName: notification.type == .membershipRequest ? "person.fill" : "message.fill")
-                    .foregroundColor(.orange)
-                    .frame(width: 32, height: 32)
-                    .background(Color.white)
-                    .clipShape(Circle())
-                    .overlay(Circle().stroke(Color.orange, lineWidth: 2))
-
-                VStack(alignment: .leading, spacing: 4) {
-                    Text(notification.name).font(.headline)
-                    Text(notification.message).font(.subheadline)
-                    Text(notification.email).font(.footnote).foregroundColor(.gray)
-                }
-                
-                Spacer()
-                
-                if notification.type == .membershipRequest {
-                    Button(action: {
-                        viewModel.approve(notification: notification)
-                    }) {
-                        Label("Approve", systemImage: "checkmark")
-                    }
-                    .buttonStyle(BorderlessButtonStyle())
-                    .foregroundColor(.green)
-                    
-                    Button(action: {
-                        viewModel.reject(notification: notification)
-                    }) {
-                        Label("Reject", systemImage: "xmark")
-                    }
-                    .buttonStyle(BorderlessButtonStyle())
-                    .foregroundColor(.red)
-                } else {
-                    Text(">")
-                        .foregroundColor(.gray)
-                }
-            }
-            .padding(.horizontal)
-            .padding(.vertical, 8)
-            
-            if notification.type == .grievance, isShowingGrievanceDetail { // Use the corrected state variable name
-                Text(notification.detail ?? "")
-                    .padding([.horizontal, .bottom])
-            }
-        }
-        .background(Color.white)
-        .cornerRadius(10)
-        .shadow(radius: 1)
-        .onTapGesture {
-            if notification.type == .grievance {
-                self.isShowingGrievanceDetail = true // Use the corrected state variable name
-            }
-        }
-        .sheet(isPresented: $isShowingGrievanceDetail) { // Use the corrected state variable name
-            GrievanceDetailView(grievance: notification.detail ?? "No details provided", viewModel: viewModel, notification: notification)
-        }
-        .onAppear(
-            perform: {
-                Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { time in
-                    self.viewModel.fetchData()
-                }
-            })
-    }
-}
-
-
-
-
-struct GrievanceDetailView: View {
-    let grievance: String
-    @ObservedObject var viewModel: NotificationsViewModel
-    var notification: NotificationItem
-    @State private var replyText: String = ""
-    @Environment(\.presentationMode) var presentationMode
-
-    var body: some View {
-        VStack {
-            ScrollView {
-                Text(grievance)
-                    .padding()
-            }
-            
-            HStack {
-                TextField("Reply...", text: $replyText)
-                    .textFieldStyle(RoundedBorderTextFieldStyle())
-                    .padding()
-
-                Button("Send") {
-                    // Handle sending the reply here.
-                    // You might want to add the reply to the 'notification' or inform the viewModel.
-                    presentationMode.wrappedValue.dismiss()
-                }
-                .padding()
-                .disabled(replyText.isEmpty)
-            }
-        }
-        .navigationBarTitle("Grievance Detail", displayMode: .inline)
-        .toolbar {
-            ToolbarItem(placement: .navigationBarTrailing) {
-                Button("Done") {
-                    presentationMode.wrappedValue.dismiss()
-                }
-            }
-        }
-    }
-}
-
-
 
 struct NotificationsView: View {
+    @EnvironmentObject var themeManager: ThemeManager
+    @ObservedObject var LibViewModel: LibrarianViewModel
     @StateObject var viewModel = NotificationsViewModel()
-
+    @State private var selectedOption: Option = .CheckOut
+    @State var searchText = ""
+    @State var notifications: [NotificationItem] = []
+    @State var requestedLoans: [Loan] = []
+    @State var issuedLoans: [Loan] = []
+    
+    enum Option {
+        case CheckIn
+        case Membership
+        case CheckOut
+    }
+    
     var body: some View {
-        NavigationView {
-            ScrollView {
-                LazyVStack(spacing: 16) {
-                    ForEach(viewModel.notifications) { notification in
-                        NotificationRow(viewModel: viewModel, notification: notification)
-                            .padding(.horizontal)
+        NavigationView{
+            VStack(){
+                HStack() {
+                    
+                    PickerButton(title: "Check Out", isSelected: selectedOption == .CheckOut) {
+                        self.selectedOption = .CheckOut
+                    }
+                    
+                    PickerButton(title: "Check In", isSelected: selectedOption == .CheckIn) {
+                        self.selectedOption = .CheckIn
+                    }
+                    
+                    PickerButton(title: "Membership", isSelected: selectedOption == .Membership) {
+                        self.selectedOption = .Membership
                     }
                 }
-                .padding(.top)
-            }
-            .background(Color(UIColor.systemGroupedBackground)) // Matches iOS group background
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .principal) {
-                    HStack {
-                        Image(systemName: "bell.fill").foregroundColor(.orange)
-                        Text("Notifications").font(.headline)
+                .padding([.bottom, .leading, .trailing])
+                
+                if (selectedOption == .CheckOut){
+                    if (requestedLoans.isEmpty){
+                        EmptySection()
+                    } else {
+                        BooksSections(LibViewModel: LibViewModel, issue: $issuedLoans, request: $requestedLoans)
+                    }
+                } 
+                else if( selectedOption == .CheckIn){
+                    if (issuedLoans.isEmpty) {
+                        EmptySection()
+                    } else {
+                        checkInSections(LibViewModel: LibViewModel)
+                    }
+                }
+                else if( selectedOption == .Membership){
+                    if (notifications.isEmpty) {
+                        EmptySection()
+                    } else {
+                        MembershipSections(notifs: $notifications)
                     }
                 }
             }
+            .navigationTitle("Actions")
+            .navigationBarBackButtonHidden(true)
+            .onAppear(perform: {
+                Timer.scheduledTimer(withTimeInterval: 3, repeats: true) { time in
+                    Task{
+                        LibViewModel.getLoans()
+                        try? await Task.sleep(nanoseconds: 1_000_000_000)
+                        issuedLoans = LibViewModel.issuedLoans
+                        requestedLoans = LibViewModel.requestedLoans
+                        viewModel.fetchData()
+                        try? await Task.sleep(nanoseconds: 1_000_000_000)
+                        notifications = viewModel.notifications
+                    }
+                }
+            })
+            .task{
+                Task{
+                    LibViewModel.getLoans()
+                    try? await Task.sleep(nanoseconds: 1_000_000_000)
+                    issuedLoans = LibViewModel.issuedLoans
+                    requestedLoans = LibViewModel.requestedLoans
+                    viewModel.fetchData()
+                    try? await Task.sleep(nanoseconds: 1_000_000_000)
+                    notifications = viewModel.notifications
+                }
+            }
+            .searchable(text: $searchText)
         }
     }
 }
 
-struct NotificationsView_Previews: PreviewProvider {
-    static var previews: some View {
-        // You can create a mock NotificationsViewModel with sample data for the preview
-        let viewModel = NotificationsViewModel()
-        viewModel.notifications = [
-            NotificationItem(id: "1" ,name: "John Doe", message: "Membership Request", type: .membershipRequest, email:"john@gmail.com")
-        ]
 
-        return NotificationsView(viewModel: viewModel)
+
+struct EmptySection: View {
+    var body: some View {
+        VStack(alignment: .center) {
+            Image(systemName: "tray.fill")
+                .resizable()
+                .scaledToFit()
+                .frame(width: 60, height: 60)
+                .foregroundColor(.gray)
+            
+            Text("emptyMessage")
+                .foregroundColor(.gray)
+                .font(.headline)
+                .padding()
+                .italic()
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .listRowBackground(Color.clear)
+        .listRowSeparator(.hidden)
+    }
+}
+
+struct MembershipSections: View {
+    
+    @StateObject var viewModel = NotificationsViewModel()
+    @Binding var notifs: [NotificationItem]
+    
+    var body: some View {
+        List {
+            ForEach(0..<viewModel.notifications.count, id: \.self) { key in
+                MemberRequestCustomBox(viewModel: viewModel, notification: viewModel.notifications[key])
+                    .swipeActions(edge: .trailing){
+                        
+                        Button(action:{
+                            viewModel.approve(notification: viewModel.notifications[key])
+                            viewModel.fetchData()
+                            Task{
+                                try? await Task.sleep(nanoseconds: 1_000_000_000/2)
+                                notifs = viewModel.notifications
+                            }
+                        }){
+                            Label("Accept", systemImage: "checkmark")
+                        }
+                        .tint(.green)
+                        
+                    }
+                    .swipeActions(edge: .leading){
+                        
+                        Button(action:{
+                            viewModel.reject(notification: viewModel.notifications[key])
+                            viewModel.fetchData()
+                        }){
+                            Label("Reject", systemImage: "xmark")
+                        }
+                        .tint(.red)
+                    }
+            }
+        }
+        .listStyle(.inset)
+    }
+}
+
+
+
+struct checkInSections: View {
+    @ObservedObject var LibViewModel: LibrarianViewModel
+    
+    var body: some View {
+        List {
+            ForEach(0..<LibViewModel.issuedLoans.count, id: \.self) { userDetail in
+                NavigationLink(destination: CheckInDetailsView(checkInDetails: LibViewModel.issuedLoans[userDetail], LibViewModel: LibViewModel)){
+                    BookRequestCustomBox(bookRequestData: LibViewModel.issuedLoans[userDetail])
+                }
+            }
+        }
+        .listStyle(.inset)
+    }
+}
+
+struct BooksSections: View {
+    @ObservedObject var LibViewModel: LibrarianViewModel
+    @Binding var issue: [Loan]
+    @Binding var request: [Loan]
+    
+    var body: some View {
+        List {
+            ForEach(0..<LibViewModel.requestedLoans.count, id: \.self) { key in
+                    BookRequestCustomBox(bookRequestData: LibViewModel.requestedLoans[key])
+                    .swipeActions(edge: .trailing){
+                        Button(action:{
+                            LibViewModel.checkOutBook(loanId: LibViewModel.requestedLoans[key].loanId)
+                            LibViewModel.getLoans()
+                            Task{
+                                try? await Task.sleep(nanoseconds: 1_000_000_000/2)
+                                issue = LibViewModel.issuedLoans
+                                request = LibViewModel.requestedLoans
+                            }
+                        }){
+                            Label("Accept", systemImage: "checkmark")
+                        }
+                        .tint(.green)
+                        
+                    }
+                    .swipeActions(edge: .leading){
+                        
+                        Button(action:{
+                            Task{
+                                await LibViewModel.rejectRequest(loanId:LibViewModel.requestedLoans[key].loanId ,bookId:LibViewModel.requestedLoans[key].bookId)
+                                LibViewModel.getLoans()
+                                Task{
+                                    try? await Task.sleep(nanoseconds: 1_000_000_000/2)
+                                    issue = LibViewModel.issuedLoans
+                                    request = LibViewModel.requestedLoans
+                                }
+                            }
+                        }){
+                            Label("Reject", systemImage: "xmark")
+                        }
+                        .tint(.red)
+                    }
+            }
+        }
+        .listStyle(.inset)
+    }
+}
+
+struct TestNotificationView_Previews: PreviewProvider {
+    static var previews: some View {
+    let themeManager = ThemeManager()
+    @StateObject var LibViewModel = LibrarianViewModel()
+    @StateObject var ConfiViewModel = ConfigViewModel()
+
+    return NotificationsView(LibViewModel: LibViewModel)
+            .environmentObject(themeManager)
     }
 }

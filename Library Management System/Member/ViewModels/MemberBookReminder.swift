@@ -37,7 +37,6 @@ func createCalendarEvents(LibViewModel: LibrarianViewModel) async {
     LibViewModel.getUserHistory(userId: "2432345")
     try? await Task.sleep(nanoseconds: 2_000_000_000)
     let loans: [Loan] = LibViewModel.currentUserHistory
-    print(loans)
     let dateFormatter = DateFormatter()
     dateFormatter.dateFormat = "dd/MM/yy"
     

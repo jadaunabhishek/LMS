@@ -96,7 +96,6 @@ class ConfigViewModel: ObservableObject {
             }
             else{
                 self.fetchConfig()
-                print("Done")
             }
         }
     }
