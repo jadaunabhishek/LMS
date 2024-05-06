@@ -76,6 +76,19 @@ class AuthViewModel: ObservableObject {
         }
     }
     
+    func respondSupport(supportId: String, response: String){
+        
+        db.collection("Support").document(supportId).updateData(["reply":response,"status":"Completed"]){ error in
+            if let error = error{
+                print("Error")
+            }
+            else{
+                print("Done")
+            }
+        }
+        
+    }
+    
     func getSupport(){
         
         guard let userID = Auth.auth().currentUser?.uid else {
