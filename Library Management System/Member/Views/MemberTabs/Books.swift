@@ -12,6 +12,7 @@ struct Books: View {
     
     @ObservedObject var MemViewModel = UserBooksModel()
     @ObservedObject var ConfiViewMmodel = ConfigViewModel()
+    @State private var searchText = ""
     
     @State var isPageLoading: Bool = true
     
@@ -23,7 +24,12 @@ struct Books: View {
                     VStack{
                         if(!MemViewModel.allBooks.isEmpty){
                             ForEach(MemViewModel.allBooks, id: \..id){ book in
-                                NavigationLink(destination: MemberBookDetailView(themeManager: ThemeManager(), book: book)){
+                                NavigationLink(destination: MemberBookDetailView(
+                                    book: book,
+                                    userData: AuthViewModel(),
+                                    bookRequest: UserBooksModel(),
+                                    prebookRequest: UserBooksModel()
+                                )){
                                     HStack(){
                                         AsyncImage(url: URL(string: book.bookImageURL)) { image in
                                             image.resizable()
@@ -62,6 +68,7 @@ struct Books: View {
                 }
                 .padding(10)
             }
+            .searchable(text: $searchText)
             .navigationTitle("Books")
             .background(.black.opacity(0.05))
             .task {
@@ -90,5 +97,3 @@ struct BooksView_Previews: PreviewProvider {
             .environmentObject(themeManager)
     }
 }
-
-
