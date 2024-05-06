@@ -19,7 +19,6 @@ struct Books: View {
     var body: some View {
         NavigationStack{
             ZStack{
-                Color("BgColor").edgesIgnoringSafeArea(.all)
                 ScrollView{
                     VStack{
                         if(!MemViewModel.allBooks.isEmpty){
