@@ -21,12 +21,6 @@ struct MemberTabView: View {
                     Text("Home")
                 }
             
-            Filter()
-                .tabItem {
-                    Image(systemName: "sparkle.magnifyingglass")
-                    Text("Search")
-                }
-            
             Books()
                 .tabItem {
                     Image(systemName: "books.vertical.fill")

@@ -74,20 +74,6 @@ struct MembersView: View {
     var body: some View {
         NavigationView {
             ScrollView {
-                TextField("Search", text: $searchText)
-                    .textFieldStyle(RoundedBorderTextFieldStyle())
-                    .padding()
-                    .cornerRadius(10)
-                    .shadow(radius: 2)
-                    .overlay(
-                        HStack {
-                            Image(systemName: "magnifyingglass")
-                                .foregroundColor(.gray)
-                                .padding(.leading, 320)
-                        }
-                    )
-
-
                 LazyVStack(spacing: 16) {
                     ForEach(filteredMembers, id: \.id) { member in
                         MemberCard(member: .constant(member))  // Binding for toggling
@@ -96,7 +82,8 @@ struct MembersView: View {
                     }
                 }
             }
-            .navigationTitle("MEMBERS")
+            .searchable(text: $searchText)
+            .navigationTitle("Members")
             .onAppear {
                 fetchData()
             }

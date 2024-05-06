@@ -7,16 +7,6 @@ struct EmptyPage: View {
     
     var body: some View {
         ZStack{
-//            Circle()
-//                .trim(from: 0, to: 0.7)
-//                .stroke(Color("PrimaryColor"), lineWidth: 10)
-//                .frame(width: 100, height: 100)
-//                .rotationEffect(Angle(degrees: Double(degree)))
-//                .animation(Animation.linear(duration: 1).repeatForever(autoreverses: false))
-//                .onAppear{
-//                    degree = 270 + 360
-//                    spinnerLength = 0
-//                }
             Text("No data found.")
         }
         .ignoresSafeArea(.all)
@@ -33,18 +23,10 @@ struct BooksPage: View {
     @State var isPageLoading: Bool = true
     
     var body: some View {
-        NavigationStack{
+        NavigationView{
             ZStack{
                 Color("BgColor").edgesIgnoringSafeArea(.all)
                 VStack(spacing: 26){
-                    HStack{
-                        Spacer()
-                        NavigationLink( destination: AddBookPage(LibViewModel: LibViewModel, ConfiViewModel: ConfiViewMmodel) ){
-                            Image(systemName: "plus")
-                                .symbolRenderingMode(.hierarchical)
-                                .font(.system(size: 22, weight: .medium))
-                        }
-                    }
                     if(!LibViewModel.allBooks.isEmpty){
                         ScrollView{
                             VStack{
@@ -52,12 +34,12 @@ struct BooksPage: View {
                                     NavigationLink(destination:UpdateBookPage(LibViewModel: LibViewModel, ConfiViewModel: ConfiViewMmodel, currentBookId: book.id)){
                                         HStack(){
                                             AsyncImage(url: URL(string: book.bookImageURL)) { image in
-                                                    image.resizable()
-                                                } placeholder: {
+                                                image.resizable()
+                                            } placeholder: {
                                                 ProgressView()
                                             }
-                                                .frame(width: 60,height: 80)
-                                                .cornerRadius(8)
+                                            .frame(width: 60,height: 80)
+                                            .cornerRadius(8)
                                             VStack(alignment: .leading, spacing: 5){
                                                 Text("\(book.bookName)")
                                                     .font(.system(size: 18, weight: .bold))
@@ -87,6 +69,12 @@ struct BooksPage: View {
                 }
                 .padding(10)
                 .background(.black.opacity(0.05))
+                .navigationTitle("Books")
+                .navigationBarItems(trailing: NavigationLink( destination: AddBookPage(LibViewModel: LibViewModel, ConfiViewModel: ConfiViewMmodel) ){
+                    Image(systemName: "plus")
+                        .symbolRenderingMode(.hierarchical)
+                        .font(.system(size: 22, weight: .medium))
+                })
                 .task {
                     LibViewModel.getBooks()
                     try? await Task.sleep(nanoseconds: 1_000_000_000)
@@ -103,7 +91,6 @@ struct BooksPage: View {
                 )
             }
         }
-        .navigationBarBackButtonHidden(true)
     }
 }
 

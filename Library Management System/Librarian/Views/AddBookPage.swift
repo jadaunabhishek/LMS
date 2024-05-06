@@ -278,7 +278,6 @@ struct AddBookPage: View {
                                                 isPageLoading = true
                                                 LibViewModel.addBook(bookISBN: bookISBN, bookName: bookName, bookAuthor: bookAuthor, bookDescription: bookDescription, bookCategory: bookCategory, bookSubCategories: bookSubCategories, bookPublishingDate: bookPublishingDate.formatted(), bookStatus: bookStatus, bookCount: Int(bookCount)!, bookAvailableCount: Int(bookCount)!, bookPreBookedCount: 0, bookTakenCount: 0, bookImage: bookImage)
                                                 try? await Task.sleep(nanoseconds: 3_000_000_000)
-                                                print(LibViewModel.responseStatus)
                                                 if(LibViewModel.responseStatus == 200){
                                                     docState = .ready
                                                 }
