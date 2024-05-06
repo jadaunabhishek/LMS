@@ -22,7 +22,7 @@ func getUserHistory(userId: String) async throws -> [Loan] {
             loanStatus: documentData["loanStatus"] as? String ?? "",
             loanReminderStatus: documentData["loanReminderStatus"] as? String ?? "",
             createdOn: documentData["createdOn"] as? String ?? "",
-            updatedOn: documentData["updatedOn"] as? String ?? "", 
+            updatedOn: documentData["updatedOn"] as? String ?? "",
             timeStamp: documentData["timeStamp"] as? Int ?? 0
         )
         
@@ -33,8 +33,8 @@ func getUserHistory(userId: String) async throws -> [Loan] {
     return tempUserHistory
 }
 
-func createCalendarEvents(LibViewModel: LibrarianViewModel) async {
-    LibViewModel.getUserHistory(userId: "2432345")
+func createCalendarEvents(LibViewModel: LibrarianViewModel, userId: String) async {
+    LibViewModel.getUserHistory(userId: userId)
     try? await Task.sleep(nanoseconds: 2_000_000_000)
     let loans: [Loan] = LibViewModel.currentUserHistory
     let dateFormatter = DateFormatter()
