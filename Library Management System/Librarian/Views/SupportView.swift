@@ -3,7 +3,7 @@
 //  Library Management System
 //
 //  Created by Admin on 06/05/24.
-//
+
 
 import SwiftUI
 
@@ -30,21 +30,26 @@ struct SupportView: View {
             }
             .listStyle(.inset)
             .background(.black.opacity(0.05))
-            .navigationTitle("Books")
             .navigationTitle("Support")
-            .onAppear(
-                perform: {
-                    Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { time in
-                        Task{
-                            authViewModel.getSupports()
-                            try? await Task.sleep(nanoseconds: 1_000_000_000)
-                        }
-                    }
+            .navigationBarItems(trailing: Button(action: {
+                createIssue = true
+            }, label: {
+                Image(systemName: "plus")
+            }))
+            .sheet(isPresented: $createIssue, content: {
+                CreateIssue()
+            })
+            .task {
+                Task{
+                    authViewModel.getSupports()
+                    try? await Task.sleep(nanoseconds: 1_000_000_000)
                 }
-            )
+            }
+            
         }
     }
 }
+
 
 
 struct SupportView_Previews: PreviewProvider {
@@ -53,3 +58,5 @@ struct SupportView_Previews: PreviewProvider {
         return SupportView(authViewModel: AuthViewModel()).environmentObject(themeManager)
     }
 }
+
+

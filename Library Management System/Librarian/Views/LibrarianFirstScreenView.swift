@@ -5,15 +5,10 @@ struct LibrarianFirstScreenView: View {
     @EnvironmentObject var themeManager: ThemeManager
     @ObservedObject var LibModelView: LibrarianViewModel
     @ObservedObject var ConfiViewModel: ConfigViewModel
-    @ObservedObject var auth = AuthViewModel()
+    @StateObject var auth = AuthViewModel()
 
     var body: some View {
             TabView {
-//                LibrarianHomeView()
-//                    .tabItem {
-//                        Image(systemName: "house")
-//                        Text("Home")
-//                    }
                 
                 NotificationsView(LibViewModel: LibModelView)
                     .tabItem {
@@ -48,6 +43,7 @@ struct LFSPrev: View {
     
     @StateObject var LibViewModel = LibrarianViewModel()
     @StateObject var ConfiViewModel = ConfigViewModel()
+    @StateObject var auth = AuthViewModel()
     
     var body: some View {
         LibrarianFirstScreenView(LibModelView: LibViewModel, ConfiViewModel: ConfiViewModel)
