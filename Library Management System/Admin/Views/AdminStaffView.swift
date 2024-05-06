@@ -65,7 +65,7 @@ struct AdminStaffView: View {
                                         
                                         .frame(width: 60, height: 60)
                                         .aspectRatio(contentMode: .fit)
-                                        .clipShape(Circle())
+                                        .clipShape(Circle()).foregroundStyle(themeManager.selectedTheme.secondaryThemeColor)
                                         
                                         VStack(alignment: .leading) {
                                             Text(staffMember.name)
