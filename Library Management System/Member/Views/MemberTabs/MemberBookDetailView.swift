@@ -44,6 +44,10 @@ struct MemberBookDetailView: View {
                                     
                                 }) {
                                     Text("Book")
+                                        .padding(10)
+                                        .background(themeManager.selectedTheme.primaryThemeColor)
+                                        .cornerRadius(8)
+                                        .foregroundColor(Color(.black))
                                 }
                             } else {
                                 return Button(action: {
@@ -60,6 +64,10 @@ struct MemberBookDetailView: View {
                                     
                                 }) {
                                     Text("Pre-Book")
+                                        .padding(10)
+                                        .background(themeManager.selectedTheme.primaryThemeColor)
+                                        .cornerRadius(8)
+                                        .foregroundColor(Color(.black))
                                 }
                             }
                         }())
@@ -118,7 +126,7 @@ struct MemberBookDetailView: View {
                         .padding(16)
                         .background{
                             Rectangle()
-                                .fill(Color(red: 121/255, green: 218/255, blue: 232/255))
+                                .fill(themeManager.selectedTheme.secondaryThemeColor)
                                 .cornerRadius(24)
                         }
                         .padding(4)
