@@ -6,10 +6,16 @@
 //
 
 import SwiftUI
+import FirebaseAuth
 
 struct MemberBookDetailView: View {
-    @ObservedObject var themeManager = ThemeManager()
     @State var book: Book
+    @State var userData: AuthViewModel
+    @State var bookRequest: UserBooksModel
+    @State var prebookRequest: UserBooksModel
+    @State var navigateToHome = false
+    
+    
     var body: some View {
         ScrollView{
             ZStack(alignment: .top){
@@ -134,38 +140,44 @@ struct MemberBookDetailView: View {
                     userData.fetchUserData(userID: userID)
                     try? await Task.sleep(nanoseconds: 1_000_000_000)
                 }
-                
             }
         }
-        .ignoresSafeArea(.all)
+        .padding(.bottom)
     }
 }
 
-#Preview {
-    MemberBookDetailView(book: Book(
-        id: "ED4x3Tkc2OdiIUhACkGJ",
-        bookISBN: "124-435-233",
-        bookImageURL: "https://firebasestorage.googleapis.com:443/v0/b/library-management-syste-6cc1e.appspot.com/o/bookImages%2FED4x3Tkc2OdiIUhACkGJ.jpeg?alt=media&token=b0b4217f-93df-4baa-b94d-9858d17ff7ef",
-        bookName: "Harry Potter",
-        bookAuthor: "JK Rowling",
-        bookDescription: "Harry Potter is a series of seven fantasy novels written by British author J. K. Rowling. The novels chronicle the lives of a young wizard, Harry Potter, and his friends Hermione Granger and Ron Weasley, all of whom are students at Hogwarts School of Witchcraft and Wizardry.",
-        bookCategory: "Fantasy",
-        bookSubCategories: ["Sci-Fi"],
-        bookPublishingDate: "26/6/1997, 12:23 PM",
-        bookStatus: "Available",
-        bookCount: 2,
-        bookAvailableCount: 2,
-        bookPreBookedCount: 0,
-        bookTakenCount: 0,
-        bookIssuedTo: ["2432345"],
-        bookIssuedToName: ["Rishi"],
-        bookIssuedOn: [],
-        bookExpectedReturnOn: ["4/5/2024, 8:10 PM"],
-        bookRating: 0,
-        bookReviews: [],
-        bookHistory: [],
-        createdOn: "2024-04-29 06:54:48 +0000",
-        updayedOn: "29/4/2024, 11:56 PM"
-    )
-                         )
+
+struct MemberBookDetailView_Previews: PreviewProvider {
+    static var previews: some View {
+        MemberBookDetailView(
+            book: Book(
+                id: "ED4x3Tkc2OdiIUhACkGJ",
+                bookISBN: "124-435-233",
+                bookImageURL: "https://firebasestorage.googleapis.com:443/v0/b/library-management-syste-6cc1e.appspot.com/o/bookImages%2FED4x3Tkc2OdiIUhACkGJ.jpeg?alt=media&token=b0b4217f-93df-4baa-b94d-9858d17ff7ef",
+                bookName: "Harry Potter",
+                bookAuthor: "JK Rowling",
+                bookDescription: "Harry Potter is a series of seven fantasy novels written by British author J. K. Rowling. The novels chronicle the lives of a young wizard, Harry Potter, and his friends Hermione Granger and Ron Weasley, all of whom are students at Hogwarts School of Witchcraft and Wizardry.",
+                bookCategory: "Fantasy",
+                bookSubCategories: ["Sci-Fi"],
+                bookPublishingDate: "26/6/1997, 12:23 PM",
+                bookStatus: "Available",
+                bookCount: 0,
+                bookAvailableCount: 2,
+                bookPreBookedCount: 0,
+                bookTakenCount: 0,
+                bookIssuedTo: ["2432345"],
+                bookIssuedToName: ["Rishi"],
+                bookIssuedOn: [],
+                bookExpectedReturnOn: ["4/5/2024, 8:10 PM"],
+                bookRating: 0,
+                bookReviews: [],
+                bookHistory: [],
+                createdOn: "2024-04-29 06:54:48 +0000",
+                updayedOn: "29/4/2024, 11:56 PM"
+            ),
+            userData: AuthViewModel(),
+            bookRequest: UserBooksModel(), prebookRequest: UserBooksModel()
+            
+        )
+    }
 }

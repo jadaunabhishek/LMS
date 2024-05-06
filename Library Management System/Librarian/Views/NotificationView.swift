@@ -28,11 +28,11 @@ struct NotificationsView: View {
             VStack(){
                 HStack() {
                     
-                    PickerButton(title: "Check Out", isSelected: selectedOption == .CheckOut) {
+                    PickerButton(title: "Issue", isSelected: selectedOption == .CheckOut) {
                         self.selectedOption = .CheckOut
                     }
                     
-                    PickerButton(title: "Check In", isSelected: selectedOption == .CheckIn) {
+                    PickerButton(title: "Return", isSelected: selectedOption == .CheckIn) {
                         self.selectedOption = .CheckIn
                     }
                     
