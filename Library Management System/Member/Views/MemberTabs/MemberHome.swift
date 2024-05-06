@@ -1,5 +1,6 @@
 import SwiftUI
 import EventKit
+import FirebaseAuth
 
 // Function to request access to the calendar
 func requestAccessToCalendar(completion: @escaping (Bool) -> Void) {
@@ -24,6 +25,7 @@ func requestAccessToCalendar(completion: @escaping (Bool) -> Void) {
 // SwiftUI view for MemberHome
 struct MemberHome: View {
     @EnvironmentObject var themeManager: ThemeManager
+    @ObservedObject var LibViewModel: LibrarianViewModel
     @State private var hasCalendarAccess = false
 
     var body: some View {
@@ -137,8 +139,13 @@ struct MemberHome: View {
                     }
                 }
                 .onAppear {
-                    requestAccessToCalendar { granted in
-                        self.hasCalendarAccess = granted
+                    Task{
+                        if let currentUser = Auth.auth().currentUser?.uid{
+                            requestAccessToCalendar { granted in
+                                self.hasCalendarAccess = granted
+                            }
+                            await createCalendarEvents(LibViewModel: LibViewModel, userId: currentUser)
+                        }
                     }
                 }
             }
@@ -149,7 +156,8 @@ struct MemberHome: View {
 // SwiftUI Preview Provider
 struct MemberHome_Previews: PreviewProvider {
     static var previews: some View {
+        @StateObject var LibViewModel = LibrarianViewModel()
         let themeManager = ThemeManager()
-        return MemberHome().environmentObject(themeManager)
+        return MemberHome(LibViewModel: LibViewModel).environmentObject(themeManager)
     }
 }
