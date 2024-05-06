@@ -12,6 +12,7 @@ struct MemberTabView: View {
     @State private var applyMembership = false
     @ObservedObject var memModelView = UserBooksModel()
     @ObservedObject var ConfiViewModel = ConfigViewModel()
+    @ObservedObject var auth = AuthViewModel()
     
     var body: some View {
         TabView {
@@ -27,7 +28,7 @@ struct MemberTabView: View {
                     Text("Books")
                 }
             
-            Support()
+            Support(authViewModel: auth)
                 .tabItem {
                     Image(systemName: "person.line.dotted.person.fill")
                     Text("Support")
