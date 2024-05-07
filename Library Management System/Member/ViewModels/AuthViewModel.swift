@@ -11,16 +11,17 @@ class AuthViewModel: ObservableObject {
     @Published var userName = ""
     @Published var userEmail = ""
     @Published var userID = ""
+    @Published var allSupports: [SupportTicket] = []
     
     @Published var allUsers: [UserSchema] = []
     @Published var totalIncome: Int = 0
     @Published var finesPending: Int = 0
     
     private var db = Firestore.firestore()
-
+    
     func login(email: String, password: String) {
         guard !email.isEmpty, !password.isEmpty else { return }
-
+        
         Auth.auth().signIn(withEmail: email, password: password) { [weak self] authResult, error in
             if let error = error {
                 // Handle the login error
@@ -83,25 +84,113 @@ class AuthViewModel: ObservableObject {
 //    }
     func fetchUserRole(email: String) {
         db.collection("users").whereField("email", isEqualTo: email).getDocuments { [weak self] (querySnapshot, error) in
-                    if let error = error {
-                        print("Error fetching user by email: \(error.localizedDescription)")
-                        return
-                    }
-                    
-                    guard let document = querySnapshot?.documents.first else {
-                        print("No documents found or role not found")
-                        return
-                    }
-
-                    let role = document.data()["role"] as? String ?? ""
+            if let error = error {
+                print("Error fetching user by email: \(error.localizedDescription)")
+                return
+            }
+            
+            guard let document = querySnapshot?.documents.first else {
+                print("No documents found or role not found")
+                return
+            }
+            
+            let role = document.data()["role"] as? String ?? ""
             let id = document.data()[""]
-                    // Check role and navigate based on it
-                    DispatchQueue.main.async {
-                        // Implement role-based navigation logic
-                        self?.navigateBasedOnRole(role: role)
-                    }
-                }
+            // Check role and navigate based on it
+            DispatchQueue.main.async {
+                // Implement role-based navigation logic
+                self?.navigateBasedOnRole(role: role)
+            }
+        }
     }
+    
+    
+    func addSupportTicket(userID: String, name: String, email: String, phoneNumber: String, message: String, subject: String) {
+        
+        let isSupportIssue = message.contains("support")
+        let addNewRequest = self.db.collection("Support").document()
+        
+        let newRequest = SupportTicket(id: addNewRequest.documentID, senderID: userID, name: name, email: email, phoneNumber: phoneNumber, description: message, status: "Pending", handledBy: "", createdOn: Date.now.formatted(), updatedOn: Date.now.formatted(), reply: "", LibName: "", Subject: subject)
+        
+        // Choose the collection based on whether it's a support issue
+        addNewRequest.setData(newRequest.getDeict()){ error in
+            if let error = error{
+                print("Issue in creating Ticket")
+            }
+            else{
+                print("Tickect created successfully")
+            }
+        }
+    }
+    
+    func respondSupport(supportId: String, response: String){
+        
+        db.collection("Support").document(supportId).updateData(["reply":response,"status":"Completed"]){ error in
+            if let error = error{
+                print("Error")
+            }
+            else{
+                print("Done")
+            }
+        }
+        
+    }
+    
+    func getSupport(){
+        
+        guard let userID = Auth.auth().currentUser?.uid else {
+                print("User not logged in")
+                return
+            }
+        print(userID)
+        var tempSupports: [SupportTicket] = []
+        
+        dbInstance.collection("Support").whereField("senderID", isEqualTo: userID).getDocuments{ (snapshot, error) in
+            
+            if(error == nil && snapshot != nil){
+                for document in snapshot!.documents{
+                    let documentData = document.data()
+                
+                    let support = SupportTicket(id: documentData["id"] as! String as Any as! String, senderID: documentData["senderID"] as! String as Any as! String, name: documentData["name"] as! String as Any as! String, email: documentData["email"] as! String as Any as! String, phoneNumber: documentData["phoneNumber"] as! String as Any as! String, description:  documentData["description"] as! String as Any as! String, status: documentData["status"] as! String as Any as! String, handledBy: documentData["handledBy"] as! String as Any as! String, createdOn: documentData["createdOn"] as! String as Any as! String, updatedOn: documentData["updatedOn"] as! String as Any as! String, reply: documentData["reply"] as! String as Any as! String, LibName: documentData["LibName"] as! String as Any as! String, Subject: documentData["Subject"] as! String as Any as! String)
+                    tempSupports.append(support)
+                }
+                self.allSupports = tempSupports
+                print(tempSupports)
+            }
+            else{
+                print("Error")
+            }
+            
+        }
+        
+    }
+    
+    func getSupports(){
+        
+        var tempSupports: [SupportTicket] = []
+        
+        dbInstance.collection("Support").getDocuments{ (snapshot, error) in
+            
+            if(error == nil && snapshot != nil){
+                for document in snapshot!.documents{
+                    let documentData = document.data()
+                
+                    let support = SupportTicket(id: documentData["id"] as! String as Any as! String, senderID: documentData["senderID"] as! String as Any as! String, name: documentData["name"] as! String as Any as! String, email: documentData["email"] as! String as Any as! String, phoneNumber: documentData["phoneNumber"] as! String as Any as! String, description:  documentData["description"] as! String as Any as! String, status: documentData["status"] as! String as Any as! String, handledBy: documentData["handledBy"] as! String as Any as! String, createdOn: documentData["createdOn"] as! String as Any as! String, updatedOn: documentData["updatedOn"] as! String as Any as! String, reply: documentData["reply"] as! String as Any as! String, LibName: documentData["LibName"] as! String as Any as! String, Subject: documentData["Subject"] as! String as Any as! String)
+                    tempSupports.append(support)
+                }
+                self.allSupports = tempSupports
+                print("From BE: ",tempSupports)
+            }
+            else{
+                print("Error")
+            }
+            
+        }
+        
+    }
+    
+    
+    
     
     func fetchUserData(userID: String) {
         db.collection("users").document(userID).getDocument { [weak self] (documentSnapshot, error) in
@@ -130,41 +219,42 @@ class AuthViewModel: ObservableObject {
             }
         }
     }
-
-
+    
+    
     private func navigateBasedOnRole(role: String){
         // Implement your role-based navigation here
         // For example:
+        print(role)
         DispatchQueue.main.async {
-                switch role {
-                case "admin":
-                    self.shouldNavigateToAdmin = true
-                case "librarian":
-                    self.shouldNavigateToLibrarian = true
-                case "member":
-                    self.shouldNavigateToMember = true
-                default:
-                    self.shouldNavigateToGeneral = true
-                }
+            switch role {
+            case "admin":
+                self.shouldNavigateToAdmin = true
+            case "librarian":
+                self.shouldNavigateToLibrarian = true
+            case "member":
+                self.shouldNavigateToMember = true
+            default:
+                self.shouldNavigateToGeneral = true
             }
+        }
     }
     
     func findAndUpdateUserStatus(email: String, newStatus: String, completion: @escaping (Bool) -> Void) {
-            db.collection("users").whereField("email", isEqualTo: email).getDocuments { snapshot, error in
-                if let error = error {
-                    print("Error fetching user: \(error)")
-                    completion(false)
-                    return
-                }
-                
-                guard let document = snapshot?.documents.first else {
-                    print("User not found")
-                    completion(false)
-                    return
-                }
-                
-                let documentID = document.documentID
-
+        db.collection("users").whereField("email", isEqualTo: email).getDocuments { snapshot, error in
+            if let error = error {
+                print("Error fetching user: \(error)")
+                completion(false)
+                return
             }
+            
+            guard let document = snapshot?.documents.first else {
+                print("User not found")
+                completion(false)
+                return
+            }
+            
+            let documentID = document.documentID
+            
         }
+    }
 }

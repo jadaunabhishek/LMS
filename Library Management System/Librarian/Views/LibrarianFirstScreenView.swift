@@ -5,14 +5,10 @@ struct LibrarianFirstScreenView: View {
     @EnvironmentObject var themeManager: ThemeManager
     @ObservedObject var LibModelView: LibrarianViewModel
     @ObservedObject var ConfiViewModel: ConfigViewModel
+    @StateObject var auth = AuthViewModel()
 
     var body: some View {
             TabView {
-                LibrarianHomeView()
-                    .tabItem {
-                        Image(systemName: "house")
-                        Text("Home")
-                    }
                 
                 NotificationsView(LibViewModel: LibModelView)
                     .tabItem {
@@ -31,6 +27,12 @@ struct LibrarianFirstScreenView: View {
                         Image(systemName: "person.3.fill")
                         Text("Member")
                     }
+                
+                SupportView(authViewModel: auth)
+                    .tabItem {
+                        Image(systemName: "person.line.dotted.person.fill")
+                        Text("Support")
+                    }
             }
             .accentColor(themeManager.selectedTheme.primaryThemeColor)
             .navigationBarHidden(true)
@@ -41,6 +43,7 @@ struct LFSPrev: View {
     
     @StateObject var LibViewModel = LibrarianViewModel()
     @StateObject var ConfiViewModel = ConfigViewModel()
+    @StateObject var auth = AuthViewModel()
     
     var body: some View {
         LibrarianFirstScreenView(LibModelView: LibViewModel, ConfiViewModel: ConfiViewModel)
