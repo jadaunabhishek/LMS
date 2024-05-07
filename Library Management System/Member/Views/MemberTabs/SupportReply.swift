@@ -1,13 +1,13 @@
 //
-//  SupportResponse.swift
+//  SupportReply.swift
 //  Library Management System
 //
-//  Created by Abhishek Jadaun on 06/05/24.
+//  Created by Abhishek Jadaun on 07/05/24.
 //
 
 import SwiftUI
 
-struct SupportResponse: View {
+struct SupportReply: View {
     @State var supportData: SupportTicket
     @State var reply: String = ""
     @Environment(\.presentationMode) var presentationMode
@@ -29,7 +29,7 @@ struct SupportResponse: View {
                             .foregroundColor(.gray)
                         Text(supportData.email)
                     }
-                                        
+                    
                     HStack {
                         Text("Subject ")
                             .foregroundColor(.gray)
@@ -44,16 +44,13 @@ struct SupportResponse: View {
                     }
                 }
                 
+                
                 if supportData.status == "Completed"{
                     Section(header: Text("Response")) {
                         Text(supportData.reply)
                     }
-                } else {
-                    Section(header: Text("Response")) {
-                        TextEditor(text: $reply)
-                            .frame(minHeight: 100)
-                    }
                 }
+                
             }
             .navigationBarTitle("Query details", displayMode: .inline)
             .navigationBarItems(trailing: Button(action: {
@@ -62,10 +59,7 @@ struct SupportResponse: View {
             }) {
                 Text("Save")
                     .foregroundColor(.blue)
-            }
-                .disabled(supportData.status == "Completed")
-            )
-            
+            })
             Spacer()
         }
     }
@@ -84,11 +78,11 @@ struct SupportResponse: View {
 }
 
 
-struct SupportResponse_Previews: PreviewProvider {
+struct SupportReply_Previews: PreviewProvider {
     static var previews: some View {
         @State var authViewModel = AuthViewModel()
         
-        SupportResponse(supportData: SupportTicket(
+        SupportReply(supportData: SupportTicket(
             id: "123456",
             senderID: "user123",
             name: "John Doe",
@@ -104,5 +98,3 @@ struct SupportResponse_Previews: PreviewProvider {
         ), authViewModel: authViewModel)
     }
 }
-
-

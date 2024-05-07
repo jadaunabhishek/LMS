@@ -9,224 +9,280 @@ import SwiftUI
 import Firebase
 import FirebaseAuth
 struct AdminHomeView: View {
-    @EnvironmentObject var themeManager: ThemeManager
+    
     @ObservedObject var librarianViewModel: LibrarianViewModel
     @ObservedObject var staffViewModel: StaffViewModel
     @ObservedObject var userAuthViewModel: AuthViewModel
-    @State var isThemeSelecterSheetPresented: Bool = false
+    @ObservedObject var configViewModel: ConfigViewModel
+    
     @State var isPageLoading: Bool = true
+    @State var isThemeSelecterSheetPresented: Bool = false
+    
+    @State var isLogoSelecterSheetPresented: Bool = false
+    @State var selectedImage: UIImage = UIImage()
+    @State var isLogoSelected = false
+    
+    @Environment(\.presentationMode) var presentationMode
+    @EnvironmentObject var themeManager: ThemeManager
+    
     var body: some View {
-        
-        VStack(spacing:0){
-            if !isPageLoading {
-                ZStack(alignment:.bottomLeading){
-                    Rectangle()
-                        .colorInvert()
-                        .frame(height:110)
-                    HStack{
-                        Text("Hello! \(staffViewModel.currentStaff[0].name) ")
-                            .font(.title3)
-                        Spacer()
-                        Image(systemName: "person.crop.circle")
-                            .resizable()
-                            .frame(width: 30, height: 30)
-                    }
-                    .padding()
-                    Divider()
-                }
-                ScrollView {
-                    VStack(spacing:8){
-                        VStack{
-                            ZStack{
-                                RoundedRectangle(cornerRadius: 10)
-                                    .fill(Color(.systemGray4).opacity(0.5))
-                                    .frame(height: 150)
-                                    .padding(.horizontal)
-                                
-                                VStack(alignment: .leading){
-                                    Text("Total Revenue")
-                                        .foregroundStyle(Color.gray)
-                                        .font(.system(size: 20))
-                                    HStack{
-                                        Text("₹")
-                                            .font(.system(size: 30))
-                                        Text(String(userAuthViewModel.totalIncome))
-                                            .padding(.top,8)
-                                            .font(.system(size: 40))
-                                            .bold()
-                                    }
-                                }
-                            }
-                        }
-                        HStack{
-                            ZStack{
-                                RoundedRectangle(cornerRadius: 10)
-                                    .fill(Color(.systemGray4).opacity(0.5))
-                                    .padding([.leading])
-                                    .frame(height: 100)
-                                VStack(alignment: .leading){
-                                    HStack{
-                                        Image(systemName: "person.fill")
-                                            .foregroundStyle(Color.gray)
-                                        Text("Members")
-                                            .foregroundStyle(Color.gray)
-                                    }
-                                    Text(String("\(userAuthViewModel.allUsers.count)"))
-                                        .font(.title.bold())
-                                        .padding(2)
-                                }
-                                .offset(x: -16)
-                            }
-                            ZStack{
-                                RoundedRectangle(cornerRadius: 10)
-                                    .fill(Color(.systemGray4).opacity(0.5))
-                                    .padding([.trailing])
-                                    .frame(height: 100)
-                                VStack(alignment: .leading){
-                                    HStack{
-                                        Image(systemName: "text.book.closed.fill")
-                                            .foregroundStyle(Color.gray)
-                                        Text("Books")
-                                            .foregroundStyle(Color.gray)
-                                    }
-                                    Text(String(librarianViewModel.allBooks.count))
-                                        .font(.title.bold())
-                                        .padding(2)
-                                }
-                                .offset(x: -40)
-                            }
-                        }
-                        HStack{
-                            VStack{
+        NavigationView{
+            VStack {
+                if !isPageLoading {
+                    ScrollView {
+                        VStack(spacing:12){
+                            VStack(alignment: .leading){
                                 ZStack{
                                     RoundedRectangle(cornerRadius: 10)
                                         .fill(Color(.systemGray4).opacity(0.5))
-                                        .padding([.leading])
-                                        .frame(height: 100)
-                                    VStack(alignment:.leading){
-                                        HStack{
-                                            Image(systemName: "person.3.fill")
-                                                .foregroundStyle(Color.gray)
-                                            Text("Staffs")
-                                                .foregroundStyle(Color.gray)
-                                        }
-                                        Text(String(staffViewModel.currentStaff.count))
-                                            .font(.title.bold())
-                                            .padding(2)
-                                    }
-                                    .offset(x: -20)
-                                }
-                                ZStack(alignment:.topLeading){
-                                    RoundedRectangle(cornerRadius: 10)
-                                        .fill(Color(.systemGray4).opacity(0.5))
-                                        .padding([.leading,.bottom])
-                                        .frame(height: 124)
-                                    VStack(alignment:.leading){
-                                        
-                                        Text("Fine Remaining")
-                                            .foregroundStyle(Color.gray)
-                                        
-                                        Text("Rs. \(userAuthViewModel.finesPending)")
-                                            .font(.title.bold())
-                                            .padding(2)
-                                    }
-                                    .offset(x:36,y:20)
+                                        .frame(height: 150)
                                     
+                                    VStack{
+                                        Text("Total Revenue")
+                                            .foregroundStyle(Color.gray)
+                                            .font(.title3)
+                                        Text("₹ \(userAuthViewModel.totalIncome)")
+                                            .font(.title)
+                                            .bold()
+                                            .padding(.top)
+                                    }
                                 }
                             }
-                            Button{
-                                isThemeSelecterSheetPresented = true
-                            }label: {
-                                ZStack(alignment:.topLeading){
+                            
+                            HStack(spacing:12){
+                                ZStack{
                                     RoundedRectangle(cornerRadius: 10)
                                         .fill(Color(.systemGray4).opacity(0.5))
-                                        .padding([.trailing,.bottom])
-                                        .frame(height: 234)
-                                    VStack(alignment:.leading){
-                                        Text("Theme Color")
-                                            .foregroundStyle(Color.gray)
-                                            .padding(.bottom)
-                                        VStack{
-                                            Image("AppLogo")
-                                                .resizable()
-                                                .frame(width: 140,height: 90)
+                                        .frame(height: 125)
+                                    VStack(alignment: .leading){
+                                        HStack{
+                                            Text("Members")
+                                                .font(.title3)
+                                            Spacer()
+                                            Image(systemName: "chevron.right")
+                                                .font(.subheadline)
                                         }
-                                        .frame(height: 60)
-                                        .padding(.vertical)
-                                        HStack(spacing:0){
-                                            Rectangle()
-                                                .fill(themeManager.selectedTheme.primaryThemeColor)
-                                            
-                                            Rectangle()
-                                                .fill(themeManager.selectedTheme.secondaryThemeColor)
-                                            
-                                            Rectangle()
-                                                .fill(themeManager.selectedTheme.secondaryThemeColor.opacity(0.5))
-                                                .background(Color.white)
-                                            
-                                        }
-                                        .frame(width: 130, height: 40)
-                                        .cornerRadius(5)
-                                        .padding(.leading,6)
+                                        .foregroundStyle(Color.gray)
+                                        Text(String("\(userAuthViewModel.allUsers.count)"))
+                                            .font(.title)
+                                            .bold()
+                                            .padding(.top)
                                     }
-                                    .padding()
+                                    .padding(.horizontal)
                                 }
+                                
+                                ZStack{
+                                    RoundedRectangle(cornerRadius: 10)
+                                        .fill(Color(.systemGray4).opacity(0.5))
+                                        .frame(height: 125)
+                                    VStack(alignment: .leading){
+                                        HStack{
+                                            Text("Books")
+                                                .font(.title3)
+                                            Spacer()
+                                            Image(systemName: "chevron.right")
+                                                .font(.subheadline)
+                                        }
+                                        .foregroundStyle(Color.gray)
+                                        Text(String("\(librarianViewModel.allBooks.count)"))
+                                            .font(.title)
+                                            .bold()
+                                            .padding(.top)
+                                    }
+                                    .padding(.horizontal)
+                                }
+                            }
+                            
+                            HStack(spacing:12){
+                                ZStack{
+                                    RoundedRectangle(cornerRadius: 10)
+                                        .fill(Color(.systemGray4).opacity(0.5))
+                                        .frame(height: 125)
+                                    VStack(alignment: .leading){
+                                        HStack{
+                                            Text("Staff")
+                                                .font(.title3)
+                                            Spacer()
+                                            Image(systemName: "chevron.right")
+                                                .font(.subheadline)
+                                        }
+                                        .foregroundStyle(Color.gray)
+                                        Text(String("\(staffViewModel.currentStaff.count)"))
+                                            .font(.title)
+                                            .bold()
+                                            .padding(.top)
+                                    }
+                                    .padding(.horizontal)
+                                }
+                                
+                                ZStack{
+                                    RoundedRectangle(cornerRadius: 10)
+                                        .fill(Color(.systemGray4).opacity(0.5))
+                                        .frame(height: 125)
+                                    VStack(alignment: .leading){
+                                        HStack{
+                                            Text("Fine")
+                                                .font(.title3)
+                                            Spacer()
+                                            Image(systemName: "chevron.right")
+                                                .font(.subheadline)
+                                        }
+                                        .foregroundStyle(Color.gray)
+                                        Text("₹ \(userAuthViewModel.finesPending)")
+                                            .font(.title)
+                                            .bold()
+                                            .padding(.top)
+                                    }
+                                    .padding(.horizontal)
+                                }
+                                
+                            }
+                            
+                            HStack(spacing:12){
+                                
+                                Button{
+                                    isThemeSelecterSheetPresented = true
+                                } label: {
+                                    ZStack{
+                                        RoundedRectangle(cornerRadius: 10)
+                                            .fill(Color(.systemGray4).opacity(0.5))
+                                            .frame(height: 170)
+                                        VStack(alignment: .leading){
+                                            HStack(alignment: .top){
+                                                Text("Theme")
+                                                    .font(.title3)
+                                                Spacer()
+                                                Image(systemName: "chevron.right")
+                                                    .font(.subheadline)
+                                            }
+                                            .foregroundStyle(Color.gray)
+                                            .padding(.top)
+                                            Spacer()
+                                            HStack(spacing:0){
+                                                Rectangle()
+                                                    .fill(themeManager.selectedTheme.primaryThemeColor)
+                                                
+                                                Rectangle()
+                                                    .fill(themeManager.selectedTheme.secondaryThemeColor)
+                                                
+                                                Rectangle()
+                                                    .fill(themeManager.selectedTheme.secondaryThemeColor.opacity(0.5))
+                                                    .background(Color.white)
+                                            }
+                                            .frame(width: 130, height: 40)
+                                            .cornerRadius(5)
+                                            .padding(.bottom, 30)
+                                        }
+                                        .padding(.horizontal)
+                                    }}
                                 .sheet(isPresented: $isThemeSelecterSheetPresented) {
                                     colorSelecterView(isSheetPresented: $isThemeSelecterSheetPresented)
                                         .presentationDetents([.fraction(0.45)])
                                 }
-                            }
-                        }
-                    }
-                    .padding(.vertical)
-                                        VStack(alignment:.leading){
-                                            Text("Trending")
-                                                .font(.title2)
-                                            ScrollView(.horizontal){
-                                                HStack{
-                                                    ForEach(1...8, id: \.self) { index in
-                                                        bookCard()
+                                
+                                Button {
+                                    isLogoSelecterSheetPresented = true
+                                } label : {
+                                    ZStack {
+                                        RoundedRectangle(cornerRadius: 10)
+                                            .fill(Color(.systemGray4).opacity(0.5))
+                                            .frame(height: 170)
+                                        VStack {
+                                            VStack(alignment: .leading) {
+                                                HStack(alignment: .top) {
+                                                    Text("Brand Logo")
+                                                        .font(.title3)
+                                                    Spacer()
+                                                    Image(systemName: "chevron.right")
+                                                        .font(.subheadline)
+                                                }
+                                                .foregroundStyle(Color.gray)
+                                                .padding()
+                                            }
+                                            
+                                            Spacer()
+                                            
+                                            VStack(alignment: .center) {
+                                                if isLogoSelected {
+                                                    Image(uiImage: selectedImage)
+                                                        .resizable()
+                                                        .aspectRatio(contentMode: .fit)
+                                                        .frame(width: 80, height: 80)
+                                                        .clipShape(Circle())
+                                                        .padding(.bottom, 20)
+                                                } else if let logoURL = configViewModel.currentConfig.first?.logo {
+                                                    AsyncImage(url: URL(string: logoURL)) { phase in
+                                                        switch phase {
+                                                        case .success(let image):
+                                                            image
+                                                                .resizable()
+                                                                .aspectRatio(contentMode: .fit)
+                                                                .frame(width: 80, height: 80)
+                                                                .clipShape(Circle())
+                                                                .padding(.bottom, 30)
+                                                        default:
+                                                            ZStack {
+                                                                Circle()
+                                                                    .frame(width: 80, height: 80)
+                                                                    .foregroundColor(themeManager.selectedTheme.primaryThemeColor)
+                                                                Image(systemName: "books.vertical.fill")
+                                                                    .font(.system(size: 45))
+                                                                    .foregroundColor(.white)
+                                                            }
+                                                            .padding(.bottom, 20)
+                                                        }
                                                     }
+                                                } else {
+                                                    ZStack {
+                                                        Circle()
+                                                            .frame(width: 80, height: 80)
+                                                            .foregroundColor(themeManager.selectedTheme.primaryThemeColor)
+                                                        Image(systemName: "books.vertical.fill")
+                                                            .font(.system(size: 45))
+                                                            .foregroundColor(.white)
+                                                    }
+                                                    .padding(.bottom, 20)
                                                 }
                                             }
+                                            .padding(.horizontal)
                                         }
-                                        .padding(.horizontal)
-                    
+                                    }}
+                                .sheet(isPresented: $isLogoSelecterSheetPresented) {
+                                    ImagePicker(selectedImage: $selectedImage, isImageSelected: $isLogoSelected, sourceType: .photoLibrary)
+                                }
+                                .onChange(of: selectedImage) { newImage in
+                                    if isLogoSelected {
+                                        configViewModel.updateLibraryLogo(libraryLogo: newImage, configId: configViewModel.currentConfig[0].configID)
+                                    }
+                                }
+                            }
+                        }
+                        .padding(.vertical)
+                    }
+                    .padding(.horizontal)
+                }
+                else{
+                    Spacer()
+                    ProgressView()
                     Spacer()
                 }
-            }
-            //            .background(Color(.systemGray3).opacity(0.4))
-            else{
-                Spacer()
-                ProgressView()
                 Spacer()
             }
-            Spacer()
-        }
-        .ignoresSafeArea(.all)
-        
-        
-        .task {
-            do{
-                isPageLoading = true
-                userAuthViewModel.fetchAllUsers()
-                librarianViewModel.getBooks()
-                staffViewModel.getStaff()
-                staffViewModel.getAllStaff()
-                try? await Task.sleep(nanoseconds: 1_000_000_000)
-                isPageLoading = false
+            .task {
+                do{
+                    isPageLoading = true
+                    userAuthViewModel.fetchAllUsers()
+                    librarianViewModel.getBooks()
+                    staffViewModel.getStaff()
+                    staffViewModel.getAllStaff()
+                    try? await Task.sleep(nanoseconds: 1_000_000_000)
+                    isPageLoading = false
+                }
             }
-            
         }
-        
-    }
-}
-
-struct bookCard: View {
-    var body: some View {
-        RoundedRectangle(cornerRadius: 10)
-            .fill(Color(.systemGray4).opacity(0.5))
-            .frame(width:100, height: 200)
+        .navigationBarBackButtonHidden()
+        .navigationBarTitleDisplayMode(.inline)
+        .navigationTitle("Hello!)")
     }
 }
 
@@ -247,10 +303,12 @@ struct AdminHomeView_Previews: PreviewProvider {
         @StateObject var staffViewMod = StaffViewModel()
         @StateObject var LibViewModel = LibrarianViewModel()
         @StateObject var userAuthViewModel = AuthViewModel()
-        return AdminHomeView(librarianViewModel: LibViewModel, staffViewModel: staffViewMod, userAuthViewModel: userAuthViewModel)
+        @StateObject var configViewModel = ConfigViewModel()
+        return AdminHomeView(librarianViewModel: LibViewModel, staffViewModel: staffViewMod, userAuthViewModel: userAuthViewModel, configViewModel: configViewModel)
             .environmentObject(themeManager)
     }
 }
+
 struct colorSelecterView: View {
     @EnvironmentObject var themeManager: ThemeManager
     @ObservedObject var configManager = ConfigViewModel()
@@ -296,10 +354,4 @@ struct colorSelecterView: View {
             Spacer()
         }
     }
-}
-
-
-#Preview{
-    colorSelecterView(isSheetPresented: .constant(true))
-        .environmentObject(ThemeManager())
 }

@@ -16,7 +16,7 @@ struct AdminTabView: View {
     @StateObject var configViewModel = ConfigViewModel()
     var body: some View {
             TabView {
-                AdminHomeView(librarianViewModel: LibViewModel, staffViewModel: staffViewModel, userAuthViewModel: userAuthViewModel)
+                AdminHomeView(librarianViewModel: LibViewModel, staffViewModel: staffViewModel, userAuthViewModel: userAuthViewModel, configViewModel: configViewModel)
                     .tabItem {
                         Image(systemName: "house")
                         Text("Home")

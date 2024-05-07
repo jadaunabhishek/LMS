@@ -14,7 +14,6 @@ import SwiftUI
 struct CreateIssue: View {
     @EnvironmentObject var themeManager: ThemeManager
     
-    @State private var phoneNumber: String = ""
     @State private var message: String = ""
     @State private var subject: String = ""
     @State private var showAlert = false
@@ -22,37 +21,35 @@ struct CreateIssue: View {
     @Environment(\.presentationMode) var presentationMode
     
     private func isInputValid() -> Bool {
-        return !subject.isEmpty && !message.isEmpty && !phoneNumber.isEmpty
+        return !subject.isEmpty && !message.isEmpty
     }
     
     var body: some View {
         NavigationView {
             VStack {
-                Section(header: Text("If you have any queries, feel free to write them here. We're here to help!").padding().textCase(nil)) {
-                    
-                    CustomTextField(text: $phoneNumber, placeholder: "Phone Number")
-                        .keyboardType(.numberPad)
-                    
-                    TextField("Subject", text: $subject)
-                        .font(.title3)
-                        .padding(12)
-                        .background(Color(.systemGray5))
-                        .cornerRadius(15)
-                        .padding(5)
-                        .lineLimit(30)
-                    
-                    TextField("Message", text: $message)
-                        .font(.title3)
-                        .padding(12)
-                        .background(Color(.systemGray5))
-                        .cornerRadius(15)
-                        .padding(5)
-                        .lineLimit(30)
-                }
+                Text("If you have any queries, feel free to write them here. We're here to help!")
+                
+                TextField("Subject", text: $subject)
+                    .font(.title3)
+                    .padding(12)
+                    .background(Color(.systemGray5))
+                    .cornerRadius(15)
+                    .padding(.horizontal, 5)
+                    .padding(.top, 5)
+                    .lineLimit(30)
+                
+                TextField("Message", text: $message)
+                    .frame(minHeight: 100)
+                    .font(.title3)
+                    .padding(12)
+                    .background(Color(.systemGray5))
+                    .cornerRadius(15)
+                    .padding(5)
+                    .lineLimit(100)
                 
                 PrimaryCustomButton(action: {
                     if isInputValid() {
-                        authViewModel.addSupportTicket(userID: authViewModel.userID, name: authViewModel.userName, email: authViewModel.userEmail, phoneNumber: phoneNumber, message: message, subject: subject)
+                        authViewModel.addSupportTicket(userID: authViewModel.userID, name: authViewModel.userName, email: authViewModel.userEmail, message: message, subject: subject)
                         presentationMode.wrappedValue.dismiss()
                     } else {
                         showAlert = true

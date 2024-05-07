@@ -9,7 +9,6 @@ import SwiftUI
 
 struct SupportView: View {
     @State private var createIssue = false
-    @State private var showDetails = false
     @ObservedObject var authViewModel: AuthViewModel
     
     @State var pageState: String = "Main"
@@ -21,37 +20,21 @@ struct SupportView: View {
     var body: some View {
         NavigationView {
             List {
-                if(!authViewModel.allSupports.isEmpty){
-                    ScrollView{
-                        VStack{
-                            ForEach(0..<authViewModel.allSupports.count, id: \.self) { supportDetail in
-                                IssueView(supportData: authViewModel.allSupports[supportDetail])
-                            }
-                        }
+                ForEach(authViewModel.allSupports, id: \.id) { supportData in
+                    NavigationLink(destination: SupportResponse(supportData: supportData, authViewModel: authViewModel)) {
+                        supportCard(supportData: supportData)
                     }
-                }
-                else{
-                    EmptyPage()
                 }
             }
             .listStyle(.inset)
-            .background(.black.opacity(0.05))
+            .background(Color.black.opacity(0.05))
             .navigationTitle("Support")
-            .navigationBarItems(trailing: Button(action: {
-                createIssue = true
-            }, label: {
-                Image(systemName: "plus")
-            }))
-            .sheet(isPresented: $createIssue, content: {
+            .sheet(isPresented: $createIssue) {
                 CreateIssue()
-            })
-            .task {
-                Task{
-                    authViewModel.getSupports()
-                    try? await Task.sleep(nanoseconds: 1_000_000_000)
-                }
             }
-            
+            .task {
+                await authViewModel.getSupports()
+            }
         }
     }
 }

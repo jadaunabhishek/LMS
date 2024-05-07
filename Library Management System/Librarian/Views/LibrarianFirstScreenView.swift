@@ -36,6 +36,20 @@ struct LibrarianFirstScreenView: View {
             }
             .accentColor(themeManager.selectedTheme.primaryThemeColor)
             .navigationBarHidden(true)
+            .task {
+                Task{
+                    LibModelView.calculateFine()
+                }
+            }
+            .onAppear(
+                perform: {
+                    Timer.scheduledTimer(withTimeInterval: 900, repeats: true) { time in
+                        Task{
+                            LibModelView.calculateFine()
+                        }
+                    }
+                }
+            )
     }
 }
 
