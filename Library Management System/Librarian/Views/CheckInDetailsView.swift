@@ -10,7 +10,7 @@ import SwiftUI
 struct CheckInDetailsView: View {
     @EnvironmentObject var themeManager: ThemeManager
     @State var checkInDetails: Loan
-    @State var LibViewModel: LibrarianViewModel
+    @ObservedObject var LibViewModel: LibrarianViewModel
     
     var body: some View {
         List {
@@ -89,13 +89,37 @@ struct CheckInDetailsView: View {
                     Text(checkInDetails.loanStatus)
                 }
             }
-            Spacer()
+            //Spacer()
+            Section(header: Text("Fine Information")) {
+                HStack{
+                    Text("Overdue Days: ")
+                        .foregroundColor(.gray)
+                    
+                    Spacer()
+                    
+                    Text("\(checkInDetails.fineCalculatedDays)")
+                }
+                HStack{
+                    Text("Total Fine: ")
+                        .foregroundColor(.gray)
+                    
+                    Spacer()
+                    
+                    Text("\(checkInDetails.loanFine)")
+                }
+            }
+        }
+        .task {
+            do{
+                LibViewModel.fetchUserData(userID: checkInDetails.bookIssuedTo)
+                try? await Task.sleep(nanoseconds: 1_000_000_000)
+            }
         }
         .navigationBarTitle("Checkin details", displayMode: .inline)
         .navigationBarItems(trailing: Button(action: {
             Task {
                 do {
-                    try await LibViewModel.checkInBook(loanId: checkInDetails.loanId, bookId: checkInDetails.bookId)
+                    try await LibViewModel.checkInBook(loanId: checkInDetails.loanId, bookId: checkInDetails.bookId, userId: checkInDetails.bookIssuedTo, userFines: LibViewModel.currentMember[0].activeFine, loanFine: checkInDetails.loanFine, userPenalty: LibViewModel.currentMember[0].penaltiesCount)
                     // Handle success
                 } catch {
                     // Handle error
@@ -124,14 +148,14 @@ struct CIDVPrev: View {
     @State var LibViewModel = LibrarianViewModel()
     let loan = Loan(loanId: "1",
                     bookId: "123",
-                    bookName: "Sample Book",
+                    bookName: "Sample Book", bookImageURL: "https://books.google.com/books/content?id=vlkqAAAAYAAJ&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api",
                     bookIssuedTo: "John Doe",
                     bookIssuedToName: "John Doe",
                     bookIssuedOn: "05/01/2024, 10:00 AM",
                     bookExpectedReturnOn: "05/15/2024, 10:00 AM",
                     bookReturnedOn: "05/12/2024, 10:00 AM",
                     loanStatus: "Returned",
-                    loanReminderStatus: "None",
+                    loanReminderStatus: "None", fineCalculatedDays: 0, loanFine: 0,
                     createdOn: "05/01/2024, 10:00 AM",
                     updatedOn: "05/12/2024, 10:00 AM",
                     timeStamp: 1620202800)

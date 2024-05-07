@@ -34,7 +34,7 @@ struct MemberBookDetailView: View {
                                 return Button(action: {
                                     // Perform action for book count not equal to 0
                                     Task{
-                                        bookRequest.requestBook(bookId: book.id, bookName: book.bookName, userId: userData.userID, userName: userData.userName, bookAvailableCount: book.bookAvailableCount, bookTakenCount: book.bookTakenCount, loanPeriod: 1)
+                                        bookRequest.requestBook(bookId: book.id, bookName: book.bookName, bookImageURL: book.bookImageURL, userId: userData.userID, userName: userData.userName, bookAvailableCount: book.bookAvailableCount, bookTakenCount: book.bookTakenCount, loanPeriod: 1)
                                         try? await Task.sleep(nanoseconds: 2_000_000_000)
                                         if(bookRequest.responseStatus == 200){
                                             navigateToHome = false
@@ -54,7 +54,7 @@ struct MemberBookDetailView: View {
                                     // Perform action for book count not equal to 0
                                     Task{
                                         // Perform action for book count not equal to 0
-                                        prebookRequest.preBook(bookId: book.id, bookName: book.bookName, userId: userData.userID, userName: userData.userName, bookPreBookedCount: book.bookPreBookedCount, loanPeriod: 1)
+                                        prebookRequest.preBook(bookId: book.id, bookName: book.bookName, bookImageURL: book.bookImageURL, userId: userData.userID, userName: userData.userName, bookPreBookedCount: book.bookPreBookedCount, loanPeriod: 1)
                                         try? await Task.sleep(nanoseconds: 2_000_000_000)
                                         if(prebookRequest.responseStatus == 200){
                                             navigateToHome = false
