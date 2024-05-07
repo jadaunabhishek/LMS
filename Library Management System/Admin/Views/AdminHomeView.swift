@@ -6,8 +6,8 @@
 //
 
 import SwiftUI
-import Firebase
 import FirebaseAuth
+import Charts
 struct AdminHomeView: View {
     @EnvironmentObject var themeManager: ThemeManager
     @ObservedObject var librarianViewModel: LibrarianViewModel
@@ -15,13 +15,14 @@ struct AdminHomeView: View {
     @ObservedObject var userAuthViewModel: AuthViewModel
     @State var isThemeSelecterSheetPresented: Bool = false
     @State var isPageLoading: Bool = true
+    
     var body: some View {
         
         VStack(spacing:0){
             if !isPageLoading {
                 ZStack(alignment:.bottomLeading){
                     Rectangle()
-                        .colorInvert()
+                        .fill(Color(.systemGray4).opacity(0.5))
                         .frame(height:110)
                     HStack{
                         Text("Hello! \(staffViewModel.currentStaff[0].name) ")
@@ -37,6 +38,9 @@ struct AdminHomeView: View {
                 ScrollView {
                     VStack(spacing:8){
                         VStack{
+                            
+                        }
+                        VStack{
                             ZStack{
                                 RoundedRectangle(cornerRadius: 10)
                                     .fill(Color(.systemGray4).opacity(0.5))
@@ -46,10 +50,11 @@ struct AdminHomeView: View {
                                 VStack(alignment: .leading){
                                     Text("Total Revenue")
                                         .foregroundStyle(Color.gray)
-                                        .font(.system(size: 20))
+                                        .font(.title3)
                                     HStack{
                                         Text("₹")
-                                            .font(.system(size: 30))
+                                            .padding(.top,8)
+                                            .font(.title)
                                         Text(String(userAuthViewModel.totalIncome))
                                             .padding(.top,8)
                                             .font(.system(size: 40))
