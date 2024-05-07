@@ -5,7 +5,6 @@ struct SupportTicket: Identifiable {
     var senderID: String
     var name: String
     var email: String
-    var phoneNumber: String
     var description: String
     var status: String
     var handledBy: String
@@ -21,7 +20,6 @@ struct SupportTicket: Identifiable {
             "senderID":senderID,
             "name":name,
             "email":email,
-            "phoneNumber":phoneNumber,
             "description":description,
             "status":status,
             "handledBy":handledBy,
