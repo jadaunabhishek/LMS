@@ -64,24 +64,7 @@ class AuthViewModel: ObservableObject {
         }
     }
     
-//    func fetchData() {
-//        let db = Firestore.firestore()
-//        db.collection("users").whereField("role", isEqualTo: "member")
-//          .addSnapshotListener { querySnapshot, error in
-//            guard let documents = querySnapshot?.documents else {
-//                print("Error fetching documents: \(error?.localizedDescription ?? "Unknown error")")
-//                return
-//            }
-//
-//            self.members = documents.map { doc -> Member in
-//                let data = doc.data()
-//                let email = data["email"] as? String ?? ""
-//                let name = data["name"] as? String ?? ""
-//                let status = data["status"] as? String ?? ""
-//                return Member(id: doc.documentID, name: name, email: email, status: status, isToggled: status == "approved")
-//            }
-//        }
-//    }
+    
     func fetchUserRole(email: String) {
         db.collection("users").whereField("email", isEqualTo: email).getDocuments { [weak self] (querySnapshot, error) in
             if let error = error {
@@ -105,12 +88,12 @@ class AuthViewModel: ObservableObject {
     }
     
     
-    func addSupportTicket(userID: String, name: String, email: String, phoneNumber: String, message: String, subject: String) {
+    func addSupportTicket(userID: String, name: String, email: String, message: String, subject: String) {
         
         let isSupportIssue = message.contains("support")
         let addNewRequest = self.db.collection("Support").document()
         
-        let newRequest = SupportTicket(id: addNewRequest.documentID, senderID: userID, name: name, email: email, phoneNumber: phoneNumber, description: message, status: "Pending", handledBy: "", createdOn: Date.now.formatted(), updatedOn: Date.now.formatted(), reply: "", LibName: "", Subject: subject)
+        let newRequest = SupportTicket(id: addNewRequest.documentID, senderID: userID, name: name, email: email,description: message, status: "Pending", handledBy: "", createdOn: Date.now.formatted(), updatedOn: Date.now.formatted(), reply: "", LibName: "", Subject: subject)
         
         // Choose the collection based on whether it's a support issue
         addNewRequest.setData(newRequest.getDeict()){ error in
@@ -151,7 +134,7 @@ class AuthViewModel: ObservableObject {
                 for document in snapshot!.documents{
                     let documentData = document.data()
                 
-                    let support = SupportTicket(id: documentData["id"] as! String as Any as! String, senderID: documentData["senderID"] as! String as Any as! String, name: documentData["name"] as! String as Any as! String, email: documentData["email"] as! String as Any as! String, phoneNumber: documentData["phoneNumber"] as! String as Any as! String, description:  documentData["description"] as! String as Any as! String, status: documentData["status"] as! String as Any as! String, handledBy: documentData["handledBy"] as! String as Any as! String, createdOn: documentData["createdOn"] as! String as Any as! String, updatedOn: documentData["updatedOn"] as! String as Any as! String, reply: documentData["reply"] as! String as Any as! String, LibName: documentData["LibName"] as! String as Any as! String, Subject: documentData["Subject"] as! String as Any as! String)
+                    let support = SupportTicket(id: documentData["id"] as! String as Any as! String, senderID: documentData["senderID"] as! String as Any as! String, name: documentData["name"] as! String as Any as! String, email: documentData["email"] as! String as Any as! String, description:  documentData["description"] as! String as Any as! String, status: documentData["status"] as! String as Any as! String, handledBy: documentData["handledBy"] as! String as Any as! String, createdOn: documentData["createdOn"] as! String as Any as! String, updatedOn: documentData["updatedOn"] as! String as Any as! String, reply: documentData["reply"] as! String as Any as! String, LibName: documentData["LibName"] as! String as Any as! String, Subject: documentData["Subject"] as! String as Any as! String)
                     tempSupports.append(support)
                 }
                 self.allSupports = tempSupports
@@ -175,7 +158,7 @@ class AuthViewModel: ObservableObject {
                 for document in snapshot!.documents{
                     let documentData = document.data()
                 
-                    let support = SupportTicket(id: documentData["id"] as! String as Any as! String, senderID: documentData["senderID"] as! String as Any as! String, name: documentData["name"] as! String as Any as! String, email: documentData["email"] as! String as Any as! String, phoneNumber: documentData["phoneNumber"] as! String as Any as! String, description:  documentData["description"] as! String as Any as! String, status: documentData["status"] as! String as Any as! String, handledBy: documentData["handledBy"] as! String as Any as! String, createdOn: documentData["createdOn"] as! String as Any as! String, updatedOn: documentData["updatedOn"] as! String as Any as! String, reply: documentData["reply"] as! String as Any as! String, LibName: documentData["LibName"] as! String as Any as! String, Subject: documentData["Subject"] as! String as Any as! String)
+                    let support = SupportTicket(id: documentData["id"] as! String as Any as! String, senderID: documentData["senderID"] as! String as Any as! String, name: documentData["name"] as! String as Any as! String, email: documentData["email"] as! String as Any as! String, description:  documentData["description"] as! String as Any as! String, status: documentData["status"] as! String as Any as! String, handledBy: documentData["handledBy"] as! String as Any as! String, createdOn: documentData["createdOn"] as! String as Any as! String, updatedOn: documentData["updatedOn"] as! String as Any as! String, reply: documentData["reply"] as! String as Any as! String, LibName: documentData["LibName"] as! String as Any as! String, Subject: documentData["Subject"] as! String as Any as! String)
                     tempSupports.append(support)
                 }
                 self.allSupports = tempSupports
