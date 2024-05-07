@@ -4,6 +4,7 @@ struct EmptyPage: View {
     
     @State private var degree:Int = 270
     @State private var spinnerLength = 0.6
+    @EnvironmentObject var themeManager: ThemeManager
     
     var body: some View {
         ZStack{
@@ -23,7 +24,7 @@ struct BooksPage: View {
     @State var isPageLoading: Bool = true
     
     var body: some View {
-        NavigationView{
+        //NavigationView{
             ZStack{
                 Color("BgColor").edgesIgnoringSafeArea(.all)
                 VStack(spacing: 26){
@@ -91,7 +92,7 @@ struct BooksPage: View {
                 )
             }
         }
-    }
+    //}
 }
 
 struct BPPrev: View {

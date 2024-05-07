@@ -9,6 +9,9 @@ import SwiftUI
 import FirebaseAuth
 
 struct MemberBookDetailView: View {
+    
+    @EnvironmentObject var themeManager: ThemeManager
+    
     @State var book: Book
     @State var userData: AuthViewModel
     @State var bookRequest: UserBooksModel
@@ -21,9 +24,10 @@ struct MemberBookDetailView: View {
             ZStack(alignment: .top){
                 VStack(spacing:0){
                     Rectangle()
-                        .fill(Color(red: 121/255, green: 218/255, blue: 232/255))
+                        .fill(themeManager.selectedTheme.secondaryThemeColor)
                         .cornerRadius(45)
                         .frame(height: 600)
+                        .frame(maxWidth: .infinity)
                         .position(CGPoint(x: 196.0, y: -80.0))
                         .navigationBarItems(trailing: {
                             if book.bookAvailableCount != 0 {
@@ -40,6 +44,10 @@ struct MemberBookDetailView: View {
                                     
                                 }) {
                                     Text("Book")
+                                        .padding(10)
+                                        .background(themeManager.selectedTheme.primaryThemeColor)
+                                        .cornerRadius(8)
+                                        .foregroundColor(Color(.black))
                                 }
                             } else {
                                 return Button(action: {
@@ -56,6 +64,10 @@ struct MemberBookDetailView: View {
                                     
                                 }) {
                                     Text("Pre-Book")
+                                        .padding(10)
+                                        .background(themeManager.selectedTheme.primaryThemeColor)
+                                        .cornerRadius(8)
+                                        .foregroundColor(Color(.black))
                                 }
                             }
                         }())
@@ -114,7 +126,7 @@ struct MemberBookDetailView: View {
                         .padding(16)
                         .background{
                             Rectangle()
-                                .fill(Color(red: 121/255, green: 218/255, blue: 232/255))
+                                .fill(themeManager.selectedTheme.secondaryThemeColor)
                                 .cornerRadius(24)
                         }
                         .padding(4)

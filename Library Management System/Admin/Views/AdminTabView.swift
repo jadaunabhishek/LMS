@@ -10,10 +10,13 @@ import SwiftUI
 
 struct AdminTabView: View {
     @EnvironmentObject var themeManager: ThemeManager
+    @StateObject var LibViewModel = LibrarianViewModel()
+    @StateObject var staffViewModel = StaffViewModel()
+    @StateObject var userAuthViewModel = AuthViewModel()
+    @StateObject var configViewModel = ConfigViewModel()
     var body: some View {
-        NavigationView{
             TabView {
-                AdminHomeView()
+                AdminHomeView(librarianViewModel: LibViewModel, staffViewModel: staffViewModel, userAuthViewModel: userAuthViewModel)
                     .tabItem {
                         Image(systemName: "house")
                         Text("Home")
@@ -28,8 +31,14 @@ struct AdminTabView: View {
                         Image(systemName: "person.3.fill")
                         Text("Staff")
                     }
+                AdminFineView(configViewModel: configViewModel)
+                    .tabItem {
+                        Image(systemName: "gear")
+                        Text("Fine")
+
+                    }
             }
-        }
+        
         .accentColor(themeManager.selectedTheme.primaryThemeColor)
         .navigationBarHidden(true)
     }
