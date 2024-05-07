@@ -13,10 +13,12 @@ struct BookRequestCustomBox: View {
     
     var body: some View {
         HStack{
-            Image("Logo")
-                .resizable()
-                .frame(width: 70, height: 70)
-                .clipShape(Circle())
+            AsyncImage(url: URL(string: bookRequestData.bookImageURL)) { image in
+                image.resizable()
+            } placeholder: {
+                ProgressView()
+            }
+                .frame(width: 60, height: 90)
                 .padding(.trailing)
             
             VStack(alignment:.leading, spacing: 10){

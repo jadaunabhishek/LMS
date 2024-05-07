@@ -103,7 +103,7 @@ class ConfigViewModel: ObservableObject {
     func updateLibraryLogo(libraryLogo: UIImage, configId: String){
         
         let storageRef = Storage.storage().reference()
-        let imageData  = libraryLogo.jpegData(compressionQuality: 0.9)!
+        let imageData  = libraryLogo.jpegData(compressionQuality: 0.1)!
         let fileRef = storageRef.child("libraryLogos/\(configId).jpeg")
         
         //var uploadDone  = false

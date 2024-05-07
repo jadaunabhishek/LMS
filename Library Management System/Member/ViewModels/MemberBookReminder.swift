@@ -14,6 +14,7 @@ func getUserHistory(userId: String) async throws -> [Loan] {
             loanId: documentData["loanId"] as? String ?? "",
             bookId: documentData["bookId"] as? String ?? "",
             bookName: documentData["bookName"] as? String ?? "",
+            bookImageURL: documentData["bookImageURL"] as? String ?? "",
             bookIssuedTo: documentData["bookIssuedTo"] as? String ?? "",
             bookIssuedToName: documentData["bookIssuedToName"] as? String ?? "",
             bookIssuedOn: documentData["bookIssuedOn"] as? String ?? "",
@@ -21,6 +22,8 @@ func getUserHistory(userId: String) async throws -> [Loan] {
             bookReturnedOn: documentData["bookReturnedOn"] as? String ?? "",
             loanStatus: documentData["loanStatus"] as? String ?? "",
             loanReminderStatus: documentData["loanReminderStatus"] as? String ?? "",
+            fineCalculatedDays: documentData["fineCalculatedDays"] as? Int ?? 0,
+            loanFine: documentData["loanFine"] as? Int ?? 0,
             createdOn: documentData["createdOn"] as? String ?? "",
             updatedOn: documentData["updatedOn"] as? String ?? "",
             timeStamp: documentData["timeStamp"] as? Int ?? 0
