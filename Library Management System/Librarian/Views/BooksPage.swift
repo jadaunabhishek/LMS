@@ -20,13 +20,12 @@ struct BooksPage: View {
     
     @ObservedObject var LibViewModel: LibrarianViewModel
     @ObservedObject var ConfiViewMmodel: ConfigViewModel
-    
+    @EnvironmentObject var themeManager: ThemeManager
     @State var isPageLoading: Bool = true
     
     var body: some View {
-        //NavigationView{
+        NavigationView{
             ZStack{
-                Color("BgColor").edgesIgnoringSafeArea(.all)
                 VStack(spacing: 26){
                     if(!LibViewModel.allBooks.isEmpty){
                         ScrollView{
@@ -56,10 +55,9 @@ struct BooksPage: View {
                                             }
                                         }
                                         .padding(10)
-                                        .background(.white)
                                         .cornerRadius(8)
                                     }
-                                    .foregroundColor(.black)
+                                    .foregroundColor(themeManager.selectedTheme.bodyTextColor)
                                 }
                             }
                         }
@@ -92,6 +90,7 @@ struct BooksPage: View {
                 )
             }
         }
+    }
     //}
 }
 
@@ -105,6 +104,11 @@ struct BPPrev: View {
     }
 }
 
-#Preview {
-    BPPrev()
+
+struct BPPrev_Previews: PreviewProvider {
+    static var previews: some View {
+        let themeManager = ThemeManager()
+        return BPPrev()
+            .environmentObject(themeManager)
+    }
 }

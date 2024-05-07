@@ -27,6 +27,7 @@ struct AddBookPage: View {
     
     @State private var docState: DocState? = .setup
         
+    @EnvironmentObject var themeManager: ThemeManager
     enum DocState: Int {
         case setup = 0
         case ready = 1
@@ -76,7 +77,6 @@ struct AddBookPage: View {
     var body: some View {
         NavigationView{
             ZStack{
-                Color("BgColor").edgesIgnoringSafeArea(.all)
                 ScrollView{
                     VStack(spacing: 26){
                         HStack(alignment: .center){
@@ -109,13 +109,13 @@ struct AddBookPage: View {
                                             .font(.system(size: 18, weight: .thin))
                                     }
                                 }
-                                .foregroundColor(.black)
+                                .foregroundColor(themeManager.selectedTheme.bodyTextColor)
                             }
                             .padding(20)
                             .overlay(content: {
                                 RoundedRectangle(cornerRadius: 8)
                                     .stroke(style: StrokeStyle(lineWidth: 2, lineCap: .round, dash: [5]))
-                                            .foregroundColor(.black)
+                                    .foregroundColor(themeManager.selectedTheme.bodyTextColor)
                                             .frame(width: 360, height: 111)
                             })
                         }
@@ -169,38 +169,40 @@ struct AddBookPage: View {
                                     )
                             }
                             .padding(10)
-                            .background(.white)
+                            .background(Color(.systemGray5))
                             .cornerRadius(8)
                             TextField("Book Description", text: $bookDescription, axis: .vertical)
                                 .lineLimit(5...5)
                                 .padding(10)
-                                .background(.white)
+                                .background(Color(.systemGray5))
                                 .cornerRadius(10)
                                 .autocorrectionDisabled()
                                 .autocapitalization(.sentences)
-                            HStack{
+                        VStack{
                                 HStack(){
+                                    Text("Book Status").foregroundColor(Color(.systemGray))
+                                    Spacer()
                                     Picker("", selection: $bookStatus){
                                         Text("Available").tag("Available")
                                         Text("PreBooked").tag("PreBooked")
                                         Text("Taken").tag("Taken")
                                     }
-                                    .accentColor(.black)
+                                    .accentColor(themeManager.selectedTheme.bodyTextColor)
                                     .labelsHidden()
-                                    Spacer()
                                 }
                                 .padding(10)
                                 .frame(maxWidth: .infinity)
-                                .background(.white)
+                                .background(Color(.systemGray5))
                                 .cornerRadius(10)
                                 HStack{
+                                    Text("Book publish Date").foregroundColor(Color(.systemGray))
                                     Spacer()
                                     DatePicker("", selection: $bookPublishingDate, displayedComponents: .date)
                                         .labelsHidden()
                                 }
                                 .padding(10)
                                 .frame(maxWidth: .infinity)
-                                .background(.white)
+                                .background(Color(.systemGray5))
                                 .cornerRadius(10)
                             }
                             VStack(spacing:20){
@@ -215,8 +217,9 @@ struct AddBookPage: View {
                                             }
                                         }
                                     }
-                                    .accentColor(.black)
+                                    .accentColor(themeManager.selectedTheme.bodyTextColor)
                                 }
+                                Divider()
                                 VStack(spacing: 10){
                                     HStack{
                                         Text("Sub Categories")
@@ -229,7 +232,7 @@ struct AddBookPage: View {
                                                 }
                                             }
                                         }
-                                        .accentColor(.black)
+                                        .accentColor(themeManager.selectedTheme.bodyTextColor)
                                         .onChange(of: bookSubCategory, initial: true){ (oldValue,newValue)  in
                                             if(newValue != oldValue && newValue != "Choose" && !bookSubCategories.contains(newValue)){
                                                 bookSubCategories.append(bookSubCategory)
@@ -249,8 +252,7 @@ struct AddBookPage: View {
                                                     }
                                                 }
                                                 .padding(10)
-                                                .foregroundColor(.black)
-                                                .background(Color("PrimaryColor").opacity(0.25))
+                                                .foregroundColor(themeManager.selectedTheme.bodyTextColor)
                                                 .cornerRadius(8)
                                             }
                                         })
@@ -262,15 +264,12 @@ struct AddBookPage: View {
                                 }
                             }
                             .padding(10)
-                            .background(.white)
+                            .background(Color(.systemGray5))
                             .cornerRadius(8)
                             
-//                            .padding(10)
-//                            .background(.white)
-//                            .cornerRadius(8)
                             VStack{
                                 Text("All fields are mandatory")
-                                    .font(.system(size: 18, weight: .thin))
+                                    .font(.system(size: 15, weight: .thin))
                                 NavigationLink(destination: BooksPage(LibViewModel: LibViewModel, ConfiViewMmodel: ConfiViewModel), tag: .ready, selection: $docState){
                                     Button(action:{
                                         Task{
@@ -303,20 +302,20 @@ struct AddBookPage: View {
                                         if(isPageLoading){
                                             Text("Adding....")
                                                 .font(.system(size: 18, weight: .medium))
-                                                .foregroundColor(.white)
+                                                .foregroundColor(themeManager.selectedTheme.bodyTextColor)
                                                 .padding(10)
                                                 .frame(maxWidth: .infinity)
-                                                .background(Color("PrimaryColor").opacity(0.5))
+                                                .background(themeManager.selectedTheme.secondaryThemeColor)
                                                 .cornerRadius(8)
                                                 .disabled(isPageLoading)
                                         }
                                         else{
                                             Text("Add Book")
                                                 .font(.system(size: 18, weight: .medium))
-                                                .foregroundColor(.white)
+                                                .foregroundColor(themeManager.selectedTheme.bodyTextColor)
                                                 .padding(10)
                                                 .frame(maxWidth: .infinity)
-                                                .background(Color("PrimaryColor"))
+                                                .background(themeManager.selectedTheme.secondaryThemeColor)
                                                 .cornerRadius(8)
                                         }
                                     }
@@ -333,9 +332,8 @@ struct AddBookPage: View {
                     VStack{
                         Text("\(popupMessage)")
                             .font(.system(size: 18, weight: .light))
-                            .foregroundColor(.white)
+                            .foregroundColor(themeManager.selectedTheme.bodyTextColor)
                             .padding(10)
-                            .background(Color("PrimaryColor").opacity(0.75))
                             .cornerRadius(100)
                     }
                     .offset(y:-320)
@@ -354,12 +352,18 @@ struct ABPreview: View {
     
     @StateObject var LibViewModel = LibrarianViewModel()
     @StateObject var ConfiViewModel = ConfigViewModel()
-    
+    let themeManager = ThemeManager()
     var body: some View {
         AddBookPage(LibViewModel: LibViewModel, ConfiViewModel: ConfiViewModel)
     }
 }
 
-#Preview {
-    ABPreview()
+
+struct ABPreview_Previews: PreviewProvider {
+    static var previews: some View {
+        let themeManager = ThemeManager()
+        return ABPreview()
+            .environmentObject(themeManager)
+    }
 }
+

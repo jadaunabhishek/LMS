@@ -1,7 +1,7 @@
 import SwiftUI
 import FirebaseFirestore
 
-// Define the Member struct to hold member information
+
 struct Member {
     let id: String
     var name: String
@@ -10,12 +10,12 @@ struct Member {
     var isToggled: Bool
 }
 
-// View for displaying individual member cards
+
 struct MemberCard: View {
     var db = Firestore.firestore()
     @Binding var member: Member
 
-    // Update member status in Firestore
+    
     func updateData(memberId: String, status: String) {
         db.collection("users").document(memberId).updateData(["status": status])
     }
@@ -37,10 +37,8 @@ struct MemberCard: View {
                         .font(.headline)
                     Text(member.email)
                         .font(.subheadline)
-                        .foregroundColor(.gray)
                     Text("Status: \(member.status)")
                         .font(.subheadline)
-                        .foregroundColor(.gray)
                 }
                 
                 Spacer()
@@ -57,7 +55,7 @@ struct MemberCard: View {
                     }
             }
             .padding()
-            .background(Color.white)
+            .background(Color(.systemGray5))
             .cornerRadius(10)
             .shadow(radius: 2)
         }
@@ -65,7 +63,7 @@ struct MemberCard: View {
     }
 }
 
-// Main view for displaying members
+
 struct MembersView: View {
     @State private var members: [Member] = []
     @State private var searchText = ""
@@ -76,9 +74,8 @@ struct MembersView: View {
             ScrollView {
                 LazyVStack(spacing: 16) {
                     ForEach(filteredMembers, id: \.id) { member in
-                        MemberCard(member: .constant(member))  // Binding for toggling
+                        MemberCard(member: .constant(member))
                             .frame(maxWidth: .infinity)
-                            .background(Color.white)
                     }
                 }
             }
@@ -101,7 +98,7 @@ struct MembersView: View {
         }
     }
 
-    // Fetch data from Firestore
+    
     func fetchData() {
         db.collection("users").whereField("role", isEqualTo: "member")
           .addSnapshotListener { querySnapshot, error in
@@ -121,7 +118,7 @@ struct MembersView: View {
     }
 }
 
-// Preview provider for SwiftUI previews
+    
 struct MembersView_Previews: PreviewProvider {
     static var previews: some View {
         MembersView()
