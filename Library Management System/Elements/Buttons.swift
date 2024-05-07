@@ -16,7 +16,6 @@ struct PrimaryCustomButton: View {
         Button(action: action) {
             Text(label)
                 .font(.title3)
-                .fontWeight(.bold)
                 .frame(maxWidth: .infinity)
                 .padding()
                 .background(themeManager.selectedTheme.primaryThemeColor)
@@ -35,7 +34,6 @@ struct SecondaryCustomButton: View {
         Button(action: action) {
             Text(label)
                 .font(.headline)
-                .fontWeight(.bold)
                 .foregroundColor(.white)
                 .frame(maxWidth: .infinity)
                 .padding()

@@ -7,6 +7,8 @@ struct Filter: View {
     @State private var searchText = ""
     @State private var isFilterButtonTapped = false
     @State private var showFilterOptions = false
+    @ObservedObject var MemBooksModel = UserBooksModel()
+    @State private var filteredBooks: [Book] = []
     
     var body: some View {
         NavigationView {
@@ -19,7 +21,7 @@ struct Filter: View {
             }
             .navigationTitle("Search")
             .sheet(isPresented: $showFilterOptions) {
-                FilterOptions()
+                FilterOptions( userBooksModel: MemBooksModel)
                     .presentationDetents([.medium])
             }
             
@@ -39,14 +41,11 @@ struct SearchBar: View {
                 .foregroundColor(.gray)
                 .padding(.leading, 8)
             TextField("Search", text: $text)
-            
                 .padding(8)
                 .background(Color(.systemGray5))
                 .cornerRadius(8)
-                .padding(.trailing, 8)
             HStack {
                 Button(action: {
-                    
                     isFilterButtonTapped.toggle()
                     showFilterOptions.toggle()
                 }) {
@@ -59,17 +58,20 @@ struct SearchBar: View {
                 }
             }
         }
+        .background(Color(.systemGray5)) // Set background color for the entire search bar
+        .cornerRadius(8) // Set corner radius for the entire search bar
+
     }
 }
 
 struct FilterOptions: View {
     @State private var selectedCategories: [String] = []
-    @State private var selectedAuthors: [String] = []
-    @State private var selectedLanguages: [String] = []
-    
+    @State var selectedAuthors: [String] = []
+    @State var userBooksModel: UserBooksModel
     let categories = ["Fiction", "Non-Fiction", "Science Fiction", "Mystery", "Thriller", "Romance", "Fantasy", "Biography", "Self-Help"]
-    let authors = ["Harward Business review", "Darren Hardy", "Ed haddon"]
-    let languages = ["English", "Hindi", "French", "German", "Chinese"]
+    var authors: [String] {
+        userBooksModel.authors
+    }
     
     var body: some View {
         
@@ -134,42 +136,13 @@ struct FilterOptions: View {
             
             Divider()
             
-            Section(header: Text("Language")) {
-                ScrollView(.horizontal){
-                    HStack {
-                        ForEach(languages, id: \.self) {language in
-                            Button(action: {
-                                if selectedLanguages.contains(language) {
-                                    selectedLanguages.removeAll(where: { $0 == language })
-                                } else {
-                                    selectedLanguages.append(language)
-                                }
-                            }) {
-                                Text(language)
-                                    .padding()
-                                    .foregroundColor(selectedLanguages.contains(language) ? .white : .black)
-                                    .background(selectedLanguages.contains(language) ? Color.blue : Color.gray.opacity(0.3))
-                                    .cornerRadius(25)
-                                    .overlay(
-                                        RoundedRectangle(cornerRadius: 25)
-                                            .stroke(Color.gray.opacity(0.3), lineWidth: 1)
-                                    )
-                            }
-                            .padding(.trailing, 8)
-                        }
-                    }
-                }
-            }
-            
-            Divider()
-            
             
         }
         .padding(.all, 15)
         Button(action: {
             print("Selected Categories: \(selectedCategories)")
             print("Selected Authors: \(selectedAuthors)")
-            print("Selected Languages: \(selectedLanguages)")
+//            print("Selected Languages: \(selectedLanguages)")
         }) {
             Text("Apply")
                 .padding(.vertical, 10)
@@ -185,4 +158,3 @@ struct FilterOptions: View {
 #Preview {
         Filter()
 }
-

@@ -2,7 +2,7 @@
 //  Membership.swift
 //  Library Management System
 //
-//  Created by admin on 22/04/24.
+//  Created by Ishan Joshi on 22/04/24.
 //
 
 import SwiftUI
@@ -27,6 +27,7 @@ struct Membership: View {
     @State private var requestStatus = "Request Status"
     @StateObject var ConfiViewMOdel = ConfigViewModel()
     @StateObject var memModelView = UserBooksModel()
+    @EnvironmentObject var themeManager: ThemeManager
     
     
     private func colorForStatus(_ status: MembershipStatus) -> Color {
@@ -47,7 +48,7 @@ struct Membership: View {
             VStack{
                 ZStack {
                     Rectangle()
-                        .foregroundColor(Color(red: 255/255, green: 183/255, blue: 21/255))
+                        .foregroundColor(themeManager.selectedTheme.primaryThemeColor)
                         .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
                         .frame(height: 250)
                         .navigationBarHidden(true)
@@ -60,6 +61,7 @@ struct Membership: View {
                             .font(.title3)
                             .fontWeight(.semibold)
                     }.padding(.top, 80)
+                        .foregroundColor(.white)
                 }
                 HStack {
                     VStack(alignment: .leading) {
@@ -120,8 +122,8 @@ struct Membership: View {
                             statusIndicator(imageName: "clock", text: "Request Sent", status: status_sent)
                         }
                         Rectangle()
-                            .fill(Color.black)
-                            .frame(width: 2, height: 50)
+                            .fill(Color(.systemGray))
+                            .frame(width: 3, height: 50)
                             .padding(.leading,10)
                         HStack{
                             statusIndicator(imageName: "clock", text: "Request Received by Librarian", status: status_sent)
@@ -129,8 +131,8 @@ struct Membership: View {
                         }
                         
                         Rectangle()
-                            .fill(Color.black)
-                            .frame(width: 2, height: 50)
+                            .fill(Color(.systemGray))
+                            .frame(width: 3, height: 50)
                             .padding(.leading,10)
                         HStack{
                             statusIndicator(imageName: "clock", text: requestStatus, status: status_received)
@@ -141,25 +143,18 @@ struct Membership: View {
                 }.padding(.vertical)
                 VStack {
                     Spacer()
-                    Button(action: {
+                    PrimaryCustomButton(action: {
                         self.status_sent = .applied
                         self.status_received = .new
                         self.requestStatus = "Request Status"
                         updateCurrentUserDetails()
-                    }) {
-                        Text("Request Membership")
-                            .foregroundColor(.black)
-                            .frame(maxWidth: .infinity)
-                    }
-                    .buttonStyle(.bordered)
-                    .background(Color(red: 255/255, green: 183/255, blue: 21/255))
-                    .cornerRadius(20)
-                    .padding(.horizontal)
-                    .padding(.bottom)
-                    NavigationLink("", destination: MemberTabView(memModelView: memModelView, ConfiViewModel: ConfiViewMOdel), isActive: $shouldNavigate)
-                        .hidden() // Hide the navigation link
+                    }, label: "Request Membership")
+                    .padding(.bottom, 15)
                     
-                }
+                    NavigationLink("", destination: MemberTabView(memModelView: memModelView, ConfiViewModel: ConfiViewMOdel), isActive: $shouldNavigate)
+                        .hidden()
+                    
+                }.padding()
             }
         }
         .onAppear(perform: {
@@ -186,7 +181,7 @@ struct Membership: View {
     private func updateCurrentUserDetails() {
         if let currentUser = Auth.auth().currentUser {
             let userId = currentUser.uid
-                // Update status to "applied for membership" in Firestore
+    
                 db.collection("users").document(userId).updateData(["status": "applied"]) { error in
                     if let error = error {
                         print("Error updating user status: \(error.localizedDescription)")
@@ -251,6 +246,11 @@ struct Membership: View {
 
 }
 
-#Preview {
-    Membership()
+
+struct Membership_Previews: PreviewProvider {
+    static var previews: some View {
+        let themeManager = ThemeManager()
+        return Membership()
+            .environmentObject(themeManager)
+    }
 }

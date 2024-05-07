@@ -20,6 +20,7 @@ class StaffViewModel: ObservableObject {
     @Published var responseMessage = ""
     
     @Published var currentStaff: [Staff] = []
+    @Published var allStaffs: [Staff] = []
     
     func addStaff(
         name: String,
@@ -84,6 +85,32 @@ class StaffViewModel: ObservableObject {
             }
         }
     }
+    
+    func getAllStaff() {
+            self.dbInstance.collection("users").whereField("role", isEqualTo: "librarian").getDocuments { querySnapshot, error in
+                guard let querySnapshot = querySnapshot else {
+                    print("Error fetching librarians: \(error?.localizedDescription ?? "Unknown error")")
+                    return
+                }
+                
+                var librarians = [Staff]()
+                for document in querySnapshot.documents {
+                    let data = document.data()
+                    let librarian = Staff(
+                        userID: document.documentID,
+                        name: data["name"] as? String ?? "",
+                        email: data["email"] as? String ?? "",
+                        mobile: data["mobile"] as? String ?? "",
+                        profileImageURL: data["profileImageURL"] as? String ?? "",
+                        aadhar: data["aadhar"] as? String ?? "",
+                        role: data["role"] as? String ?? "",
+                        password: data["password"] as? String ?? "",
+                        createdOn: (data["createdOn"] as? Timestamp)?.dateValue() ?? Date(),
+                        updatedOn: (data["updatedOn"] as? Timestamp)?.dateValue() ?? Date()
+                    )
+                }
+            }
+        }
     
     func getStaff() {
         self.dbInstance.collection("users").whereField("role", isEqualTo: "librarian").getDocuments { querySnapshot, error in

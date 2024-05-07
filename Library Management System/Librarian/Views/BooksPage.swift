@@ -4,6 +4,7 @@ struct EmptyPage: View {
     
     @State private var degree:Int = 270
     @State private var spinnerLength = 0.6
+    @EnvironmentObject var themeManager: ThemeManager
     
     var body: some View {
         ZStack{

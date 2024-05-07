@@ -12,11 +12,12 @@ struct MemberTabView: View {
     @State private var applyMembership = false
     @ObservedObject var memModelView = UserBooksModel()
     @ObservedObject var ConfiViewModel = ConfigViewModel()
+    @ObservedObject var LibViewModel = LibrarianViewModel()
     @ObservedObject var auth = AuthViewModel()
     
     var body: some View {
         TabView {
-            MemberHome()
+            MemberHome(LibViewModel: LibViewModel)
                 .tabItem {
                     Image(systemName: "house")
                     Text("Home")

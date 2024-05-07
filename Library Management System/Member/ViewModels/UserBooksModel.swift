@@ -21,6 +21,7 @@ class UserBooksModel: ObservableObject{
     
     @Published var currentBook: [Book] = []
     @Published var allBooks: [Book] = []
+    @Published var authors: [String] = []
     
     func getBook(bookId: String){
         
@@ -75,6 +76,7 @@ class UserBooksModel: ObservableObject{
         self.responseStatus = 0
         self.responseMessage = ""
         self.allBooks = []
+        self.authors = []
         
         dbInstance.collection("Books").getDocuments{ (snapshot, error) in
             
@@ -101,11 +103,16 @@ class UserBooksModel: ObservableObject{
                         let bookHistory = History(userId: userId, userName: userName, issuedOn: issuedOn, returnedOn: returnedOn)
                         bookHistoryArray.append(bookHistory)
                     }
+                    if let author = documentData["bookAuthor"] as? String, !self.authors.contains(author) {
+                                           self.authors.append(author)
+                                       }
+
+                                       print(self.authors)
                     
                     let book = Book(id: documentData["id"] as! String as Any as! String, bookISBN: documentData["bookISBN"] as! String as Any as! String, bookImageURL: documentData["bookImageURL"] as! String as Any as! String, bookName: documentData["bookName"] as! String as Any as! String, bookAuthor: documentData["bookAuthor"] as! String as Any as! String, bookDescription: documentData["bookDescription"] as! String as Any as! String, bookCategory: documentData["bookCategory"] as! String as Any as! String, bookSubCategories: documentData["bookSubCategories"] as! [String] as Any as! [String], bookPublishingDate: documentData["bookPublishingDate"] as! String as Any as! String, bookStatus: documentData["bookStatus"] as! String as Any as! String, bookCount: documentData["bookCount"] as! Int as Any as! Int, bookAvailableCount: documentData["bookAvailableCount"] as! Int as Any as! Int, bookPreBookedCount: documentData["bookPreBookedCount"] as! Int as Any as! Int, bookTakenCount: documentData["bookTakenCount"] as! Int as Any as! Int, bookIssuedTo: documentData["bookIssuedTo"] as! [String] as Any as! [String], bookIssuedToName: documentData["bookIssuedToName"] as! [String] as Any as! [String], bookIssuedOn: documentData["bookIssuedOn"] as! [String] as Any as! [String], bookExpectedReturnOn: documentData["bookExpectedReturnOn"] as! [String] as Any as! [String], bookRating: Float(documentData["bookRating"] as! Int as Any as! Int), bookReviews: documentData["bookReviews"] as! [String] as Any as! [String], bookHistory: bookHistoryArray, createdOn: documentData["createdOn"] as! String as Any as! String, updayedOn: documentData["updatedOn"] as! String as Any as! String)
                     self.allBooks.append(book)
                 }
-                print(self.allBooks)
+                
             }
             
         }
@@ -176,6 +183,15 @@ class UserBooksModel: ObservableObject{
         }
         
     }
+    
+    func filterBooksByAuthors(selectedAuthors: [String]) -> [Book] {
+                return allBooks.filter { book in
+                    let bookAuthors = [book.bookAuthor]
+                    return selectedAuthors.allSatisfy { author in
+                        bookAuthors.contains(author)
+                    }
+                }
+            }
     
     func preBook(bookId: String, bookName: String, userId: String, userName: String, bookPreBookedCount: Int, loanPeriod: Int){
         
