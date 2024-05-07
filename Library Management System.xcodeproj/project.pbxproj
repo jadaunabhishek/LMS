@@ -92,6 +92,8 @@
 		D57BFDAF2BDD233E0094A0B5 /* Books.swift in Sources */ = {isa = PBXBuildFile; fileRef = D57BFDAE2BDD233E0094A0B5 /* Books.swift */; };
 		D57BFDB12BDD23480094A0B5 /* Support.swift in Sources */ = {isa = PBXBuildFile; fileRef = D57BFDB02BDD23480094A0B5 /* Support.swift */; };
 		D57BFDB32BDD24FD0094A0B5 /* UserBooksModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D57BFDB22BDD24FD0094A0B5 /* UserBooksModel.swift */; };
+		D5C949582BE9F52800D5310D /* supportCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5C949572BE9F52800D5310D /* supportCard.swift */; };
+		D5C9495A2BEA193100D5310D /* SupportReply.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5C949592BEA193100D5310D /* SupportReply.swift */; };
 		DC1D402C2BD6EB4A00970C7B /* BookSchema.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC1D402B2BD6EB4A00970C7B /* BookSchema.swift */; };
 		DC1D402E2BD76BF000970C7B /* AddBookPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC1D402D2BD76BF000970C7B /* AddBookPage.swift */; };
 		DC1D40302BD77E4B00970C7B /* AdminHomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC1D402F2BD77E4B00970C7B /* AdminHomeView.swift */; };
@@ -182,6 +184,8 @@
 		D57BFDAE2BDD233E0094A0B5 /* Books.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Books.swift; sourceTree = "<group>"; };
 		D57BFDB02BDD23480094A0B5 /* Support.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Support.swift; sourceTree = "<group>"; };
 		D57BFDB22BDD24FD0094A0B5 /* UserBooksModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserBooksModel.swift; sourceTree = "<group>"; };
+		D5C949572BE9F52800D5310D /* supportCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = supportCard.swift; sourceTree = "<group>"; };
+		D5C949592BEA193100D5310D /* SupportReply.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupportReply.swift; sourceTree = "<group>"; };
 		DC1D402B2BD6EB4A00970C7B /* BookSchema.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookSchema.swift; sourceTree = "<group>"; };
 		DC1D402D2BD76BF000970C7B /* AddBookPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddBookPage.swift; sourceTree = "<group>"; };
 		DC1D402F2BD77E4B00970C7B /* AdminHomeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AdminHomeView.swift; sourceTree = "<group>"; };
@@ -277,6 +281,7 @@
 				843CB5852BE399E5008CFAFC /* Buttons.swift */,
 				843CB5872BE399F2008CFAFC /* Textfields.swift */,
 				D50EA9D22BE4D0870079C1AB /* Picker.swift */,
+				D5C949572BE9F52800D5310D /* supportCard.swift */,
 			);
 			path = Elements;
 			sourceTree = "<group>";
@@ -490,6 +495,7 @@
 				D57BFDB02BDD23480094A0B5 /* Support.swift */,
 				0F85ED882BE0E32900C48C75 /* MemberBookDetailView.swift */,
 				848F9DE12BE897F9004614D9 /* CreateIssue.swift */,
+				D5C949592BEA193100D5310D /* SupportReply.swift */,
 			);
 			path = MemberTabs;
 			sourceTree = "<group>";
@@ -690,6 +696,7 @@
 				DC1D402C2BD6EB4A00970C7B /* BookSchema.swift in Sources */,
 				84E87D592BD7D4E200FAD5DC /* AddCategoriesView.swift in Sources */,
 				DC79BDC42BDA23710048F1DE /* UpdateBookPage.swift in Sources */,
+				D5C9495A2BEA193100D5310D /* SupportReply.swift in Sources */,
 				840A18ED2BE03F2700B9ED91 /* UserProfileView.swift in Sources */,
 				845F7D702BD8DFD9006831F8 /* Membership.swift in Sources */,
 				0F85ED892BE0E32900C48C75 /* MemberBookDetailView.swift in Sources */,
@@ -718,6 +725,7 @@
 				DC1D40302BD77E4B00970C7B /* AdminHomeView.swift in Sources */,
 				D55820C92BD61AB0005A00F9 /* ContentView.swift in Sources */,
 				1F7C0E4D2BD7A920007D5221 /* StaffSchema.swift in Sources */,
+				D5C949582BE9F52800D5310D /* supportCard.swift in Sources */,
 				D50EA9CF2BE4BA7B0079C1AB /* MemReqViewModel.swift in Sources */,
 				84301CB72BDA13C8004CF581 /* MemberTabView.swift in Sources */,
 				D57BFDB32BDD24FD0094A0B5 /* UserBooksModel.swift in Sources */,
@@ -908,7 +916,6 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 17.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -940,7 +947,6 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 17.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

@@ -32,7 +32,7 @@ class LibrarianViewModel: ObservableObject{
         
         let addNewBook = dbInstance.collection("Books").document()
         let storageRef = Storage.storage().reference()
-        let imageData  = bookImage.jpegData(compressionQuality: 0.9)!
+        let imageData  = bookImage.jpegData(compressionQuality: 0.1)!
         let fileRef = storageRef.child("bookImages/\(addNewBook.documentID).jpeg")
         
         //var uploadDone  = false
@@ -88,7 +88,7 @@ class LibrarianViewModel: ObservableObject{
         
         if(isImageUpdated){
             let storageRef = Storage.storage().reference()
-            let imageData  = bookImage.jpegData(compressionQuality: 0.9)!
+            let imageData  = bookImage.jpegData(compressionQuality: 0.1)!
             let fileRef = storageRef.child("bookImages/\(bookId).jpeg")
             
             fileRef.putData(imageData, metadata: nil){
