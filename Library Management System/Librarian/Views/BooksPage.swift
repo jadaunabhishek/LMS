@@ -24,7 +24,7 @@ struct BooksPage: View {
     @State var isPageLoading: Bool = true
     
     var body: some View {
-        //NavigationView{
+        NavigationView{
             ZStack{
                 Color("BgColor").edgesIgnoringSafeArea(.all)
                 VStack(spacing: 26){
@@ -92,7 +92,7 @@ struct BooksPage: View {
                 )
             }
         }
-    //}
+    }
 }
 
 struct BPPrev: View {
