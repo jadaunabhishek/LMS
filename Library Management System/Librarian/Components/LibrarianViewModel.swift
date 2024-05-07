@@ -12,6 +12,7 @@ class LibrarianViewModel: ObservableObject{
     @Published var responseStatus = 0
     @Published var responseMessage = ""
     
+    @Published var currentMember: [UserSchema] = []
     @Published var currentBook: [Book] = []
     @Published var currentBookHistory: [Loan] = []
     @Published var currentUserHistory: [Loan] = []
@@ -163,7 +164,7 @@ class LibrarianViewModel: ObservableObject{
                         print("Error: Unable to parse fineDetails array from Firestore document")
                         return
                     }
-
+                    
                     var bookHistoryArray: [History] = []
                     for bookHistoryDict in bookHistoryDictArray {
                         guard let userId = bookHistoryDict["userId"] as? String,
@@ -178,7 +179,7 @@ class LibrarianViewModel: ObservableObject{
                         let bookHistory = History(userId: userId, userName: userName, issuedOn: issuedOn, returnedOn: returnedOn)
                         bookHistoryArray.append(bookHistory)
                     }
-
+                    
                     
                     self.currentBook = [ Book(id: document!["id"] as! String, bookISBN: document!["bookISBN"] as! String, bookImageURL: document!["bookImageURL"] as! String, bookName: document!["bookName"] as! String, bookAuthor: document!["bookAuthor"] as! String, bookDescription: document!["bookDescription"] as! String, bookCategory: document!["bookCategory"] as! String, bookSubCategories: document!["bookSubCategories"] as! [String], bookPublishingDate: document!["bookPublishingDate"] as! String, bookStatus: document!["bookStatus"] as! String, bookCount: document!["bookCount"] as! Int, bookAvailableCount:  document!["bookAvailableCount"] as! Int, bookPreBookedCount:  document!["bookPreBookedCount"] as! Int, bookTakenCount:  document!["bookTakenCount"] as! Int, bookIssuedTo: document!["bookIssuedTo"] as! [String], bookIssuedToName: document!["bookIssuedToName"] as! [String] as Any as! [String], bookIssuedOn: document!["bookIssuedOn"] as! [String], bookExpectedReturnOn: document!["bookExpectedReturnOn"] as! [String], bookRating: document!["bookRating"] as! Float, bookReviews: document!["bookReviews"] as! [String], bookHistory: bookHistoryArray, createdOn: document!["createdOn"] as! String, updayedOn: document!["updatedOn"] as! String) ]
                     self.responseStatus = 200
@@ -200,8 +201,8 @@ class LibrarianViewModel: ObservableObject{
     
     func getBooks(){
         
-//        self.responseStatus = 0
-//        self.responseMessage = ""
+        //        self.responseStatus = 0
+        //        self.responseMessage = ""
         
         var tempBooks: [Book] = []
         
@@ -215,7 +216,7 @@ class LibrarianViewModel: ObservableObject{
                         print("Error: Unable to parse fineDetails array from Firestore document")
                         return
                     }
-
+                    
                     var bookHistoryArray: [History] = []
                     for bookHistoryDict in bookHistoryDictArray {
                         guard let userId = bookHistoryDict["userId"] as? String,
@@ -257,7 +258,7 @@ class LibrarianViewModel: ObservableObject{
         
     }
     
-    func checkInBook(loanId: String, bookId:String) async{
+    func checkInBook(loanId: String, bookId:String, userId: String, userFines: Int, loanFine: Int, userPenalty: Int) async{
         
         
         var currenBook: [Book] = []
@@ -276,7 +277,7 @@ class LibrarianViewModel: ObservableObject{
                                 print("Error: Unable to parse fineDetails array from Firestore document")
                                 return
                             }
-
+                            
                             var bookHistoryArray: [History] = []
                             for bookHistoryDict in bookHistoryDictArray {
                                 guard let userId = bookHistoryDict["userId"] as? String,
@@ -291,7 +292,7 @@ class LibrarianViewModel: ObservableObject{
                                 let bookHistory = History(userId: userId, userName: userName, issuedOn: issuedOn, returnedOn: returnedOn)
                                 bookHistoryArray.append(bookHistory)
                             }
-
+                            
                             
                             currenBook = [ Book(id: document!["id"] as! String, bookISBN: document!["bookISBN"] as! String, bookImageURL: document!["bookImageURL"] as! String, bookName: document!["bookName"] as! String, bookAuthor: document!["bookAuthor"] as! String, bookDescription: document!["bookDescription"] as! String, bookCategory: document!["bookCategory"] as! String, bookSubCategories: document!["bookSubCategories"] as! [String], bookPublishingDate: document!["bookPublishingDate"] as! String, bookStatus: document!["bookStatus"] as! String, bookCount: document!["bookCount"] as! Int, bookAvailableCount:  document!["bookAvailableCount"] as! Int, bookPreBookedCount:  document!["bookPreBookedCount"] as! Int, bookTakenCount:  document!["bookTakenCount"] as! Int, bookIssuedTo: document!["bookIssuedTo"] as! [String], bookIssuedToName: document!["bookIssuedToName"] as! [String] as Any as! [String], bookIssuedOn: document!["bookIssuedOn"] as! [String], bookExpectedReturnOn: document!["bookExpectedReturnOn"] as! [String], bookRating: document!["bookRating"] as! Float, bookReviews: document!["bookReviews"] as! [String], bookHistory: bookHistoryArray, createdOn: document!["createdOn"] as! String, updayedOn: document!["updatedOn"] as! String) ]
                             if(currenBook[0].bookPreBookedCount > 0){
@@ -303,7 +304,7 @@ class LibrarianViewModel: ObservableObject{
                                             let dateFormatter = DateFormatter()
                                             dateFormatter.dateFormat = "dd/MM/yy"
                                             
-                                            let tempLoan = Loan(loanId: documentData["loanId"] as! String as Any as! String, bookId: documentData["bookId"] as! String as Any as! String, bookName: documentData["bookName"] as! String as Any as! String, bookIssuedTo: documentData["bookIssuedTo"] as! String as Any as! String, bookIssuedToName: documentData["bookIssuedToName"] as! String as Any as! String, bookIssuedOn: documentData["bookIssuedOn"] as! String as Any as! String, bookExpectedReturnOn: documentData["bookExpectedReturnOn"] as! String as Any as! String, bookReturnedOn: documentData["bookReturnedOn"] as! String as Any as! String, loanStatus: documentData["loanStatus"] as! String as Any as! String, loanReminderStatus: documentData["loanReminderStatus"] as! String as Any as! String, createdOn:  documentData["createdOn"] as! String as Any as! String, updatedOn: documentData["updatedOn"] as! String as Any as! String, timeStamp: documentData["timeStamp"] as! Int as Any as! Int)
+                                            let tempLoan = Loan(loanId: documentData["loanId"] as! String as Any as! String, bookId: documentData["bookId"] as! String as Any as! String, bookName: documentData["bookName"] as! String as Any as! String, bookImageURL: documentData["bookImageURL"] as! String as Any as! String, bookIssuedTo: documentData["bookIssuedTo"] as! String as Any as! String, bookIssuedToName: documentData["bookIssuedToName"] as! String as Any as! String, bookIssuedOn: documentData["bookIssuedOn"] as! String as Any as! String, bookExpectedReturnOn: documentData["bookExpectedReturnOn"] as! String as Any as! String, bookReturnedOn: documentData["bookReturnedOn"] as! String as Any as! String, loanStatus: documentData["loanStatus"] as! String as Any as! String, loanReminderStatus: documentData["loanReminderStatus"] as! String as Any as! String, fineCalculatedDays: documentData["fineCalculatedDays"] as! Int as Any as! Int, loanFine: documentData["loanFine"] as! Int as Any as! Int, createdOn:  documentData["createdOn"] as! String as Any as! String, updatedOn: documentData["updatedOn"] as! String as Any as! String, timeStamp: documentData["timeStamp"] as! Int as Any as! Int)
                                             if(tempLoan.bookId == bookId && tempLoan.loanStatus == "PreBooked"){
                                                 preBookings.append(tempLoan)
                                             }
@@ -318,7 +319,15 @@ class LibrarianViewModel: ObservableObject{
                                                         print("Loan updateion Error")
                                                     }
                                                     else{
-                                                        print("Updated loan successfully")
+                                                        self.dbInstance.collection("users").document(userId).updateData(["activeFine": userFines+loanFine, "penaltiesCount": userPenalty+1]){ error in
+                                                            if let error = error{
+                                                                self.responseStatus = 400
+                                                            }
+                                                            else{
+                                                                self.responseStatus = 200
+                                                                self.responseMessage = "Completed loan successfuly."
+                                                            }
+                                                        }
                                                     }
                                                 }
                                             }
@@ -343,8 +352,15 @@ class LibrarianViewModel: ObservableObject{
                                                 print("Unable to update loan. Error: \(error)")
                                             }
                                             else{
-                                                self.responseStatus = 200
-                                                self.responseMessage = "Completed loan successfuly."
+                                                self.dbInstance.collection("users").document(userId).updateData(["activeFine": userFines+loanFine, "penaltiesCount": userPenalty+1]){ error in
+                                                    if let error = error{
+                                                        self.responseStatus = 400
+                                                    }
+                                                    else{
+                                                        self.responseStatus = 200
+                                                        self.responseMessage = "Completed loan successfuly."
+                                                    }
+                                                }
                                             }
                                         }
                                     }
@@ -386,7 +402,7 @@ class LibrarianViewModel: ObservableObject{
                                 print("Error: Unable to parse fineDetails array from Firestore document")
                                 return
                             }
-
+                            
                             var bookHistoryArray: [History] = []
                             for bookHistoryDict in bookHistoryDictArray {
                                 guard let userId = bookHistoryDict["userId"] as? String,
@@ -401,7 +417,7 @@ class LibrarianViewModel: ObservableObject{
                                 let bookHistory = History(userId: userId, userName: userName, issuedOn: issuedOn, returnedOn: returnedOn)
                                 bookHistoryArray.append(bookHistory)
                             }
-
+                            
                             
                             currenBook = [ Book(id: document!["id"] as! String, bookISBN: document!["bookISBN"] as! String, bookImageURL: document!["bookImageURL"] as! String, bookName: document!["bookName"] as! String, bookAuthor: document!["bookAuthor"] as! String, bookDescription: document!["bookDescription"] as! String, bookCategory: document!["bookCategory"] as! String, bookSubCategories: document!["bookSubCategories"] as! [String], bookPublishingDate: document!["bookPublishingDate"] as! String, bookStatus: document!["bookStatus"] as! String, bookCount: document!["bookCount"] as! Int, bookAvailableCount:  document!["bookAvailableCount"] as! Int, bookPreBookedCount:  document!["bookPreBookedCount"] as! Int, bookTakenCount:  document!["bookTakenCount"] as! Int, bookIssuedTo: document!["bookIssuedTo"] as! [String], bookIssuedToName: document!["bookIssuedToName"] as! [String] as Any as! [String], bookIssuedOn: document!["bookIssuedOn"] as! [String], bookExpectedReturnOn: document!["bookExpectedReturnOn"] as! [String], bookRating: document!["bookRating"] as! Float, bookReviews: document!["bookReviews"] as! [String], bookHistory: bookHistoryArray, createdOn: document!["createdOn"] as! String, updayedOn: document!["updatedOn"] as! String) ]
                             if(currenBook[0].bookPreBookedCount > 0){
@@ -413,7 +429,7 @@ class LibrarianViewModel: ObservableObject{
                                             let dateFormatter = DateFormatter()
                                             dateFormatter.dateFormat = "dd/MM/yy"
                                             
-                                            let tempLoan = Loan(loanId: documentData["loanId"] as! String as Any as! String, bookId: documentData["bookId"] as! String as Any as! String, bookName: documentData["bookName"] as! String as Any as! String, bookIssuedTo: documentData["bookIssuedTo"] as! String as Any as! String, bookIssuedToName: documentData["bookIssuedToName"] as! String as Any as! String, bookIssuedOn: documentData["bookIssuedOn"] as! String as Any as! String, bookExpectedReturnOn: documentData["bookExpectedReturnOn"] as! String as Any as! String, bookReturnedOn: documentData["bookReturnedOn"] as! String as Any as! String, loanStatus: documentData["loanStatus"] as! String as Any as! String, loanReminderStatus: documentData["loanReminderStatus"] as! String as Any as! String, createdOn:  documentData["createdOn"] as! String as Any as! String, updatedOn: documentData["updatedOn"] as! String as Any as! String, timeStamp: documentData["timeStamp"] as! Int as Any as! Int)
+                                            let tempLoan = Loan(loanId: documentData["loanId"] as! String as Any as! String, bookId: documentData["bookId"] as! String as Any as! String, bookName: documentData["bookName"] as! String as Any as! String, bookImageURL: documentData["bookImageURL"] as! String as Any as! String, bookIssuedTo: documentData["bookIssuedTo"] as! String as Any as! String, bookIssuedToName: documentData["bookIssuedToName"] as! String as Any as! String, bookIssuedOn: documentData["bookIssuedOn"] as! String as Any as! String, bookExpectedReturnOn: documentData["bookExpectedReturnOn"] as! String as Any as! String, bookReturnedOn: documentData["bookReturnedOn"] as! String as Any as! String, loanStatus: documentData["loanStatus"] as! String as Any as! String, loanReminderStatus: documentData["loanReminderStatus"] as! String as Any as! String, fineCalculatedDays: documentData["fineCalculatedDays"] as! Int as Any as! Int, loanFine:  documentData["loanFine"] as! Int as Any as! Int, createdOn:  documentData["createdOn"] as! String as Any as! String, updatedOn: documentData["updatedOn"] as! String as Any as! String, timeStamp: documentData["timeStamp"] as! Int as Any as! Int)
                                             if(tempLoan.bookId == bookId && tempLoan.loanStatus == "PreBooked"){
                                                 preBookings.append(tempLoan)
                                             }
@@ -476,7 +492,7 @@ class LibrarianViewModel: ObservableObject{
             }
         }
     }
-
+    
     
     func getLoans(){
         
@@ -494,7 +510,7 @@ class LibrarianViewModel: ObservableObject{
                 for document in snapshot!.documents{
                     let documentData = document.data()
                     
-                    let tempLoan = Loan(loanId: documentData["loanId"] as! String as Any as! String, bookId: documentData["bookId"] as! String as Any as! String, bookName: documentData["bookName"] as! String as Any as! String, bookIssuedTo: documentData["bookIssuedTo"] as! String as Any as! String, bookIssuedToName: documentData["bookIssuedToName"] as! String as Any as! String, bookIssuedOn: documentData["bookIssuedOn"] as! String as Any as! String, bookExpectedReturnOn: documentData["bookExpectedReturnOn"] as! String as Any as! String, bookReturnedOn: documentData["bookReturnedOn"] as! String as Any as! String, loanStatus: documentData["loanStatus"] as! String as Any as! String, loanReminderStatus: documentData["loanReminderStatus"] as! String as Any as! String, createdOn: documentData["createdOn"] as! String as Any as! String, updatedOn: documentData["updatedOn"] as! String as Any as! String, timeStamp: documentData["timeStamp"] as! Int as Any as! Int)
+                    let tempLoan = Loan(loanId: documentData["loanId"] as! String as Any as! String, bookId: documentData["bookId"] as! String as Any as! String, bookName: documentData["bookName"] as! String as Any as! String, bookImageURL: documentData["bookImageURL"] as! String as Any as! String, bookIssuedTo: documentData["bookIssuedTo"] as! String as Any as! String, bookIssuedToName: documentData["bookIssuedToName"] as! String as Any as! String, bookIssuedOn: documentData["bookIssuedOn"] as! String as Any as! String, bookExpectedReturnOn: documentData["bookExpectedReturnOn"] as! String as Any as! String, bookReturnedOn: documentData["bookReturnedOn"] as! String as Any as! String, loanStatus: documentData["loanStatus"] as! String as Any as! String, loanReminderStatus: documentData["loanReminderStatus"] as! String as Any as! String, fineCalculatedDays: documentData["fineCalculatedDays"] as! Int as Any as! Int, loanFine: documentData["loanFine"] as! Int as Any as! Int, createdOn: documentData["createdOn"] as! String as Any as! String, updatedOn: documentData["updatedOn"] as! String as Any as! String, timeStamp: documentData["timeStamp"] as! Int as Any as! Int)
                     
                     let dateFormatter = DateFormatter()
                     dateFormatter.dateFormat = "dd/MM/yy"
@@ -545,7 +561,7 @@ class LibrarianViewModel: ObservableObject{
                 for document in snapshot!.documents{
                     let documentData = document.data()
                     
-                    let tempLoan = Loan(loanId: documentData["loanId"] as! String as Any as! String, bookId: documentData["bookId"] as! String as Any as! String, bookName: documentData["bookName"] as! String as Any as! String, bookIssuedTo: documentData["bookIssuedTo"] as! String as Any as! String, bookIssuedToName: documentData["bookIssuedToName"] as! String as Any as! String, bookIssuedOn: documentData["bookIssuedOn"] as! String as Any as! String, bookExpectedReturnOn: documentData["bookExpectedReturnOn"] as! String as Any as! String, bookReturnedOn: documentData["bookReturnedOn"] as! String as Any as! String, loanStatus: documentData["loanStatus"] as! String as Any as! String, loanReminderStatus: documentData["loanReminderStatus"] as! String as Any as! String, createdOn: documentData["createdOn"] as! String as Any as! String, updatedOn: documentData["updatedOn"] as! String as Any as! String, timeStamp: documentData["timeStamp"] as! Int as Any as! Int)
+                    let tempLoan = Loan(loanId: documentData["loanId"] as! String as Any as! String, bookId: documentData["bookId"] as! String as Any as! String, bookName: documentData["bookName"] as! String as Any as! String, bookImageURL: documentData["bookImageURL"] as! String as Any as! String, bookIssuedTo: documentData["bookIssuedTo"] as! String as Any as! String, bookIssuedToName: documentData["bookIssuedToName"] as! String as Any as! String, bookIssuedOn: documentData["bookIssuedOn"] as! String as Any as! String, bookExpectedReturnOn: documentData["bookExpectedReturnOn"] as! String as Any as! String, bookReturnedOn: documentData["bookReturnedOn"] as! String as Any as! String, loanStatus: documentData["loanStatus"] as! String as Any as! String, loanReminderStatus: documentData["loanReminderStatus"] as! String as Any as! String, fineCalculatedDays: documentData["fineCalculatedDays"] as! Int as Any as! Int, loanFine: documentData["loanFine"] as! Int as Any as! Int, createdOn: documentData["createdOn"] as! String as Any as! String, updatedOn: documentData["updatedOn"] as! String as Any as! String, timeStamp: documentData["timeStamp"] as! Int as Any as! Int)
                     
                     if(tempLoan.bookId == bookId){
                         tempBookHistory.append(tempLoan)
@@ -560,7 +576,7 @@ class LibrarianViewModel: ObservableObject{
     }
     
     func getUserHistory(userId: String){
-            
+        
         var tempUserHistory: [Loan] = []
         
         self.dbInstance.collection("Loans").getDocuments{ (snapshot, error) in
@@ -569,7 +585,7 @@ class LibrarianViewModel: ObservableObject{
                 for document in snapshot!.documents{
                     let documentData = document.data()
                     
-                    let tempLoan = Loan(loanId: documentData["loanId"] as! String as Any as! String, bookId: documentData["bookId"] as! String as Any as! String, bookName: documentData["bookName"] as! String as Any as! String, bookIssuedTo: documentData["bookIssuedTo"] as! String as Any as! String, bookIssuedToName: documentData["bookIssuedToName"] as! String as Any as! String, bookIssuedOn: documentData["bookIssuedOn"] as! String as Any as! String, bookExpectedReturnOn: documentData["bookExpectedReturnOn"] as! String as Any as! String, bookReturnedOn: documentData["bookReturnedOn"] as! String as Any as! String, loanStatus: documentData["loanStatus"] as! String as Any as! String, loanReminderStatus: documentData["loanReminderStatus"] as! String as Any as! String, createdOn: documentData["createdOn"] as! String as Any as! String, updatedOn: documentData["updatedOn"] as! String as Any as! String, timeStamp: documentData["timeStamp"] as! Int as Any as! Int)
+                    let tempLoan = Loan(loanId: documentData["loanId"] as! String as Any as! String, bookId: documentData["bookId"] as! String as Any as! String, bookName: documentData["bookName"] as! String as Any as! String, bookImageURL: documentData["bookImageURL"] as! String as Any as! String, bookIssuedTo: documentData["bookIssuedTo"] as! String as Any as! String, bookIssuedToName: documentData["bookIssuedToName"] as! String as Any as! String, bookIssuedOn: documentData["bookIssuedOn"] as! String as Any as! String, bookExpectedReturnOn: documentData["bookExpectedReturnOn"] as! String as Any as! String, bookReturnedOn: documentData["bookReturnedOn"] as! String as Any as! String, loanStatus: documentData["loanStatus"] as! String as Any as! String, loanReminderStatus: documentData["loanReminderStatus"] as! String as Any as! String, fineCalculatedDays: documentData["fineCalculatedDays"] as! Int as Any as! Int, loanFine: documentData["loanFine"] as! Int as Any as! Int, createdOn: documentData["createdOn"] as! String as Any as! String, updatedOn: documentData["updatedOn"] as! String as Any as! String, timeStamp: documentData["timeStamp"] as! Int as Any as! Int)
                     
                     if(tempLoan.bookIssuedTo == userId){
                         tempUserHistory.append(tempLoan)
@@ -598,11 +614,171 @@ class LibrarianViewModel: ObservableObject{
         }
         
     }
-
     
-//    func filterBook(){
-//
-//        let allBooks = self.dbInstance.collection("Books")
-//    }
+    func calculateFine(){
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd/MM/yy"
+        
+        self.dbInstance.collection("configuration").document("HJ9L6mDbi01TJvX3ja7Z").getDocument { document, error in
+            if error == nil {
+                if document != nil && document!.exists {
+                    
+                    guard let fineDetailsDictArray = document!["fineDetails"] as? [[String: Any]] else {
+                        print("Error: Unable to parse fineDetails array from Firestore document")
+                        return
+                    }
+                    
+                    var fineDetailsArray: [fineDetails] = []
+                    for fineDetailDict in fineDetailsDictArray {
+                        guard let fine = fineDetailDict["fine"] as? Int,
+                              let period = fineDetailDict["period"] as? Int else {
+                            print("Error: Unable to parse fineDetail from dictionary")
+                            continue
+                        }
+                        
+                        let fineDetail = fineDetails(fine: fine, period: period)
+                        fineDetailsArray.append(fineDetail)
+                    }
+                    
+                    var newConfig = Config(
+                        configID: document!["configID"] as! String,
+                        adminID: document!["adminID"] as! String,
+                        logo: document!["logo"] as! String,
+                        accentColor: document!["accentColor"] as! String,
+                        loanPeriod: document!["loanPeriod"] as! Int,
+                        fineDetails: fineDetailsArray,
+                        maxFine: document!["maxFine"] as! Double,
+                        maxPenalties: document!["maxPenalties"] as! Int,
+                        categories: document!["categories"] as! [String])
+                    
+                    self.dbInstance.collection("Loans").whereField("loanStatus", isEqualTo: "Issued").getDocuments{
+                        
+                        (snapshot, error) in
+                        
+                        if(error == nil && snapshot != nil){
+                            for document in snapshot!.documents{
+                                let documentData = document.data()
+                                
+                                let tempLoan = Loan(loanId: documentData["loanId"] as! String as Any as! String, bookId: documentData["bookId"] as! String as Any as! String, bookName: documentData["bookName"] as! String as Any as! String, bookImageURL: documentData["bookImageURL"] as! String as Any as! String, bookIssuedTo: documentData["bookIssuedTo"] as! String as Any as! String, bookIssuedToName: documentData["bookIssuedToName"] as! String as Any as! String, bookIssuedOn: documentData["bookIssuedOn"] as! String as Any as! String, bookExpectedReturnOn: documentData["bookExpectedReturnOn"] as! String as Any as! String, bookReturnedOn: documentData["bookReturnedOn"] as! String as Any as! String, loanStatus: documentData["loanStatus"] as! String as Any as! String, loanReminderStatus: documentData["loanReminderStatus"] as! String as Any as! String, fineCalculatedDays: documentData["fineCalculatedDays"] as! Int as Any as! Int, loanFine: documentData["loanFine"] as! Int as Any as! Int, createdOn: documentData["createdOn"] as! String as Any as! String, updatedOn: documentData["updatedOn"] as! String as Any as! String, timeStamp: documentData["timeStamp"] as! Int as Any as! Int)
+                                
+                                let date = dateFormatter.date(from:String(tempLoan.bookExpectedReturnOn.split(separator: ",")[0]))!
+                                
+                                var currentFine = tempLoan.loanFine
+                                var currentDays = tempLoan.fineCalculatedDays
+                                if(date < Date.now){
+                                    
+                                    let diffs = Calendar.current.dateComponents([.day], from: date, to: Date.now)
+                                    if(currentDays < diffs.day! && diffs.day! > 0){
+                                        for i in 0..<newConfig.fineDetails.count{
+                                            if(currentDays < newConfig.fineDetails[i].period){
+                                                currentFine += newConfig.fineDetails[i].fine
+                                                currentDays += 1
+                                                break
+                                            }
+                                            else{
+                                                if( i == newConfig.fineDetails.count-1 && currentDays > newConfig.fineDetails[i].period){
+                                                    currentFine += newConfig.fineDetails[i].fine
+                                                    currentDays += 1
+                                                    break
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                self.dbInstance.collection("Loans").document(tempLoan.loanId).updateData(["loanFine":currentFine,"fineCalculatedDays":currentDays]){ error in
+                                    if let error = error{
+                                        print(error)
+                                    }
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    self.responseStatus = 400
+                    self.responseMessage = "Something went wrong, Unable to get book. Check console for error"
+                    print("Unable to get updated document. May be this could be the error: Book does not exist or db returned nil.")
+                }
+            } else {
+                self.responseStatus = 400
+                self.responseMessage = "Something went wrong, Unable to book. Check console for error"
+                print("Unable to get book. Error: \(String(describing: error)).")
+            }
+            
+        }
+    }
+    
+    func fetchUserData(userID: String) {
+        self.dbInstance.collection("users").document(userID).getDocument { [weak self] (documentSnapshot, error) in
+            if let error = error {
+                print("Error fetching user data: \(error.localizedDescription)")
+                return
+            }
+            
+            guard let document = documentSnapshot, document.exists else {
+                print("User document not found")
+                return
+            }
+            
+            // Extract user data from the document
+            let userData = document.data()
+            var tempMember = UserSchema(userID: userData?["userId"] as? String ?? "", name: userData?["name"] as? String ?? "", email: userData?["email"] as? String ?? "", mobile: userData?["mobile"] as? String ?? "", profileImage: userData?["profileImage"] as? String ?? "", role: userData?["role"] as? String ?? "", activeFine: userData?["activeFine"] as? Int ?? 0, totalFined: userData?["totalFined"] as? Int ?? 0, penaltiesCount: userData?["penaltiesCount"] as? Int ?? 0, createdOn: Date.now, updateOn: Date.now, status: userData?["status"] as? String ?? "")
+            
+            self?.currentMember.append(tempMember)
+        }
+    }
+    
+    func rateReview(bookId: String, rating: Int, review: String){
+        self.responseStatus = 0
+        self.responseMessage = ""
+        
+        self.dbInstance.collection("Books").document(bookId).getDocument { (document, error) in
+            if error == nil{
+                if (document != nil && document!.exists){
+                    
+                    guard let bookHistoryDictArray = document!["bookHistory"] as? [[String: Any]] else {
+                        print("Error: Unable to parse fineDetails array from Firestore document")
+                        return
+                    }
+                    
+                    var bookHistoryArray: [History] = []
+                    for bookHistoryDict in bookHistoryDictArray {
+                        guard let userId = bookHistoryDict["userId"] as? String,
+                              let userName = bookHistoryDict["userName"] as? String,
+                              let issuedOn = bookHistoryDict["issuedOn"] as? String,
+                              let returnedOn = bookHistoryDict["returnedOn"] as? String
+                        else {
+                            print("Error: Unable to parse fineDetail from dictionary")
+                            continue
+                        }
+                        
+                        let bookHistory = History(userId: userId, userName: userName, issuedOn: issuedOn, returnedOn: returnedOn)
+                        bookHistoryArray.append(bookHistory)
+                    }
+                    
+                    
+                    var tempCurrentBook = [ Book(id: document!["id"] as! String, bookISBN: document!["bookISBN"] as! String, bookImageURL: document!["bookImageURL"] as! String, bookName: document!["bookName"] as! String, bookAuthor: document!["bookAuthor"] as! String, bookDescription: document!["bookDescription"] as! String, bookCategory: document!["bookCategory"] as! String, bookSubCategories: document!["bookSubCategories"] as! [String], bookPublishingDate: document!["bookPublishingDate"] as! String, bookStatus: document!["bookStatus"] as! String, bookCount: document!["bookCount"] as! Int, bookAvailableCount:  document!["bookAvailableCount"] as! Int, bookPreBookedCount:  document!["bookPreBookedCount"] as! Int, bookTakenCount:  document!["bookTakenCount"] as! Int, bookIssuedTo: document!["bookIssuedTo"] as! [String], bookIssuedToName: document!["bookIssuedToName"] as! [String] as Any as! [String], bookIssuedOn: document!["bookIssuedOn"] as! [String], bookExpectedReturnOn: document!["bookExpectedReturnOn"] as! [String], bookRating: document!["bookRating"] as! Float, bookReviews: document!["bookReviews"] as! [String], bookHistory: bookHistoryArray, createdOn: document!["createdOn"] as! String, updayedOn: document!["updatedOn"] as! String) ]
+                    
+                    let newRating = Float((Float(tempCurrentBook[0].bookRating)+Float(rating))/2)
+                    var newReviews: [String] = tempCurrentBook[0].bookReviews
+                    newReviews.append(review)
+                    
+                    self.dbInstance.collection("Books").document(bookId).updateData(["bookRating":newRating, "bookReviews": newReviews, "updatedOn": Date.now.formatted()])
+                    self.responseStatus = 200
+                    self.responseMessage = "Book fetched successfuly"
+                }
+                else{
+                    self.responseStatus = 200
+                    self.responseMessage = "Something went wrong, Unable to get book. Chek console for error"
+                    print("Unable to get updated document. May be this could be the error: Book does not exist or db returned nil.")
+                }
+            }
+            else{
+                self.responseStatus = 200
+                self.responseMessage = "Something went wrong, Unable to book. Chek console for error"
+                print("Unable to get book. Error: \(String(describing: error)).")
+            }
+        }
+    }
     
 }

@@ -5,6 +5,7 @@ struct Loan{
     var loanId: String
     var bookId: String
     var bookName: String
+    var bookImageURL: String
     var bookIssuedTo: String
     var bookIssuedToName: String
     var bookIssuedOn: String
@@ -12,6 +13,8 @@ struct Loan{
     var bookReturnedOn: String
     var loanStatus: String
     var loanReminderStatus: String
+    var fineCalculatedDays: Int
+    var loanFine: Int
     var createdOn: String
     var updatedOn: String
     let timeStamp: Int
@@ -22,6 +25,7 @@ struct Loan{
             "loanId":loanId,
             "bookId":bookId,
             "bookName":bookName,
+            "bookImageURL":bookImageURL,
             "bookIssuedTo":bookIssuedTo,
             "bookIssuedToName":bookIssuedToName,
             "bookIssuedOn":bookIssuedOn,
@@ -29,6 +33,8 @@ struct Loan{
             "bookReturnedOn":bookReturnedOn,
             "loanStatus":loanStatus,
             "loanReminderStatus": loanReminderStatus,
+            "fineCalculatedDays":fineCalculatedDays,
+            "loanFine":loanFine,
             "createdOn":createdOn,
             "updatedOn":updatedOn,
             "timeStamp":timeStamp
