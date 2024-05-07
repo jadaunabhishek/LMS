@@ -47,16 +47,15 @@ struct BooksPage: View {
                                                         .foregroundColor(Color(.systemYellow))
                                                     Text(String(format: "%.1f", book.bookRating)).font(.system(size: 14, weight: .bold))
                                                         .foregroundColor(Color(.systemYellow))
-                                                    Text("/ 5").font(.system(size: 14, weight: .bold))
-                                                        .foregroundColor(Color(.systemYellow))
-                                                }
+                                                    
+                                                }.padding(.bottom, 5)
                                                 Text("\(book.bookName)")
                                                     .multilineTextAlignment(.leading)
-                                                    .font(.system(size: 18, weight: .bold))
+                                                    .font(.system(size: 22, weight: .bold))
                                                     .lineLimit(2)
                                                 Text("\(book.bookAuthor)")
                                                     .multilineTextAlignment(.leading)
-                                                    .font(.system(size: 16, weight: .semibold))
+                                                    .font(.system(size: 19, weight: .semibold))
                                                     .lineLimit(1)
                                                     .foregroundColor(Color(.systemGray))
                                             }
@@ -72,6 +71,7 @@ struct BooksPage: View {
                                         .cornerRadius(8)
                                     }
                                     .foregroundColor(themeManager.selectedTheme.bodyTextColor)
+                                    Divider()
                                 }
                             }
                         }
