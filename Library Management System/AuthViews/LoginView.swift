@@ -15,7 +15,7 @@ struct LoginView: View {
     @EnvironmentObject var themeManager: ThemeManager
     @StateObject private var viewModel = AuthViewModel()
     @StateObject var LibViewModel = LibrarianViewModel()
-    @StateObject var ConfiViewMOdel = ConfigViewModel()
+    @StateObject var configViewModel = ConfigViewModel()
     @StateObject var memModelView = UserBooksModel()
     
     @State private var email: String = ""
@@ -26,9 +26,27 @@ struct LoginView: View {
         ZStack {
             VStack {
                 VStack {
-                    Image("AppLogo")
-                        .resizable()
-                        .frame(width: 300, height: 150, alignment: .center)
+                    if let logoURL = configViewModel.currentConfig.first?.logo {
+                        AsyncImage(url: URL(string: logoURL)) { phase in
+                            switch phase {
+                            case .success(let image):
+                                image
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fit)
+                                    .frame(width: 300, height: 150)
+                            default:
+                                Image("AppLogo")
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fit)
+                                    .frame(width: 300, height: 150)
+                            }
+                        }
+                    } else {
+                        Image("AppLogo")
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(width: 300, height: 150)
+                    }
                     
                     Text("Log In")
                         .font(.largeTitle)
@@ -73,8 +91,8 @@ struct LoginView: View {
                     .disabled(email.isEmpty || password.isEmpty)
                     
                     NavigationLink(destination: AdminTabView(), isActive: $viewModel.shouldNavigateToAdmin) { EmptyView() }
-                    NavigationLink(destination: LibrarianFirstScreenView(LibModelView: LibViewModel, ConfiViewModel: ConfiViewMOdel), isActive: $viewModel.shouldNavigateToLibrarian) { EmptyView() }
-                    NavigationLink(destination: MemberTabView(memModelView: memModelView, ConfiViewModel: ConfiViewMOdel), isActive: $viewModel.shouldNavigateToMember) { EmptyView() }
+                    NavigationLink(destination: LibrarianFirstScreenView(LibModelView: LibViewModel, ConfiViewModel: configViewModel), isActive: $viewModel.shouldNavigateToLibrarian) { EmptyView() }
+                    NavigationLink(destination: MemberTabView(memModelView: memModelView, ConfiViewModel: configViewModel), isActive: $viewModel.shouldNavigateToMember) { EmptyView() }
                     NavigationLink(destination: Membership(), isActive: $viewModel.shouldNavigateToGeneral) { EmptyView() }
                 }
                 
