@@ -59,7 +59,7 @@ struct MemberCard: View {
             .cornerRadius(10)
             .shadow(radius: 2)
         }
-        .padding(.horizontal)
+        .padding()
     }
 }
 
@@ -67,17 +67,45 @@ struct MemberCard: View {
 struct MembersView: View {
     @State private var members: [Member] = []
     @State private var searchText = ""
-    private var db = Firestore.firestore()
+    
+    var db = Firestore.firestore()
+    func updateData(memberId: String, status: String) {
+        db.collection("users").document(memberId).updateData(["status": status])
+    }
 
     var body: some View {
         NavigationView {
-            ScrollView {
-                LazyVStack(spacing: 16) {
+            VStack{
+                List{
                     ForEach(filteredMembers, id: \.id) { member in
                         MemberCard(member: .constant(member))
                             .frame(maxWidth: .infinity)
+                            .background(Color.white)
+                            .swipeActions(edge: .trailing){
+                                if(member.status != "Approved"){
+                                    Button(action:{
+                                        updateData(memberId: member.id, status: "Approved")
+                                        fetchData()
+                                        //member.status = "Approved"
+                                    }){
+                                        Label("Approve", systemImage: "checkmark")
+                                    }
+                                    .tint(.green)
+                                }
+                                else{
+                                    Button(action:{
+                                        updateData(memberId: member.id, status: "Revoked")
+                                        fetchData()
+                                    }){
+                                        Label("Revoke", systemImage: "xmark")
+                                    }
+                                    .tint(.red)
+                                }
+                            }
                     }
                 }
+                .listStyle(.plain)
+
             }
             .searchable(text: $searchText)
             .navigationTitle("Members")
@@ -111,8 +139,8 @@ struct MembersView: View {
                 let data = doc.data()
                 let email = data["email"] as? String ?? ""
                 let name = data["name"] as? String ?? ""
-                let status = data["status"] as? String ?? ""
-                return Member(id: doc.documentID, name: name, email: email, status: status, isToggled: status == "approved")
+                var status = data["status"] as? String ?? ""
+                return Member(id: doc.documentID, name: name, email: email, status: status, isToggled: status == "Approved")
             }
         }
     }
