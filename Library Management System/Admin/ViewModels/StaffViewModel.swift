@@ -33,7 +33,7 @@ class StaffViewModel: ObservableObject {
     ) {
         let addNewStaff = dbInstance.collection("users").document()
         let storageRef = Storage.storage().reference()
-        let imageData = profilePhoto.jpegData(compressionQuality: 0.9)!
+        let imageData = profilePhoto.jpegData(compressionQuality: 0.1)!
         let fileRef = storageRef.child("staffProfileImages/\(addNewStaff.documentID).jpeg")
         
         fileRef.putData(imageData, metadata: nil) { metadata, error in
@@ -155,7 +155,7 @@ class StaffViewModel: ObservableObject {
         
         if isImageUpdated {
             let storageRef = Storage.storage().reference()
-            let imageData = profilePhoto.jpegData(compressionQuality: 0.9)!
+            let imageData = profilePhoto.jpegData(compressionQuality: 0.1)!
             let fileRef = storageRef.child("staffProfileImages/\(staffID).jpeg")
             
             fileRef.putData(imageData, metadata: nil) { metadata, error in
