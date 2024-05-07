@@ -72,6 +72,7 @@ struct Books: View {
 
 struct BookRow: View {
     let book: Book
+    @EnvironmentObject var themeManager: ThemeManager
     var body: some View {
         HStack {
             AsyncImage(url: URL(string: book.bookImageURL)) { image in
@@ -90,6 +91,7 @@ struct BookRow: View {
                 Text("\(book.bookAuthor)")
                     .font(.system(size: 18, weight: .regular))
             }
+            .foregroundColor(themeManager.selectedTheme.bodyTextColor)
             .padding(5)
             
             Spacer()

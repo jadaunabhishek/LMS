@@ -36,25 +36,26 @@ struct MemberHome: View {
                         Rectangle()
                             .foregroundColor(themeManager.selectedTheme.secondaryThemeColor)
                             .clipShape(RoundedRectangle(cornerRadius: 25, style: .continuous))
-                            .frame(height: 230)
+                            .frame(height: 250)
                             .navigationBarBackButtonHidden(true)
                             .navigationTitle("Home")
                             .navigationBarHidden(true)
                         HStack {
-                            VStack(alignment: .leading, spacing: 10) {
-                                Text("DATE")
-                                    .font(.title3)
-                                    .fontWeight(.bold).padding(.bottom, 15)
-                                Text("Author:")
-                                    .font(.title2)
+                            VStack(alignment: .leading, spacing: 5) {
+                                Text("DATE : 6/5/24")
+                                Text("6/5/24")
+                                    .font(.headline)
+                                    .fontWeight(.bold)
+                                Text("Author: Howard S.Smith")
+                                    .font(.headline)
                                     .fontWeight(.semibold)
-                                Text("Title")
-                                    .font(.title)
+                                Text("Title: I, Robor")
+                                    .font(.headline)
                                     .fontWeight(.bold)
                                 Text("ISBN 1234")
                                     .multilineTextAlignment(.leading)
                                     .font(.headline)
-                                    .fontWeight(.semibold).padding(.top, 30)
+                                    .fontWeight(.semibold)
                             }.padding().foregroundColor(.white)
                             Spacer()
                             VStack {
@@ -88,20 +89,27 @@ struct MemberHome: View {
                     
                     ScrollView(.horizontal) {
                         HStack {
-                            ZStack(alignment: .bottomLeading) {
-                                Rectangle()
-                                    .foregroundColor(themeManager.selectedTheme.primaryThemeColor)
-                                    .clipShape(RoundedRectangle(cornerRadius: 25, style: .continuous))
-                                    .frame(width: 230, height: 130)
-                                HStack {
-                                    Text("My Books").font(.title)
-                                        .fontWeight(.bold)
-                                        .foregroundColor(.white)
-                                    Image(systemName: "book")
-                                        .resizable()
-                                        .foregroundColor(.white)
-                                        .frame(width: 20, height: 20)
-                                }.padding()
+                            NavigationLink(destination: Books()) {
+                                ZStack(alignment: .bottomLeading) {
+                                    
+                                    Rectangle()
+                                        .foregroundColor(themeManager.selectedTheme.primaryThemeColor)
+                                        .clipShape(RoundedRectangle(cornerRadius: 25, style: .continuous))
+                                        .frame(width: 230, height: 130)
+                                    
+                                    HStack {
+                                        Text("My Books")
+                                            .font(.title)
+                                            .fontWeight(.bold)
+                                            .foregroundColor(.white)
+                                        Image(systemName: "book")
+                                            .resizable()
+                                            .foregroundColor(.white)
+                                            .frame(width: 20, height: 20)
+                                    }
+                                    .padding()
+                                }
+                                
                             }
                             ZStack(alignment: .bottomLeading) {
                                 Rectangle()
@@ -121,22 +129,22 @@ struct MemberHome: View {
                         }.padding()
                     }
                     
-                    Text("New Release")
-                        .font(.title)
-                        .fontWeight(.bold)
-                        .foregroundColor(.black)
-                        .padding()
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                    
-                    ScrollView(.horizontal) {
-                        LazyHStack(spacing: 20) {
-                            ForEach(0..<10) { _ in
-                                RoundedRectangle(cornerRadius: 10)
-                                    .frame(width: 100, height: 150)
-                                    .foregroundColor(themeManager.selectedTheme.primaryThemeColor)
-                            }
-                        }
-                    }
+                    //                    Text("New Release")
+                    //                        .font(.title)
+                    //                        .fontWeight(.bold)
+                    //                        .foregroundColor(.black)
+                    //                        .padding()
+                    //                        .frame(maxWidth: .infinity, alignment: .leading)
+                    //
+                    //                    ScrollView(.horizontal) {
+                    //                        LazyHStack(spacing: 20) {
+                    //                            ForEach(0..<10) { _ in
+                    //                                RoundedRectangle(cornerRadius: 10)
+                    //                                    .frame(width: 100, height: 150)
+                    //                                    .foregroundColor(themeManager.selectedTheme.primaryThemeColor)
+                    //                            }
+                    //                        }
+                    //                    }
                 }
                 .onAppear {
                     Task{
