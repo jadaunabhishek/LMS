@@ -139,7 +139,7 @@ struct forgotPasswordView: View {
             RoundedRectangle(cornerRadius: 15)
                 .fill(Color(.systemGray4))
                 .frame(width: 100,height: 5)
-            
+                .padding()
             VStack(alignment:.leading, spacing: 18) {
                
                    
@@ -148,8 +148,9 @@ struct forgotPasswordView: View {
                     .bold()
                 VStack(alignment:.leading,spacing:8){
                     
-                    Text("Enter your email for the Password reset. You will recive a mail to reset the password.")
+                    Text("You will recive a mail to reset the password.")
                 }
+                
                 VStack(spacing:8){
                     ZStack{
                         CustomTextField(text: $email, placeholder: "Email")

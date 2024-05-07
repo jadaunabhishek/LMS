@@ -6,8 +6,8 @@
 //
 
 import SwiftUI
+import Firebase
 import FirebaseAuth
-import Charts
 struct AdminHomeView: View {
     
     @ObservedObject var librarianViewModel: LibrarianViewModel
@@ -26,92 +26,12 @@ struct AdminHomeView: View {
     @EnvironmentObject var themeManager: ThemeManager
     
     var body: some View {
-        
-        VStack(spacing:0){
-            if !isPageLoading {
-                ZStack(alignment:.bottomLeading){
-                    Rectangle()
-                        .fill(Color(.systemGray4).opacity(0.5))
-                        .frame(height:110)
-                    HStack{
-                        Text("Hello! \(staffViewModel.currentStaff[0].name) ")
-                            .font(.title3)
-                        Spacer()
-                        Image(systemName: "person.crop.circle")
-                            .resizable()
-                            .frame(width: 30, height: 30)
-                    }
-                    .padding()
-                    Divider()
-                }
-                ScrollView {
-                    VStack(spacing:8){
-                        VStack{
-                            
-                        }
-                        VStack{
-                            ZStack{
-                                RoundedRectangle(cornerRadius: 10)
-                                    .fill(Color(.systemGray4).opacity(0.5))
-                                    .frame(height: 150)
-                                    .padding(.horizontal)
-                                
-                                VStack(alignment: .leading){
-                                    Text("Total Revenue")
-                                        .foregroundStyle(Color.gray)
-                                        .font(.title3)
-                                    HStack{
-                                        Text("₹")
-                                            .padding(.top,8)
-                                            .font(.title)
-                                        Text(String(userAuthViewModel.totalIncome))
-                                            .padding(.top,8)
-                                            .font(.system(size: 40))
-                                            .bold()
-                                    }
-                                }
-                            }
-                        }
-                        HStack{
-                            ZStack{
-                                RoundedRectangle(cornerRadius: 10)
-                                    .fill(Color(.systemGray4).opacity(0.5))
-                                    .padding([.leading])
-                                    .frame(height: 100)
-                                VStack(alignment: .leading){
-                                    HStack{
-                                        Image(systemName: "person.fill")
-                                            .foregroundStyle(Color.gray)
-                                        Text("Members")
-                                            .foregroundStyle(Color.gray)
-                                    }
-                                    Text(String("\(userAuthViewModel.allUsers.count)"))
-                                        .font(.title.bold())
-                                        .padding(2)
-                                }
-                                .offset(x: -16)
-                            }
-                            ZStack{
-                                RoundedRectangle(cornerRadius: 10)
-                                    .fill(Color(.systemGray4).opacity(0.5))
-                                    .padding([.trailing])
-                                    .frame(height: 100)
-                                VStack(alignment: .leading){
-                                    HStack{
-                                        Image(systemName: "text.book.closed.fill")
-                                            .foregroundStyle(Color.gray)
-                                        Text("Books")
-                                            .foregroundStyle(Color.gray)
-                                    }
-                                    Text(String(librarianViewModel.allBooks.count))
-                                        .font(.title.bold())
-                                        .padding(2)
-                                }
-                                .offset(x: -40)
-                            }
-                        }
-                        HStack{
-                            VStack{
+        NavigationView{
+            VStack {
+                if !isPageLoading {
+                    ScrollView {
+                        VStack(spacing:12){
+                            VStack(alignment: .leading){
                                 ZStack{
                                     RoundedRectangle(cornerRadius: 10)
                                         .fill(Color(.systemGray4).opacity(0.5))
