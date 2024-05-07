@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct LoadingAnimation: View {
-    
+    @EnvironmentObject var themeManager: ThemeManager
     @State private var degree:Int = 270
     @State private var spinnerLength = 0.6
     
@@ -27,7 +27,7 @@ struct LoadingAnimation: View {
 }
 
 struct UpdateBookPage: View {
-    
+    @EnvironmentObject var themeManager: ThemeManager
     @ObservedObject var LibViewModel: LibrarianViewModel
     @ObservedObject var ConfiViewModel: ConfigViewModel
     @State var currentBookId: String = "ED4x3Tkc2OdiIUhACkGJ"
@@ -90,8 +90,7 @@ struct UpdateBookPage: View {
     }
     
     var body: some View {
-        ZStack{
-            Color("BgColor").edgesIgnoringSafeArea(.all)
+        ScrollView{
             VStack(spacing: 26){                    if(isPageLoading){
                 LoadingAnimation()
             }
@@ -173,7 +172,7 @@ struct UpdateBookPage: View {
                                     .frame(maxWidth: .infinity)
                                 }
                                 .padding(10)
-                                .background(.white)
+                                .background(Color(.systemGray5))
                                 .cornerRadius(8)
                             }
                             VStack(spacing: 20){
@@ -204,7 +203,7 @@ struct UpdateBookPage: View {
                                 .frame(maxWidth: .infinity)
                             }
                             .padding(10)
-                            .background(.white)
+                            .background(Color(.systemGray5))
                             .cornerRadius(8)
                             VStack(spacing: 20){
                                 HStack{
@@ -243,7 +242,7 @@ struct UpdateBookPage: View {
                                                 }
                                             }
                                         }
-                                        .accentColor(.black)
+                                        .accentColor(themeManager.selectedTheme.bodyTextColor)
                                         .labelsHidden()
                                         .disabled(!canEdit)
                                         .onChange(of: bookSubCategory, initial: true){ (oldValue,newValue)  in
@@ -268,15 +267,14 @@ struct UpdateBookPage: View {
                                                 .disabled(!canEdit)
                                             }
                                             .padding(10)
-                                            .foregroundColor(.black)
-                                            .background(Color("PrimaryColor").opacity(0.25))
+                                            .foregroundColor(themeManager.selectedTheme.bodyTextColor)
                                             .cornerRadius(8)
                                         }
                                     })
                                 }
                             }
                             .padding(10)
-                            .background(.white)
+                            .background(Color(.systemGray5))
                             .cornerRadius(8)
                             VStack(alignment: .leading,spacing: 20){
                                 Text("Description")
@@ -286,7 +284,7 @@ struct UpdateBookPage: View {
                                     .disabled(!canEdit)
                             }
                             .padding(10)
-                            .background(.white)
+                            .background(Color(.systemGray5))
                             .cornerRadius(8)
                             if(canEdit){
                                 Button(action:{
@@ -313,7 +311,7 @@ struct UpdateBookPage: View {
                                             .foregroundColor(.white)
                                             .padding(10)
                                             .frame(maxWidth: .infinity)
-                                            .background(Color("PrimaryColor").opacity(0.5))
+                                            .background(themeManager.selectedTheme.secondaryThemeColor)
                                             .cornerRadius(8)
                                             .disabled(isButtonLoading)
                                     }
@@ -323,7 +321,7 @@ struct UpdateBookPage: View {
                                             .foregroundColor(.white)
                                             .padding(10)
                                             .frame(maxWidth: .infinity)
-                                            .background(Color("PrimaryColor"))
+                                            .background(themeManager.selectedTheme.secondaryThemeColor)
                                             .cornerRadius(8)
                                     }
                                 }
@@ -355,7 +353,7 @@ struct UpdateBookPage: View {
                                                 .foregroundColor(.white)
                                                 .padding(10)
                                                 .frame(maxWidth: .infinity)
-                                                .background(Color("PrimaryColor").opacity(0.5))
+                                                .background(themeManager.selectedTheme.secondaryThemeColor)
                                                 .cornerRadius(8)
                                                 .disabled(isButtonLoading)
                                         }
@@ -365,7 +363,7 @@ struct UpdateBookPage: View {
                                                 .foregroundColor(.white)
                                                 .padding(10)
                                                 .frame(maxWidth: .infinity)
-                                                .background(Color("PrimaryColor"))
+                                                .background(themeManager.selectedTheme.secondaryThemeColor)
                                                 .cornerRadius(8)
                                         }
                                     }
@@ -402,7 +400,7 @@ struct UpdateBookPage: View {
             })
             .padding(.horizontal,10)
             .fullScreenCover(isPresented: $openPhotoPicker) {
-                ImagePicker(selectedImage: $bookImage, isImageSelected: $isImageSelected, sourceType: .photoLibrary).frame(maxHeight: .infinity).ignoresSafeArea(.all)
+                ImagePicker(selectedImage: $bookImage, isImageSelected: $isImageSelected, sourceType: .photoLibrary).frame(maxHeight: .infinity)
             }
             if(isPopupShown){
                 VStack{
@@ -410,13 +408,12 @@ struct UpdateBookPage: View {
                         .font(.system(size: 18, weight: .light))
                         .foregroundColor(.white)
                         .padding(10)
-                        .background(Color("PrimaryColor").opacity(0.75))
+                        .background(themeManager.selectedTheme.secondaryThemeColor)
                         .cornerRadius(100)
                 }
                 .offset(y:-320)
             }
         }
-        .background(.black.opacity(0.05))
         .task {
             do{
                 isPageLoading.toggle()
@@ -428,7 +425,7 @@ struct UpdateBookPage: View {
 }
 
 struct UBPrev: View {
-    
+    @EnvironmentObject var themeManager: ThemeManager
     @StateObject var LibViewModel = LibrarianViewModel()
     @StateObject var ConfiViewModel = ConfigViewModel()
     
@@ -437,6 +434,14 @@ struct UBPrev: View {
     }
 }
 
-#Preview {
-    UBPrev()
+
+struct UpdateBookPage_Previews: PreviewProvider {
+    static var previews: some View {
+        let themeManager = ThemeManager()
+        let librarianViewModel = LibrarianViewModel()
+        let configViewModel = ConfigViewModel()
+        
+        return UpdateBookPage(LibViewModel: librarianViewModel, ConfiViewModel: configViewModel)
+            .environmentObject(themeManager)
+    }
 }

@@ -32,26 +32,40 @@ struct BooksPage: View {
                             VStack{
                                 ForEach(LibViewModel.allBooks, id: \..id){ book in
                                     NavigationLink(destination:UpdateBookPage(LibViewModel: LibViewModel, ConfiViewModel: ConfiViewMmodel, currentBookId: book.id)){
-                                        HStack(){
+                                        HStack{
                                             AsyncImage(url: URL(string: book.bookImageURL)) { image in
                                                 image.resizable()
                                             } placeholder: {
                                                 ProgressView()
                                             }
-                                            .frame(width: 60,height: 80)
+                                            .frame(width: 100,height: 140)
                                             .cornerRadius(8)
                                             VStack(alignment: .leading, spacing: 5){
+                                                Spacer()
+                                                HStack{
+                                                    Image(systemName: "star.fill").font(.system(size: 14, weight: .bold))
+                                                        .foregroundColor(Color(.systemYellow))
+                                                    Text(String(format: "%.1f", book.bookRating)).font(.system(size: 14, weight: .bold))
+                                                        .foregroundColor(Color(.systemYellow))
+                                                    Text("/ 5").font(.system(size: 14, weight: .bold))
+                                                        .foregroundColor(Color(.systemYellow))
+                                                }
                                                 Text("\(book.bookName)")
+                                                    .multilineTextAlignment(.leading)
                                                     .font(.system(size: 18, weight: .bold))
+                                                    .lineLimit(2)
                                                 Text("\(book.bookAuthor)")
-                                                    .font(.system(size: 18, weight: .regular))
+                                                    .multilineTextAlignment(.leading)
+                                                    .font(.system(size: 16, weight: .semibold))
+                                                    .lineLimit(1)
+                                                    .foregroundColor(Color(.systemGray))
                                             }
                                             .padding(5)
                                             Spacer()
                                             VStack{
                                                 Image(systemName: "chevron.right")
                                                     .symbolRenderingMode(.hierarchical)
-                                                    .font(.system(size: 25))
+                                                    .font(.system(size: 15))
                                             }
                                         }
                                         .padding(10)

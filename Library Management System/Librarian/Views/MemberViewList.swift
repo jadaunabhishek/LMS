@@ -1,7 +1,6 @@
 import SwiftUI
 import FirebaseFirestore
 
-
 struct Member {
     let id: String
     var name: String
@@ -10,63 +9,47 @@ struct Member {
     var isToggled: Bool
 }
 
-
 struct MemberCard: View {
     var db = Firestore.firestore()
     @Binding var member: Member
+    @EnvironmentObject var themeManager: ThemeManager
 
-    
     func updateData(memberId: String, status: String) {
         db.collection("users").document(memberId).updateData(["status": status])
     }
 
     var body: some View {
-        VStack(alignment: .leading) {
-            HStack {
-                Image(systemName: "person.crop.circle.fill")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 32, height: 32)
-                    .foregroundColor(.orange)
-                    .background(Color.white)
-                    .clipShape(Circle())
-                    .overlay(Circle().stroke(Color.orange, lineWidth: 2))
-                
-                VStack(alignment: .leading, spacing: 4) {
-                    Text(member.name)
-                        .font(.headline)
-                    Text(member.email)
-                        .font(.subheadline)
-                    Text("Status: \(member.status)")
-                        .font(.subheadline)
-                }
-                
-                Spacer()
-                
-                Toggle("", isOn: $member.isToggled)
-                    .labelsHidden()
-                    .toggleStyle(SwitchToggleStyle(tint: .green))
-                    .onChange(of: member.isToggled) { newValue in
-                        let newStatus = newValue ? "approved" : "revoked"
-                        if member.status != newStatus {
-                            updateData(memberId: member.id, status: newStatus)
-                            member.status = newStatus
-                        }
-                    }
+        HStack {
+            Image(systemName: "person.crop.circle.fill")
+                .resizable()
+                .scaledToFit()
+                .frame(width: 32, height: 32)
+                .foregroundColor(.orange)
+                .background(Color.white)
+                .clipShape(Circle())
+                .overlay(Circle().stroke(Color.orange, lineWidth: 2))
+                .padding(.trailing, 10)
+            VStack(alignment: .leading, spacing: 4) {
+                Text(member.name)
+                    .font(.headline)
+                Text(member.email)
+                    .font(.subheadline)
+                    
+                Text("Status: \(member.status)")
+                    .font(.subheadline)
+                    
             }
-            .padding()
-            .background(Color(.systemGray5))
-            .cornerRadius(10)
-            .shadow(radius: 2)
+            Spacer()
         }
+        .foregroundColor(themeManager.selectedTheme.bodyTextColor)
         .padding()
     }
 }
 
-
 struct MembersView: View {
     @State private var members: [Member] = []
     @State private var searchText = ""
+    @EnvironmentObject var themeManager: ThemeManager
     
     var db = Firestore.firestore()
     func updateData(memberId: String, status: String) {
@@ -78,15 +61,14 @@ struct MembersView: View {
             VStack{
                 List{
                     ForEach(filteredMembers, id: \.id) { member in
-                        MemberCard(member: .constant(member))
+                        MemberCard(member: .constant(member))  
                             .frame(maxWidth: .infinity)
-                            .background(Color.white)
                             .swipeActions(edge: .trailing){
                                 if(member.status != "Approved"){
                                     Button(action:{
                                         updateData(memberId: member.id, status: "Approved")
                                         fetchData()
-                                        //member.status = "Approved"
+                                        
                                     }){
                                         Label("Approve", systemImage: "checkmark")
                                     }
@@ -125,7 +107,6 @@ struct MembersView: View {
             }
         }
     }
-
     
     func fetchData() {
         db.collection("users").whereField("role", isEqualTo: "member")
@@ -139,16 +120,17 @@ struct MembersView: View {
                 let data = doc.data()
                 let email = data["email"] as? String ?? ""
                 let name = data["name"] as? String ?? ""
-                var status = data["status"] as? String ?? ""
+                let status = data["status"] as? String ?? ""
                 return Member(id: doc.documentID, name: name, email: email, status: status, isToggled: status == "Approved")
             }
         }
     }
 }
 
-    
 struct MembersView_Previews: PreviewProvider {
+    
     static var previews: some View {
-        MembersView()
+        let themeManager = ThemeManager()
+        MembersView().environmentObject(themeManager)
     }
 }
