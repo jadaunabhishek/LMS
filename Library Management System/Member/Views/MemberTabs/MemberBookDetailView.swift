@@ -43,7 +43,7 @@ struct MemberBookDetailView: View {
                                     
                                     
                                 }) {
-                                    Text("Book")
+                                    Text("Borrow")
                                         .padding(10)
                                         .background(themeManager.selectedTheme.primaryThemeColor)
                                         .cornerRadius(8)
@@ -99,9 +99,16 @@ struct MemberBookDetailView: View {
                             .padding(5)
                         HStack{
                             VStack{
-                                Text(book.bookStatus)
-                                Text(String(book.bookCount))
-                                    .font(.title2)
+                                if(book.bookStatus == "PreBook"){
+                                    Text("Wait List")
+                                    Text(String(book.bookPreBookedCount))
+                                        .font(.title3)
+                                }
+                                else{
+                                    Text("Available")
+                                    Text(String(book.bookAvailableCount))
+                                        .font(.title2)
+                                }
                             }
                             Divider()
                                 .background(Color.white)
@@ -161,6 +168,7 @@ struct MemberBookDetailView: View {
 
 struct MemberBookDetailView_Previews: PreviewProvider {
     static var previews: some View {
+        let themeManager = ThemeManager()
         MemberBookDetailView(
             book: Book(
                 id: "ED4x3Tkc2OdiIUhACkGJ",
@@ -190,6 +198,6 @@ struct MemberBookDetailView_Previews: PreviewProvider {
             userData: AuthViewModel(),
             bookRequest: UserBooksModel(), prebookRequest: UserBooksModel()
             
-        )
+        ).environmentObject(themeManager)
     }
 }

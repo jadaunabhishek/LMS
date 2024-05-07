@@ -60,7 +60,7 @@ struct History{
     
 }
 
-struct Book{
+struct Book: Identifiable {
     
     var id: String
     var bookISBN: String
