@@ -1,7 +1,6 @@
 import SwiftUI
 import FirebaseFirestore
 
-// Define the Member struct to hold member information
 struct Member {
     let id: String
     var name: String
@@ -10,77 +9,82 @@ struct Member {
     var isToggled: Bool
 }
 
-// View for displaying individual member cards
 struct MemberCard: View {
     var db = Firestore.firestore()
     @Binding var member: Member
 
-    // Update member status in Firestore
     func updateData(memberId: String, status: String) {
         db.collection("users").document(memberId).updateData(["status": status])
     }
 
     var body: some View {
-        VStack(alignment: .leading) {
-            HStack {
-                Image(systemName: "person.crop.circle.fill")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 32, height: 32)
-                    .foregroundColor(.orange)
-                    .background(Color.white)
-                    .clipShape(Circle())
-                    .overlay(Circle().stroke(Color.orange, lineWidth: 2))
-                
-                VStack(alignment: .leading, spacing: 4) {
-                    Text(member.name)
-                        .font(.headline)
-                    Text(member.email)
-                        .font(.subheadline)
-                        .foregroundColor(.gray)
-                    Text("Status: \(member.status)")
-                        .font(.subheadline)
-                        .foregroundColor(.gray)
-                }
-                
-                Spacer()
-                
-                Toggle("", isOn: $member.isToggled)
-                    .labelsHidden()
-                    .toggleStyle(SwitchToggleStyle(tint: .green))
-                    .onChange(of: member.isToggled) { newValue in
-                        let newStatus = newValue ? "approved" : "revoked"
-                        if member.status != newStatus {
-                            updateData(memberId: member.id, status: newStatus)
-                            member.status = newStatus
-                        }
-                    }
+        HStack {
+            Image(systemName: "person.crop.circle.fill")
+                .resizable()
+                .scaledToFit()
+                .frame(width: 32, height: 32)
+                .foregroundColor(.orange)
+                .background(Color.white)
+                .clipShape(Circle())
+                .overlay(Circle().stroke(Color.orange, lineWidth: 2))
+            VStack(alignment: .leading, spacing: 4) {
+                Text(member.name)
+                    .font(.headline)
+                Text(member.email)
+                    .font(.subheadline)
+                    .foregroundColor(.gray)
+                Text("Status: \(member.status)")
+                    .font(.subheadline)
+                    .foregroundColor(.gray)
             }
-            .padding()
-            .background(Color.white)
-            .cornerRadius(10)
-            .shadow(radius: 2)
+            Spacer()
         }
-        .padding(.horizontal)
+        .padding()
     }
 }
 
-// Main view for displaying members
 struct MembersView: View {
     @State private var members: [Member] = []
     @State private var searchText = ""
-    private var db = Firestore.firestore()
+    
+    var db = Firestore.firestore()
+    func updateData(memberId: String, status: String) {
+        db.collection("users").document(memberId).updateData(["status": status])
+    }
 
     var body: some View {
         NavigationView {
-            ScrollView {
-                LazyVStack(spacing: 16) {
+            VStack{
+                List{
                     ForEach(filteredMembers, id: \.id) { member in
                         MemberCard(member: .constant(member))  // Binding for toggling
                             .frame(maxWidth: .infinity)
                             .background(Color.white)
+                            .swipeActions(edge: .trailing){
+                                if(member.status != "Approved"){
+                                    Button(action:{
+                                        updateData(memberId: member.id, status: "Approved")
+                                        fetchData()
+                                        //member.status = "Approved"
+                                    }){
+                                        Label("Approve", systemImage: "checkmark")
+                                    }
+                                    .tint(.green)
+                                }
+                                else{
+                                    Button(action:{
+                                        updateData(memberId: member.id, status: "Revoked")
+                                        fetchData()
+                                    }){
+                                        Label("Revoke", systemImage: "xmark")
+                                    }
+                                    .tint(.red)
+                                }
+                            }
                     }
                 }
+                .listStyle(.plain)
+
             }
             .searchable(text: $searchText)
             .navigationTitle("Members")
@@ -100,8 +104,7 @@ struct MembersView: View {
             }
         }
     }
-
-    // Fetch data from Firestore
+    
     func fetchData() {
         db.collection("users").whereField("role", isEqualTo: "member")
           .addSnapshotListener { querySnapshot, error in
@@ -114,14 +117,13 @@ struct MembersView: View {
                 let data = doc.data()
                 let email = data["email"] as? String ?? ""
                 let name = data["name"] as? String ?? ""
-                let status = data["status"] as? String ?? ""
-                return Member(id: doc.documentID, name: name, email: email, status: status, isToggled: status == "approved")
+                var status = data["status"] as? String ?? ""
+                return Member(id: doc.documentID, name: name, email: email, status: status, isToggled: status == "Approved")
             }
         }
     }
 }
 
-// Preview provider for SwiftUI previews
 struct MembersView_Previews: PreviewProvider {
     static var previews: some View {
         MembersView()
