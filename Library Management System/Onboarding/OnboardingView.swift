@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct OnboardingView: View {
+    @EnvironmentObject var themeManager: ThemeManager
     @State private var currentPage = 0
     
     let texts = ["We're thrilled to have you join our library community.", "Easily check out books, manage loans, and prebook items—all at your fingertips.", " From bestsellers to academic journals, we've got it all."]
@@ -12,22 +13,19 @@ struct OnboardingView: View {
                     VStack {
                         Image("onboardingImage\(index + 1)")
                             .resizable()
-                            .scaledToFit()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(width: UIScreen.main.bounds.width * 0.8, height: UIScreen.main.bounds.height * 0.3) // Set fixed width and height
                             .tag(index)
                         
                         Text(texts[index])
-                            .padding(.top, 10)
+                            .padding()
+                            .multilineTextAlignment(.center)
                     }
                 }
             }
             .frame(height: UIScreen.main.bounds.height / 2)
             .tabViewStyle(PageTabViewStyle(indexDisplayMode: .automatic))
             
-//            VStack {
-//                PrimaryCustomButton(action: {
-//                    // Action for "Agree & Join" button
-//                }, label: "Get Started")
-//            }.padding()
             VStack {
                 PrimaryCustomButton(action: {
                     // Action for "Agree & Join" button
@@ -37,7 +35,7 @@ struct OnboardingView: View {
                 SignupCustomButton(action: {
                     print("Login Attempt")
                     
-                }, label: "Sign Up with Google",imageName: "google")
+                }, label: "Continue with Google",imageName: "google")
                 
                 
                 Button(action: {
@@ -46,9 +44,10 @@ struct OnboardingView: View {
                     Text("Sign In")
                         .font(.title3)
                         .padding()
-                        .foregroundColor(.blue)
+                        .foregroundColor(themeManager.selectedTheme.primaryThemeColor)
                 }
             }
+            .frame(height: UIScreen.main.bounds.height / 3)
             .padding()
         }
         .onAppear {

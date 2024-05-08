@@ -65,11 +65,10 @@ struct SignupCustomButton: View {
             }
             .frame(maxWidth: .infinity)
             .padding()
-            .background(Color(.white))
             .cornerRadius(15)
             .overlay(
                     RoundedRectangle(cornerRadius: 15)
-                        .stroke(Color.black, lineWidth: 1) // Add a black border with width 1
+                        .stroke(themeManager.selectedTheme.bodyTextColor, lineWidth: 1) // Add a black border with width 1
                 )
         }
         .buttonStyle(PlainButtonStyle())
