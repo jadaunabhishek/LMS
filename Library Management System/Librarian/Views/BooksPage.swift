@@ -105,7 +105,6 @@ struct BooksPage: View {
             }
         }
     }
-    //}
 }
 
 struct BPPrev: View {
