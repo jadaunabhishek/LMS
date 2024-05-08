@@ -35,111 +35,112 @@ struct EditStaffDetailsView: View {
     }
     
     var body: some View {
-        VStack{
-            if let profileURL = URL(string: staffMember.profileImageURL) {
-                VStack {
-                    Button(action: {
-                        isShowingImagePicker.toggle()
-                    }) {
-                        ZStack {
-                            if isImageSelected {
-                                Image(uiImage: selectedImage)
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fill)
-                                    .frame(width: 150, height: 150)
-                                    .clipShape(Circle())
-                                    .onTapGesture {
-                                        isShowingImagePicker.toggle()
-                                    }
-                            } else {
-                                AsyncImage(url: profileURL) { image in
-                                    image
+        ScrollView{
+            VStack{
+                if let profileURL = URL(string: staffMember.profileImageURL) {
+                    VStack {
+                        Button(action: {
+                            isShowingImagePicker.toggle()
+                        }) {
+                            ZStack {
+                                if isImageSelected {
+                                    Image(uiImage: selectedImage)
                                         .resizable()
                                         .aspectRatio(contentMode: .fill)
-                                        .frame(width: 140, height: 140)
+                                        .frame(width: 150, height: 150)
                                         .clipShape(Circle())
-                                        .padding(.top, 20)
-                                } placeholder: {
-                                    Image(systemName: "person.circle.fill")
-                                        .resizable()
-                                        .aspectRatio(contentMode: .fit)
-                                        .frame(width: 140, height: 140)
-                                        .clipShape(Circle())
+                                        .onTapGesture {
+                                            isShowingImagePicker.toggle()
+                                        }
+                                } else {
+                                    AsyncImage(url: profileURL) { image in
+                                        image
+                                            .resizable()
+                                            .aspectRatio(contentMode: .fill)
+                                            .frame(width: 140, height: 140)
+                                            .clipShape(Circle())
+                                            .padding(.top, 20)
+                                    } placeholder: {
+                                        Image(systemName: "person.circle.fill")
+                                            .resizable()
+                                            .aspectRatio(contentMode: .fit)
+                                            .frame(width: 140, height: 140)
+                                            .clipShape(Circle())
+                                    }
                                 }
                             }
                         }
-                    }
-                    .padding()
-                    .sheet(isPresented: $isShowingImagePicker) {
-                        ImagePicker(selectedImage: $selectedImage, isImageSelected: $isImageSelected, sourceType: .photoLibrary)
+                        .padding()
+                        .sheet(isPresented: $isShowingImagePicker) {
+                            ImagePicker(selectedImage: $selectedImage, isImageSelected: $isImageSelected, sourceType: .photoLibrary)
+                        }
                     }
                 }
+                VStack(alignment: .leading) {
+                    
+                    Text("Name:")
+                        .font(.callout)
+                        .foregroundColor(themeManager.selectedTheme.bodyTextColor)
+                    CustomTextField(text: $name, placeholder: "")
+                    Text("Email:")
+                        .font(.callout)
+                        .foregroundColor(themeManager.selectedTheme.bodyTextColor)
+                    CustomTextField(text: $email, placeholder: "")
+                        .keyboardType(.emailAddress)
+                    Text("Mobile:")
+                        .font(.callout)
+                        .foregroundColor(themeManager.selectedTheme.bodyTextColor)
+                    CustomTextField(text: $mobile, placeholder: "")
+                        .keyboardType(.phonePad)
+                    
+                    Text("Aadhar:")
+                        .font(.callout)
+                        .foregroundColor(themeManager.selectedTheme.bodyTextColor)
+                    CustomTextField(text: $aadhar, placeholder: "")
+                        .keyboardType(.numberPad)
+                }
+                .padding()
+                
+                SecondaryCustomButton(action: {
+                    showConfirmationAlert = true
+                }, label: "Delete Staff")
+                .alert(isPresented: $showConfirmationAlert, content: {
+                    Alert(
+                        title: Text("Confirm Deletion"),
+                        message: Text("Are you sure you want to delete this staff member?"),
+                        primaryButton: .destructive(Text("Delete"), action: {
+                            deleteStaff()
+                        }),
+                        secondaryButton: .cancel()
+                    )
+                }).padding()
+                
+                NavigationLink(value: navigateToAdminStaffView) {
+                    Text("Go to Admin Staff View")
+                }
+                .navigationDestination(isPresented: $navigateToAdminStaffView) {
+                    AdminStaffView()
+                }
+                .navigationTitle("Edit Staff").hidden()
             }
-            VStack(alignment: .leading) {
-                Text("Staff Details:")
-                    .font(.title3)
-                    .foregroundColor(themeManager.selectedTheme.bodyTextColor)
-                    .padding(.bottom, 15)
-                Text("Name:")
-                    .font(.callout)
-                    .foregroundColor(themeManager.selectedTheme.bodyTextColor)
-                CustomTextField(text: $name, placeholder: "")
-                Text("Email:")
-                    .font(.callout)
-                    .foregroundColor(themeManager.selectedTheme.bodyTextColor)
-                CustomTextField(text: $email, placeholder: "")
-                    .keyboardType(.emailAddress)
-                Text("Mobile:")
-                    .font(.callout)
-                    .foregroundColor(themeManager.selectedTheme.bodyTextColor)
-                CustomTextField(text: $mobile, placeholder: "")
-                    .keyboardType(.phonePad)
-                Text("Aadhar:")
-                    .font(.callout)
-                    .foregroundColor(themeManager.selectedTheme.bodyTextColor)
-                CustomTextField(text: $aadhar, placeholder: "")
-                    .keyboardType(.numberPad)
-            }
-            .padding()
-
-            SecondaryCustomButton(action: {
-                showConfirmationAlert = true
-            }, label: "Delete Staff")
-            .alert(isPresented: $showConfirmationAlert, content: {
-                Alert(
-                    title: Text("Confirm Deletion"),
-                    message: Text("Are you sure you want to delete this staff member?"),
-                    primaryButton: .destructive(Text("Delete"), action: {
-                        deleteStaff()
-                    }),
-                    secondaryButton: .cancel()
-                )
-            }).padding()
-            
-            NavigationLink(
-                destination: AdminStaffView(),
-                isActive: $navigateToAdminStaffView,
-                label: {}
+            .navigationBarBackButtonHidden()
+            .navigationBarItems(
+                leading:
+                    Button("Cancel") {
+                        presentationMode.wrappedValue.dismiss()
+                    }
+                    .foregroundColor(themeManager.selectedTheme.primaryThemeColor),
+                trailing: Button("Save") {
+                    Task{
+                        updateStaffDetails()
+                        staffViewModel.getStaff()
+                        try? await Task.sleep(nanoseconds: 2_000_000_000)
+                        presentationMode.wrappedValue.dismiss()
+                    }
+                }
+                    .foregroundColor(themeManager.selectedTheme.primaryThemeColor)
             )
-            .hidden()
         }
-        .navigationBarBackButtonHidden()
-        .navigationBarItems(
-            leading:
-                Button("Cancel") {
-                    presentationMode.wrappedValue.dismiss()
-                }
-                .foregroundColor(themeManager.selectedTheme.primaryThemeColor),
-            trailing: Button("Save") {
-                Task{
-                    updateStaffDetails()
-                    staffViewModel.getStaff()
-                    try? await Task.sleep(nanoseconds: 2_000_000_000)
-                    presentationMode.wrappedValue.dismiss()
-                }
-            }
-                .foregroundColor(themeManager.selectedTheme.primaryThemeColor)
-        )
     }
     
     

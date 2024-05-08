@@ -20,6 +20,9 @@ struct MemberBookDetailView: View {
     
     
     var body: some View {
+        let screenWidth = UIScreen.main.bounds.width
+        let halfScreenWidth = screenWidth / 2
+        let wideScreenWidth = screenWidth * 0.70
         ScrollView{
             ZStack(alignment: .top){
                 VStack(spacing:0){
@@ -28,11 +31,10 @@ struct MemberBookDetailView: View {
                         .cornerRadius(45)
                         .frame(height: 600)
                         .frame(maxWidth: .infinity)
-                        .position(CGPoint(x: 196.0, y: -80.0))
+                        .position(CGPoint(x: halfScreenWidth, y: -70.0))
                         .navigationBarItems(trailing: {
                             if book.bookAvailableCount != 0 {
                                 return Button(action: {
-                                    // Perform action for book count not equal to 0
                                     Task{
                                         bookRequest.requestBook(bookId: book.id, bookName: book.bookName, bookImageURL: book.bookImageURL, userId: userData.userID, userName: userData.userName, bookAvailableCount: book.bookAvailableCount, bookTakenCount: book.bookTakenCount, loanPeriod: 1)
                                         try? await Task.sleep(nanoseconds: 2_000_000_000)
@@ -48,12 +50,13 @@ struct MemberBookDetailView: View {
                                         .background(themeManager.selectedTheme.primaryThemeColor)
                                         .cornerRadius(8)
                                         .foregroundColor(Color(.black))
+                                        .padding(.bottom, 2)
                                 }
                             } else {
                                 return Button(action: {
-                                    // Perform action for book count not equal to 0
+                                    
                                     Task{
-                                        // Perform action for book count not equal to 0
+                                        
                                         prebookRequest.preBook(bookId: book.id, bookName: book.bookName, bookImageURL: book.bookImageURL, userId: userData.userID, userName: userData.userName, bookPreBookedCount: book.bookPreBookedCount, loanPeriod: 1)
                                         try? await Task.sleep(nanoseconds: 2_000_000_000)
                                         if(prebookRequest.responseStatus == 200){
@@ -68,6 +71,7 @@ struct MemberBookDetailView: View {
                                         .background(themeManager.selectedTheme.primaryThemeColor)
                                         .cornerRadius(8)
                                         .foregroundColor(Color(.black))
+                                        .padding(.bottom, 2)
                                 }
                             }
                         }())
@@ -83,69 +87,78 @@ struct MemberBookDetailView: View {
                     VStack{
                         
                         Text(book.bookName)
+                            .font(.title2)
+                            .fontWeight(.bold)
+                            .foregroundColor(.black)
+                            .lineLimit(2)
+                            .frame(maxWidth: wideScreenWidth)
                         AsyncImage(url: URL(string: book.bookImageURL)) { image in
-                            image.resizable()
+                            image.resizable().shadow(color: Color(.systemGray).opacity(0.3), radius: 5, x: 0, y: 4)
                         } placeholder: {
                             ProgressView()
                         }
                         .frame(width: 200,height: 300)
                         .cornerRadius(8)
                         
+                        
                     }
                     
                     VStack{
                         Text("By \(book.bookAuthor)")
-                            .font(.system(size: 18, weight: .regular))
+                            .font(.system(size: 20, weight: .regular))
                             .padding(5)
                         HStack{
                             VStack{
                                 if(book.bookStatus == "PreBook"){
                                     Text("Wait List")
                                     Text(String(book.bookPreBookedCount))
-                                        .font(.title3)
                                 }
                                 else{
                                     Text("Available")
+                                    Spacer()
                                     Text(String(book.bookAvailableCount))
-                                        .font(.title2)
                                 }
                             }
                             Divider()
-                                .background(Color.white)
+                                .background(.black)
                                 .frame( height: 50)
-                                .padding(.horizontal,4)
+                                .padding(.horizontal,12)
                             VStack{
                                 Text("Rating")
+                                Spacer()
                                 Text(String(book.bookRating))
                             }
                             Divider()
-                                .background(Color.white)
+                                .background(.black)
                                 .frame( height: 50)
-                                .padding(.horizontal,4)
+                                .padding(.horizontal,12)
                             VStack{
                                 Text("Category")
-                                
+                                Spacer()
                                 Text(book.bookCategory)
                             }
                             
                             
                         }
-                        .padding(16)
+                        .padding(25)
+                        .frame( height: 90)
+                        .font(.title3)
                         .background{
                             Rectangle()
                                 .fill(themeManager.selectedTheme.secondaryThemeColor)
                                 .cornerRadius(24)
                         }
-                        .padding(4)
+                        .padding(10)
                         VStack(alignment:.leading){
                             Text("Synopsis")
                                 .font(.title.bold())
                                 .padding(.horizontal)
+                                .padding(.top, 20)
                             Text(book.bookDescription)
                                 .padding(.top,8)
                                 .padding(.horizontal)
                                 .lineSpacing(10)
-                        }
+                        }.padding(10)
                         
                     }
                     

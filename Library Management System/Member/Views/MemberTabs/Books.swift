@@ -2,70 +2,112 @@
 //  Books.swift
 //  Library Management System
 //
-//  Created by Abhishek Jadaun on 27/04/24.
+//  Created by Ishan Joshi on 27/04/24.
 //
 import SwiftUI
+
+struct SearchBar: View {
+    @Binding var text: String
+    var body: some View {
+        VStack{
+            HStack {
+                Image(systemName: "magnifyingglass")
+                    .foregroundColor(.gray)
+                    .padding(.leading, 8)
+                TextField("Search", text: $text)
+                    .padding(8)
+                    .background(Color(.systemGray5))
+                    .cornerRadius(8)
+                
+            }
+            .background(Color(.systemGray5))
+            .cornerRadius(8)
+        }
+        
+    }
+}
+
+
+
 struct Books: View {
+    
     @State private var searchText = ""
-    @State private var isFilterButtonTapped = false
-    @State private var showFilterOptions = false
-    @ObservedObject var MemViewModel = UserBooksModel()
-    @ObservedObject var ConfiViewMmodel = ConfigViewModel()
+    @State private var selectedCategories: [String] = []
+    @State private var isPageLoading: Bool = true
     @EnvironmentObject var themeManager: ThemeManager
-    @State var isPageLoading: Bool = true
+    @ObservedObject var MemViewModel = UserBooksModel()
+    
+    let categories = ["Fiction", "Non-Fiction", "Science Fiction", "Mystery", "Thriller", "Romance", "Fantasy", "Biography", "Self-Help"]
     
     var filteredBooks: [Book] {
-        if searchText.isEmpty {
-            return MemViewModel.allBooks
-        } else {
-            return MemViewModel.allBooks.filter { $0.bookName.localizedCaseInsensitiveContains(searchText) }
+        var booksToFilter = searchText.isEmpty ? MemViewModel.allBooks : MemViewModel.allBooks.filter { $0.bookName.localizedCaseInsensitiveContains(searchText) }
+        
+        if !selectedCategories.isEmpty {
+            booksToFilter = booksToFilter.filter { book in
+                selectedCategories.contains(book.bookCategory)
+            }
         }
+        
+        return booksToFilter
     }
     
     var body: some View {
-        NavigationStack{
-            ZStack{
-                ScrollView{
-                    VStack {
-                        SearchBar(text: $searchText, isFilterButtonTapped: $isFilterButtonTapped, showFilterOptions: $showFilterOptions)
-                            .padding(.top, 16)
-                            .padding(.horizontal, 16)
-                        
-                        Spacer()
-                    }
-                    .sheet(isPresented: $showFilterOptions) {
-                        FilterOptions(userBooksModel: MemViewModel)
-                            .presentationDetents([.medium])
-                    }
-                    
-                    VStack{
-                        VStack {
-                            if !filteredBooks.isEmpty {
-                                ForEach(filteredBooks, id: \.id) { book in
-                                    NavigationLink(destination: MemberBookDetailView(
-                                        book: book,
-                                        userData: AuthViewModel(),
-                                        bookRequest: UserBooksModel(),
-                                        prebookRequest: UserBooksModel()
-                                    )){
-                                        BookRow(book: book)
+        NavigationStack {
+            ScrollView {
+                VStack {
+
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        HStack {
+                            ForEach(categories, id: \.self) { category in
+                                Button(action: {
+                                    if selectedCategories.contains(category) {
+                                        selectedCategories.removeAll(where: { $0 == category })
+                                    } else {
+                                        selectedCategories.append(category)
                                     }
-                                }
-                            } else {
-                                Text("No books found")
+                                }) {
+                                    Text(category)
+                                        .padding(8)
+                                        .foregroundColor(themeManager.selectedTheme.bodyTextColor)
+                                        .background(selectedCategories.contains(category) ? Color.blue : Color(.systemGray).opacity(0.3))
+                                        .overlay(
+                                            Rectangle()
+                                                .stroke(Color(.systemGray4).opacity(0.3), lineWidth: 1)
+                                        )
+                                }.cornerRadius(8)
+                                .padding(.trailing, 8)
                             }
                         }
-                        
+                        .padding(.horizontal)
                     }
-                }
-                .padding(10)
+                    
+                    VStack {
+                        if !filteredBooks.isEmpty {
+                            ForEach(filteredBooks, id: \.id) { book in
+                                NavigationLink(destination: MemberBookDetailView(
+                                    book: book,
+                                    userData: AuthViewModel(),
+                                    bookRequest: UserBooksModel(),
+                                    prebookRequest: UserBooksModel()
+                                )){
+                                    BookRow(book: book)
+                                }
+                            }
+                        } else {
+                            Text("No books found")
+                        }
+                    }.navigationTitle("Search")
+                }.searchable(text: $searchText)
+                    .refreshable {
+                        MemViewModel.getBooks()
+                    }
             }
-            .navigationTitle("Books")
-            .task {
-                MemViewModel.getBooks()
-                try? await Task.sleep(nanoseconds: 1_000_000_000)
-                isPageLoading.toggle()
-            }
+        }
+        
+        .task {
+            MemViewModel.getBooks()
+            try? await Task.sleep(nanoseconds: 1_000_000_000)
+            isPageLoading.toggle()
         }
     }
 }
@@ -75,34 +117,46 @@ struct BookRow: View {
     let book: Book
     @EnvironmentObject var themeManager: ThemeManager
     var body: some View {
-        HStack {
+        HStack{
             AsyncImage(url: URL(string: book.bookImageURL)) { image in
                 image.resizable()
             } placeholder: {
                 ProgressView()
             }
-            .frame(width: 60, height: 80)
-            .navigationBarBackButtonHidden(true)
-            .navigationTitle("Books")
+            .frame(width: 80,height: 120)
             .cornerRadius(8)
-            
-            VStack(alignment: .leading, spacing: 5) {
+            VStack(alignment: .leading, spacing: 5){
+                Spacer()
+                HStack{
+                    Image(systemName: "star.fill").font(.system(size: 14, weight: .bold))
+                        .foregroundColor(Color(.systemYellow))
+                    Text(String(format: "%.1f", book.bookRating)).font(.system(size: 14, weight: .bold))
+                        .foregroundColor(Color(.systemYellow))
+                    
+                }.padding(.bottom, 5)
                 Text("\(book.bookName)")
-                    .font(.system(size: 18, weight: .bold))
+                    .multilineTextAlignment(.leading)
+                    .font(.system(size: 22, weight: .bold))
+                    .lineLimit(2)
                 Text("\(book.bookAuthor)")
-                    .font(.system(size: 18, weight: .regular))
+                    .multilineTextAlignment(.leading)
+                    .font(.system(size: 19, weight: .semibold))
+                    .lineLimit(1)
+                    .foregroundColor(Color(.systemGray))
             }
-            .foregroundColor(themeManager.selectedTheme.bodyTextColor)
             .padding(5)
-            
             Spacer()
-            
-            Image(systemName: "chevron.right")
-                .symbolRenderingMode(.hierarchical)
-                .font(.system(size: 25))
+            VStack{
+                Image(systemName: "chevron.right")
+                    .symbolRenderingMode(.hierarchical)
+                    .font(.system(size: 15))
+            }
         }
         .padding(10)
         .cornerRadius(8)
+        .background(Color(.systemGray6).opacity(0.6))
+        
+        Divider()
     }
 }
 
