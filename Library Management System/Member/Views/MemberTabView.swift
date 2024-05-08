@@ -17,7 +17,7 @@ struct MemberTabView: View {
     
     var body: some View {
         TabView {
-            MemberHome(LibViewModel: LibViewModel)
+            MemberHome(LibViewModel: LibViewModel, configViewModel: ConfiViewModel)
                 .tabItem {
                     Image(systemName: "house")
                     Text("Home")

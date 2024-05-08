@@ -11,6 +11,7 @@ import SwiftUI
 class ThemeManager: ObservableObject {
     @Published var selectedTheme: ThemeProtocol = Red()
     @ObservedObject var configModel = ConfigViewModel()
+    @Environment(\.colorScheme) var colorScheme
     
     let themes: [ThemeProtocol] = [Red(), Blue(), Green()]
     
@@ -37,7 +38,13 @@ class ThemeManager: ObservableObject {
             selectedTheme = Green()
         }
     }
-    
+    func gradientColors(for colorScheme: ColorScheme) -> [Color] {
+       if colorScheme == .dark {
+           return [Color(.systemGray5), Color(.black)]
+       } else {
+           return [Color(.white), Color(.systemGray5)]
+       }
+   }
     func updateTheme(_ theme: ThemeProtocol) {
         let accentColor: String
         switch theme {
