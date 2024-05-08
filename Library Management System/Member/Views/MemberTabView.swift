@@ -23,7 +23,7 @@ struct MemberTabView: View {
                     Text("Home")
                 }
             
-            Books()
+            Books(configViewModel: ConfiViewModel)
                 .tabItem {
                     Image(systemName: "books.vertical.fill")
                     Text("Books")

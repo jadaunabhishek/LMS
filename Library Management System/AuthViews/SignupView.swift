@@ -12,6 +12,7 @@ import FirebaseFirestore
 
 struct SignupView: View {
     @EnvironmentObject var themeManager: ThemeManager
+    @StateObject var configViewModel = ConfigViewModel()
     @State private var email: String = ""
     @State private var name: String = ""
     @State private var password: String = ""
@@ -22,9 +23,28 @@ struct SignupView: View {
     var body: some View {
         ZStack {
             VStack {
-                Image("AppLogo")
-                    .resizable()
-                    .frame(width: 300, height: 150, alignment: .center)
+                if let logoURL = configViewModel.currentConfig.first?.logo {
+                    AsyncImage(url: URL(string: logoURL)) { phase in
+                        switch phase {
+                        case .success(let image):
+                            image
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .frame(width: 300, height: 150)
+                        default:
+                            ProgressView()
+//                            Image("AppLogo")
+//                                .resizable()
+//                                .aspectRatio(contentMode: .fit)
+//                                .frame(width: 300, height: 150)
+                        }
+                    }
+                } else {
+                    Image("AppLogo")
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: 300, height: 150)
+                }
                 
                 Text("Sign Up")
                     .font(.largeTitle)
