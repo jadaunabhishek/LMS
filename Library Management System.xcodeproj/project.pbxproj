@@ -282,6 +282,7 @@
 		843CB5842BE399C9008CFAFC /* Elements */ = {
 			isa = PBXGroup;
 			children = (
+				D50EA9CC2BE4B9910079C1AB /* BookRequestCustomBox.swift */,
 				843CB5852BE399E5008CFAFC /* Buttons.swift */,
 				843CB5872BE399F2008CFAFC /* Textfields.swift */,
 				D50EA9D22BE4D0870079C1AB /* Picker.swift */,
@@ -459,7 +460,6 @@
 				848B46712BD78DF900143E7A /* NotificationView.swift */,
 				84E96EDF2BDA2A2700A572BC /* MemberViewList.swift */,
 				D50EA9CA2BE4B87E0079C1AB /* MemberRequestCustomBox.swift */,
-				D50EA9CC2BE4B9910079C1AB /* BookRequestCustomBox.swift */,
 				D50A72282BE7DC9300C9BE05 /* CheckInDetailsView.swift */,
 				D50A722A2BE7F8E700C9BE05 /* LibrarianHomeView.swift */,
 				848F9DE32BE8A85F004614D9 /* SupportView.swift */,

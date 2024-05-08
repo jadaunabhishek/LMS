@@ -32,7 +32,7 @@ struct BookRequestCustomBox: View {
                         .lineLimit(2)
                         .foregroundColor(themeManager.selectedTheme.bodyTextColor)
                     
-                    Text(bookRequestData.bookIssuedToName)
+                    Text(bookRequestData.loanStatus)
                         .multilineTextAlignment(.leading)
                         .font(.system(size: 19, weight: .semibold))
                         .lineLimit(1)

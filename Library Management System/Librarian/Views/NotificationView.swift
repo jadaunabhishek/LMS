@@ -100,7 +100,7 @@ struct EmptySection: View {
                 .frame(width: 60, height: 60)
                 .foregroundColor(.gray)
             
-            Text("emptyMessage")
+            Text("No Data")
                 .foregroundColor(.gray)
                 .font(.headline)
                 .padding()

@@ -20,6 +20,7 @@ struct Records: View {
     var body: some View {
         NavigationView{
             ScrollView{
+                
                 HStack{
                     Text("Fines")
                     Spacer()
@@ -29,16 +30,42 @@ struct Records: View {
                 .fontWeight(.bold)
                 .padding(.bottom, -5)
                 
-                HStack {
-                    ForEach(0..<LibViewModel.currentUserHistory.count, id: \.self) { userDetail in
-                        NavigationLink(destination: RecordBookDetail(checkInDetails: LibViewModel.currentUserHistory[userDetail], LibViewModel: LibViewModel)){
-                            BookRequestCustomBox(bookRequestData: LibViewModel.currentUserHistory[userDetail])
+                if(!LibViewModel.currentUserOverDueHistory.isEmpty){
+                    HStack {
+                        ForEach(0..<LibViewModel.currentUserOverDueHistory.count, id: \.self) { userDetail in
+                            NavigationLink(destination: RecordBookDetail(checkInDetails: LibViewModel.currentUserOverDueHistory[userDetail], LibViewModel: LibViewModel)){
+                                BookRequestCustomBox(bookRequestData: LibViewModel.currentUserOverDueHistory[userDetail])
+                            }
                         }
                     }
+                } else {
+                    EmptySection()
                 }
                 
                 
-
+                HStack{
+                    Text("Request Pending")
+                    Spacer()
+                }
+                .foregroundStyle(Color(.systemGray3))
+                .padding(.horizontal)
+                .fontWeight(.bold)
+                .padding(.bottom, -5)
+                
+                if(!LibViewModel.currentUserHistory.isEmpty){
+                    HStack {
+                        ForEach(0..<LibViewModel.currentUserHistory.count, id: \.self) { userDetail in
+                            NavigationLink(destination: RecordBookDetail(checkInDetails: LibViewModel.currentUserHistory[userDetail], LibViewModel: LibViewModel)){
+                                BookRequestCustomBox(bookRequestData: LibViewModel.currentUserHistory[userDetail])
+                            }
+                        }
+                    }
+                } else {
+                    EmptySection()
+                }
+                
+                
+                
                 HStack{
                     Text("Borrowed Books")
                     Spacer()
@@ -48,22 +75,27 @@ struct Records: View {
                 .fontWeight(.bold)
                 .padding(.bottom, -5)
                 
-                VStack {
-                    ForEach(0..<LibViewModel.currentUserHistory.count, id: \.self) { userDetail in
-                        NavigationLink(destination: RecordBookDetail(checkInDetails: LibViewModel.currentUserHistory[userDetail], LibViewModel: LibViewModel)){
-                            BookRequestCustomBox(bookRequestData: LibViewModel.currentUserHistory[userDetail])
+                if(!LibViewModel.currentUserProperHistory.isEmpty){
+                    
+                    VStack {
+                        ForEach(0..<LibViewModel.currentUserProperHistory.count, id: \.self) { userDetail in
+                            NavigationLink(destination: RecordBookDetail(checkInDetails: LibViewModel.currentUserProperHistory[userDetail], LibViewModel: LibViewModel)){
+                                BookRequestCustomBox(bookRequestData: LibViewModel.currentUserProperHistory[userDetail])
+                            }
                         }
                     }
+                } else {
+                    EmptySection()
                 }
-                .searchable(text: $searchContent)
-                .navigationTitle("Records")
-                .task{
-                    Task{
-                        if let userID = Auth.auth().currentUser?.uid {
-                            LibViewModel.getUserHistory(userId: userID)
-                            try? await Task.sleep(nanoseconds: 1_000_000_000)
-                            print(LibViewModel.currentUserHistory)
-                        }
+            }
+            .searchable(text: $searchContent)
+            .navigationTitle("Records")
+            .task{
+                Task{
+                    if let userID = Auth.auth().currentUser?.uid {
+                        LibViewModel.getUserHistory(userId: userID)
+                        try? await Task.sleep(nanoseconds: 1_000_000_000)
+                        print(LibViewModel.currentUserHistory)
                     }
                 }
             }
@@ -76,7 +108,7 @@ struct Records_Previews: PreviewProvider {
     static var previews: some View {
         let themeManager = ThemeManager()
         let librarianViewModel = LibrarianViewModel()
-
+        
         // Creating sample data for preview
         let sampleBookRequest = Loan(
             loanId: "1",
@@ -93,13 +125,13 @@ struct Records_Previews: PreviewProvider {
             fineCalculatedDays: 0,
             loanFine: 0,
             createdOn: "2024-05-01",
-            updatedOn: "2024-05-07", 
+            updatedOn: "2024-05-07",
             timeStamp: 20393939202
         )
-
+        
         // Adding sample data to the librarianViewModel
         librarianViewModel.currentUserHistory = [sampleBookRequest]
-
+        
         return Records(LibViewModel: librarianViewModel)
             .environmentObject(themeManager)
     }
