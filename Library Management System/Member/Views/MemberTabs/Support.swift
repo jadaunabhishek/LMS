@@ -4,10 +4,11 @@ struct Support: View {
     @State private var createIssue = false
     @State private var showDetails = false
     @ObservedObject var authViewModel: AuthViewModel
+    @State private var searchText = ""
     
     var body: some View {
         NavigationView {
-            List {
+            VStack {
                 if(!authViewModel.allSupports.isEmpty){
                             ForEach(0..<authViewModel.allSupports.count, id: \.self) { supportDetail in
                                 NavigationLink(destination: SupportReply(supportData: authViewModel.allSupports[supportDetail], authViewModel: authViewModel)) {
@@ -18,8 +19,8 @@ struct Support: View {
                 else{
                     EmptyPage()
                 }
+                Spacer()
             }
-            .listStyle(.inset)
             .background(.black.opacity(0.05))
             .navigationTitle("Support")
             .navigationBarItems(trailing: Button(action: {
@@ -37,7 +38,7 @@ struct Support: View {
                     try? await Task.sleep(nanoseconds: 1_000_000_000)
                 }
             }
-            
+            .searchable(text: $searchText)
         }
     }
 }

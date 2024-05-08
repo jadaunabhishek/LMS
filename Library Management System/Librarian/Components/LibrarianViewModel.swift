@@ -684,7 +684,6 @@ class LibrarianViewModel: ObservableObject{
                     }
                     
                 }
-                
                 self.currentUserHistory = tempUserHistory
                 self.currentUserProperHistory = tempUserProperHistory
                 self.currentUserOverDueHistory = tempUserOverDueHistory

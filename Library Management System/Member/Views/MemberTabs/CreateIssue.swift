@@ -26,37 +26,15 @@ struct CreateIssue: View {
     
     var body: some View {
         NavigationView {
-            VStack {
-                Text("If you have any queries, feel free to write them here. We're here to help!")
+            Form {
+                Section(header: Text("Message")) {
+                    TextField("Subject", text: $subject)
+                }
                 
-                TextField("Subject", text: $subject)
-                    .font(.title3)
-                    .padding(12)
-                    .background(Color(.systemGray5))
-                    .cornerRadius(15)
-                    .padding(.horizontal, 5)
-                    .padding(.top, 5)
-                    .lineLimit(30)
-                
-                TextField("Message", text: $message)
-                    .frame(minHeight: 100)
-                    .font(.title3)
-                    .padding(12)
-                    .background(Color(.systemGray5))
-                    .cornerRadius(15)
-                    .padding(5)
-                    .lineLimit(100)
-                
-                PrimaryCustomButton(action: {
-                    if isInputValid() {
-                        authViewModel.addSupportTicket(userID: authViewModel.userID, name: authViewModel.userName, email: authViewModel.userEmail, message: message, subject: subject)
-                        presentationMode.wrappedValue.dismiss()
-                    } else {
-                        showAlert = true
-                    }
-                }, label: "Send")
-                .foregroundColor(themeManager.selectedTheme.bodyTextColor)
-                Spacer()
+                Section(header: Text("Message")) {
+                    TextEditor(text: $message)
+                        .frame(minHeight: 100)
+                }
             }
             .onAppear{
                 Task{
@@ -67,7 +45,18 @@ struct CreateIssue: View {
                 }
             }
             .navigationBarTitle("Raise New Request", displayMode: .inline)
-            .padding()
+            .navigationBarItems(trailing: Button(action: {
+                presentationMode.wrappedValue.dismiss()
+                if isInputValid() {
+                    authViewModel.addSupportTicket(userID: authViewModel.userID, name: authViewModel.userName, email: authViewModel.userEmail, message: message, subject: subject)
+                    presentationMode.wrappedValue.dismiss()
+                } else {
+                    showAlert = true
+                }
+            }) {
+                Text("Send")
+                    .foregroundColor(.blue)
+            })
             .alert(isPresented: $showAlert) {
                 Alert(
                     title: Text("Incomplete Form"),
