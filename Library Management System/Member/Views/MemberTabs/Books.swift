@@ -13,13 +13,14 @@ struct Books: View {
     @ObservedObject var ConfiViewMmodel = ConfigViewModel()
     @EnvironmentObject var themeManager: ThemeManager
     @State var isPageLoading: Bool = true
+    
     var filteredBooks: [Book] {
-            if searchText.isEmpty {
-                return MemViewModel.allBooks
-            } else {
-                return MemViewModel.allBooks.filter { $0.bookName.localizedCaseInsensitiveContains(searchText) }
-            }
+        if searchText.isEmpty {
+            return MemViewModel.allBooks
+        } else {
+            return MemViewModel.allBooks.filter { $0.bookName.localizedCaseInsensitiveContains(searchText) }
         }
+    }
     
     var body: some View {
         NavigationStack{
@@ -36,17 +37,17 @@ struct Books: View {
                         FilterOptions(userBooksModel: MemViewModel)
                             .presentationDetents([.medium])
                     }
-
+                    
                     VStack{
                         VStack {
                             if !filteredBooks.isEmpty {
                                 ForEach(filteredBooks, id: \.id) { book in
                                     NavigationLink(destination: MemberBookDetailView(
-                                                                        book: book,
-                                                                        userData: AuthViewModel(),
-                                                                        bookRequest: UserBooksModel(),
-                                                                        prebookRequest: UserBooksModel()
-                                                                    )){
+                                        book: book,
+                                        userData: AuthViewModel(),
+                                        bookRequest: UserBooksModel(),
+                                        prebookRequest: UserBooksModel()
+                                    )){
                                         BookRow(book: book)
                                     }
                                 }
@@ -108,10 +109,9 @@ struct BookRow: View {
 struct BooksPrev: View {
     @StateObject var memModelView = UserBooksModel()
     @StateObject var ConfiViewModel = ConfigViewModel()
-    @State private var searchText = ""
     var body: some View {
-            Books()
-        }
+        Books(MemViewModel: memModelView, ConfiViewMmodel: ConfiViewModel)
+    }
 }
 
 struct BooksView_Previews: PreviewProvider {

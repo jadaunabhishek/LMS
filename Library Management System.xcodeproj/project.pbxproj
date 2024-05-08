@@ -70,6 +70,7 @@
 		84E87D5D2BD7D51400FAD5DC /* CardListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84E87D5C2BD7D51400FAD5DC /* CardListView.swift */; };
 		84E87D612BD7D5EA00FAD5DC /* CardListDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84E87D602BD7D5EA00FAD5DC /* CardListDetailView.swift */; };
 		84E96EE02BDA2A2700A572BC /* MemberViewList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84E96EDF2BDA2A2700A572BC /* MemberViewList.swift */; };
+		D5013B832BEA36640067724A /* Records.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5013B822BEA36630067724A /* Records.swift */; };
 		D5027A632BE8EDB600316886 /* SupportResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5027A622BE8EDB600316886 /* SupportResponse.swift */; };
 		D50A72292BE7DC9300C9BE05 /* CheckInDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D50A72282BE7DC9300C9BE05 /* CheckInDetailsView.swift */; };
 		D50A722B2BE7F8E700C9BE05 /* LibrarianHomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D50A722A2BE7F8E700C9BE05 /* LibrarianHomeView.swift */; };
@@ -94,6 +95,7 @@
 		D57BFDB32BDD24FD0094A0B5 /* UserBooksModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D57BFDB22BDD24FD0094A0B5 /* UserBooksModel.swift */; };
 		D5C949582BE9F52800D5310D /* supportCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5C949572BE9F52800D5310D /* supportCard.swift */; };
 		D5C9495A2BEA193100D5310D /* SupportReply.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5C949592BEA193100D5310D /* SupportReply.swift */; };
+		D5D1451B2BEABC3F0006A1CA /* RecordBookDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5D1451A2BEABC3F0006A1CA /* RecordBookDetail.swift */; };
 		DC1D402C2BD6EB4A00970C7B /* BookSchema.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC1D402B2BD6EB4A00970C7B /* BookSchema.swift */; };
 		DC1D402E2BD76BF000970C7B /* AddBookPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC1D402D2BD76BF000970C7B /* AddBookPage.swift */; };
 		DC1D40302BD77E4B00970C7B /* AdminHomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC1D402F2BD77E4B00970C7B /* AdminHomeView.swift */; };
@@ -159,6 +161,7 @@
 		84E87D5C2BD7D51400FAD5DC /* CardListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardListView.swift; sourceTree = "<group>"; };
 		84E87D602BD7D5EA00FAD5DC /* CardListDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardListDetailView.swift; sourceTree = "<group>"; };
 		84E96EDF2BDA2A2700A572BC /* MemberViewList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemberViewList.swift; sourceTree = "<group>"; };
+		D5013B822BEA36630067724A /* Records.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Records.swift; sourceTree = "<group>"; };
 		D5027A622BE8EDB600316886 /* SupportResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupportResponse.swift; sourceTree = "<group>"; };
 		D50A72282BE7DC9300C9BE05 /* CheckInDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckInDetailsView.swift; sourceTree = "<group>"; };
 		D50A722A2BE7F8E700C9BE05 /* LibrarianHomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibrarianHomeView.swift; sourceTree = "<group>"; };
@@ -186,6 +189,7 @@
 		D57BFDB22BDD24FD0094A0B5 /* UserBooksModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserBooksModel.swift; sourceTree = "<group>"; };
 		D5C949572BE9F52800D5310D /* supportCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = supportCard.swift; sourceTree = "<group>"; };
 		D5C949592BEA193100D5310D /* SupportReply.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupportReply.swift; sourceTree = "<group>"; };
+		D5D1451A2BEABC3F0006A1CA /* RecordBookDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordBookDetail.swift; sourceTree = "<group>"; };
 		DC1D402B2BD6EB4A00970C7B /* BookSchema.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookSchema.swift; sourceTree = "<group>"; };
 		DC1D402D2BD76BF000970C7B /* AddBookPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddBookPage.swift; sourceTree = "<group>"; };
 		DC1D402F2BD77E4B00970C7B /* AdminHomeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AdminHomeView.swift; sourceTree = "<group>"; };
@@ -496,6 +500,8 @@
 				0F85ED882BE0E32900C48C75 /* MemberBookDetailView.swift */,
 				848F9DE12BE897F9004614D9 /* CreateIssue.swift */,
 				D5C949592BEA193100D5310D /* SupportReply.swift */,
+				D5013B822BEA36630067724A /* Records.swift */,
+				D5D1451A2BEABC3F0006A1CA /* RecordBookDetail.swift */,
 			);
 			path = MemberTabs;
 			sourceTree = "<group>";
@@ -710,6 +716,7 @@
 				DC1D402E2BD76BF000970C7B /* AddBookPage.swift in Sources */,
 				84E87D5D2BD7D51400FAD5DC /* CardListView.swift in Sources */,
 				84080F2D2BDE01A3005293B8 /* UpdateCategoriesView.swift in Sources */,
+				D5013B832BEA36640067724A /* Records.swift in Sources */,
 				84E87D552BD7D44800FAD5DC /* AdminSubCategoriesView.swift in Sources */,
 				D57BFDAF2BDD233E0094A0B5 /* Books.swift in Sources */,
 				D50A722B2BE7F8E700C9BE05 /* LibrarianHomeView.swift in Sources */,
@@ -723,6 +730,7 @@
 				1F84616D2BD6563E008B7B3E /* ThemeProtocol.swift in Sources */,
 				0F85ED812BD902A900C48C75 /* ConfigSchema.swift in Sources */,
 				DC1D40302BD77E4B00970C7B /* AdminHomeView.swift in Sources */,
+				D5D1451B2BEABC3F0006A1CA /* RecordBookDetail.swift in Sources */,
 				D55820C92BD61AB0005A00F9 /* ContentView.swift in Sources */,
 				1F7C0E4D2BD7A920007D5221 /* StaffSchema.swift in Sources */,
 				D5C949582BE9F52800D5310D /* supportCard.swift in Sources */,

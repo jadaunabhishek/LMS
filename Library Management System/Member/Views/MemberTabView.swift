@@ -26,7 +26,13 @@ struct MemberTabView: View {
             Books()
                 .tabItem {
                     Image(systemName: "books.vertical.fill")
-                    Text("Books")
+                    Text("Library")
+                }
+            
+            Records(LibViewModel: LibViewModel)
+                .tabItem {
+                    Image(systemName: "book.fill")
+                    Text("Records")
                 }
             
             Support(authViewModel: auth)
@@ -59,4 +65,3 @@ struct MemberTabView_Previews: PreviewProvider {
             .environmentObject(themeManager)
     }
 }
-
