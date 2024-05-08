@@ -8,6 +8,9 @@ struct OnboardingView: View {
     
     var body: some View {
         VStack {
+            HStack{
+                
+            }
             TabView(selection: $currentPage) {
                 ForEach(0..<3) { index in
                     VStack {
@@ -24,9 +27,9 @@ struct OnboardingView: View {
                     }
                 }
             }
-            .frame(height: UIScreen.main.bounds.height / 2)
+            .frame(height: UIScreen.main.bounds.height / 1.5)
             .tabViewStyle(.page)
-            .indexViewStyle(.page(backgroundDisplayMode: .always))
+            .indexViewStyle(PageIndexViewStyle(backgroundDisplayMode: .always))
             
             VStack {
                 PrimaryCustomButton(action: {
