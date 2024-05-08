@@ -19,20 +19,20 @@ struct MemberTabView: View {
         TabView {
             MemberHome(LibViewModel: LibViewModel, configViewModel: ConfiViewModel)
                 .tabItem {
-                    Image(systemName: "house")
-                    Text("Home")
+                    Image(systemName: "books.vertical.fill")
+                    Text("Library")
                 }
             
             Books()
                 .tabItem {
-                    Image(systemName: "books.vertical.fill")
-                    Text("Library")
+                    Image(systemName: "magnifyingglass")
+                    Text("Search")
                 }
             
             Records(LibViewModel: LibViewModel)
                 .tabItem {
                     Image(systemName: "book.fill")
-                    Text("Records")
+                    Text("My Books")
                 }
             
             Support(authViewModel: auth)

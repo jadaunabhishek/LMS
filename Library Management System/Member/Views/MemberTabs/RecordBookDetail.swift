@@ -89,7 +89,8 @@ struct RecordBookDetail: View {
                         .foregroundColor(.gray)
                     
                     Spacer()
-                    
+                    Text("₹")
+                        .font(.caption)
                     Text("\(checkInDetails.loanFine)")
                 }
             }

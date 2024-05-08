@@ -37,7 +37,7 @@ struct BookFineBox: View {
                         .fontWeight(.bold)
                         .foregroundColor(themeManager.selectedTheme.bodyTextColor)
                     
-                    Text(bookRequestData.loanStatus)
+                    Text("Overdue")
                         .multilineTextAlignment(.leading)
                         .font(.caption)
                         .fontWeight(.semibold)
@@ -45,9 +45,10 @@ struct BookFineBox: View {
                         .foregroundColor(Color(.systemGray))
                     
                     HStack{
-                        Image(systemName: "calendar")
+                        Text("₹")
                             .font(.caption)
-                        Text(formatDate(bookRequestData.createdOn))
+                    
+                        Text("\(bookRequestData.loanFine)")
                             .font(.caption)
                     }
                 }
@@ -58,8 +59,8 @@ struct BookFineBox: View {
             }
             .padding(10)
             .cornerRadius(8)
-            .padding(.leading)
         }
+        .padding(.leading)
     }
     
     func formatDate(_ dateString: String) -> String {
