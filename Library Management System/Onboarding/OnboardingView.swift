@@ -25,8 +25,8 @@ struct OnboardingView: View {
                 }
             }
             .frame(height: UIScreen.main.bounds.height / 2)
-            .tabViewStyle(PageTabViewStyle(indexDisplayMode: .automatic))
-            .accentColor(Color.black)
+            .tabViewStyle(.page)
+            .indexViewStyle(.page(backgroundDisplayMode: .always))
             
             VStack {
                 PrimaryCustomButton(action: {
