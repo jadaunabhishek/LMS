@@ -30,13 +30,17 @@ struct Records: View {
                 .fontWeight(.bold)
                 .padding(.bottom, -5)
                 
+                
                 if(!LibViewModel.currentUserOverDueHistory.isEmpty){
-                    HStack {
-                        ForEach(0..<LibViewModel.currentUserOverDueHistory.count, id: \.self) { userDetail in
-                            NavigationLink(destination: RecordBookDetail(checkInDetails: LibViewModel.currentUserOverDueHistory[userDetail], LibViewModel: LibViewModel)){
-                                BookFineBox(bookRequestData: LibViewModel.currentUserOverDueHistory[userDetail])
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        HStack {
+                            ForEach(0..<LibViewModel.currentUserOverDueHistory.count, id: \.self) { userDetail in
+                                NavigationLink(destination: RecordBookDetail(checkInDetails: LibViewModel.currentUserOverDueHistory[userDetail], LibViewModel: LibViewModel)){
+                                    BookFineBox(bookRequestData: LibViewModel.currentUserHistory[userDetail])
+                                }
                             }
                         }
+                        .padding(.bottom)
                     }
                 } else {
                     EmptySection()

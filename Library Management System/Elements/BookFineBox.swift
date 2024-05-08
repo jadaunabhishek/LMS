@@ -13,63 +13,51 @@ struct BookFineBox: View {
     @EnvironmentObject var themeManager: ThemeManager
     
     var body: some View {
-        if bookRequestData.loanStatus == "Requested" {
-            ZStack {
-                RoundedRectangle(cornerRadius: 10)
-                    .foregroundColor(.white)
-                    .shadow(color: Color.gray.opacity(0.5), radius: 5, x: 0, y: 2)
-                    .frame(maxHeight: 125)
-                HStack{
-                    AsyncImage(url: URL(string: bookRequestData.bookImageURL)) { image in
-                        image.resizable()
-                    } placeholder: {
-                        ProgressView()
-                    }
-                    .frame(width: 60,height: 100)
-                    .cornerRadius(8)
-                    
-                    VStack(alignment: .leading, spacing: 5){
-                        Spacer()
-                        
-                        Text("\(bookRequestData.bookName)")
-                            .multilineTextAlignment(.leading)
-                            .font(.callout)
-                            .lineLimit(2)
-                            .fontWeight(.bold)
-                            .foregroundColor(themeManager.selectedTheme.bodyTextColor)
-                        
-                        Text(bookRequestData.loanStatus)
-                            .multilineTextAlignment(.leading)
-                            .font(.caption)
-                            .fontWeight(.semibold)
-                            .lineLimit(1)
-                            .foregroundColor(Color(.systemGray))
-                        
-                        Text(String(bookRequestData.loanFine))
-                            .multilineTextAlignment(.leading)
-                            .font(.caption)
-                            .fontWeight(.semibold)
-                            .lineLimit(1)
-                            .foregroundColor(Color(.systemGray))
-                    
-                        
-                        HStack{
-                            Image(systemName: "calendar")
-                                .font(.caption)
-                            Text(formatDate(bookRequestData.bookExpectedReturnOn))
-                                .font(.caption)
-                        }
-                        
-                    }
-                    .frame(width: 120)
-                    .padding(5)
-                    
-                    Spacer()
+        ZStack {
+            RoundedRectangle(cornerRadius: 10)
+                .foregroundColor(Color("requestCard"))
+                .shadow(color: Color.gray.opacity(0.5), radius: 5, x: 0, y: 2)
+                .frame(maxHeight: 125)
+            HStack{
+                AsyncImage(url: URL(string: bookRequestData.bookImageURL)) { image in
+                    image.resizable()
+                } placeholder: {
+                    ProgressView()
                 }
-                .padding(10)
+                .frame(width: 60,height: 100)
                 .cornerRadius(8)
                 
+                VStack(alignment: .leading, spacing: 5){
+                    Spacer()
+                    
+                    Text("\(bookRequestData.bookName)")
+                        .multilineTextAlignment(.leading)
+                        .font(.callout)
+                        .lineLimit(2)
+                        .fontWeight(.bold)
+                        .foregroundColor(themeManager.selectedTheme.bodyTextColor)
+                    
+                    Text(bookRequestData.loanStatus)
+                        .multilineTextAlignment(.leading)
+                        .font(.caption)
+                        .fontWeight(.semibold)
+                        .lineLimit(1)
+                        .foregroundColor(Color(.systemGray))
+                    
+                    HStack{
+                        Image(systemName: "calendar")
+                            .font(.caption)
+                        Text(formatDate(bookRequestData.createdOn))
+                            .font(.caption)
+                    }
+                }
+                .frame(width: 120)
+                .padding(5)
+                
+                Spacer()
             }
+            .padding(10)
+            .cornerRadius(8)
             .padding(.leading)
         }
     }
