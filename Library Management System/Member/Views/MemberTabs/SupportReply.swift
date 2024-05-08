@@ -53,13 +53,7 @@ struct SupportReply: View {
                 
             }
             .navigationBarTitle("Query details", displayMode: .inline)
-            .navigationBarItems(trailing: Button(action: {
-                presentationMode.wrappedValue.dismiss()
-                authViewModel.respondSupport(supportId: supportData.id, response: reply)
-            }) {
-                Text("Save")
-                    .foregroundColor(.blue)
-            })
+            
             Spacer()
         }
     }

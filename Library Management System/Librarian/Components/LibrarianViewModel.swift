@@ -684,7 +684,6 @@ class LibrarianViewModel: ObservableObject{
                     }
                     
                 }
-                
                 self.currentUserHistory = tempUserHistory
                 self.currentUserProperHistory = tempUserProperHistory
                 self.currentUserOverDueHistory = tempUserOverDueHistory
@@ -735,6 +734,23 @@ class LibrarianViewModel: ObservableObject{
                         fineDetailsArray.append(fineDetail)
                     }
                     
+                    guard let monthlyMembersCountDictArray = document!["monthlyMembersCount"] as? [[String: Any]] else {
+                        print("Error: Unable to parse monthlyMembersCount array from Firestore document")
+                        return
+                    }
+
+                    var monthlyMembersCountArray: [membersCount] = []
+                    for memberCountDict in monthlyMembersCountDictArray {
+                        guard let month = memberCountDict["month"] as? String,
+                              let count = memberCountDict["count"] as? Int else {
+                            print("Error: Unable to parse memberCount from dictionary")
+                            continue
+                        }
+                        
+                        let memberCount = membersCount(month: month, count: count)
+                        monthlyMembersCountArray.append(memberCount)
+                    }
+                    
                     var newConfig = Config(
                         configID: document!["configID"] as! String,
                         adminID: document!["adminID"] as! String,
@@ -744,7 +760,8 @@ class LibrarianViewModel: ObservableObject{
                         fineDetails: fineDetailsArray,
                         maxFine: document!["maxFine"] as! Double,
                         maxPenalties: document!["maxPenalties"] as! Int,
-                        categories: document!["categories"] as! [String])
+                        categories: document!["categories"] as! [String], 
+                        monthlyMembersCount: monthlyMembersCountArray)
                     
                     self.dbInstance.collection("Loans").whereField("loanStatus", isEqualTo: "Issued").getDocuments{
                         

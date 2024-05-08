@@ -12,10 +12,14 @@ class AuthViewModel: ObservableObject {
     @Published var userEmail = ""
     @Published var userID = ""
     @Published var allSupports: [SupportTicket] = []
-    
     @Published var allUsers: [UserSchema] = []
     @Published var totalIncome: Int = 0
     @Published var finesPending: Int = 0
+
+    @Published var appliedUsers: Int = 0
+    @Published var rejectedUsers: Int = 0
+    @Published var approvedUsers: Int = 0
+    @Published var newUsers: Int = 0
     
     private var db = Firestore.firestore()
     
@@ -41,6 +45,10 @@ class AuthViewModel: ObservableObject {
         var tempAllUsers: [UserSchema] = []
         var temtTotalFines: Int = 0
         var totalFinesPending: Int = 0
+        var tempAppliedUsers: Int = 0
+        var tempRejectedUsers: Int = 0
+        var tempApprovedUsers: Int = 0
+        var tempNewUsers: Int = 0
         
         self.db.collection("users").whereField("role", isEqualTo: "member").getDocuments{ (snapshot, error) in
             
@@ -54,12 +62,30 @@ class AuthViewModel: ObservableObject {
                     temtTotalFines += tempUser.totalFined
                     
                     tempAllUsers.append(tempUser)
+                    
+                    print(tempUser)
+                    if tempUser.status == "applied" {
+                        tempAppliedUsers += 1
+                    }
+                    if tempUser.status == "approved" {
+                        tempApprovedUsers += 1
+                    }
+                    if tempUser.status == "new" {
+                        tempNewUsers += 1
+                    }
+                    if tempUser.status == "rejected" {
+                        tempRejectedUsers += 1
+                    }
                 }
                 
                 self.totalIncome = temtTotalFines
                 self.finesPending = totalFinesPending
                 self.allUsers = tempAllUsers
-                print(tempAllUsers)
+                
+                self.appliedUsers = tempAppliedUsers
+                self.approvedUsers = tempApprovedUsers
+                self.newUsers = tempNewUsers
+                self.rejectedUsers = tempRejectedUsers
             }
         }
     }

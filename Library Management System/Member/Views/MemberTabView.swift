@@ -17,16 +17,22 @@ struct MemberTabView: View {
     
     var body: some View {
         TabView {
-            MemberHome(LibViewModel: LibViewModel)
-                .tabItem {
-                    Image(systemName: "house")
-                    Text("Home")
-                }
-            
-            Books(configViewModel: ConfiViewModel)
+            MemberHome(LibViewModel: LibViewModel, configViewModel: ConfiViewModel)
                 .tabItem {
                     Image(systemName: "books.vertical.fill")
-                    Text("Books")
+                    Text("Library")
+                }
+            
+            Books()
+                .tabItem {
+                    Image(systemName: "magnifyingglass")
+                    Text("Search")
+                }
+            
+            Records(LibViewModel: LibViewModel)
+                .tabItem {
+                    Image(systemName: "book.fill")
+                    Text("My Books")
                 }
             
             Support(authViewModel: auth)
@@ -59,4 +65,3 @@ struct MemberTabView_Previews: PreviewProvider {
             .environmentObject(themeManager)
     }
 }
-
