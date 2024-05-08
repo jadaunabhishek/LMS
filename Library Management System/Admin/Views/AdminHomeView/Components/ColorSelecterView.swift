@@ -54,33 +54,6 @@ struct ColorSelecterView: View {
     }
 }
 
-
-struct BarChartWithLine: View {
-    @State var memberData: [Int] = [5, 10, 200, 300, 0, 0, 0]
-    
-    var body: some View {
-        VStack {
-            VStack{
-                
-            }
-            
-            HStack(spacing: 10) {
-                ForEach(0..<memberData.count, id: \.self) { index in
-                    VStack {
-                        Spacer()
-                        Rectangle()
-                            .fill(Color.blue)
-                            .frame(width: 20, height: CGFloat(memberData[index]))
-                    }
-                }
-            }
-            .padding(.top, 20)
-            
-        }
-    }
-}
-
-
 #Preview {
     ColorSelecterView()
 }

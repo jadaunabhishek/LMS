@@ -27,6 +27,7 @@ struct AdminHomeView: View {
     @EnvironmentObject var themeManager: ThemeManager
     
     @State var memberData: [Int] = [5, 10, 200, 300,0,0,0]
+    
     @State private var isMemberSheetPresented: Bool = false
     @State private var isTotalRevenueSheetPresented: Bool = false
     var data: [(type: String, amount: Int)]{
@@ -101,12 +102,12 @@ struct AdminHomeView: View {
                                         
                                         Spacer()
                                     }
-                                    .onTapGesture {
-                                        isTotalRevenueSheetPresented.toggle()
-                                    }
-                                    .sheet(isPresented: $isTotalRevenueSheetPresented) {
-                                        RevenueDetailView()
-                                    }
+                                }
+                                .onTapGesture {
+                                    isTotalRevenueSheetPresented.toggle()
+                                }
+                                .sheet(isPresented: $isTotalRevenueSheetPresented) {
+                                    RevenueDetailView()
                                 }
                             }
                             .foregroundStyle(themeManager.selectedTheme.bodyTextColor)
@@ -137,8 +138,10 @@ struct AdminHomeView: View {
                                     isMemberSheetPresented.toggle()
                                 }
                                 .sheet(isPresented: $isMemberSheetPresented) {
-                                    MemberDetailView()
+                                    MemberDetailView(userAuthViewModel: userAuthViewModel, configViewModel: configViewModel)
+                                        .presentationDetents([.fraction(0.90)])
                                 }
+                                
                                 
                                 ZStack{
                                     RoundedRectangle(cornerRadius: 10)
@@ -346,7 +349,7 @@ struct AdminHomeView: View {
                     librarianViewModel.getBooks()
                     staffViewModel.getStaff()
                     staffViewModel.getAllStaff()
-                    try? await Task.sleep(nanoseconds: 1_000_000_000)
+                    try? await Task.sleep(nanoseconds: 2_000_000_000)
                     isPageLoading = false
                 }
             }
