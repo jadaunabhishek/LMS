@@ -42,7 +42,26 @@ class ConfigViewModel: ObservableObject {
                         
                         let fineDetail = fineDetails(fine: fine, period: period)
                         fineDetailsArray.append(fineDetail)
+                        
                     }
+                    
+                    guard let monthlyMembersCountDictArray = document!["monthlyMembersCount"] as? [[String: Any]] else {
+                        print("Error: Unable to parse monthlyMembersCount array from Firestore document")
+                        return
+                    }
+
+                    var monthlyMembersCountArray: [membersCount] = []
+                    for memberCountDict in monthlyMembersCountDictArray {
+                        guard let month = memberCountDict["month"] as? String,
+                              let count = memberCountDict["count"] as? Int else {
+                            print("Error: Unable to parse memberCount from dictionary")
+                            continue
+                        }
+                        
+                        let memberCount = membersCount(month: month, count: count)
+                        monthlyMembersCountArray.append(memberCount)
+                    }
+
                     
                     var newConfig = Config(
                         configID: document!["configID"] as! String,
@@ -53,8 +72,10 @@ class ConfigViewModel: ObservableObject {
                         fineDetails: fineDetailsArray,
                         maxFine: document!["maxFine"] as! Double,
                         maxPenalties: document!["maxPenalties"] as! Int,
-                        categories: document!["categories"] as! [String]
+                        categories: document!["categories"] as! [String],
+                        monthlyMembersCount: monthlyMembersCountArray
                                                 )
+                    print(newConfig)
                     self.currentConfig.append(newConfig)
                     self.responseStatus = 200
                     self.responseMessage = "Book fetched successfully"
