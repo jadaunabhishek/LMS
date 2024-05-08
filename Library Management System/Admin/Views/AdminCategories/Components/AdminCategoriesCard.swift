@@ -19,8 +19,7 @@ struct AdminCategoriesCard: View {
                 Rectangle()
                     .fill(randomColor())
                     .cornerRadius(12)
-                
-                
+                 
                 VStack(alignment:.leading){
                     Spacer()
                     Text(category)
@@ -46,7 +45,7 @@ struct AdminCategoriesCard: View {
 struct AdminCategoriesCard_Previews: PreviewProvider {
     static var previews: some View {
         let themeManager = ThemeManager()
-        return AdminCategoriesCard(category: "Cool-Dayejejdjwjejwuejwdujwuwj")
+        return AdminCategoriesCard(category: "Cool-Days")
             .environmentObject(themeManager)
     }
 }
