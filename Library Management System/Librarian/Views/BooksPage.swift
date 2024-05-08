@@ -5,7 +5,7 @@ struct EmptyPage: View {
     @State private var degree:Int = 270
     @State private var spinnerLength = 0.6
     @EnvironmentObject var themeManager: ThemeManager
-    
+   
     var body: some View {
         ZStack{
             Text("No data found.")
@@ -22,13 +22,13 @@ struct BooksPage: View {
     @ObservedObject var ConfiViewMmodel: ConfigViewModel
     @EnvironmentObject var themeManager: ThemeManager
     @State var isPageLoading: Bool = true
-    
+    @State private var searchText = ""
     var body: some View {
         NavigationView{
             ZStack{
                 VStack(spacing: 26){
                     if(!LibViewModel.allBooks.isEmpty){
-                        ScrollView{
+                        ScrollView(showsIndicators: false){
                             VStack{
                                 ForEach(LibViewModel.allBooks, id: \..id){ book in
                                     NavigationLink(destination:UpdateBookPage(LibViewModel: LibViewModel, ConfiViewModel: ConfiViewMmodel, currentBookId: book.id)){
@@ -79,7 +79,7 @@ struct BooksPage: View {
                     else{
                         EmptyPage()
                     }
-                }
+                }.searchable(text: $searchText)
                 .padding(10)
                 .background(.black.opacity(0.05))
                 .navigationTitle("Books")
@@ -105,6 +105,8 @@ struct BooksPage: View {
             }
         }
     }
+    
+    //}
 }
 
 struct BPPrev: View {
