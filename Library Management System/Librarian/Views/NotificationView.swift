@@ -116,7 +116,7 @@ struct MembershipSections: View {
     @EnvironmentObject var themeManager: ThemeManager
     @StateObject var viewModel = NotificationsViewModel()
     @Binding var notifs: [NotificationItem]
-    @State private var selectedItems = Set<Int>()
+    @State private var selectedItems: [String] = []
     @State private var isSelectionMode = false
     
     var body: some View {
@@ -128,28 +128,40 @@ struct MembershipSections: View {
                     .animation(.easeInOut, value: isSelectionMode)
             }
             List {
-                ForEach(0..<viewModel.notifications.count, id: \.self) { key in
+                ForEach(viewModel.notifications, id: \.id) { key in
                     HStack {
                         if isSelectionMode {
                             Button(action: {
-                                toggleSelection(for: key)
+                                toggleSelection(key: key.id)
                             }) {
-                                Image(systemName: selectedItems.contains(key) ? "checkmark.square.fill" : "square")
+                                Image(systemName: selectedItems.contains(key.id) ? "checkmark.square.fill" : "square")
                             }
                             .foregroundColor(selectedItems.isEmpty ? Color.black : themeManager.selectedTheme.primaryThemeColor)
                         }
-                        MemberRequestCustomBox(viewModel: viewModel, notification: viewModel.notifications[key])
+                        MemberRequestCustomBox(viewModel: viewModel, notification: key)
                     }
                     .contentShape(Rectangle())
                     .onTapGesture {
                         if isSelectionMode {
-                            toggleSelection(for: key)
+                            toggleSelection(key: key.id)
                         }
                     }
                     .onLongPressGesture {
                         isSelectionMode = true
-                        toggleSelection(for: key)
+                        toggleSelection(key: key.id)
                     }
+                    .swipeActions(edge: .leading, allowsFullSwipe: true) {
+                                            Button("Reject") {
+                                                processSwipeAction(key: key.id, approve: false)
+                                            }
+                                            .tint(.red)
+                                        }
+                                        .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+                                            Button("Approve") {
+                                                processSwipeAction(key: key.id, approve: true)
+                                            }
+                                            .tint(.green)
+                                        }
                 }
             }
             .listStyle(.inset)
@@ -200,11 +212,11 @@ struct MembershipSections: View {
         }
     }
     
-    func toggleSelection(for key: Int) {
+    func toggleSelection(key: String) {
         if selectedItems.contains(key) {
-            selectedItems.remove(key)
+            selectedItems.remove(at: selectedItems.firstIndex(of: key)!)
         } else {
-            selectedItems.insert(key)
+            selectedItems.append(key)
         }
     }
     
@@ -212,23 +224,40 @@ struct MembershipSections: View {
         if selectedItems.count == viewModel.notifications.count {
             selectedItems.removeAll()
         } else {
-            selectedItems = Set(0..<viewModel.notifications.count)
+            for i in 0..<viewModel.notifications.count{
+                selectedItems.append(viewModel.notifications[i].id)
+            }
         }
     }
     
     func processSelectedItems(approve: Bool) {
         for index in selectedItems {
-            if approve {
-                viewModel.approve(notification: viewModel.notifications[index])
-            } else {
-                viewModel.reject(notification: viewModel.notifications[index])
+            for i in 0..<viewModel.notifications.count{
+                if(viewModel.notifications[i].id == index){
+                    if approve {
+                        viewModel.approve(notification: viewModel.notifications[i])
+                    } else {
+                        viewModel.reject(notification: viewModel.notifications[i])
+                    }
+                }
+                
             }
         }
         viewModel.fetchData()
         selectedItems.removeAll()
         isSelectionMode = false
     }
-}
+    func processSwipeAction(key: String, approve: Bool) {
+            if let index = viewModel.notifications.firstIndex(where: { $0.id == key }) {
+                if approve {
+                    viewModel.approve(notification: viewModel.notifications[index])
+                } else {
+                    viewModel.reject(notification: viewModel.notifications[index])
+                }
+            }
+            viewModel.fetchData()
+        }
+    }
 
 
 
@@ -252,7 +281,7 @@ struct BooksSections: View {
     @ObservedObject var LibViewModel: LibrarianViewModel
     @Binding var issue: [Loan]
     @Binding var request: [Loan]
-    @State private var selectedItems = Set<Int>()
+    @State private var selectedItems: [String] = []
     @State private var isSelectionMode = false
     
     var body: some View {
@@ -264,28 +293,47 @@ struct BooksSections: View {
                     .animation(.easeInOut, value: isSelectionMode)
             }
             List {
-                ForEach(0..<LibViewModel.requestedLoans.count, id: \.self) { key in
+                ForEach(LibViewModel.requestedLoans, id: \.loanId) { key in
                     HStack {
                         if isSelectionMode {
                             Button(action: {
-                                toggleSelection(for: key)
+                                toggleSelection(key: key.loanId)
                             }) {
-                                Image(systemName: selectedItems.contains(key) ? "checkmark.square.fill" : "square")
+                                HStack{
+                                    Image(systemName: selectedItems.contains(key.loanId) ? "checkmark.square.fill" : "square")
+                                    
+                                }
                             }
                             .foregroundColor(selectedItems.isEmpty ? Color.black : themeManager.selectedTheme.primaryThemeColor)
                         }
-                        BookRequestCustomBox(bookRequestData: LibViewModel.requestedLoans[key])
+                        BookRequestCustomBox(bookRequestData: key)
                     }
                     .contentShape(Rectangle())
                     .onTapGesture {
                         if isSelectionMode {
-                            toggleSelection(for: key)
+                            toggleSelection(key: key.loanId)
                         }
                     }
                     .onLongPressGesture {
                         isSelectionMode = true
-                        toggleSelection(for: key) // Auto-select the item on long press
+                        toggleSelection(key: key.loanId)
                     }
+                    .swipeActions(edge: .leading, allowsFullSwipe: true) {
+                        Button("Reject") {
+                            Task {
+                                await LibViewModel.rejectRequest(loanId: key.loanId, bookId: key.bookId)
+                                LibViewModel.getLoans()
+                                                }
+                                            }
+                                            .tint(.red)
+                                        }
+                                        .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+                                            Button("Approve") {
+                                                LibViewModel.checkOutBook(loanId: key.loanId)
+                                                LibViewModel.getLoans()
+                                            }
+                                            .tint(.green)
+                                        }
                 }
             }
             .listStyle(.inset)
@@ -336,11 +384,11 @@ struct BooksSections: View {
         }
     }
     
-    func toggleSelection(for key: Int) {
+    func toggleSelection(key: String) {
         if selectedItems.contains(key) {
-            selectedItems.remove(key)
+            selectedItems.remove(at: selectedItems.firstIndex(of: key)!)
         } else {
-            selectedItems.insert(key)
+            selectedItems.append(key)
         }
     }
     
@@ -348,17 +396,26 @@ struct BooksSections: View {
         if selectedItems.count == LibViewModel.requestedLoans.count {
             selectedItems.removeAll()
         } else {
-            selectedItems = Set(0..<LibViewModel.requestedLoans.count)
+            for i in 0..<LibViewModel.requestedLoans.count{
+                selectedItems.append(LibViewModel.requestedLoans[i].loanId)
+            }
         }
     }
     
     func processSelectedItems(approve: Bool) {
         for index in selectedItems {
             if approve {
-                LibViewModel.checkOutBook(loanId: LibViewModel.requestedLoans[index].loanId)
+                LibViewModel.checkOutBook(loanId: index)
+                
+                LibViewModel.getLoans()
             } else {
                 Task {
-                    await LibViewModel.rejectRequest(loanId: LibViewModel.requestedLoans[index].loanId, bookId: LibViewModel.requestedLoans[index].bookId)
+                    for i in 0..<LibViewModel.requestedLoans.count{
+                        if(LibViewModel.requestedLoans[i].loanId == index){
+                            await LibViewModel.rejectRequest(loanId: index, bookId: LibViewModel.requestedLoans[i].bookId)
+                            LibViewModel.getLoans()
+                        }
+                    }
                 }
             }
         }
@@ -379,3 +436,4 @@ struct TestNotificationView_Previews: PreviewProvider {
             .environmentObject(themeManager)
     }
 }
+

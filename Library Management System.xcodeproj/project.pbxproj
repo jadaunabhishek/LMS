@@ -11,6 +11,9 @@
 		0F85ED832BD902B400C48C75 /* ConfigVIewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F85ED822BD902B400C48C75 /* ConfigVIewModel.swift */; };
 		0F85ED872BDA71F800C48C75 /* BookDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F85ED862BDA71F800C48C75 /* BookDetailView.swift */; };
 		0F85ED892BE0E32900C48C75 /* MemberBookDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F85ED882BE0E32900C48C75 /* MemberBookDetailView.swift */; };
+		0FC0423E2BEB3558000BDA67 /* RevenueDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FC0423D2BEB3558000BDA67 /* RevenueDetailView.swift */; };
+		0FC042402BEB3624000BDA67 /* ColorSelecterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FC0423F2BEB3624000BDA67 /* ColorSelecterView.swift */; };
+		0FC042422BEB3784000BDA67 /* MemberDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FC042412BEB3784000BDA67 /* MemberDetailView.swift */; };
 		1F7C0E4D2BD7A920007D5221 /* StaffSchema.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F7C0E4C2BD7A920007D5221 /* StaffSchema.swift */; };
 		1F7C0E502BD7B142007D5221 /* StaffViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F7C0E4F2BD7B142007D5221 /* StaffViewModel.swift */; };
 		1F7C0E522BD7B3B2007D5221 /* AddStaffView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F7C0E512BD7B3B2007D5221 /* AddStaffView.swift */; };
@@ -130,6 +133,9 @@
 		0F85ED822BD902B400C48C75 /* ConfigVIewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigVIewModel.swift; sourceTree = "<group>"; };
 		0F85ED862BDA71F800C48C75 /* BookDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookDetailView.swift; sourceTree = "<group>"; };
 		0F85ED882BE0E32900C48C75 /* MemberBookDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemberBookDetailView.swift; sourceTree = "<group>"; };
+		0FC0423D2BEB3558000BDA67 /* RevenueDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RevenueDetailView.swift; sourceTree = "<group>"; };
+		0FC0423F2BEB3624000BDA67 /* ColorSelecterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorSelecterView.swift; sourceTree = "<group>"; };
+		0FC042412BEB3784000BDA67 /* MemberDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemberDetailView.swift; sourceTree = "<group>"; };
 		1F7C0E4C2BD7A920007D5221 /* StaffSchema.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaffSchema.swift; sourceTree = "<group>"; };
 		1F7C0E4F2BD7B142007D5221 /* StaffViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaffViewModel.swift; sourceTree = "<group>"; };
 		1F7C0E512BD7B3B2007D5221 /* AddStaffView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddStaffView.swift; sourceTree = "<group>"; };
@@ -256,6 +262,25 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0FC0423B2BEB348A000BDA67 /* AdminHomeView */ = {
+			isa = PBXGroup;
+			children = (
+				0FC0423C2BEB352F000BDA67 /* Components */,
+				DC1D402F2BD77E4B00970C7B /* AdminHomeView.swift */,
+			);
+			path = AdminHomeView;
+			sourceTree = "<group>";
+		};
+		0FC0423C2BEB352F000BDA67 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				0FC0423F2BEB3624000BDA67 /* ColorSelecterView.swift */,
+				0FC0423D2BEB3558000BDA67 /* RevenueDetailView.swift */,
+				0FC042412BEB3784000BDA67 /* MemberDetailView.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
 		1F7C0E4B2BD7A8EB007D5221 /* Schemas */ = {
 			isa = PBXGroup;
 			children = (
@@ -444,8 +469,8 @@
 		D55821022BD63950005A00F9 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				0FC0423B2BEB348A000BDA67 /* AdminHomeView */,
 				84E87D4E2BD7D3D700FAD5DC /* AdminCategories */,
-				DC1D402F2BD77E4B00970C7B /* AdminHomeView.swift */,
 				DC1D40312BD77E8000970C7B /* AdminStaffView.swift */,
 				DC1D40332BD77E9600970C7B /* AdminTabView.swift */,
 				84D3293D2BDE707000E75F81 /* EditStaffDetailsView.swift */,
@@ -716,6 +741,7 @@
 				1F7C0E522BD7B3B2007D5221 /* AddStaffView.swift in Sources */,
 				D56B18D92BEB789F000EF169 /* BookFineBox.swift in Sources */,
 				84301CB52BDA126F004CF581 /* MemberHome.swift in Sources */,
+				0FC042402BEB3624000BDA67 /* ColorSelecterView.swift in Sources */,
 				848F9DE42BE8A85F004614D9 /* SupportView.swift in Sources */,
 				D55820F22BD61ADE005A00F9 /* LoginView.swift in Sources */,
 				D50EA9CB2BE4B87E0079C1AB /* MemberRequestCustomBox.swift in Sources */,
@@ -735,6 +761,7 @@
 				848F9DDF2BE8951A004614D9 /* SupportSystem.swift in Sources */,
 				843CB5882BE399F2008CFAFC /* Textfields.swift in Sources */,
 				D50EA9C72BE38DEA0079C1AB /* UserSchema.swift in Sources */,
+				0FC0423E2BEB3558000BDA67 /* RevenueDetailView.swift in Sources */,
 				1F84616D2BD6563E008B7B3E /* ThemeProtocol.swift in Sources */,
 				0F85ED812BD902A900C48C75 /* ConfigSchema.swift in Sources */,
 				DC1D40302BD77E4B00970C7B /* AdminHomeView.swift in Sources */,
@@ -751,6 +778,7 @@
 				1F84616F2BD65679008B7B3E /* ThemeManager.swift in Sources */,
 				DC1D40322BD77E8000970C7B /* AdminStaffView.swift in Sources */,
 				84301CB92BDA4B87004CF581 /* StaffDetailsView.swift in Sources */,
+				0FC042422BEB3784000BDA67 /* MemberDetailView.swift in Sources */,
 				84E96EE02BDA2A2700A572BC /* MemberViewList.swift in Sources */,
 				84E87D612BD7D5EA00FAD5DC /* CardListDetailView.swift in Sources */,
 				D55821062BD63AF4005A00F9 /* LibrarianFirstScreenView.swift in Sources */,
