@@ -8,6 +8,7 @@
 import SwiftUI
 import Firebase
 import FirebaseAuth
+import Charts
 struct AdminHomeView: View {
     
     @ObservedObject var librarianViewModel: LibrarianViewModel
@@ -25,30 +26,92 @@ struct AdminHomeView: View {
     @Environment(\.presentationMode) var presentationMode
     @EnvironmentObject var themeManager: ThemeManager
     
+    @State var memberData: [Int] = [5, 10, 200, 300,0,0,0]
+    @State private var isMemberSheetPresented: Bool = false
+    @State private var isTotalRevenueSheetPresented: Bool = false
+    var data: [(type: String, amount: Int)]{
+        [(type: "Fine", amount : userAuthViewModel.totalIncome),
+         (type: "Membership", amount : userAuthViewModel.allUsers.count * 50)
+        ]
+        
+    }
+    
     var body: some View {
         NavigationView{
             VStack {
                 if !isPageLoading {
                     ScrollView {
                         VStack(spacing:12){
+                            
                             VStack(alignment: .leading){
                                 ZStack{
                                     RoundedRectangle(cornerRadius: 10)
                                         .fill(Color(.systemGray4).opacity(0.5))
                                         .frame(height: 150)
                                     
-                                    VStack{
-                                        Text("Total Revenue")
-                                            .foregroundStyle(Color.gray)
-                                            .font(.title3)
-                                        Text("₹ \(userAuthViewModel.totalIncome)")
-                                            .font(.title)
-                                            .bold()
-                                            .padding(.top)
+                                    // MARK: Total Revenue
+                                    HStack() {
+                                        Spacer()
+                                        VStack(alignment:.trailing,spacing:4){
+                                            VStack(alignment:.leading){
+                                                Text("Total Revenue")
+                                                    .foregroundStyle(Color.gray)
+                                                    .font(.title3)
+                                                Text("₹ \(userAuthViewModel.totalIncome + (userAuthViewModel.allUsers.count*50))")
+                                                    .font(.title)
+                                                    .bold()
+                                            }
+                                            HStack(alignment: .center,spacing: 14){
+                                                VStack{
+                                                    HStack {
+                                                        Rectangle()
+                                                            .fill(Color(themeManager.selectedTheme.primaryThemeColor))
+                                                            .frame(width: 10, height: 10)
+                                                        Text(data[0].type)
+                                                            .font(.caption)
+                                                    }
+                                                    Text("\(data[0].amount)")
+                                                        .font(.caption)
+                                                }
+                                                VStack{
+                                                    HStack {
+                                                        Rectangle()
+                                                            .fill(Color(themeManager.selectedTheme.primaryThemeColor).opacity(0.5))
+                                                            .frame(width: 10, height: 10)
+                                                        Text(data[1].type)
+                                                            .font(.caption)
+                                                    }
+                                                    Text("\(data[1].amount)")
+                                                        .font(.caption)
+                                                }
+                                            }
+                                            .padding(6)
+                                        }
+                                        .padding()
+                                        Spacer()
+                                        Chart(data, id: \.type) { dataItem in
+                                            SectorMark(angle: .value("type", dataItem.amount),
+                                                       //
+                                                       angularInset: 1.5)
+                                            .foregroundStyle(themeManager.selectedTheme.primaryThemeColor)
+                                            .cornerRadius(24)
+                                            .opacity(dataItem.type != "Fine" ? 0.7 : 1)
+                                        }
+                                        .frame(width: 120)
+                                        
+                                        Spacer()
+                                    }
+                                    .onTapGesture {
+                                        isTotalRevenueSheetPresented.toggle()
+                                    }
+                                    .sheet(isPresented: $isTotalRevenueSheetPresented) {
+                                        RevenueDetailView()
                                     }
                                 }
                             }
+                            .foregroundStyle(themeManager.selectedTheme.bodyTextColor)
                             
+                            // MARK: Member and Books
                             HStack(spacing:12){
                                 ZStack{
                                     RoundedRectangle(cornerRadius: 10)
@@ -69,6 +132,12 @@ struct AdminHomeView: View {
                                             .padding(.top)
                                     }
                                     .padding(.horizontal)
+                                }
+                                .onTapGesture {
+                                    isMemberSheetPresented.toggle()
+                                }
+                                .sheet(isPresented: $isMemberSheetPresented) {
+                                    MemberDetailView()
                                 }
                                 
                                 ZStack{
@@ -93,6 +162,7 @@ struct AdminHomeView: View {
                                 }
                             }
                             
+                            // MARK: Staff and Fine
                             HStack(spacing:12){
                                 ZStack{
                                     RoundedRectangle(cornerRadius: 10)
@@ -138,6 +208,7 @@ struct AdminHomeView: View {
                                 
                             }
                             
+                            // MARK: Theme and Brand Logo
                             HStack(spacing:12){
                                 
                                 Button{
@@ -176,7 +247,7 @@ struct AdminHomeView: View {
                                         .padding(.horizontal)
                                     }}
                                 .sheet(isPresented: $isThemeSelecterSheetPresented) {
-                                    colorSelecterView(isSheetPresented: $isThemeSelecterSheetPresented)
+                                    ColorSelecterView()
                                         .presentationDetents([.fraction(0.45)])
                                 }
                                 
@@ -309,49 +380,3 @@ struct AdminHomeView_Previews: PreviewProvider {
     }
 }
 
-struct colorSelecterView: View {
-    @EnvironmentObject var themeManager: ThemeManager
-    @ObservedObject var configManager = ConfigViewModel()
-    @Binding var isSheetPresented: Bool
-    @State var selectedTheme: ThemeProtocol?
-    
-    var body: some View {
-        VStack {
-            HStack{
-                Spacer()
-                Button(action: {
-                    guard let selectedTheme = selectedTheme else { return }
-                    themeManager.setTheme(selectedTheme)
-                    themeManager.updateTheme(selectedTheme)
-                    isSheetPresented = false
-                }) {
-                    Text("Save")
-                        .foregroundStyle(themeManager.selectedTheme.bodyTextColor)
-                }
-                .padding([.top,.trailing])
-            }
-            .padding([.top,.trailing])
-            Text("Select Theme")
-                .foregroundStyle(themeManager.selectedTheme.bodyTextColor)
-                .font(.headline)
-                .padding()
-            
-            HStack {
-                ForEach(themeManager.themes, id: \.primaryThemeColor) { theme in
-                    Button(action: {
-                        selectedTheme = theme
-                    }) {
-                        ThemeView(theme: theme)
-                    }
-                }
-            }
-            
-            Text("Selected Theme:")
-                .foregroundStyle(themeManager.selectedTheme.bodyTextColor)
-                .font(.headline)
-                .padding()
-            ThemeView(theme: selectedTheme ?? themeManager.selectedTheme)
-            Spacer()
-        }
-    }
-}
