@@ -706,7 +706,7 @@ class LibrarianViewModel: ObservableObject{
                 self.responseMessage = "Completed loan successfuly."
             }
         }
-        
+
     }
     
     func calculateFine(){
