@@ -23,9 +23,13 @@ struct supportCard: View {
                         
                         Spacer()
                         
-                        Text(supportData.createdOn)
-                            .font(.system(size: 12))
-                            .foregroundColor(.gray)
+                        HStack{
+                            Text(formatDate(supportData.createdOn))
+                                .font(.system(size: 12))
+                                .foregroundColor(.gray)
+                            Image(systemName: "chevron.right")
+                                .foregroundColor(.gray)
+                        }
                     }
                     
                     HStack{
@@ -34,6 +38,7 @@ struct supportCard: View {
                             .foregroundColor(.secondary)
                         Text(supportData.Subject)
                             .font(.callout)
+                            .foregroundColor(.black)
                     }
                     
                     HStack {
@@ -42,16 +47,27 @@ struct supportCard: View {
                             .foregroundColor(.secondary)
                         Text(supportData.status)
                             .font(.callout)
+                            .foregroundColor(.black)
                         
                     }
+                    .padding(.bottom, 8)
+                    Divider()
+                        .padding(.horizontal, 8)
                 }
-                .padding(5)
-                
+                .padding(.horizontal)
             }
-            .previewLayout(.sizeThatFits)
-            .background(Color.white)
-            .cornerRadius(10)
-            
+        }
+    }
+    
+    func formatDate(_ dateString: String) -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd/MM/yyyy, h:mm a"
+        if let date = dateFormatter.date(from: dateString) {
+            let dateFormatterOutput = DateFormatter()
+            dateFormatterOutput.dateFormat = "dd/MM/yy"
+            return dateFormatterOutput.string(from: date)
+        } else {
+            return "Invalid Date"
         }
     }
 }

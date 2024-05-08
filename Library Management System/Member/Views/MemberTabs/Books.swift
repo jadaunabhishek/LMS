@@ -115,6 +115,7 @@ struct BookRow: View {
                         .multilineTextAlignment(.leading)
                         .font(.headline)
                         .bold()
+                        .foregroundColor(themeManager.selectedTheme.bodyTextColor)
                         .lineLimit(2)
                     Text("\(book.bookAuthor)")
                         .multilineTextAlignment(.leading)
@@ -150,9 +151,8 @@ struct BookRow: View {
 struct BooksPrev: View {
     @StateObject var memModelView = UserBooksModel()
     @StateObject var ConfiViewModel = ConfigViewModel()
-    @State private var searchText = ""
     var body: some View {
-        Books()
+        Books(MemViewModel: memModelView, configViewModel: ConfiViewModel)
     }
 }
 
