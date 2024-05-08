@@ -60,9 +60,14 @@ struct AdminStaffView: View {
                                         AsyncImage(url: URL(string: staffMember.profileImageURL)) { image in
                                             image.resizable()
                                         } placeholder: {
-                                            ProgressView()
+                                            Image(systemName: "person.crop.circle.fill")
+                                                .resizable()
+                                                .scaledToFit()
+                                                .font(.headline)
+                                                .foregroundColor(themeManager.selectedTheme.primaryThemeColor)
+                                                .background(Color.white)
+                                                .clipShape(Circle())
                                         }
-                                        
                                         .frame(width: 60, height: 60)
                                         .aspectRatio(contentMode: .fit)
                                         .clipShape(Circle()).foregroundStyle(themeManager.selectedTheme.secondaryThemeColor)
@@ -78,7 +83,7 @@ struct AdminStaffView: View {
                                         }.padding(.leading, 20)
                                         Spacer()
                                         Image(systemName: "chevron.right")
-                                            .foregroundStyle(themeManager.selectedTheme.bodyTextColor)
+                                            .foregroundStyle(themeManager.selectedTheme.bodyTextColor.opacity(0.5))
                                     }.padding()
                                 }
                                 
