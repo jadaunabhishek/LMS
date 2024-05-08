@@ -20,46 +20,58 @@ struct BooksPage: View {
     
     @ObservedObject var LibViewModel: LibrarianViewModel
     @ObservedObject var ConfiViewMmodel: ConfigViewModel
-    
+    @EnvironmentObject var themeManager: ThemeManager
     @State var isPageLoading: Bool = true
     
     var body: some View {
         NavigationView{
             ZStack{
-                Color("BgColor").edgesIgnoringSafeArea(.all)
                 VStack(spacing: 26){
                     if(!LibViewModel.allBooks.isEmpty){
                         ScrollView{
                             VStack{
                                 ForEach(LibViewModel.allBooks, id: \..id){ book in
                                     NavigationLink(destination:UpdateBookPage(LibViewModel: LibViewModel, ConfiViewModel: ConfiViewMmodel, currentBookId: book.id)){
-                                        HStack(){
+                                        HStack{
                                             AsyncImage(url: URL(string: book.bookImageURL)) { image in
                                                 image.resizable()
                                             } placeholder: {
                                                 ProgressView()
                                             }
-                                            .frame(width: 60,height: 80)
+                                            .frame(width: 100,height: 140)
                                             .cornerRadius(8)
                                             VStack(alignment: .leading, spacing: 5){
+                                                Spacer()
+                                                HStack{
+                                                    Image(systemName: "star.fill").font(.system(size: 14, weight: .bold))
+                                                        .foregroundColor(Color(.systemYellow))
+                                                    Text(String(format: "%.1f", book.bookRating)).font(.system(size: 14, weight: .bold))
+                                                        .foregroundColor(Color(.systemYellow))
+                                                    
+                                                }.padding(.bottom, 5)
                                                 Text("\(book.bookName)")
-                                                    .font(.system(size: 18, weight: .bold))
+                                                    .multilineTextAlignment(.leading)
+                                                    .font(.system(size: 22, weight: .bold))
+                                                    .lineLimit(2)
                                                 Text("\(book.bookAuthor)")
-                                                    .font(.system(size: 18, weight: .regular))
+                                                    .multilineTextAlignment(.leading)
+                                                    .font(.system(size: 19, weight: .semibold))
+                                                    .lineLimit(1)
+                                                    .foregroundColor(Color(.systemGray))
                                             }
                                             .padding(5)
                                             Spacer()
                                             VStack{
                                                 Image(systemName: "chevron.right")
                                                     .symbolRenderingMode(.hierarchical)
-                                                    .font(.system(size: 25))
+                                                    .font(.system(size: 15))
                                             }
                                         }
                                         .padding(10)
-                                        .background(.white)
                                         .cornerRadius(8)
                                     }
-                                    .foregroundColor(.black)
+                                    .foregroundColor(themeManager.selectedTheme.bodyTextColor)
+                                    Divider()
                                 }
                             }
                         }
@@ -93,6 +105,7 @@ struct BooksPage: View {
             }
         }
     }
+    //}
 }
 
 struct BPPrev: View {
@@ -105,6 +118,11 @@ struct BPPrev: View {
     }
 }
 
-#Preview {
-    BPPrev()
+
+struct BPPrev_Previews: PreviewProvider {
+    static var previews: some View {
+        let themeManager = ThemeManager()
+        return BPPrev()
+            .environmentObject(themeManager)
+    }
 }

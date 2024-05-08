@@ -12,6 +12,7 @@ struct Member {
 struct MemberCard: View {
     var db = Firestore.firestore()
     @Binding var member: Member
+    @EnvironmentObject var themeManager: ThemeManager
 
     func updateData(memberId: String, status: String) {
         db.collection("users").document(memberId).updateData(["status": status])
@@ -27,18 +28,20 @@ struct MemberCard: View {
                 .background(Color.white)
                 .clipShape(Circle())
                 .overlay(Circle().stroke(Color.orange, lineWidth: 2))
+                .padding(.trailing, 10)
             VStack(alignment: .leading, spacing: 4) {
                 Text(member.name)
                     .font(.headline)
                 Text(member.email)
                     .font(.subheadline)
-                    .foregroundColor(.gray)
+                    
                 Text("Status: \(member.status)")
                     .font(.subheadline)
-                    .foregroundColor(.gray)
+                    
             }
             Spacer()
         }
+        .foregroundColor(themeManager.selectedTheme.bodyTextColor)
         .padding()
     }
 }
@@ -46,6 +49,7 @@ struct MemberCard: View {
 struct MembersView: View {
     @State private var members: [Member] = []
     @State private var searchText = ""
+    @EnvironmentObject var themeManager: ThemeManager
     
     var db = Firestore.firestore()
     func updateData(memberId: String, status: String) {
@@ -57,15 +61,14 @@ struct MembersView: View {
             VStack{
                 List{
                     ForEach(filteredMembers, id: \.id) { member in
-                        MemberCard(member: .constant(member))  // Binding for toggling
+                        MemberCard(member: .constant(member))  
                             .frame(maxWidth: .infinity)
-                            .background(Color.white)
                             .swipeActions(edge: .trailing){
                                 if(member.status != "Approved"){
                                     Button(action:{
                                         updateData(memberId: member.id, status: "Approved")
                                         fetchData()
-                                        //member.status = "Approved"
+                                        
                                     }){
                                         Label("Approve", systemImage: "checkmark")
                                     }
@@ -117,7 +120,7 @@ struct MembersView: View {
                 let data = doc.data()
                 let email = data["email"] as? String ?? ""
                 let name = data["name"] as? String ?? ""
-                var status = data["status"] as? String ?? ""
+                let status = data["status"] as? String ?? ""
                 return Member(id: doc.documentID, name: name, email: email, status: status, isToggled: status == "Approved")
             }
         }
@@ -125,7 +128,9 @@ struct MembersView: View {
 }
 
 struct MembersView_Previews: PreviewProvider {
+    
     static var previews: some View {
-        MembersView()
+        let themeManager = ThemeManager()
+        MembersView().environmentObject(themeManager)
     }
 }
