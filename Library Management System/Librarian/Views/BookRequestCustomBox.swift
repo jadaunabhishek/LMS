@@ -10,39 +10,57 @@ import SwiftUI
 struct BookRequestCustomBox: View {
     
     @State var bookRequestData: Loan
+    @EnvironmentObject var themeManager: ThemeManager
     
     var body: some View {
         HStack{
-            AsyncImage(url: URL(string: bookRequestData.bookImageURL)) { image in
-                image.resizable()
-            } placeholder: {
-                ProgressView()
-            }
-                .frame(width: 60, height: 90)
-                .padding(.trailing)
-            
-            VStack(alignment:.leading, spacing: 10){
+            HStack{
+                AsyncImage(url: URL(string: bookRequestData.bookImageURL)) { image in
+                    image.resizable()
+                } placeholder: {
+                    ProgressView()
+                }
+                .frame(width: 80,height: 120)
+                .cornerRadius(8)
                 
-                VStack(alignment: .leading, spacing: 2){
+                VStack(alignment: .leading, spacing: 5){
+                    Spacer()
+                    
+                    Text("\(bookRequestData.bookName)")
+                        .multilineTextAlignment(.leading)
+                        .font(.system(size: 22, weight: .bold))
+                        .lineLimit(2)
+                        .foregroundColor(themeManager.selectedTheme.bodyTextColor)
+                    
                     Text(bookRequestData.bookIssuedToName)
-                        .font(.system(size: 20, weight: .medium))
-                    Text(bookRequestData.bookName)
-                        .font(.system(size: 16))
+                        .multilineTextAlignment(.leading)
+                        .font(.system(size: 19, weight: .semibold))
+                        .lineLimit(1)
+                        .foregroundColor(Color(.systemGray))
+                    HStack{
+                        Image(systemName: "calendar")
+                            .font(.system(size: 18,weight: .bold))
+                        Text(formatDate(bookRequestData.bookIssuedOn))
+                            .font(.system(size: 14, weight: .regular))
+                        Image(systemName: "arrow.right")
+                            .font(.system(size: 10))
+                        Text(formatDate(bookRequestData.bookExpectedReturnOn))
+                            .font(.system(size: 14, weight: .regular))
+                    }
                 }
-                HStack{
-                    Image(systemName: "calendar")
-                        .font(.system(size: 18,weight: .bold))
-                    Text(formatDate(bookRequestData.bookIssuedOn))
-                        .font(.system(size: 14, weight: .regular))
-                    Image(systemName: "arrow.right")
-                        .font(.system(size: 14))
-                    Text(formatDate(bookRequestData.bookExpectedReturnOn))
-                        .font(.system(size: 14, weight: .regular))
+                .padding(5)
+                Spacer()
+                VStack{
+                    Image(systemName: "chevron.right")
+                        .symbolRenderingMode(.hierarchical)
+                        .font(.system(size: 15))
+                        .foregroundColor(Color(.systemGray))
                 }
             }
-            Spacer()
+            .padding(10)
+            .cornerRadius(8)
+            .background(Color(.systemGray6).opacity(0.6))
         }
-        .padding(.vertical, 10)
     }
     
     func formatDate(_ dateString: String) -> String {

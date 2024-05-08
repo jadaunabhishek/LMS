@@ -36,6 +36,7 @@ struct Books: View {
     @State private var isPageLoading: Bool = true
     @EnvironmentObject var themeManager: ThemeManager
     @ObservedObject var MemViewModel = UserBooksModel()
+    @StateObject var ConfiViewModel = ConfigViewModel()
     
     let categories = ["Fiction", "Non-Fiction", "Science Fiction", "Mystery", "Thriller", "Romance", "Fantasy", "Biography", "Self-Help"]
     
@@ -55,7 +56,6 @@ struct Books: View {
         NavigationStack {
             ScrollView {
                 VStack {
-
                     ScrollView(.horizontal, showsIndicators: false) {
                         HStack {
                             ForEach(categories, id: \.self) { category in
@@ -69,7 +69,7 @@ struct Books: View {
                                     Text(category)
                                         .padding(8)
                                         .foregroundColor(themeManager.selectedTheme.bodyTextColor)
-                                        .background(selectedCategories.contains(category) ? Color.blue : Color(.systemGray).opacity(0.3))
+                                        .background(selectedCategories.contains(category) ? themeManager.selectedTheme.primaryThemeColor : Color(.systemGray).opacity(0.3))
                                         .overlay(
                                             Rectangle()
                                                 .stroke(Color(.systemGray4).opacity(0.3), lineWidth: 1)
@@ -96,7 +96,7 @@ struct Books: View {
                         } else {
                             Text("No books found")
                         }
-                    }.navigationTitle("Search")
+                    }.navigationTitle("Library")
                 }.searchable(text: $searchText)
                     .refreshable {
                         MemViewModel.getBooks()
@@ -127,22 +127,24 @@ struct BookRow: View {
             .cornerRadius(8)
             VStack(alignment: .leading, spacing: 5){
                 Spacer()
+                
+                Text("\(book.bookName)")
+                    .multilineTextAlignment(.leading)
+                    .font(.system(size: 22, weight: .bold))
+                    .lineLimit(2)
+                    .foregroundColor(themeManager.selectedTheme.bodyTextColor)
+                Text("\(book.bookAuthor)")
+                    .multilineTextAlignment(.leading)
+                    .font(.system(size: 19, weight: .semibold))
+                    .lineLimit(1)
+                    .foregroundColor(Color(.systemGray))
                 HStack{
                     Image(systemName: "star.fill").font(.system(size: 14, weight: .bold))
                         .foregroundColor(Color(.systemYellow))
                     Text(String(format: "%.1f", book.bookRating)).font(.system(size: 14, weight: .bold))
                         .foregroundColor(Color(.systemYellow))
                     
-                }.padding(.bottom, 5)
-                Text("\(book.bookName)")
-                    .multilineTextAlignment(.leading)
-                    .font(.system(size: 22, weight: .bold))
-                    .lineLimit(2)
-                Text("\(book.bookAuthor)")
-                    .multilineTextAlignment(.leading)
-                    .font(.system(size: 19, weight: .semibold))
-                    .lineLimit(1)
-                    .foregroundColor(Color(.systemGray))
+                }.padding(.top, 5)
             }
             .padding(5)
             Spacer()
@@ -150,6 +152,7 @@ struct BookRow: View {
                 Image(systemName: "chevron.right")
                     .symbolRenderingMode(.hierarchical)
                     .font(.system(size: 15))
+                    .foregroundColor(Color(.systemGray))
             }
         }
         .padding(10)
@@ -164,7 +167,7 @@ struct BooksPrev: View {
     @StateObject var memModelView = UserBooksModel()
     @StateObject var ConfiViewModel = ConfigViewModel()
     var body: some View {
-        Books(MemViewModel: memModelView, ConfiViewMmodel: ConfiViewModel)
+        Books(MemViewModel: memModelView, ConfiViewModel: ConfiViewModel)
     }
 }
 
