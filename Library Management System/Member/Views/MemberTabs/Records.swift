@@ -34,7 +34,7 @@ struct Records: View {
                     HStack {
                         ForEach(0..<LibViewModel.currentUserOverDueHistory.count, id: \.self) { userDetail in
                             NavigationLink(destination: RecordBookDetail(checkInDetails: LibViewModel.currentUserOverDueHistory[userDetail], LibViewModel: LibViewModel)){
-                                BookRequestCustomBox(bookRequestData: LibViewModel.currentUserOverDueHistory[userDetail])
+                                BookFineBox(bookRequestData: LibViewModel.currentUserOverDueHistory[userDetail])
                             }
                         }
                     }
@@ -53,12 +53,15 @@ struct Records: View {
                 .padding(.bottom, -5)
                 
                 if(!LibViewModel.currentUserHistory.isEmpty){
-                    HStack {
-                        ForEach(0..<LibViewModel.currentUserHistory.count, id: \.self) { userDetail in
-                            NavigationLink(destination: RecordBookDetail(checkInDetails: LibViewModel.currentUserHistory[userDetail], LibViewModel: LibViewModel)){
-                                BookRequestCustomBox(bookRequestData: LibViewModel.currentUserHistory[userDetail])
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        HStack {
+                            ForEach(0..<LibViewModel.currentUserHistory.count, id: \.self) { userDetail in
+                                NavigationLink(destination: RecordBookDetail(checkInDetails: LibViewModel.currentUserHistory[userDetail], LibViewModel: LibViewModel)){
+                                    BookReqBox(bookRequestData: LibViewModel.currentUserHistory[userDetail])
+                                }
                             }
                         }
+                        .padding(.bottom)
                     }
                 } else {
                     EmptySection()
@@ -76,7 +79,6 @@ struct Records: View {
                 .padding(.bottom, -5)
                 
                 if(!LibViewModel.currentUserProperHistory.isEmpty){
-                    
                     VStack {
                         ForEach(0..<LibViewModel.currentUserProperHistory.count, id: \.self) { userDetail in
                             NavigationLink(destination: RecordBookDetail(checkInDetails: LibViewModel.currentUserProperHistory[userDetail], LibViewModel: LibViewModel)){

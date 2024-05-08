@@ -1,27 +1,31 @@
 //
-//  BookRequestCustomBox.swift
+//  BookReqBox.swift
 //  Library Management System
 //
-//  Created by Abhishek Jadaun on 03/05/24.
+//  Created by Abhishek Jadaun on 08/05/24.
 //
 
 import SwiftUI
 
-struct BookRequestCustomBox: View {
+struct BookFineBox: View {
     
     @State var bookRequestData: Loan
     @EnvironmentObject var themeManager: ThemeManager
     
     var body: some View {
-        VStack {
-            HStack{
+        if bookRequestData.loanStatus == "Requested" {
+            ZStack {
+                RoundedRectangle(cornerRadius: 10)
+                    .foregroundColor(.white)
+                    .shadow(color: Color.gray.opacity(0.5), radius: 5, x: 0, y: 2)
+                    .frame(maxHeight: 125)
                 HStack{
                     AsyncImage(url: URL(string: bookRequestData.bookImageURL)) { image in
                         image.resizable()
                     } placeholder: {
                         ProgressView()
                     }
-                    .frame(width: 80,height: 120)
+                    .frame(width: 60,height: 100)
                     .cornerRadius(8)
                     
                     VStack(alignment: .leading, spacing: 5){
@@ -29,40 +33,44 @@ struct BookRequestCustomBox: View {
                         
                         Text("\(bookRequestData.bookName)")
                             .multilineTextAlignment(.leading)
-                            .font(.system(size: 22, weight: .bold))
+                            .font(.callout)
                             .lineLimit(2)
+                            .fontWeight(.bold)
                             .foregroundColor(themeManager.selectedTheme.bodyTextColor)
                         
                         Text(bookRequestData.loanStatus)
                             .multilineTextAlignment(.leading)
-                            .font(.system(size: 19, weight: .semibold))
+                            .font(.caption)
+                            .fontWeight(.semibold)
                             .lineLimit(1)
                             .foregroundColor(Color(.systemGray))
+                        
+                        Text(String(bookRequestData.loanFine))
+                            .multilineTextAlignment(.leading)
+                            .font(.caption)
+                            .fontWeight(.semibold)
+                            .lineLimit(1)
+                            .foregroundColor(Color(.systemGray))
+                    
+                        
                         HStack{
                             Image(systemName: "calendar")
-                                .font(.system(size: 18,weight: .bold))
-                            Text(formatDate(bookRequestData.bookIssuedOn))
-                                .font(.system(size: 14, weight: .regular))
-                            Image(systemName: "arrow.right")
-                                .font(.system(size: 10))
+                                .font(.caption)
                             Text(formatDate(bookRequestData.bookExpectedReturnOn))
-                                .font(.system(size: 14, weight: .regular))
+                                .font(.caption)
                         }
+                        
                     }
+                    .frame(width: 120)
                     .padding(5)
+                    
                     Spacer()
-                    VStack{
-                        Image(systemName: "chevron.right")
-                            .symbolRenderingMode(.hierarchical)
-                            .font(.system(size: 15))
-                            .foregroundColor(Color(.systemGray))
-                    }
                 }
                 .padding(10)
                 .cornerRadius(8)
+                
             }
-            Divider()
-                .padding(.horizontal)
+            .padding(.leading)
         }
     }
     
