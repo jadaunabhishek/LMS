@@ -9,26 +9,27 @@ struct OnboardingView: View {
     var body: some View {
         VStack {
             TabView(selection: $currentPage) {
-                ForEach(0..<3) { index in // Use integer literals directly
+                ForEach(0..<3) { index in
                     VStack {
                         Image("onboardingImage\(index + 1)")
                             .resizable()
                             .aspectRatio(contentMode: .fit)
-                            .frame(width: UIScreen.main.bounds.width * 0.8, height: UIScreen.main.bounds.height * 0.3) // Set fixed width and height
+                            .frame(width: UIScreen.main.bounds.width * 0.8, height: UIScreen.main.bounds.height * 0.3)
                             .tag(index)
                         
                         Text(texts[index])
                             .padding()
                             .multilineTextAlignment(.center)
+                            .font(.title2)
                     }
                 }
             }
             .frame(height: UIScreen.main.bounds.height / 2)
             .tabViewStyle(PageTabViewStyle(indexDisplayMode: .automatic))
+            .accentColor(Color.black)
             
             VStack {
                 PrimaryCustomButton(action: {
-                    // Action for "Agree & Join" button
                 }, label: "Agree & Join")
                 
                 
@@ -43,6 +44,7 @@ struct OnboardingView: View {
                 }) {
                     Text("Sign In")
                         .font(.title3)
+                        .fontWeight(.bold)
                         .padding()
                         .foregroundColor(themeManager.selectedTheme.primaryThemeColor)
                 }
