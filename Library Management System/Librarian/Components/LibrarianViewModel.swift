@@ -16,7 +16,11 @@ class LibrarianViewModel: ObservableObject{
     @Published var currentBook: [Book] = []
     @Published var currentBookHistory: [Loan] = []
     @Published var currentUserHistory: [Loan] = []
+    @Published var currentUserOverDueHistory: [Loan] = []
+    @Published var currentUserProperHistory: [Loan] = []
     @Published var allBooks: [Book] = []
+    @Published var topRatedBooks: [Book] = []
+    @Published var trendingBooks: [Book] = []
     @Published var requestedLoans: [Loan] = []
     @Published var issuedLoans: [Loan] = []
     @Published var activeLoans: [Loan] = []
@@ -206,7 +210,7 @@ class LibrarianViewModel: ObservableObject{
         
         var tempBooks: [Book] = []
         
-        dbInstance.collection("Books").getDocuments{ (snapshot, error) in
+        dbInstance.collection("Books").order(by: "bookName").getDocuments{ (snapshot, error) in
             
             if(error == nil && snapshot != nil){
                 for document in snapshot!.documents{
@@ -236,6 +240,86 @@ class LibrarianViewModel: ObservableObject{
                     tempBooks.append(book)
                 }
                 self.allBooks = tempBooks
+            }
+            
+        }
+        
+    }
+    
+    func getTopRatedBooks(){
+        
+        var tempBooks: [Book] = []
+        
+        dbInstance.collection("Books").order(by: "bookRating").getDocuments{ (snapshot, error) in
+            
+            if(error == nil && snapshot != nil){
+                for document in snapshot!.documents{
+                    let documentData = document.data()
+                    
+                    guard let bookHistoryDictArray = documentData["bookHistory"] as? [[String: Any]] else {
+                        print("Error: Unable to parse fineDetails array from Firestore document")
+                        return
+                    }
+                    
+                    var bookHistoryArray: [History] = []
+                    for bookHistoryDict in bookHistoryDictArray {
+                        guard let userId = bookHistoryDict["userId"] as? String,
+                              let userName = bookHistoryDict["userName"] as? String,
+                              let issuedOn = bookHistoryDict["issuedOn"] as? String,
+                              let returnedOn = bookHistoryDict["returnedOn"] as? String
+                        else {
+                            print("Error: Unable to parse fineDetail from dictionary")
+                            continue
+                        }
+                        
+                        let bookHistory = History(userId: userId, userName: userName, issuedOn: issuedOn, returnedOn: returnedOn)
+                        bookHistoryArray.append(bookHistory)
+                    }
+                    
+                    let book = Book(id: documentData["id"] as! String as Any as! String, bookISBN: documentData["bookISBN"] as! String as Any as! String, bookImageURL: documentData["bookImageURL"] as! String as Any as! String, bookName: documentData["bookName"] as! String as Any as! String, bookAuthor: documentData["bookAuthor"] as! String as Any as! String, bookDescription: documentData["bookDescription"] as! String as Any as! String, bookCategory: documentData["bookCategory"] as! String as Any as! String, bookSubCategories: documentData["bookSubCategories"] as! [String] as Any as! [String], bookPublishingDate: documentData["bookPublishingDate"] as! String as Any as! String, bookStatus: documentData["bookStatus"] as! String as Any as! String, bookCount: documentData["bookCount"] as! Int as Any as! Int, bookAvailableCount: documentData["bookAvailableCount"] as! Int as Any as! Int, bookPreBookedCount: documentData["bookPreBookedCount"] as! Int as Any as! Int, bookTakenCount: documentData["bookTakenCount"] as! Int as Any as! Int, bookIssuedTo: documentData["bookIssuedTo"] as! [String] as Any as! [String], bookIssuedToName: documentData["bookIssuedToName"] as! [String] as Any as! [String], bookIssuedOn: documentData["bookIssuedOn"] as! [String] as Any as! [String], bookExpectedReturnOn: documentData["bookExpectedReturnOn"] as! [String] as Any as! [String], bookRating: Float(documentData["bookRating"] as! Float as Any as! Float), bookReviews: documentData["bookReviews"] as! [String] as Any as! [String], bookHistory: bookHistoryArray, createdOn: documentData["createdOn"] as! String as Any as! String, updayedOn: documentData["updatedOn"] as! String as Any as! String)
+                    tempBooks.append(book)
+                }
+                self.topRatedBooks = tempBooks
+            }
+            
+        }
+        
+    }
+    
+    func getTrendingBooks(){
+        
+        var tempBooks: [Book] = []
+        
+        dbInstance.collection("Books").order(by: "bookPreBookedCount").getDocuments{ (snapshot, error) in
+            
+            if(error == nil && snapshot != nil){
+                for document in snapshot!.documents{
+                    let documentData = document.data()
+                    
+                    guard let bookHistoryDictArray = documentData["bookHistory"] as? [[String: Any]] else {
+                        print("Error: Unable to parse fineDetails array from Firestore document")
+                        return
+                    }
+                    
+                    var bookHistoryArray: [History] = []
+                    for bookHistoryDict in bookHistoryDictArray {
+                        guard let userId = bookHistoryDict["userId"] as? String,
+                              let userName = bookHistoryDict["userName"] as? String,
+                              let issuedOn = bookHistoryDict["issuedOn"] as? String,
+                              let returnedOn = bookHistoryDict["returnedOn"] as? String
+                        else {
+                            print("Error: Unable to parse fineDetail from dictionary")
+                            continue
+                        }
+                        
+                        let bookHistory = History(userId: userId, userName: userName, issuedOn: issuedOn, returnedOn: returnedOn)
+                        bookHistoryArray.append(bookHistory)
+                    }
+                    
+                    let book = Book(id: documentData["id"] as! String as Any as! String, bookISBN: documentData["bookISBN"] as! String as Any as! String, bookImageURL: documentData["bookImageURL"] as! String as Any as! String, bookName: documentData["bookName"] as! String as Any as! String, bookAuthor: documentData["bookAuthor"] as! String as Any as! String, bookDescription: documentData["bookDescription"] as! String as Any as! String, bookCategory: documentData["bookCategory"] as! String as Any as! String, bookSubCategories: documentData["bookSubCategories"] as! [String] as Any as! [String], bookPublishingDate: documentData["bookPublishingDate"] as! String as Any as! String, bookStatus: documentData["bookStatus"] as! String as Any as! String, bookCount: documentData["bookCount"] as! Int as Any as! Int, bookAvailableCount: documentData["bookAvailableCount"] as! Int as Any as! Int, bookPreBookedCount: documentData["bookPreBookedCount"] as! Int as Any as! Int, bookTakenCount: documentData["bookTakenCount"] as! Int as Any as! Int, bookIssuedTo: documentData["bookIssuedTo"] as! [String] as Any as! [String], bookIssuedToName: documentData["bookIssuedToName"] as! [String] as Any as! [String], bookIssuedOn: documentData["bookIssuedOn"] as! [String] as Any as! [String], bookExpectedReturnOn: documentData["bookExpectedReturnOn"] as! [String] as Any as! [String], bookRating: Float(documentData["bookRating"] as! Float as Any as! Float), bookReviews: documentData["bookReviews"] as! [String] as Any as! [String], bookHistory: bookHistoryArray, createdOn: documentData["createdOn"] as! String as Any as! String, updayedOn: documentData["updatedOn"] as! String as Any as! String)
+                    tempBooks.append(book)
+                }
+                self.trendingBooks = tempBooks
             }
             
         }
@@ -578,6 +662,8 @@ class LibrarianViewModel: ObservableObject{
     func getUserHistory(userId: String){
         
         var tempUserHistory: [Loan] = []
+        var tempUserOverDueHistory: [Loan] = []
+        var tempUserProperHistory: [Loan] = []
         
         self.dbInstance.collection("Loans").getDocuments{ (snapshot, error) in
             
@@ -589,11 +675,19 @@ class LibrarianViewModel: ObservableObject{
                     
                     if(tempLoan.bookIssuedTo == userId){
                         tempUserHistory.append(tempLoan)
+                        if(tempLoan.fineCalculatedDays > 0){
+                            tempUserOverDueHistory.append(tempLoan)
+                        }
+                        else{
+                            tempUserProperHistory.append(tempLoan)
+                        }
                     }
                     
                 }
                 
                 self.currentUserHistory = tempUserHistory
+                self.currentUserProperHistory = tempUserProperHistory
+                self.currentUserOverDueHistory = tempUserOverDueHistory
                 
             }
         }
