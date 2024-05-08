@@ -1,10 +1,3 @@
-//
-//  TestNotificationView.swift
-//  Library Management System
-//
-//  Created by Abhishek Jadaun on 03/05/24.
-//
-
 import SwiftUI
 
 struct NotificationsView: View {
@@ -16,6 +9,7 @@ struct NotificationsView: View {
     @State var notifications: [NotificationItem] = []
     @State var requestedLoans: [Loan] = []
     @State var issuedLoans: [Loan] = []
+    @State var isSelectionMode: Bool = false
     
     enum Option {
         case CheckIn
@@ -27,7 +21,6 @@ struct NotificationsView: View {
         NavigationView{
             VStack(){
                 HStack() {
-                    
                     PickerButton(title: "Issue", isSelected: selectedOption == .CheckOut) {
                         self.selectedOption = .CheckOut
                     }
@@ -48,7 +41,7 @@ struct NotificationsView: View {
                     } else {
                         BooksSections(LibViewModel: LibViewModel, issue: $issuedLoans, request: $requestedLoans)
                     }
-                } 
+                }
                 else if( selectedOption == .CheckIn){
                     if (issuedLoans.isEmpty) {
                         EmptySection()
@@ -93,7 +86,8 @@ struct NotificationsView: View {
             .searchable(text: $searchText)
         }
     }
-}
+    }
+
 
 
 
@@ -119,42 +113,120 @@ struct EmptySection: View {
 }
 
 struct MembershipSections: View {
-    
+    @EnvironmentObject var themeManager: ThemeManager
     @StateObject var viewModel = NotificationsViewModel()
     @Binding var notifs: [NotificationItem]
+    @State private var selectedItems = Set<Int>()
+    @State private var isSelectionMode = false
     
     var body: some View {
-        List {
-            ForEach(0..<viewModel.notifications.count, id: \.self) { key in
-                MemberRequestCustomBox(viewModel: viewModel, notification: viewModel.notifications[key])
-                    .swipeActions(edge: .trailing){
-                        
-                        Button(action:{
-                            viewModel.approve(notification: viewModel.notifications[key])
-                            viewModel.fetchData()
-                            Task{
-                                try? await Task.sleep(nanoseconds: 1_000_000_000/2)
-                                notifs = viewModel.notifications
+        VStack {
+            if isSelectionMode {
+                selectionBar
+                    .padding(.horizontal,20)
+                    .transition(.move(edge: .top))
+                    .animation(.easeInOut, value: isSelectionMode)
+            }
+            List {
+                ForEach(0..<viewModel.notifications.count, id: \.self) { key in
+                    HStack {
+                        if isSelectionMode {
+                            Button(action: {
+                                toggleSelection(for: key)
+                            }) {
+                                Image(systemName: selectedItems.contains(key) ? "checkmark.square.fill" : "square")
                             }
-                        }){
-                            Label("Accept", systemImage: "checkmark")
+                            .foregroundColor(selectedItems.isEmpty ? Color.black : themeManager.selectedTheme.primaryThemeColor)
                         }
-                        .tint(.green)
-                        
+                        MemberRequestCustomBox(viewModel: viewModel, notification: viewModel.notifications[key])
                     }
-                    .swipeActions(edge: .leading){
-                        
-                        Button(action:{
-                            viewModel.reject(notification: viewModel.notifications[key])
-                            viewModel.fetchData()
-                        }){
-                            Label("Reject", systemImage: "xmark")
+                    .contentShape(Rectangle())
+                    .onTapGesture {
+                        if isSelectionMode {
+                            toggleSelection(for: key)
                         }
-                        .tint(.red)
                     }
+                    .onLongPressGesture {
+                        isSelectionMode = true
+                        toggleSelection(for: key)
+                    }
+                }
+            }
+            .listStyle(.inset)
+        }
+        .navigationBarItems(trailing: selectionModeButton)
+    }
+    
+    var selectionModeButton: some View {
+        Button(action: {
+            isSelectionMode.toggle()
+            if !isSelectionMode {
+                selectedItems.removeAll()
+            }
+        }) {
+            Text(isSelectionMode ? "Done" : "Select")
+        }
+    }
+    
+    var selectionBar: some View {
+        HStack {
+            Button(action: toggleSelectAll) {
+                HStack {
+                    Image(systemName: selectedItems.count == viewModel.notifications.count ? "checkmark.square.fill" : "square")
+                    Text(selectedItems.count == viewModel.notifications.count ? "Unselect All" : "Select All")
+                }
+            }
+            .foregroundColor(selectedItems.isEmpty ? Color.black : themeManager.selectedTheme.primaryThemeColor)
+
+            Spacer()
+
+            Button(action: {
+                processSelectedItems(approve: true)
+            }) {
+                Text("Approve")
+                    .foregroundColor(selectedItems.isEmpty ? Color.green.opacity(0.5): Color.green)
+            }
+            .cornerRadius(8)
+            .disabled(selectedItems.isEmpty)
+
+            Button(action: {
+                processSelectedItems(approve: false)
+            }) {
+                Text("Reject")
+                    .foregroundColor(selectedItems.isEmpty ? Color.red.opacity(0.5) : Color.red)
+            }
+            .cornerRadius(8)
+            .disabled(selectedItems.isEmpty)
+        }
+    }
+    
+    func toggleSelection(for key: Int) {
+        if selectedItems.contains(key) {
+            selectedItems.remove(key)
+        } else {
+            selectedItems.insert(key)
+        }
+    }
+    
+    func toggleSelectAll() {
+        if selectedItems.count == viewModel.notifications.count {
+            selectedItems.removeAll()
+        } else {
+            selectedItems = Set(0..<viewModel.notifications.count)
+        }
+    }
+    
+    func processSelectedItems(approve: Bool) {
+        for index in selectedItems {
+            if approve {
+                viewModel.approve(notification: viewModel.notifications[index])
+            } else {
+                viewModel.reject(notification: viewModel.notifications[index])
             }
         }
-        .listStyle(.inset)
+        viewModel.fetchData()
+        selectedItems.removeAll()
+        isSelectionMode = false
     }
 }
 
@@ -176,51 +248,126 @@ struct checkInSections: View {
 }
 
 struct BooksSections: View {
+    @EnvironmentObject var themeManager: ThemeManager
     @ObservedObject var LibViewModel: LibrarianViewModel
     @Binding var issue: [Loan]
     @Binding var request: [Loan]
+    @State private var selectedItems = Set<Int>()
+    @State private var isSelectionMode = false
     
     var body: some View {
-        List {
-            ForEach(0..<LibViewModel.requestedLoans.count, id: \.self) { key in
-                    BookRequestCustomBox(bookRequestData: LibViewModel.requestedLoans[key])
-                    .swipeActions(edge: .trailing){
-                        Button(action:{
-                            LibViewModel.checkOutBook(loanId: LibViewModel.requestedLoans[key].loanId)
-                            LibViewModel.getLoans()
-                            Task{
-                                try? await Task.sleep(nanoseconds: 1_000_000_000/2)
-                                issue = LibViewModel.issuedLoans
-                                request = LibViewModel.requestedLoans
+        VStack {
+            if isSelectionMode {
+                selectionBar
+                    .padding(.horizontal, 20)
+                    .transition(.move(edge: .top))
+                    .animation(.easeInOut, value: isSelectionMode)
+            }
+            List {
+                ForEach(0..<LibViewModel.requestedLoans.count, id: \.self) { key in
+                    HStack {
+                        if isSelectionMode {
+                            Button(action: {
+                                toggleSelection(for: key)
+                            }) {
+                                Image(systemName: selectedItems.contains(key) ? "checkmark.square.fill" : "square")
                             }
-                        }){
-                            Label("Accept", systemImage: "checkmark")
+                            .foregroundColor(selectedItems.isEmpty ? Color.black : themeManager.selectedTheme.primaryThemeColor)
                         }
-                        .tint(.green)
-                        
+                        BookRequestCustomBox(bookRequestData: LibViewModel.requestedLoans[key])
                     }
-                    .swipeActions(edge: .leading){
-                        
-                        Button(action:{
-                            Task{
-                                await LibViewModel.rejectRequest(loanId:LibViewModel.requestedLoans[key].loanId ,bookId:LibViewModel.requestedLoans[key].bookId)
-                                LibViewModel.getLoans()
-                                Task{
-                                    try? await Task.sleep(nanoseconds: 1_000_000_000/2)
-                                    issue = LibViewModel.issuedLoans
-                                    request = LibViewModel.requestedLoans
-                                }
-                            }
-                        }){
-                            Label("Reject", systemImage: "xmark")
+                    .contentShape(Rectangle())
+                    .onTapGesture {
+                        if isSelectionMode {
+                            toggleSelection(for: key)
                         }
-                        .tint(.red)
                     }
+                    .onLongPressGesture {
+                        isSelectionMode = true
+                        toggleSelection(for: key) // Auto-select the item on long press
+                    }
+                }
+            }
+            .listStyle(.inset)
+        }
+        .navigationBarItems(trailing: selectionModeButton)
+    }
+    
+    var selectionModeButton: some View {
+        Button(action: {
+            isSelectionMode.toggle()
+            if !isSelectionMode {
+                selectedItems.removeAll()
+            }
+        }) {
+            Text(isSelectionMode ? "Done" : "Select")
+        }
+    }
+    
+    var selectionBar: some View {
+        HStack {
+            Button(action: toggleSelectAll) {
+                HStack {
+                    Image(systemName: selectedItems.count == LibViewModel.requestedLoans.count ? "checkmark.square.fill" : "square")
+                    Text(selectedItems.count == LibViewModel.requestedLoans.count ? "Unselect All" : "Select All")
+                }
+            }
+            .foregroundColor(selectedItems.isEmpty ? Color.black : themeManager.selectedTheme.primaryThemeColor)
+
+            Spacer()
+
+            Button(action: {
+                processSelectedItems(approve: true)
+            }) {
+                Text("Approve")
+                    .foregroundColor(selectedItems.isEmpty ? Color.green.opacity(0.5) : Color.green)
+            }
+            .cornerRadius(8)
+            .disabled(selectedItems.isEmpty)
+
+            Button(action: {
+                processSelectedItems(approve: false)
+            }) {
+                Text("Reject")
+                    .foregroundColor(selectedItems.isEmpty ? Color.red.opacity(0.5) : Color.red)
+            }
+            .cornerRadius(8)
+            .disabled(selectedItems.isEmpty)
+        }
+    }
+    
+    func toggleSelection(for key: Int) {
+        if selectedItems.contains(key) {
+            selectedItems.remove(key)
+        } else {
+            selectedItems.insert(key)
+        }
+    }
+    
+    func toggleSelectAll() {
+        if selectedItems.count == LibViewModel.requestedLoans.count {
+            selectedItems.removeAll()
+        } else {
+            selectedItems = Set(0..<LibViewModel.requestedLoans.count)
+        }
+    }
+    
+    func processSelectedItems(approve: Bool) {
+        for index in selectedItems {
+            if approve {
+                LibViewModel.checkOutBook(loanId: LibViewModel.requestedLoans[index].loanId)
+            } else {
+                Task {
+                    await LibViewModel.rejectRequest(loanId: LibViewModel.requestedLoans[index].loanId, bookId: LibViewModel.requestedLoans[index].bookId)
+                }
             }
         }
-        .listStyle(.inset)
+        LibViewModel.getLoans()
+        selectedItems.removeAll()
+        isSelectionMode = false
     }
 }
+
 
 struct TestNotificationView_Previews: PreviewProvider {
     static var previews: some View {
