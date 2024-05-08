@@ -59,6 +59,12 @@ struct NotificationsView: View {
             }
             .navigationTitle("Actions")
             .navigationBarBackButtonHidden(true)
+            .navigationBarItems(trailing: NavigationLink(destination: ProfileCompletedView(), label: {
+                Image(systemName: "person.crop.circle")
+                    .font(.title3)
+                    .foregroundColor(Color(themeManager.selectedTheme.primaryThemeColor))
+            }))
+            
             .onAppear(perform: {
                 Timer.scheduledTimer(withTimeInterval: 3, repeats: true) { time in
                     Task{
@@ -86,7 +92,7 @@ struct NotificationsView: View {
             .searchable(text: $searchText)
         }
     }
-    }
+}
 
 
 
@@ -151,17 +157,17 @@ struct MembershipSections: View {
                         toggleSelection(key: key.id)
                     }
                     .swipeActions(edge: .leading, allowsFullSwipe: true) {
-                                            Button("Reject") {
-                                                processSwipeAction(key: key.id, approve: false)
-                                            }
-                                            .tint(.red)
-                                        }
-                                        .swipeActions(edge: .trailing, allowsFullSwipe: true) {
-                                            Button("Approve") {
-                                                processSwipeAction(key: key.id, approve: true)
-                                            }
-                                            .tint(.green)
-                                        }
+                        Button("Reject") {
+                            processSwipeAction(key: key.id, approve: false)
+                        }
+                        .tint(.red)
+                    }
+                    .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+                        Button("Approve") {
+                            processSwipeAction(key: key.id, approve: true)
+                        }
+                        .tint(.green)
+                    }
                 }
             }
             .listStyle(.inset)
@@ -189,9 +195,9 @@ struct MembershipSections: View {
                 }
             }
             .foregroundColor(selectedItems.isEmpty ? Color.black : themeManager.selectedTheme.primaryThemeColor)
-
+            
             Spacer()
-
+            
             Button(action: {
                 processSelectedItems(approve: true)
             }) {
@@ -200,7 +206,7 @@ struct MembershipSections: View {
             }
             .cornerRadius(8)
             .disabled(selectedItems.isEmpty)
-
+            
             Button(action: {
                 processSelectedItems(approve: false)
             }) {
@@ -248,16 +254,16 @@ struct MembershipSections: View {
         isSelectionMode = false
     }
     func processSwipeAction(key: String, approve: Bool) {
-            if let index = viewModel.notifications.firstIndex(where: { $0.id == key }) {
-                if approve {
-                    viewModel.approve(notification: viewModel.notifications[index])
-                } else {
-                    viewModel.reject(notification: viewModel.notifications[index])
-                }
+        if let index = viewModel.notifications.firstIndex(where: { $0.id == key }) {
+            if approve {
+                viewModel.approve(notification: viewModel.notifications[index])
+            } else {
+                viewModel.reject(notification: viewModel.notifications[index])
             }
-            viewModel.fetchData()
         }
+        viewModel.fetchData()
     }
+}
 
 
 
@@ -323,17 +329,17 @@ struct BooksSections: View {
                             Task {
                                 await LibViewModel.rejectRequest(loanId: key.loanId, bookId: key.bookId)
                                 LibViewModel.getLoans()
-                                                }
-                                            }
-                                            .tint(.red)
-                                        }
-                                        .swipeActions(edge: .trailing, allowsFullSwipe: true) {
-                                            Button("Approve") {
-                                                LibViewModel.checkOutBook(loanId: key.loanId)
-                                                LibViewModel.getLoans()
-                                            }
-                                            .tint(.green)
-                                        }
+                            }
+                        }
+                        .tint(.red)
+                    }
+                    .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+                        Button("Approve") {
+                            LibViewModel.checkOutBook(loanId: key.loanId)
+                            LibViewModel.getLoans()
+                        }
+                        .tint(.green)
+                    }
                 }
             }
             .listStyle(.inset)
@@ -361,9 +367,9 @@ struct BooksSections: View {
                 }
             }
             .foregroundColor(selectedItems.isEmpty ? Color.black : themeManager.selectedTheme.primaryThemeColor)
-
+            
             Spacer()
-
+            
             Button(action: {
                 processSelectedItems(approve: true)
             }) {
@@ -372,7 +378,7 @@ struct BooksSections: View {
             }
             .cornerRadius(8)
             .disabled(selectedItems.isEmpty)
-
+            
             Button(action: {
                 processSelectedItems(approve: false)
             }) {
@@ -428,11 +434,11 @@ struct BooksSections: View {
 
 struct TestNotificationView_Previews: PreviewProvider {
     static var previews: some View {
-    let themeManager = ThemeManager()
-    @StateObject var LibViewModel = LibrarianViewModel()
-    @StateObject var ConfiViewModel = ConfigViewModel()
-
-    return NotificationsView(LibViewModel: LibViewModel)
+        let themeManager = ThemeManager()
+        @StateObject var LibViewModel = LibrarianViewModel()
+        @StateObject var ConfiViewModel = ConfigViewModel()
+        
+        return NotificationsView(LibViewModel: LibViewModel)
             .environmentObject(themeManager)
     }
 }

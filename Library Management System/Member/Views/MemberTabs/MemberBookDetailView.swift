@@ -77,7 +77,7 @@ struct MemberBookDetailView: View {
                         }())
                     
                     NavigationLink(
-                        destination: MemberTabView(),
+                        destination: MemberTabView(themeManager: themeManager),
                         isActive: $navigateToHome,
                         label: { EmptyView() }
                     )

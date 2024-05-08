@@ -353,10 +353,14 @@ struct AdminHomeView: View {
                     isPageLoading = false
                 }
             }
+            .navigationBarBackButtonHidden()
+            .navigationBarTitle("Hello! Admin")
+            .navigationBarItems(trailing: NavigationLink(destination: ProfileCompletedView(), label: {
+                Image(systemName: "person.crop.circle")
+                    .font(.title3)
+                    .foregroundColor(Color(themeManager.selectedTheme.primaryThemeColor))
+            }))
         }
-        .navigationBarBackButtonHidden()
-        .navigationBarTitleDisplayMode(.inline)
-        .navigationTitle("Hello!)")
     }
 }
 

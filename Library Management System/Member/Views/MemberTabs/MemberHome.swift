@@ -24,17 +24,17 @@ func requestAccessToCalendar(completion: @escaping (Bool) -> Void) {
 
 
 struct MemberHome: View {
-    @EnvironmentObject var themeManager: ThemeManager
+    @ObservedObject var themeManager: ThemeManager
     @ObservedObject var LibViewModel: LibrarianViewModel
     @State private var hasCalendarAccess = false
     @ObservedObject var configViewModel: ConfigViewModel
     @ObservedObject var MemViewModel = UserBooksModel()
     @Environment(\.colorScheme) var colorScheme
-
+    
     var categories: [String] {
-            configViewModel.currentConfig.isEmpty ? [] : configViewModel.currentConfig[0].categories
-        }
- 
+        configViewModel.currentConfig.isEmpty ? [] : configViewModel.currentConfig[0].categories
+    }
+    
     var topfree: [Book] {
         LibViewModel.allBooks.isEmpty ? [] : LibViewModel.allBooks
     }
@@ -42,164 +42,165 @@ struct MemberHome: View {
     var body: some View {
         NavigationView {
             ScrollView(.vertical, showsIndicators: false) {
-
-                    HStack{
-                        Text("Hi! Ishan ").font(.largeTitle)
-                        Spacer()
-                    }.padding(.leading, 20)
-                    ScrollView(.horizontal, showsIndicators: false) {
-                        HStack {
-                            NavigationLink(destination: Books()) {
-                                ZStack(alignment: .bottomLeading) {
-                                    
-                                    Rectangle()
-                                        .foregroundColor(themeManager.selectedTheme.primaryThemeColor)
-                                        .clipShape(RoundedRectangle(cornerRadius: 25, style: .continuous))
-                                        .frame(width: 230, height: 130)
-                                    
-                                    HStack {
-                                        Text("My Books")
-                                            .font(.title)
-                                            .fontWeight(.bold)
-                                            .foregroundColor(.white)
-                                        Image(systemName: "book")
-                                            .resizable()
-                                            .foregroundColor(.white)
-                                            .frame(width: 20, height: 20)
-                                    }
-                                    .padding()
-                                }
-                                
-                            }
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack {
+                        NavigationLink(destination: Books(themeManager: themeManager)) {
                             ZStack(alignment: .bottomLeading) {
+                                
                                 Rectangle()
                                     .foregroundColor(themeManager.selectedTheme.primaryThemeColor)
                                     .clipShape(RoundedRectangle(cornerRadius: 25, style: .continuous))
-                                    .frame(width: 210, height: 130)
+                                    .frame(width: 230, height: 130)
+                                
                                 HStack {
-                                    Text("History").font(.title)
+                                    Text("My Books")
+                                        .font(.title)
                                         .fontWeight(.bold)
                                         .foregroundColor(.white)
-                                    Image(systemName: "square.stack.3d.up.fill")
+                                    Image(systemName: "book")
                                         .resizable()
                                         .foregroundColor(.white)
                                         .frame(width: 20, height: 20)
-                                }.padding()
-                            }
-                        }.padding()
-                    }
-                    
- 
-                    VStack(alignment: .leading){
-                        HStack{
-                            Text("Categories").font(.title2).fontWeight(.semibold).padding(.leading, 20)
-                        }
-                        ScrollView(.horizontal, showsIndicators: false) {
-                            HStack{
-                                ForEach(categories.prefix(5), id: \.self) { category in
-                                
-                                    NavigationLink(destination: Books()) {
-                                        VStack(alignment: .leading){
-                                            Text("Featured Collection").multilineTextAlignment(.leading).font(.callout).fontWeight(.semibold)
-                                            ZStack(alignment:.leading){
-                                                Rectangle()
-                                                    .fill(randomColor())
-                                                    .cornerRadius(12)
-                                                VStack(alignment:.leading){
-                                                    Spacer()
-                                                    Text("\(category)")
-                                                        .font(.title2)
-                                                        .lineLimit(1)
-                                                        .multilineTextAlignment(.leading)
-                                                        .truncationMode(.tail)
-                                                        .foregroundStyle(themeManager.selectedTheme.bodyTextColor)
-                                                        .padding()
-                                                }
-                                            }
-                                            .frame(width: 160, height: 180)
-                                        }.padding(3)
-                                        
-                                        
-                                    }
-                                    .buttonStyle(PlainButtonStyle())
                                 }
+                                .padding()
                             }
-                            .padding(.horizontal, 20)
-                            .padding(.vertical, 10)
                             
                         }
-
-                    }.padding(.vertical, 10)
-                        .background(
-                                    LinearGradient(
-                                        gradient: Gradient(colors: themeManager.gradientColors(for: colorScheme)),
-                                        startPoint: .top,
-                                        endPoint: .bottom
-                                    )
-                                )
-                    
-                        .cornerRadius(5)
-                    VStack(alignment: .leading){
-                        HStack{
-                            Text("Top Free").font(.title2).fontWeight(.semibold).padding(.leading, 20)
+                        ZStack(alignment: .bottomLeading) {
+                            Rectangle()
+                                .foregroundColor(themeManager.selectedTheme.primaryThemeColor)
+                                .clipShape(RoundedRectangle(cornerRadius: 25, style: .continuous))
+                                .frame(width: 210, height: 130)
+                            HStack {
+                                Text("History").font(.title)
+                                    .fontWeight(.bold)
+                                    .foregroundColor(.white)
+                                Image(systemName: "square.stack.3d.up.fill")
+                                    .resizable()
+                                    .foregroundColor(.white)
+                                    .frame(width: 20, height: 20)
+                            }.padding()
                         }
-                        ScrollView(.horizontal, showsIndicators: false) {
-                            HStack{
-                                ForEach(topfree.prefix(9), id: \.id) { book in
-                                
-                                    HStack(spacing: 5){
-                                        AsyncImage(url: URL(string: book.bookImageURL)) { image in
-                                            image.resizable()
-                                        } placeholder: {
-                                            ProgressView()
-                                        }
-                                        .frame(width: 80,height: 120)
-                                        .cornerRadius(8)
-                                        VStack{
-                                            Spacer()
-                                            Text("\(book.bookName)")
-                                                .multilineTextAlignment(.leading)
-                                                .font(.title3)
-                                                .bold()
-                                                .lineLimit(2)
-                                            Text("\(book.bookAuthor)")
-                                                .multilineTextAlignment(.leading)
-                                                .font(.callout)
-                                                .bold()
-                                                .lineLimit(1)
-                                        }.frame(width: 130)
-                                    }
-                                    .padding(5)
-                                }
-                            }
-                            .padding(.horizontal, 20)
-                            .padding(.vertical, 10)
-                            
-                        }
-
-                    }.padding(.vertical, 10)
-                        .background(
-                                    LinearGradient(
-                                        gradient: Gradient(colors: themeManager.gradientColors(for: colorScheme)),
-                                        startPoint: .top,
-                                        endPoint: .bottom
-                                    )
-                                )
-
+                    }.padding()
                 }
-                .onAppear {
-                    Task{
-                        if let currentUser = Auth.auth().currentUser?.uid{
-                            requestAccessToCalendar { granted in
-                                self.hasCalendarAccess = granted
+                
+                
+                VStack(alignment: .leading){
+                    HStack{
+                        Text("Categories").font(.title2).fontWeight(.semibold).padding(.leading, 20)
+                    }
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        HStack{
+                            ForEach(categories.prefix(5), id: \.self) { category in
+                                
+                                NavigationLink(destination: Books(themeManager: themeManager)) {
+                                    VStack(alignment: .leading){
+                                        Text("Featured Collection").multilineTextAlignment(.leading).font(.callout).fontWeight(.semibold)
+                                        ZStack(alignment:.leading){
+                                            Rectangle()
+                                                .fill(randomColor())
+                                                .cornerRadius(12)
+                                            VStack(alignment:.leading){
+                                                Spacer()
+                                                Text("\(category)")
+                                                    .font(.title2)
+                                                    .lineLimit(1)
+                                                    .multilineTextAlignment(.leading)
+                                                    .truncationMode(.tail)
+                                                    .foregroundStyle(themeManager.selectedTheme.bodyTextColor)
+                                                    .padding()
+                                            }
+                                        }
+                                        .frame(width: 160, height: 180)
+                                    }.padding(3)
+                                    
+                                    
+                                }
+                                .buttonStyle(PlainButtonStyle())
                             }
-                            await createCalendarEvents(LibViewModel: LibViewModel, userId: currentUser)
-                            LibViewModel.getBooks()
-                            try? await Task.sleep(nanoseconds: 2_000_000_000)
                         }
+                        .padding(.horizontal, 20)
+                        .padding(.vertical, 10)
                         
                     }
+                    
+                }.padding(.vertical, 10)
+                    .background(
+                        LinearGradient(
+                            gradient: Gradient(colors: themeManager.gradientColors(for: colorScheme)),
+                            startPoint: .top,
+                            endPoint: .bottom
+                        )
+                    )
+                
+                    .cornerRadius(5)
+                VStack(alignment: .leading){
+                    HStack{
+                        Text("Top Free").font(.title2).fontWeight(.semibold).padding(.leading, 20)
+                    }
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        HStack{
+                            ForEach(topfree.prefix(9), id: \.id) { book in
+                                
+                                HStack(spacing: 5){
+                                    AsyncImage(url: URL(string: book.bookImageURL)) { image in
+                                        image.resizable()
+                                    } placeholder: {
+                                        ProgressView()
+                                    }
+                                    .frame(width: 80,height: 120)
+                                    .cornerRadius(8)
+                                    VStack{
+                                        Spacer()
+                                        Text("\(book.bookName)")
+                                            .multilineTextAlignment(.leading)
+                                            .font(.title3)
+                                            .bold()
+                                            .lineLimit(2)
+                                        Text("\(book.bookAuthor)")
+                                            .multilineTextAlignment(.leading)
+                                            .font(.callout)
+                                            .bold()
+                                            .lineLimit(1)
+                                    }.frame(width: 130)
+                                }
+                                .padding(5)
+                            }
+                        }
+                        .padding(.horizontal, 20)
+                        .padding(.vertical, 10)
+                        
+                    }
+                    
+                }.padding(.vertical, 10)
+                    .background(
+                        LinearGradient(
+                            gradient: Gradient(colors: themeManager.gradientColors(for: colorScheme)),
+                            startPoint: .top,
+                            endPoint: .bottom
+                        )
+                    )
+                
+            }
+            .navigationTitle("Hello Member")
+            .navigationBarItems(trailing: NavigationLink(destination: ProfileCompletedView(), label: {
+                Image(systemName: "person.crop.circle")
+                    .font(.title3)
+                    .foregroundColor(Color(themeManager.selectedTheme.primaryThemeColor))
+            }))
+            .onAppear {
+                Task{
+                    if let currentUser = Auth.auth().currentUser?.uid{
+                        requestAccessToCalendar { granted in
+                            self.hasCalendarAccess = granted
+                        }
+                        await createCalendarEvents(LibViewModel: LibViewModel, userId: currentUser)
+                        LibViewModel.getBooks()
+                        try? await Task.sleep(nanoseconds: 2_000_000_000)
+                    }
+                    
                 }
+            }
             
         }
     }
@@ -215,6 +216,6 @@ struct MemberHome_Previews: PreviewProvider {
         @ObservedObject var configViewModel = ConfigViewModel()
         @StateObject var LibViewModel = LibrarianViewModel()
         let themeManager = ThemeManager()
-        return MemberHome(LibViewModel: LibViewModel, configViewModel: configViewModel).environmentObject(themeManager)
+        return MemberHome(themeManager: themeManager, LibViewModel: LibViewModel, configViewModel: configViewModel).environmentObject(themeManager)
     }
 }

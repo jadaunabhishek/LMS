@@ -97,6 +97,8 @@
 		D55821062BD63AF4005A00F9 /* LibrarianFirstScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D55821052BD63AF4005A00F9 /* LibrarianFirstScreenView.swift */; };
 		D56B18D72BEB4FB6000EF169 /* BookReqBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = D56B18D62BEB4FB6000EF169 /* BookReqBox.swift */; };
 		D56B18D92BEB789F000EF169 /* BookFineBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = D56B18D82BEB789F000EF169 /* BookFineBox.swift */; };
+		D56B18DC2BEC005A000EF169 /* ProfileCompletedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D56B18DB2BEC005A000EF169 /* ProfileCompletedView.swift */; };
+		D56B18DE2BEC020B000EF169 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D56B18DD2BEC020B000EF169 /* ProfileView.swift */; };
 		D57BFDAF2BDD233E0094A0B5 /* Books.swift in Sources */ = {isa = PBXBuildFile; fileRef = D57BFDAE2BDD233E0094A0B5 /* Books.swift */; };
 		D57BFDB12BDD23480094A0B5 /* Support.swift in Sources */ = {isa = PBXBuildFile; fileRef = D57BFDB02BDD23480094A0B5 /* Support.swift */; };
 		D57BFDB32BDD24FD0094A0B5 /* UserBooksModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D57BFDB22BDD24FD0094A0B5 /* UserBooksModel.swift */; };
@@ -198,6 +200,8 @@
 		D55821052BD63AF4005A00F9 /* LibrarianFirstScreenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibrarianFirstScreenView.swift; sourceTree = "<group>"; };
 		D56B18D62BEB4FB6000EF169 /* BookReqBox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookReqBox.swift; sourceTree = "<group>"; };
 		D56B18D82BEB789F000EF169 /* BookFineBox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookFineBox.swift; sourceTree = "<group>"; };
+		D56B18DB2BEC005A000EF169 /* ProfileCompletedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileCompletedView.swift; sourceTree = "<group>"; };
+		D56B18DD2BEC020B000EF169 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		D57BFDAE2BDD233E0094A0B5 /* Books.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Books.swift; sourceTree = "<group>"; };
 		D57BFDB02BDD23480094A0B5 /* Support.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Support.swift; sourceTree = "<group>"; };
 		D57BFDB22BDD24FD0094A0B5 /* UserBooksModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserBooksModel.swift; sourceTree = "<group>"; };
@@ -392,6 +396,7 @@
 			children = (
 				840A18F22BE0E8C200B9ED91 /* Library-Management-System-Info.plist */,
 				D55820F52BD61BCC005A00F9 /* GoogleService-Info.plist */,
+				D56B18DA2BEC0041000EF169 /* Profile */,
 				8424682E2BEB343B008746D1 /* Onboarding */,
 				D55820FF2BD637BD005A00F9 /* Admin */,
 				D55821002BD637C4005A00F9 /* Librarian */,
@@ -522,6 +527,15 @@
 				D5E597142BD97ED1007622E4 /* MemberTabs */,
 			);
 			path = Views;
+			sourceTree = "<group>";
+		};
+		D56B18DA2BEC0041000EF169 /* Profile */ = {
+			isa = PBXGroup;
+			children = (
+				D56B18DB2BEC005A000EF169 /* ProfileCompletedView.swift */,
+				D56B18DD2BEC020B000EF169 /* ProfileView.swift */,
+			);
+			path = Profile;
 			sourceTree = "<group>";
 		};
 		D5E597132BD97E71007622E4 /* ViewModels */ = {
@@ -782,6 +796,7 @@
 				D5D1451B2BEABC3F0006A1CA /* RecordBookDetail.swift in Sources */,
 				D55820C92BD61AB0005A00F9 /* ContentView.swift in Sources */,
 				1F7C0E4D2BD7A920007D5221 /* StaffSchema.swift in Sources */,
+				D56B18DC2BEC005A000EF169 /* ProfileCompletedView.swift in Sources */,
 				D5C949582BE9F52800D5310D /* supportCard.swift in Sources */,
 				D50EA9CF2BE4BA7B0079C1AB /* MemReqViewModel.swift in Sources */,
 				84301CB72BDA13C8004CF581 /* MemberTabView.swift in Sources */,
@@ -796,6 +811,7 @@
 				0FC042422BEB3784000BDA67 /* MemberDetailView.swift in Sources */,
 				84E96EE02BDA2A2700A572BC /* MemberViewList.swift in Sources */,
 				84E87D612BD7D5EA00FAD5DC /* CardListDetailView.swift in Sources */,
+				D56B18DE2BEC020B000EF169 /* ProfileView.swift in Sources */,
 				842468322BEB752F008746D1 /* SplashScreenView.swift in Sources */,
 				D55821062BD63AF4005A00F9 /* LibrarianFirstScreenView.swift in Sources */,
 				D57BFDB12BDD23480094A0B5 /* Support.swift in Sources */,
