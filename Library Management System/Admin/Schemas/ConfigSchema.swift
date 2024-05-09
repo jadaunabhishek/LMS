@@ -32,17 +32,6 @@ struct membersCount: Codable {
     }
 }
 
-struct monthlyRevenue: Codable {
-    var month: String
-    var revenue: Int
-    
-    func getDictionary() -> [String: Any] {
-        return [
-            "month": month,
-            "revenue": revenue
-        ]
-    }
-}
 
 struct Config {
     
@@ -56,7 +45,6 @@ struct Config {
     var maxPenalties: Int
     var categories: [String]
     var monthlyMembersCount: [membersCount]
-    var monthlyRevenueTotal: [monthlyRevenue]
     
     func getDictionaryOfStruct() -> [String: Any] {
         var fineDetailsArray: [[String: Any]] = []
@@ -69,11 +57,6 @@ struct Config {
             monthlyMembersCountArray.append(member.getDictionary())
         }
         
-        var monthlyRevenueTotalArray: [[String: Any]] = []
-        for member in monthlyRevenueTotal {
-            monthlyRevenueTotalArray.append(member.getDictionary())
-        }
-        
         return [
             "configID": configID,
             "adminID": adminID,
@@ -84,8 +67,7 @@ struct Config {
             "maxFine": maxFine,
             "maxPenalties": maxPenalties,
             "categories": categories,
-            "monthlyMembersCount": monthlyMembersCountArray,
-            "montlyRevenueTotal": monthlyRevenueTotalArray
+            "monthlyMembersCount": monthlyMembersCountArray
             
         ]
     }

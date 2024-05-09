@@ -15,7 +15,6 @@ struct AdminHomeView: View {
     @ObservedObject var staffViewModel: StaffViewModel
     @ObservedObject var userAuthViewModel: AuthViewModel
     @ObservedObject var configViewModel: ConfigViewModel
-    @EnvironmentObject var themeManager: ThemeManager
     
     @State var isPageLoading: Bool = true
     @State var isThemeSelecterSheetPresented: Bool = false
@@ -25,13 +24,12 @@ struct AdminHomeView: View {
     @State var isLogoSelected = false
     
     @Environment(\.presentationMode) var presentationMode
-    
+    @EnvironmentObject var themeManager: ThemeManager
     
     @State var memberData: [Int] = [5, 10, 200, 300,0,0,0]
     
     @State private var isMemberSheetPresented: Bool = false
     @State private var isTotalRevenueSheetPresented: Bool = false
-    
     var data: [(type: String, amount: Int)]{
         [(type: "Fine", amount : userAuthViewModel.totalIncome),
          (type: "Membership", amount : userAuthViewModel.allUsers.count * 50)
@@ -40,7 +38,7 @@ struct AdminHomeView: View {
     }
     @State var TotalRevenue : Int = 0
     var body: some View {
-        NavigationStack{
+        NavigationView{
             VStack {
                 if !isPageLoading {
                     ScrollView {
@@ -63,8 +61,8 @@ struct AdminHomeView: View {
                                                     .font(.title)
                                                     .bold()
                                                     .padding(.top,2)
+                                                    .padding(.leading,2)
                                             }
-                                            .padding(.leading,10)
                                             HStack(alignment: .center,spacing: 14){
                                                 VStack(alignment:.leading){
                                                     HStack {
@@ -101,11 +99,11 @@ struct AdminHomeView: View {
                                                 .foregroundStyle(themeManager.selectedTheme.primaryThemeColor)
                                                 .cornerRadius(24)
                                                 .opacity(dataItem.type != "Fine" ? 0.7 : 1)
-                                                .annotation(position: .overlay) {
-                                                    let percentage = (Float(dataItem.amount) / Float(TotalRevenue)) * 100
-                                                    let roundedPercentage = round(percentage)
-                                                    Text("\(Int(roundedPercentage))%")
-                                                }
+//                                                .annotation(position: .overlay) {
+//                                                    let percentage = (Float(dataItem.amount) / Float(TotalRevenue)) * 100
+//                                                    let roundedPercentage = round(percentage)
+//                                                    Text("\(Int(roundedPercentage))%")
+//                                                }
                                                 
                                             }
                                             
@@ -153,7 +151,7 @@ struct AdminHomeView: View {
                                         .presentationDetents([.fraction(0.90)])
                                 }
                                 
-                                NavigationLink(destination: AdminCategoriesView()){
+                                NavigationLink(destination: AdminCategoriesView(configViewModel: configViewModel, libViewModel: librarianViewModel)){
                                     ZStack{
                                         RoundedRectangle(cornerRadius: 10)
                                             .fill(Color(.systemGray4).opacity(0.5))
@@ -369,7 +367,6 @@ struct AdminHomeView: View {
                     staffViewModel.getStaff()
                     staffViewModel.getAllStaff()
                     try? await Task.sleep(nanoseconds: 2_000_000_000)
-                    TotalRevenue = userAuthViewModel.totalIncome + (userAuthViewModel.allUsers.count*50)
                     isPageLoading = false
                 }
             }
@@ -402,4 +399,3 @@ struct AdminHomeView_Previews: PreviewProvider {
             .environmentObject(themeManager)
     }
 }
-
