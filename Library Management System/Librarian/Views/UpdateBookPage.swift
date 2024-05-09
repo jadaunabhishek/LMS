@@ -308,7 +308,7 @@ struct UpdateBookPage: View {
                                 }
                             }
                             else{
-                                NavigationLink(destination: BooksPage(LibViewModel: LibViewModel, ConfiViewMmodel: ConfiViewModel), tag: .ready, selection: $docState){
+                                NavigationLink(destination: BooksPage(LibViewModel: LibViewModel, ConfigViewModel: ConfiViewModel), tag: .ready, selection: $docState){
                                     Button(action:{
                                         Task{
                                             isButtonLoading.toggle()

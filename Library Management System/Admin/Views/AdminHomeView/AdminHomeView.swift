@@ -9,7 +9,11 @@ import SwiftUI
 import Firebase
 import FirebaseAuth
 import Charts
+import TipKit
+
 struct AdminHomeView: View {
+    
+    @Binding var adminTabSelection: Int
     
     @ObservedObject var librarianViewModel: LibrarianViewModel
     @ObservedObject var staffViewModel: StaffViewModel
@@ -36,60 +40,69 @@ struct AdminHomeView: View {
         ]
         
     }
-    @State var TotalRevenue : Int = 0
+    
+    // Tip Data
+    var tipProcedure = customizeTip()
+    @State var totalRevenue : Int = 0
+    
+    
     var body: some View {
         NavigationView{
             VStack {
                 if !isPageLoading {
                     ScrollView {
+                        TipView(tipProcedure)
+                            .padding([.leading, .trailing, .bottom])
+                        
                         VStack(spacing:12){
-                            
                             VStack(alignment: .leading){
                                 ZStack{
                                     RoundedRectangle(cornerRadius: 10)
-                                        .fill(Color(.systemGray4).opacity(0.5))
-                                        .frame(height: 150)
+                                        .foregroundColor(Color("requestCard"))
+                                        .shadow(color: Color.gray.opacity(0.5), radius: 5, x: 0, y: 2)
+                                        .frame(height: 170)
                                     
                                     // MARK: Total Revenue
                                     HStack() {
-                                        VStack(alignment:.leading,spacing:4){
-                                            VStack(alignment:.leading){
+                                        VStack(alignment:.leading,spacing:8){
+                                            VStack(alignment:.leading,spacing: 6){
                                                 Text("Total Revenue")
                                                     .foregroundStyle(Color.gray)
                                                     .font(.title3)
-                                                Text("₹ \(userAuthViewModel.totalIncome + (userAuthViewModel.allUsers.count*50))")
+                                                    
+                                                Text("₹ \(totalRevenue)")
                                                     .font(.title)
                                                     .bold()
-                                                    .padding(.top,2)
                                                     .padding(.leading,2)
                                             }
-                                            HStack(alignment: .center,spacing: 14){
+                                            HStack(spacing: 14){
                                                 VStack(alignment:.leading){
                                                     HStack {
-                                                        Rectangle()
+                                                        Circle()
                                                             .fill(Color(themeManager.selectedTheme.primaryThemeColor))
                                                             .frame(width: 10, height: 10)
                                                         Text(data[0].type)
                                                             .font(.caption)
                                                     }
                                                     Text("\(data[0].amount)")
-                                                        .font(.caption)
+                                                        .font(.caption2)
+                                                        .padding(.leading)
                                                 }
                                                 
                                                 VStack(alignment:.leading){
                                                     HStack {
-                                                        Rectangle()
+                                                        Circle()
                                                             .fill(Color(themeManager.selectedTheme.primaryThemeColor).opacity(0.5))
                                                             .frame(width: 10, height: 10)
                                                         Text(data[1].type)
                                                             .font(.caption)
                                                     }
                                                     Text("\(data[1].amount)")
-                                                        .font(.caption)
+                                                        .font(.caption2)
+                                                        .padding(.leading)
                                                 }
                                             }
                                             .padding(6)
-                                            .padding(.leading,10)
                                         }
                                         .padding()
                                         VStack{
@@ -97,13 +110,16 @@ struct AdminHomeView: View {
                                                 SectorMark(angle: .value("type", dataItem.amount),
                                                            angularInset: 1.5)
                                                 .foregroundStyle(themeManager.selectedTheme.primaryThemeColor)
-                                                .cornerRadius(24)
+                                                .cornerRadius(14)
                                                 .opacity(dataItem.type != "Fine" ? 0.7 : 1)
-//                                                .annotation(position: .overlay) {
-//                                                    let percentage = (Float(dataItem.amount) / Float(TotalRevenue)) * 100
-//                                                    let roundedPercentage = round(percentage)
-//                                                    Text("\(Int(roundedPercentage))%")
-//                                                }
+                                                .annotation(position: .overlay) {
+                                                            let percentage = (Float(dataItem.amount) / Float(totalRevenue)) * 100
+                                                            let roundedPercentage = round(percentage)
+                                                            Text("\(Int(roundedPercentage))%")
+                                                        .foregroundStyle(Color.white)
+                                                        .font(.body)
+                                                            
+                                                }
                                                 
                                             }
                                             
@@ -116,16 +132,18 @@ struct AdminHomeView: View {
                                     isTotalRevenueSheetPresented.toggle()
                                 }
                                 .sheet(isPresented: $isTotalRevenueSheetPresented) {
-                                    RevenueDetailView()
+                                    RevenueDetailView( configViewModel: configViewModel)
                                 }
                             }
                             .foregroundStyle(themeManager.selectedTheme.bodyTextColor)
+                            .padding(.horizontal)
                             
                             // MARK: Member and Books
                             HStack(spacing:12){
                                 ZStack{
                                     RoundedRectangle(cornerRadius: 10)
-                                        .fill(Color(.systemGray4).opacity(0.5))
+                                        .foregroundColor(Color("requestCard"))
+                                        .shadow(color: Color.gray.opacity(0.5), radius: 5, x: 0, y: 2)
                                         .frame(height: 125)
                                     VStack(alignment: .leading){
                                         HStack{
@@ -148,13 +166,13 @@ struct AdminHomeView: View {
                                 }
                                 .sheet(isPresented: $isMemberSheetPresented) {
                                     MemberDetailView(userAuthViewModel: userAuthViewModel, configViewModel: configViewModel)
-                                        .presentationDetents([.fraction(0.90)])
+                                        .presentationDetents([.fraction(0.70)])
                                 }
                                 
-                                NavigationLink(destination: AdminCategoriesView(configViewModel: configViewModel, libViewModel: librarianViewModel)){
                                     ZStack{
                                         RoundedRectangle(cornerRadius: 10)
-                                            .fill(Color(.systemGray4).opacity(0.5))
+                                            .foregroundColor(Color("requestCard"))
+                                            .shadow(color: Color.gray.opacity(0.5), radius: 5, x: 0, y: 2)
                                             .frame(height: 125)
                                         VStack(alignment: .leading){
                                             HStack{
@@ -173,15 +191,19 @@ struct AdminHomeView: View {
                                         }
                                         .padding(.horizontal)
                                     }
-                                }
+                                    .onTapGesture {
+                                        adminTabSelection = 1
+                                    }
+                                
                             }
+                            .padding(.horizontal)
                             
                             // MARK: Staff and Fine
                             HStack(spacing:12){
-                                NavigationLink(destination: AdminStaffView()){
                                     ZStack{
                                         RoundedRectangle(cornerRadius: 10)
-                                            .fill(Color(.systemGray4).opacity(0.5))
+                                            .foregroundColor(Color("requestCard"))
+                                            .shadow(color: Color.gray.opacity(0.5), radius: 5, x: 0, y: 2)
                                             .frame(height: 125)
                                         VStack(alignment: .leading){
                                             HStack{
@@ -200,12 +222,16 @@ struct AdminHomeView: View {
                                         }
                                         .padding(.horizontal)
                                     }
-                                }
+                                    .onTapGesture {
+                                        adminTabSelection = 2
+                                    }
                                 
-                                NavigationLink(destination: AdminFineView(configViewModel: configViewModel)){
+                                
+                                
                                     ZStack{
                                         RoundedRectangle(cornerRadius: 10)
-                                            .fill(Color(.systemGray4).opacity(0.5))
+                                            .foregroundColor(Color("requestCard"))
+                                            .shadow(color: Color.gray.opacity(0.5), radius: 5, x: 0, y: 2)
                                             .frame(height: 125)
                                         VStack(alignment: .leading){
                                             HStack{
@@ -224,9 +250,12 @@ struct AdminHomeView: View {
                                         }
                                         .padding(.horizontal)
                                     }
-                                }
+                                    .onTapGesture {
+                                        adminTabSelection = 3
+                                    }
                                 
                             }
+                            .padding(.horizontal)
                             
                             // MARK: Theme and Brand Logo
                             HStack(spacing:12){
@@ -236,7 +265,8 @@ struct AdminHomeView: View {
                                 } label: {
                                     ZStack{
                                         RoundedRectangle(cornerRadius: 10)
-                                            .fill(Color(.systemGray4).opacity(0.5))
+                                            .foregroundColor(Color("requestCard"))
+                                            .shadow(color: Color.gray.opacity(0.5), radius: 5, x: 0, y: 2)
                                             .frame(height: 170)
                                         VStack(alignment: .leading){
                                             HStack(alignment: .top){
@@ -276,7 +306,8 @@ struct AdminHomeView: View {
                                 } label : {
                                     ZStack {
                                         RoundedRectangle(cornerRadius: 10)
-                                            .fill(Color(.systemGray4).opacity(0.5))
+                                            .foregroundColor(Color("requestCard"))
+                                            .shadow(color: Color.gray.opacity(0.5), radius: 5, x: 0, y: 2)
                                             .frame(height: 170)
                                         VStack {
                                             VStack(alignment: .leading) {
@@ -347,10 +378,11 @@ struct AdminHomeView: View {
                                     }
                                 }
                             }
+                            .padding(.horizontal)
                         }
                         .padding(.vertical)
                     }
-                    .padding(.horizontal)
+                    
                 }
                 else{
                     Spacer()
@@ -367,6 +399,7 @@ struct AdminHomeView: View {
                     staffViewModel.getStaff()
                     staffViewModel.getAllStaff()
                     try? await Task.sleep(nanoseconds: 2_000_000_000)
+                    totalRevenue = userAuthViewModel.totalIncome + (userAuthViewModel.allUsers.count*50)
                     isPageLoading = false
                 }
             }
@@ -399,7 +432,7 @@ struct AdminHomeView_Previews: PreviewProvider {
         @StateObject var LibViewModel = LibrarianViewModel()
         @StateObject var userAuthViewModel = AuthViewModel()
         @StateObject var configViewModel = ConfigViewModel()
-        return AdminHomeView(librarianViewModel: LibViewModel, staffViewModel: staffViewMod, userAuthViewModel: userAuthViewModel, configViewModel: configViewModel)
+        return AdminHomeView(adminTabSelection: .constant(1), librarianViewModel: LibViewModel, staffViewModel: staffViewMod, userAuthViewModel: userAuthViewModel, configViewModel: configViewModel)
             .environmentObject(themeManager)
     }
 }

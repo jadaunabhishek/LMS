@@ -7,11 +7,11 @@ class LibrarianViewModel: ObservableObject{
     
     let dbInstance = Firestore.firestore()
     
-
-    
     @Published var responseStatus = 0
     @Published var responseMessage = ""
     
+    @Published var currentStaff: [Staff] = []
+    @Published var currentConfig: [Config] = []
     @Published var currentMember: [UserSchema] = []
     @Published var currentBook: [Book] = []
     @Published var currentBookHistory: [Loan] = []
@@ -28,6 +28,7 @@ class LibrarianViewModel: ObservableObject{
     @Published var returnedLoans: [Loan] = []
     @Published var preBookedLoans: [Loan] = []
     @Published var allLoans: [Loan] = []
+    @Published var categoryStat: [categoryStats] = []
     
     func addBook(bookISBN: String, bookName: String, bookAuthor: String, bookDescription: String, bookCategory: String, bookSubCategories: [String], bookPublishingDate: String, bookStatus: String, bookCount: Int, bookAvailableCount: Int, bookPreBookedCount: Int, bookTakenCount: Int, bookImage: UIImage){
         
@@ -948,6 +949,28 @@ class LibrarianViewModel: ObservableObject{
         }
     }
     
+    
+    func fetchStaffData(staffID: String) {
+        self.dbInstance.collection("users").document(staffID).getDocument { [weak self] (documentSnapshot, error) in
+            if let error = error {
+                print("Error fetching user data: \(error.localizedDescription)")
+                return
+            }
+            
+            guard let document = documentSnapshot, document.exists else {
+                print("User document not found")
+                return
+            }
+            
+            let staffData = document.data()
+            var tempMember = Staff(userID: staffData?["userID"] as? String ?? "", name: staffData?["name"] as? String ?? "", email: staffData?["email"] as? String ?? "", mobile: staffData?["mobile"] as? String ?? "", profileImageURL: staffData?["profileImage"] as? String ?? "", aadhar: staffData?["aadhar"] as? String ?? "", role: staffData?["role"] as? String ?? "", password: staffData?["password"] as? String ?? "", createdOn: Date.now, updatedOn: Date.now)
+            
+            self?.currentStaff.append(tempMember)
+        }
+    }
+    
+    
+    
     func rateReview(bookId: String, rating: Int, review: String, loanId: String){
         self.responseStatus = 0
         self.responseMessage = ""
@@ -1006,65 +1029,124 @@ class LibrarianViewModel: ObservableObject{
         }
     }
     
-    func updateStaff(
-        userID: String,
-        name: String,
-        email: String,
-        mobile: String,
-        profilePhoto: UIImage,
-        isImageUpdated: Bool
-    ) {
-        self.responseStatus = 0
-        self.responseMessage = ""
-        
-        if isImageUpdated {
-            let storageRef = Storage.storage().reference()
-            let imageData = profilePhoto.pngData()!
-            let fileRef = storageRef.child("userProfileImages/\(userID).jpeg")
-            
-            fileRef.putData(imageData, metadata: nil) { metadata, error in
-                guard error == nil, metadata != nil else {
-                    return
-                }
-                
-                fileRef.downloadURL { url, error in
-                    guard let imageURL = url?.absoluteString, error == nil else {
+    func fetchConfig(){
+        dbInstance.collection("configuration").document("HJ9L6mDbi01TJvX3ja7Z").getDocument { document, error in
+            if error == nil {
+                if document != nil && document!.exists {
+                    
+                    guard let fineDetailsDictArray = document!["fineDetails"] as? [[String: Any]] else {
+                        print("Error: Unable to parse fineDetails array from Firestore document")
+                        return
+                    }
+
+                    var fineDetailsArray: [fineDetails] = []
+                    for fineDetailDict in fineDetailsDictArray {
+                        guard let fine = fineDetailDict["fine"] as? Int,
+                              let period = fineDetailDict["period"] as? Int else {
+                            print("Error: Unable to parse fineDetail from dictionary")
+                            continue
+                        }
+                        
+                        let fineDetail = fineDetails(fine: fine, period: period)
+                        fineDetailsArray.append(fineDetail)
+                        
+                    }
+                    
+                    guard let monthlyMembersCountDictArray = document!["monthlyMembersCount"] as? [[String: Any]] else {
+                        print("Error: Unable to parse monthlyMembersCount array from Firestore document")
+                        return
+                    }
+
+                    var monthlyMembersCountArray: [membersCount] = []
+                    for memberCountDict in monthlyMembersCountDictArray {
+                        guard let month = memberCountDict["month"] as? String,
+                              let count = memberCountDict["count"] as? Int else {
+                            print("Error: Unable to parse memberCount from dictionary")
+                            continue
+                        }
+                        
+                        let memberCount = membersCount(month: month, count: count)
+                        monthlyMembersCountArray.append(memberCount)
+                    }
+                    
+                    guard let monthlyIncomeDictArray = document!["monthlyIncome"] as? [[String: Any]] else {
+                        print("Error: Unable to parse monthlyMembersCount array from Firestore document")
                         return
                     }
                     
-                    self.dbInstance.collection("users").document(userID).updateData([
-                        "name": name,
-                        "email": email,
-                        "mobile": mobile,
-                        "profileImage": imageURL
-                    ]) { [self] error in
-                        if let error = error {
-                            self.responseStatus = 400
-                            self.responseMessage = "Something went wrong, Unable to update staff member. Check console for error."
-                            print("Unable to update staff member. Error: \(error)")
-                        } else {
-                            self.responseStatus = 200
-                            self.responseMessage = "Staff member updated successfully."
+                    var monthlyIncomeArray: [monthlyIncome] = []
+                    for memberIncomeDict in monthlyIncomeDictArray {
+                        guard let month = memberIncomeDict["month"] as? String,
+                              let count = memberIncomeDict["income"] as? Int else {
+                            print("Error: Unable to parse memberCount from dictionary")
+                            continue
                         }
+                        
+                        let monthlyIncome = monthlyIncome(month: month, income: count)
+                        monthlyIncomeArray.append(monthlyIncome)
                     }
-                }
-            }
-        } else {
-            self.dbInstance.collection("users").document(userID).updateData([
-                "name": name,
-                "email": email,
-                "mobile": mobile,
-            ]) { error in
-                if let error = error {
-                    self.responseStatus = 400
-                    self.responseMessage = "Something went wrong, Unable to update staff member. Check console for error."
-                    print("Unable to update staff member. Error: \(error)")
+                  
+                    var newConfig = Config(
+                        configID: document!["configID"] as! String,
+                        adminID: document!["adminID"] as! String,
+                        logo: document!["logo"] as! String,
+                        accentColor: document!["accentColor"] as! String,
+                        loanPeriod: document!["loanPeriod"] as! Int,
+                        fineDetails: fineDetailsArray,
+                        maxFine: document!["maxFine"] as! Double,
+                        maxPenalties: document!["maxPenalties"] as! Int,
+                        categories: document!["categories"] as! [String],
+                        monthlyMembersCount: monthlyMembersCountArray, monthlyIncome: monthlyIncomeArray)
+                    print(newConfig)
+                    self.currentConfig.append(newConfig)
+                    self.responseStatus = 200
+                    self.responseMessage = "Book fetched successfully"
                 } else {
                     self.responseStatus = 200
-                    self.responseMessage = "Staff member updated successfully."
+                    self.responseMessage = "Something went wrong, Unable to get book. Check console for error"
+                    print("Unable to get updated document. May be this could be the error: Book does not exist or db returned nil.")
+                }
+            } else {
+                self.responseStatus = 200
+                self.responseMessage = "Something went wrong, Unable to book. Check console for error"
+                print("Unable to get book. Error: \(String(describing: error)).")
+            }
+        }
+    }
+    
+    func getCategoryStat() async{
+        
+        fetchConfig()
+        try? await Task.sleep(nanoseconds: 1_000_000_000)
+        
+        var tempCategoryStat: [categoryStats] = []
+        
+        for i in currentConfig[0].categories{
+            tempCategoryStat.append(categoryStats(category: i, count: 0))
+        }
+        
+        self.getBooks()
+        try? await Task.sleep(nanoseconds: 1_000_000_000)
+        
+        for i in allBooks{
+            for j in 0..<tempCategoryStat.count{
+                if(i.bookCategory == tempCategoryStat[j].category){
+                    tempCategoryStat[j].count += 1
                 }
             }
         }
+        
+        tempCategoryStat.sort { $0.count > $1.count }
+        
+        var total: Int = 0
+        
+        for i in 3..<tempCategoryStat.count{
+            total += tempCategoryStat[i].count
+        }
+        
+        self.categoryStat = [categoryStats(category: tempCategoryStat[0].category, count: tempCategoryStat[0].count),categoryStats(category: tempCategoryStat[1].category, count: tempCategoryStat[1].count),categoryStats(category: tempCategoryStat[2].category, count: tempCategoryStat[2].count),
+        categoryStats(category: "Others", count: total)]
+        
     }
     
 }

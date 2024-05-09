@@ -34,18 +34,24 @@ struct OnboardingView: View {
             VStack {
                 PrimaryCustomButton(action: {
                     naviToRegister = true
+                    UserDefaults.standard.set(true, forKey: "onBoarded")
                 }, label: "Agree & Join")
                 
                 
                 SignupCustomButton(action: {
-                    naviToGoogleLogin = true
-                    print("Login Attempt")
+                    FireAuth.share.signInWithGoogle(presenting: getRootViewController()){
+                        error in
+                        print("ERROR: \(error)")
+                    }
+                    print("Google Login Attempt")
+                    UserDefaults.standard.set(true, forKey: "onBoarded")
                     
                 }, label: "Continue with Google",imageName: "google")
                 
                 
                 Button(action: {
                     naviToLogin = true
+                    UserDefaults.standard.set(true, forKey: "onBoarded")
                 }) {
                     Text("Sign In")
                         .font(.title3)

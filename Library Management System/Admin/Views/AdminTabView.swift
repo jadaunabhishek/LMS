@@ -15,28 +15,32 @@ struct AdminTabView: View {
     @ObservedObject var configViewModel: ConfigViewModel
     
     var body: some View {
-            TabView {
-                AdminHomeView(librarianViewModel: LibViewModel, staffViewModel: staffViewModel, userAuthViewModel: userAuthViewModel, configViewModel: configViewModel)
+        TabView (selection: $tabSelection) {
+            AdminHomeView(adminTabSelection: $tabSelection, librarianViewModel: LibViewModel, staffViewModel: staffViewModel, userAuthViewModel: userAuthViewModel, configViewModel: configViewModel)
                     .tabItem {
                         Image(systemName: "house")
                         Text("Home")
                     }
+                    .tag(0)
                 AdminCategoriesView(configViewModel: configViewModel, libViewModel: LibViewModel)
                     .tabItem {
                         Image(systemName: "square.split.2x2.fill")
                         Text("Categories")
                     }
+                    .tag(1)
                 AdminStaffView()
                     .tabItem {
                         Image(systemName: "person.3.fill")
                         Text("Staff")
                     }
+                    .tag(2)
                 AdminFineView(configViewModel: configViewModel)
                     .tabItem {
                         Image(systemName: "gear")
                         Text("Fine")
 
                     }
+                    .tag(3)
             }
         
         .accentColor(themeManager.selectedTheme.primaryThemeColor)

@@ -8,11 +8,25 @@
 import SwiftUI
 import Firebase
 import TipKit
+import FirebaseCore
+import GoogleSignIn
+
+class AppDelegate: NSObject, UIApplicationDelegate {
+    func application(_ app: UIApplication,
+                     open url: URL,
+                     options: [UIApplication.OpenURLOptionsKey: Any] = [:]) -> Bool {
+        return GIDSignIn.sharedInstance.handle(url)
+    }
+}
 
 @main
 struct Library_Management_SystemApp: App {
+    @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
+    
     @StateObject var LibModel = LibrarianViewModel()
     @AppStorage("emailLoggedIn") var emailLoggedIn = "false"
+    @AppStorage("signIn") var isSignIn = "false"
+
     
     // Admin side parameters
     @StateObject var LibViewModel = LibrarianViewModel()

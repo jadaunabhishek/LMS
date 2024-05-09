@@ -135,7 +135,6 @@ struct MemberBookDetailView: View {
                                     .foregroundColor(Color(themeManager.selectedTheme.primaryThemeColor))
                                     .frame(maxWidth: .infinity)
                                     .padding()
-                                    .background(Color.white)
                                     .background{
                                         Rectangle()
                                             .fill(Color(.systemGray4))
@@ -169,7 +168,6 @@ struct MemberBookDetailView: View {
                                     .foregroundColor(Color(themeManager.selectedTheme.primaryThemeColor))
                                     .frame(maxWidth: .infinity)
                                     .padding()
-                                    .background(Color.white)
                                     .background{
                                         Rectangle()
                                             .fill(Color(.systemGray4))

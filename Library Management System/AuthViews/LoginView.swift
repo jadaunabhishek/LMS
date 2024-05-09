@@ -27,6 +27,8 @@ struct LoginView: View {
     var body: some View {
         ZStack {
             VStack {
+                Spacer()
+                
                 VStack {
                     if let logoURL = configViewModel.currentConfig.first?.logo {
                         AsyncImage(url: URL(string: logoURL)) { phase in
@@ -35,12 +37,12 @@ struct LoginView: View {
                                 image
                                     .resizable()
                                     .aspectRatio(contentMode: .fit)
-                                    .frame(width: 300, height: 150)
+                                    .frame(width: 270, height: 120)
                             default:
                                 Image("AppLogo")
                                     .resizable()
                                     .aspectRatio(contentMode: .fit)
-                                    .frame(width: 300, height: 150)
+                                    .frame(width: 270, height: 120)
                             }
                         }
                     } else {
@@ -102,6 +104,8 @@ struct LoginView: View {
                 
                 .padding()
                 
+                Spacer()
+                
                 HStack{
                     Text("Don't have an account?")
                     NavigationLink(destination: SignupView()){
@@ -109,7 +113,7 @@ struct LoginView: View {
                             .foregroundColor(themeManager.selectedTheme.primaryThemeColor)
                     }
                 }
-                .padding([.leading, .trailing, .top])
+                .padding()
                 .navigationBarHidden(true)
                 .navigationBarBackButtonHidden(true)
                 .task {
