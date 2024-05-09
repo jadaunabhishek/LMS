@@ -78,6 +78,7 @@ struct AdminStaffView: View {
                                             Text(staffMember.email)
                                                 .font(.subheadline)
                                                 .foregroundColor(.secondary)
+                                                .lineLimit(1)
                                         }.padding(.leading, 20)
                                         Spacer()
                                         Image(systemName: "chevron.right")

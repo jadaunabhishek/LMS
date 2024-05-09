@@ -266,6 +266,13 @@ struct Dashboard: View {
                             .padding(.horizontal)
                         }
                         .padding(.vertical)
+                        .padding(.vertical)
+                        .navigationTitle("Trove")
+                        .navigationBarItems(trailing: NavigationLink(destination: LibProfileView(LibViewModel: librarianViewModel, configViewModel: configViewModel, staffViewModel: staffViewModel), label: {
+                            Image(systemName: "person.crop.circle")
+                                .font(.title3)
+                                .foregroundColor(Color(themeManager.selectedTheme.primaryThemeColor))
+                        }))
                     }
                 }
                 else{
@@ -275,16 +282,20 @@ struct Dashboard: View {
                 }
                 Spacer()
             }
-            .task {
-                do{
+            .onAppear {
+                Task{
                     isPageLoading = true
+                    if let currentUser = Auth.auth().currentUser?.uid{
+                        print(currentUser)
+                        staffViewModel.fetchStaffData(staffID: currentUser)
+                    }
                     userAuthViewModel.fetchAllUsers()
                     librarianViewModel.getLoans()
                     librarianViewModel.getBooks()
                     staffViewModel.getStaff()
                     staffViewModel.getAllStaff()
                     await librarianViewModel.getCategoryStat()
-                    //try? await Task.sleep(nanoseconds: 2_000_000_000)
+                    try? await Task.sleep(nanoseconds: 2_000_000_000)
                     isPageLoading = false
                 }
             }

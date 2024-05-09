@@ -292,7 +292,7 @@ struct MemberHome: View {
                     
                     
                 }
-                .navigationTitle("Hello Member")
+                .navigationTitle("Trove")
                 .navigationBarItems(trailing: NavigationLink(destination: ProfileView(LibViewModel: LibViewModel, configViewModel: configViewModel), label: {
                     Image(systemName: "person.crop.circle")
                         .font(.title3)
