@@ -8,52 +8,50 @@
 import Foundation
 import TipKit
 
-struct identifyTip: Tip {
-    var title: Text {
-        Text("Identify")
-    }
-    var message: Text? {
-        Text("Scan your skin to detect acne and other issues quickly and accurately.")
-    }
-    var image: Image? {
-        Image(systemName: "magnifyingglass")
-    }
-}
 
-struct diagnoseTip: Tip {
-    var title: Text {
-        Text("Diagnose")
-    }
-    var message: Text? {
-        Text("Consult with dermatologists to get professional advice.")
-    }
-    var image: Image? {
-        Image(systemName: "person.fill.questionmark")
-    }
-}
-
-struct prescribeTip: Tip {
-    var title: Text {
-        Text("Prescribe")
-    }
-    var message: Text? {
-        Text("Receive prescriptions tailored to your skin's needs.")
-    }
-    var image: Image? {
-        Image(systemName: "pills.fill")
-    }
-}
-
-struct profileTip: Tip {
+struct borrowTip: Tip {
     @EnvironmentObject var themeManager: ThemeManager
     var title: Text {
-        Text("Procedure")
+        Text("Book")
     }
     var message: Text? {
-        Text("In the 'Diagnose' tab, identify your acne and consult with a doctor based on the app's analysis. Then, in 'Prescription', get personalized treatment plans prescribed by your doctor.")
+        Text("Tap here to borrow this book.")
     }
     var image: Image? {
-        Image(systemName: "exclamationmark.square.fill")
+        Image(systemName: "checkmark.seal.fill")
+    }
+}
+
+struct preBookTip: Tip {
+    @EnvironmentObject var themeManager: ThemeManager
+    var title: Text {
+        Text("Pre Book")
+    }
+    var message: Text? {
+        Text("Tap here to Pre Book this book.")
+    }
+    var image: Image? {
+        Image(systemName: "checkmark.seal.fill")
+    }
+}
+
+struct welcomingTip: Tip {
+    @EnvironmentObject var themeManager: ThemeManager
+    var title: Text {
+        Text("Discover & Organize")
+    }
+    var message: Text? {
+        Text("Welcome to Trove, your ultimate library app! 📚✨ Dive into our collection and discover literary treasures. Happy exploring!")
+    }
+}
+
+struct customizeTip: Tip {
+    @EnvironmentObject var themeManager: ThemeManager
+    var title: Text {
+        Text("Customize Your Trove!")
+    }
+    var message: Text? {
+        Text("Customize your Trove experience! 🎨✨ Personalize your app's theme and brand logo to reflect your unique style.")
     }
 }
 

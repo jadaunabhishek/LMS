@@ -9,6 +9,8 @@ import SwiftUI
 import Firebase
 import FirebaseAuth
 import Charts
+import TipKit
+
 struct AdminHomeView: View {
     
     @Binding var adminTabSelection: Int
@@ -38,14 +40,21 @@ struct AdminHomeView: View {
         ]
         
     }
+    
+    // Tip Data
+    var tipProcedure = customizeTip()
     @State var totalRevenue : Int = 0
+    
+    
     var body: some View {
         NavigationView{
             VStack {
                 if !isPageLoading {
                     ScrollView {
+                        TipView(tipProcedure)
+                            .padding([.leading, .trailing, .bottom])
+                        
                         VStack(spacing:12){
-                            
                             VStack(alignment: .leading){
                                 ZStack{
                                     RoundedRectangle(cornerRadius: 10)
