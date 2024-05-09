@@ -676,7 +676,7 @@ class LibrarianViewModel: ObservableObject{
         var tempReturnedLoans: [Loan] = []
         var tempAllLoans: [Loan] = []
         
-        self.dbInstance.collection("Loans").order(by: "timeStamp", descending: false).getDocuments{ (snapshot, error) in
+        self.dbInstance.collection("Loans").order(by: "timeStamp", descending: true).getDocuments{ (snapshot, error) in
             
             if(error == nil && snapshot != nil){
                 for document in snapshot!.documents{

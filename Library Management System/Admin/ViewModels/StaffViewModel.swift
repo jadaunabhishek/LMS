@@ -22,6 +22,7 @@ class StaffViewModel: ObservableObject {
     @Published var currentStaff: [Staff] = []
     @Published var staff: [Staff] = []
     @Published var allStaffs: [Staff] = []
+    @Published var currentAdmin: [Admin] = []
     
     func addStaff(
         name: String,
@@ -248,6 +249,25 @@ class StaffViewModel: ObservableObject {
             var tempMember = Staff(userID: userData?["userId"] as? String ?? "", name: userData?["name"] as? String ?? "", email: userData?["email"] as? String ?? "", mobile: userData?["mobile"] as? String ?? "", profileImageURL: userData?["profileImageURL"] as? String ?? "", aadhar: userData?["aadhar"] as? String ?? "", role: userData?["role"] as? String ?? "", password: "", createdOn: (userData?["createdOn"] as? Timestamp)?.dateValue() ?? Date(), updatedOn: (userData?["updatedOn"] as? Timestamp)?.dateValue() ?? Date())
             
             self?.staff.append(tempMember)
+        }
+    }
+    
+    func fetchAdminData() {
+        self.dbInstance.collection("users").document("cYlLVOR8LnO9AEpBxEpb").getDocument { [weak self] (documentSnapshot, error) in
+            if let error = error {
+                print("Error fetching user data: \(error.localizedDescription)")
+                return
+            }
+            
+            guard let document = documentSnapshot, document.exists else {
+                print("User document not found")
+                return
+            }
+            
+            let userData = document.data()
+            var tempMember = Admin(name: userData?["name"] as? String ?? "", email: userData?["email"] as? String ?? "", mobile: userData?["mobile"] as? String ?? "", profileImageURL: userData?["profileImageURL"] as? String ?? "")
+            
+            self?.currentAdmin.append(tempMember)
         }
     }
 }

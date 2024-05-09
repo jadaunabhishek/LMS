@@ -11,6 +11,8 @@ struct ContentView: View {
     @State private var isActive: Bool = false
     @AppStorage("onBoarded") var onBoarded = false
     
+    @EnvironmentObject var themeManager: ThemeManager
+    
     var body: some View {
         NavigationView {
             VStack{
@@ -24,7 +26,7 @@ struct ContentView: View {
                 Text("Trove")
                     .font(.largeTitle)
                     .fontWeight(.bold)
-                    .foregroundColor(.white)
+                    .foregroundColor(themeManager.selectedTheme.bodyTextColor)
                 
                 
                 Spacer()
@@ -52,10 +54,9 @@ struct ContentView: View {
             
             .navigationBarTitle("Main Screen", displayMode: .inline)
             .onAppear {
-                DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                    withAnimation {
-                        self.isActive = true
-                    }
+                Task{
+                    await themeManager.setBaseTheme()
+                    self.isActive = true
                 }
             }
             .navigationBarHidden(true)

@@ -44,21 +44,21 @@ struct Library_Management_SystemApp: App {
                 Membership(memModelView: memModelView, ConfiViewModel: configViewModel, LibViewModel: LibViewModel, authViewModel: userAuthViewModel)
                     .transition(.move(edge: .leading))
                     .environmentObject(themeManager)
-                    .task {
-                        do{
-                            await themeManager.setBaseTheme()
-                        }
-                    }
+//                    .task {
+//                        do{
+//                            await themeManager.setBaseTheme()
+//                        }
+//                    }
             }
             else if emailLoggedIn == "admin" {
                 AdminTabView(LibViewModel: LibViewModel, staffViewModel: staffViewModel, userAuthViewModel: userAuthViewModel, configViewModel: configViewModel)
                     .transition(.move(edge: .leading))
                     .environmentObject(themeManager)
-                    .task {
-                        do{
-                            await themeManager.setBaseTheme()
-                        }
-                    }
+//                    .task {
+//                        do{
+//                            await themeManager.setBaseTheme()
+//                        }
+//                    }
             }
             else if emailLoggedIn == "librarian" {
                 LibrarianFirstScreenView(LibModelView: LibModel, ConfiViewModel: confiModel)
@@ -66,29 +66,34 @@ struct Library_Management_SystemApp: App {
                     .environmentObject(themeManager)
                     .task {
                         do{
-                            await themeManager.setBaseTheme()
+                            await LibModel.getCategoryStat()
                         }
                     }
+//                    .task {
+//                        do{
+//                            await themeManager.setBaseTheme()
+//                        }
+//                    }
             }
             else if emailLoggedIn == "member" {
                 MemberTabView(memModelView: memModelView, ConfiViewModel: configViewModel, LibViewModel: LibViewModel, auth: userAuthViewModel)
                     .transition(.move(edge: .leading))
                     .environmentObject(themeManager)
-                    .task {
-                        do{
-                            await themeManager.setBaseTheme()
-                        }
-                    }
+//                    .task {
+//                        do{
+//                            await themeManager.setBaseTheme()
+//                        }
+//                    }
             }
             else {
                 ContentView()
                     .transition(.move(edge: .trailing))
                     .environmentObject(themeManager)
-                    .task {
-                        do{
-                            await themeManager.setBaseTheme()
-                        }
-                    }
+//                    .task {
+//                        do{
+//                            await themeManager.setBaseTheme()
+//                        }
+//                    }
             }
         }
     }

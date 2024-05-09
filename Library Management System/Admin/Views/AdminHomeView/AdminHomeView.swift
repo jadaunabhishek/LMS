@@ -405,7 +405,7 @@ struct AdminHomeView: View {
             }
             .navigationBarBackButtonHidden()
             .navigationBarTitle("Trove")
-            .navigationBarItems(trailing: NavigationLink(destination: ProfileView(LibViewModel: librarianViewModel, configViewModel: configViewModel), label: {
+            .navigationBarItems(trailing: NavigationLink(destination: AdminProfileView(LibViewModel: librarianViewModel, configViewModel: configViewModel, staffViewModel: staffViewModel), label: {
                 Image(systemName: "person.crop.circle")
                     .font(.title3)
                     .foregroundColor(Color(themeManager.selectedTheme.primaryThemeColor))

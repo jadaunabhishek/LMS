@@ -48,6 +48,8 @@ struct LibrarianFirstScreenView: View {
         .task {
             Task{
                 LibModelView.calculateFine()
+                LibModelView.getLoans()
+                LibModelView.getBooks()
             }
         }
         .onAppear(
@@ -55,6 +57,8 @@ struct LibrarianFirstScreenView: View {
                 Timer.scheduledTimer(withTimeInterval: 900, repeats: true) { time in
                     Task{
                         LibModelView.calculateFine()
+                        LibModelView.getLoans()
+                        LibModelView.getBooks()
                     }
                 }
             }

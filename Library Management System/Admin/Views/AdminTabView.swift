@@ -44,6 +44,9 @@ struct AdminTabView: View {
                     }
                     .tag(3)
             }
+        .task{
+            staffViewModel.fetchAdminData()
+        }
         
         .accentColor(themeManager.selectedTheme.primaryThemeColor)
         .navigationBarHidden(true)

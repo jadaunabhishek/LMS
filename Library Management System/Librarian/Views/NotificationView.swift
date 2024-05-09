@@ -77,7 +77,7 @@ struct NotificationsView: View {
                             staffViewModel.fetchStaffData(staffID: currentUser)
                         }
                         LibViewModel.getLoans()
-                        try? await Task.sleep(nanoseconds: 1_000_000_000)
+                        //try? await Task.sleep(nanoseconds: 1_000_000_000)
                         issuedLoans = LibViewModel.issuedLoans
                         requestedLoans = LibViewModel.requestedLoans
                         viewModel.fetchData()
@@ -93,7 +93,7 @@ struct NotificationsView: View {
                         staffViewModel.fetchStaffData(staffID: currentUser)
                     }
                     LibViewModel.getLoans()
-                    try? await Task.sleep(nanoseconds: 1_000_000_000)
+                    //try? await Task.sleep(nanoseconds: 1_000_000_000)
                     issuedLoans = LibViewModel.issuedLoans
                     requestedLoans = LibViewModel.requestedLoans
                     viewModel.fetchData()
