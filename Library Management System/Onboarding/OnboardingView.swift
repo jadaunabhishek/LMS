@@ -36,6 +36,7 @@ struct OnboardingView: View {
                     naviToRegister = true
                     UserDefaults.standard.set(true, forKey: "onBoarded")
                 }, label: "Agree & Join")
+                .padding(.vertical, 8)
                 
                 
                 SignupCustomButton(action: {
@@ -60,6 +61,7 @@ struct OnboardingView: View {
                         .foregroundColor(themeManager.selectedTheme.primaryThemeColor)
                 }
                 
+                
                 NavigationLink(
                     destination: LoginView(),
                     isActive: $naviToLogin
@@ -74,22 +76,11 @@ struct OnboardingView: View {
                     EmptyView()
                 }
             }
-            .frame(height: UIScreen.main.bounds.height / 3)
+            .frame(height: UIScreen.main.bounds.height / 4)
             .padding()
         }
         .navigationBarHidden(true)
         .navigationBarBackButtonHidden(true)
-        .onAppear {
-            startTimer()
-        }
-    }
-    
-    private func startTimer() {
-        _ = Timer.scheduledTimer(withTimeInterval: 4, repeats: true) { timer in
-            withAnimation {
-                currentPage = (currentPage + 1) % 3
-            }
-        }
     }
 }
 

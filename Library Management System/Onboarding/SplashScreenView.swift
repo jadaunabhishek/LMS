@@ -6,22 +6,20 @@ struct SplashScreenView: View {
     var body: some View {
         ZStack {
             // Background color or image
-            themeManager.selectedTheme.secondaryThemeColor// Change to your desired background color
-            
-            // Your logo or branding
+            themeManager.selectedTheme.secondaryThemeColor
             VStack {
                             Image("appLogo")
                                 .resizable()
                                 .scaledToFit()
-                                .frame(width: 200, height: 200) // Adjust size as needed
+                                .frame(width: 200, height: 200)
                             
                             Text("Trove")
                                 .font(.largeTitle)
                                 .fontWeight(.bold)
-                                .foregroundColor(.white) // Adjust text color
+                                .foregroundColor(.white)
                         }
         }
-        .edgesIgnoringSafeArea(.all) // Ignore safe area edges to cover full screen
+        .edgesIgnoringSafeArea(.all)
     }
 }
 
