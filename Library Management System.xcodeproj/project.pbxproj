@@ -114,6 +114,7 @@
 		DC48E7222BD6E78000794A7C /* LibrarianViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC48E7212BD6E78000794A7C /* LibrarianViewModel.swift */; };
 		DC79BDC42BDA23710048F1DE /* UpdateBookPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC79BDC32BDA23710048F1DE /* UpdateBookPage.swift */; };
 		DC79BDC62BDA23780048F1DE /* BooksPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC79BDC52BDA23780048F1DE /* BooksPage.swift */; };
+		DCAB1FDE2BEB8D0D0052AC93 /* Review.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCAB1FDD2BEB8D0D0052AC93 /* Review.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -218,6 +219,7 @@
 		DC48E7212BD6E78000794A7C /* LibrarianViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibrarianViewModel.swift; sourceTree = "<group>"; };
 		DC79BDC32BDA23710048F1DE /* UpdateBookPage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UpdateBookPage.swift; sourceTree = "<group>"; };
 		DC79BDC52BDA23780048F1DE /* BooksPage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BooksPage.swift; sourceTree = "<group>"; };
+		DCAB1FDD2BEB8D0D0052AC93 /* Review.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Review.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -572,6 +574,7 @@
 				D5C949592BEA193100D5310D /* SupportReply.swift */,
 				D5013B822BEA36630067724A /* Records.swift */,
 				D5D1451A2BEABC3F0006A1CA /* RecordBookDetail.swift */,
+				DCAB1FDD2BEB8D0D0052AC93 /* Review.swift */,
 			);
 			path = MemberTabs;
 			sourceTree = "<group>";
@@ -813,6 +816,7 @@
 				D50EA9CF2BE4BA7B0079C1AB /* MemReqViewModel.swift in Sources */,
 				84301CB72BDA13C8004CF581 /* MemberTabView.swift in Sources */,
 				D57BFDB32BDD24FD0094A0B5 /* UserBooksModel.swift in Sources */,
+				DCAB1FDE2BEB8D0D0052AC93 /* Review.swift in Sources */,
 				840A18EF2BE040F700B9ED91 /* TextFieldComponent.swift in Sources */,
 				DC79BDC62BDA23780048F1DE /* BooksPage.swift in Sources */,
 				84D3293E2BDE707000E75F81 /* EditStaffDetailsView.swift in Sources */,

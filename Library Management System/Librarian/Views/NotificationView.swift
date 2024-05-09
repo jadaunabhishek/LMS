@@ -159,12 +159,18 @@ struct MembershipSections: View {
                     .swipeActions(edge: .leading, allowsFullSwipe: true) {
                         Button("Reject") {
                             processSwipeAction(key: key.id, approve: false)
+                        } label: {
+                            Image(systemName: "xmark")
+                            Text("Reject")
                         }
                         .tint(.red)
                     }
                     .swipeActions(edge: .trailing, allowsFullSwipe: true) {
                         Button("Approve") {
                             processSwipeAction(key: key.id, approve: true)
+                        } label: {
+                            Image(systemName: "checkmark")
+                            Text("Accept")
                         }
                         .tint(.green)
                     }
@@ -271,14 +277,15 @@ struct checkInSections: View {
     @ObservedObject var LibViewModel: LibrarianViewModel
     
     var body: some View {
-        List {
-            ForEach(0..<LibViewModel.issuedLoans.count, id: \.self) { userDetail in
-                NavigationLink(destination: CheckInDetailsView(checkInDetails: LibViewModel.issuedLoans[userDetail], LibViewModel: LibViewModel)){
-                    BookRequestCustomBox(bookRequestData: LibViewModel.issuedLoans[userDetail])
+        ScrollView{
+            VStack{
+                ForEach(0..<LibViewModel.issuedLoans.count, id: \.self) { userDetail in
+                    NavigationLink(destination: CheckInDetailsView(checkInDetails: LibViewModel.issuedLoans[userDetail], LibViewModel: LibViewModel)){
+                        BookRequestCustomBox(bookRequestData: LibViewModel.issuedLoans[userDetail])
+                    }
                 }
             }
         }
-        .listStyle(.inset)
     }
 }
 
@@ -325,11 +332,14 @@ struct BooksSections: View {
                         toggleSelection(key: key.loanId)
                     }
                     .swipeActions(edge: .leading, allowsFullSwipe: true) {
-                        Button("Reject") {
+                        Button{
                             Task {
                                 await LibViewModel.rejectRequest(loanId: key.loanId, bookId: key.bookId)
                                 LibViewModel.getLoans()
                             }
+                        } label: {
+                            Image(systemName: "xmark")
+                            Text("Reject")
                         }
                         .tint(.red)
                     }
@@ -337,6 +347,9 @@ struct BooksSections: View {
                         Button("Approve") {
                             LibViewModel.checkOutBook(loanId: key.loanId)
                             LibViewModel.getLoans()
+                        } label: {
+                            Image(systemName: "checkmark")
+                            Text("Accept")
                         }
                         .tint(.green)
                     }

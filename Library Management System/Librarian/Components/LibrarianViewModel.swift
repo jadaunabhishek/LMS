@@ -7,7 +7,7 @@ class LibrarianViewModel: ObservableObject{
     
     let dbInstance = Firestore.firestore()
     
-    //@StateObject var confiViewModel = ConfigViewModel()
+
     
     @Published var responseStatus = 0
     @Published var responseMessage = ""
@@ -441,8 +441,95 @@ class LibrarianViewModel: ObservableObject{
                                                         self.responseStatus = 400
                                                     }
                                                     else{
-                                                        self.responseStatus = 200
-                                                        self.responseMessage = "Completed loan successfuly."
+                                                        self.dbInstance.collection("configuration").document("HJ9L6mDbi01TJvX3ja7Z").getDocument{ (document,error) in
+                                                            if error == nil{
+                                                                if (document != nil && document!.exists){
+                                                                    guard let fineDetailsDictArray = document!["fineDetails"] as? [[String: Any]] else {
+                                                                        print("Error: Unable to parse fineDetails array from Firestore document")
+                                                                        return
+                                                                    }
+
+                                                                    var fineDetailsArray: [fineDetails] = []
+                                                                    for fineDetailDict in fineDetailsDictArray {
+                                                                        guard let fine = fineDetailDict["fine"] as? Int,
+                                                                              let period = fineDetailDict["period"] as? Int else {
+                                                                            print("Error: Unable to parse fineDetail from dictionary")
+                                                                            continue
+                                                                        }
+                                                                        
+                                                                        let fineDetail = fineDetails(fine: fine, period: period)
+                                                                        fineDetailsArray.append(fineDetail)
+                                                                        
+                                                                    }
+                                                                    
+                                                                    guard let monthlyMembersCountDictArray = document!["monthlyMembersCount"] as? [[String: Any]] else {
+                                                                        print("Error: Unable to parse monthlyMembersCount array from Firestore document")
+                                                                        return
+                                                                    }
+
+                                                                    var monthlyMembersCountArray: [membersCount] = []
+                                                                    for memberCountDict in monthlyMembersCountDictArray {
+                                                                        guard let month = memberCountDict["month"] as? String,
+                                                                              let count = memberCountDict["count"] as? Int else {
+                                                                            print("Error: Unable to parse memberCount from dictionary")
+                                                                            continue
+                                                                        }
+                                                                        
+                                                                        let memberCount = membersCount(month: month, count: count)
+                                                                        monthlyMembersCountArray.append(memberCount)
+                                                                    }
+
+                                                                    
+                                                                    guard let monthlyIncomeDictArray = document!["monthlyIncome"] as? [[String: Any]] else {
+                                                                        print("Error: Unable to parse monthlyMembersCount array from Firestore document")
+                                                                        return
+                                                                    }
+                                                                    
+                                                                    var monthlyIncomeArray: [monthlyIncome] = []
+                                                                    for memberIncomeDict in monthlyIncomeDictArray {
+                                                                        guard let month = memberIncomeDict["month"] as? String,
+                                                                              let count = memberIncomeDict["income"] as? Int else {
+                                                                            print("Error: Unable to parse memberCount from dictionary")
+                                                                            continue
+                                                                        }
+                                                                        
+                                                                        let monthlyIncome = monthlyIncome(month: month, income: count)
+                                                                        monthlyIncomeArray.append(monthlyIncome)
+                                                                    }
+
+                                                                    
+                                                                    var newConfig = Config(
+                                                                        configID: document!["configID"] as! String,
+                                                                        adminID: document!["adminID"] as! String,
+                                                                        logo: document!["logo"] as! String,
+                                                                        accentColor: document!["accentColor"] as! String,
+                                                                        loanPeriod: document!["loanPeriod"] as! Int,
+                                                                        fineDetails: fineDetailsArray,
+                                                                        maxFine: document!["maxFine"] as! Double,
+                                                                        maxPenalties: document!["maxPenalties"] as! Int,
+                                                                        categories: document!["categories"] as! [String],
+                                                                        monthlyMembersCount: monthlyMembersCountArray, monthlyIncome: monthlyIncomeArray)
+                                                                    
+                                                                    if let monthInt = Calendar.current.dateComponents([.month], from: Date()).month {
+                                                                        let monthStr = Calendar.current.monthSymbols[monthInt-1]
+                                                                        
+                                                                        for i in 0..<newConfig.monthlyIncome.count{
+                                                                            if(newConfig.monthlyIncome[i].month == monthStr){
+                                                                                newConfig.monthlyIncome[i].income += loanFine
+                                                                            }
+                                                                        }
+                                                                        self.dbInstance.collection("configuration").document("HJ9L6mDbi01TJvX3ja7Z").setData(newConfig.getDictionaryOfStruct()){ error in
+                                                                            if let error = error{
+                                                                                print(error)
+                                                                            }
+                                                                            else{
+                                                                                print("Done")
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
                                                     }
                                                 }
                                             }
@@ -751,6 +838,28 @@ class LibrarianViewModel: ObservableObject{
                         monthlyMembersCountArray.append(memberCount)
                     }
                     
+                    guard let monthlyIncomeDictArray = document!["monthlyIncome"] as? [[String: Any]] else {
+                        print("Error: Unable to parse monthlyMembersCount array from Firestore document")
+                        return
+                    }
+                    
+                    var monthlyIncomeArray: [monthlyIncome] = []
+                    for memberIncomeDict in monthlyIncomeDictArray {
+                        guard let month = memberIncomeDict["month"] as? String,
+                              let count = memberIncomeDict["income"] as? Int else {
+                            print("Error: Unable to parse memberCount from dictionary")
+                            continue
+                        }
+                        
+                        let monthlyIncome = monthlyIncome(month: month, income: count)
+                        monthlyIncomeArray.append(monthlyIncome)
+                    }
+
+                    guard let monthlyRevenueTotalDictArray = document!["monthlyRevenueTotal"] as? [[String: Any]] else {
+                        print("Error: Unable to parse monthlyRevenueTotal array from Firestore document")
+                        return
+                    }
+                    
                     var newConfig = Config(
                         configID: document!["configID"] as! String,
                         adminID: document!["adminID"] as! String,
@@ -760,8 +869,8 @@ class LibrarianViewModel: ObservableObject{
                         fineDetails: fineDetailsArray,
                         maxFine: document!["maxFine"] as! Double,
                         maxPenalties: document!["maxPenalties"] as! Int,
-                        categories: document!["categories"] as! [String], 
-                        monthlyMembersCount: monthlyMembersCountArray)
+                        categories: document!["categories"] as! [String],
+                        monthlyMembersCount: monthlyMembersCountArray, monthlyIncome: monthlyIncomeArray)
                     
                     self.dbInstance.collection("Loans").whereField("loanStatus", isEqualTo: "Issued").getDocuments{
                         
@@ -839,7 +948,7 @@ class LibrarianViewModel: ObservableObject{
         }
     }
     
-    func rateReview(bookId: String, rating: Int, review: String){
+    func rateReview(bookId: String, rating: Int, review: String, loanId: String){
         self.responseStatus = 0
         self.responseMessage = ""
         
@@ -874,18 +983,23 @@ class LibrarianViewModel: ObservableObject{
                     var newReviews: [String] = tempCurrentBook[0].bookReviews
                     newReviews.append(review)
                     
-                    self.dbInstance.collection("Books").document(bookId).updateData(["bookRating":newRating, "bookReviews": newReviews, "updatedOn": Date.now.formatted()])
-                    self.responseStatus = 200
-                    self.responseMessage = "Book fetched successfuly"
+                    self.dbInstance.collection("Books").document(bookId).updateData(["bookRating":newRating, "bookReviews": newReviews, "updatedOn": Date.now.formatted()]){ error in
+                        if let error = error{
+                            print(error)
+                        }
+                        else{
+                            self.dbInstance.collection("Loans").document(loanId).updateData(["loanStatus":"Completed"])
+                        }
+                    }
                 }
                 else{
-                    self.responseStatus = 200
+                    self.responseStatus = 400
                     self.responseMessage = "Something went wrong, Unable to get book. Chek console for error"
                     print("Unable to get updated document. May be this could be the error: Book does not exist or db returned nil.")
                 }
             }
             else{
-                self.responseStatus = 200
+                self.responseStatus = 400
                 self.responseMessage = "Something went wrong, Unable to book. Chek console for error"
                 print("Unable to get book. Error: \(String(describing: error)).")
             }

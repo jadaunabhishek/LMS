@@ -22,7 +22,7 @@ struct AdminTabView: View {
                         Image(systemName: "house")
                         Text("Home")
                     }
-                AdminCategoriesView(configViewModel: ConfigViewModel())
+                AdminCategoriesView(configViewModel: configViewModel, libViewModel: LibViewModel)
                     .tabItem {
                         Image(systemName: "square.split.2x2.fill")
                         Text("Categories")

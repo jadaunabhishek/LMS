@@ -39,8 +39,12 @@ struct MemberHome: View {
         configViewModel.currentConfig.isEmpty ? [] : configViewModel.currentConfig[0].categories
     }
     
-    var topfree: [Book] {
-        LibViewModel.allBooks.isEmpty ? [] : LibViewModel.allBooks
+    var toprated: [Book] {
+        LibViewModel.topRatedBooks
+    }
+    
+    var trending: [Book] {
+        LibViewModel.trendingBooks
     }
     
     var body: some View {
@@ -50,7 +54,7 @@ struct MemberHome: View {
                     .padding([.leading, .trailing, .bottom])
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack {
-                        NavigationLink(destination: Books(themeManager: themeManager)) {
+                        NavigationLink(destination: Books()) {
                             ZStack(alignment: .bottomLeading) {
                                 
                                 Rectangle()
@@ -89,6 +93,72 @@ struct MemberHome: View {
                         }
                     }.padding()
                 }
+                
+                VStack(alignment: .leading){
+                    HStack{
+                        Text("Top Rated ")
+                            .font(.title2).fontWeight(.semibold).padding(.leading, 20)
+                    }
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        HStack{
+                            ForEach(toprated.prefix(9), id: \.id) { book in
+                                
+                                NavigationLink(destination: MemberBookDetailView(
+                                    book: book,
+                                    userData: AuthViewModel(),
+                                    bookRequest: UserBooksModel(),
+                                    prebookRequest: UserBooksModel()
+                                )){
+                                    HStack(spacing: 5) {
+                                        VStack{
+                                            AsyncImage(url: URL(string: book.bookImageURL)) { image in
+                                                image.resizable()
+                                            } placeholder: {
+                                                ProgressView()
+                                            }
+                                            .frame(width: 80, height: 120)
+                                            .cornerRadius(8)
+                                        }
+                                        VStack (alignment: .leading){
+                                            Spacer()
+                                            HStack{
+                                                Image(systemName: "star.fill")
+                                                Text(String(format: "%.1f", book.bookRating))
+                                            }
+                                            .font(.caption)
+                                            .bold()
+                                            .foregroundStyle(Color(.systemGray))
+                                            .padding(.bottom, 5)
+                                            Text("\(book.bookName)")
+                                                .multilineTextAlignment(.leading)
+                                                .font(.title3)
+                                                .bold()
+                                                .lineLimit(2)
+                                            Text("\(book.bookAuthor)")
+                                                .multilineTextAlignment(.leading)
+                                                .font(.callout)
+                                                .bold()
+                                                .lineLimit(1)
+                                        }.frame(width: 130)
+                                            .foregroundColor(themeManager.selectedTheme.bodyTextColor)
+                                    }
+                                    .padding(5)
+                                }
+                            }
+                            .padding(.horizontal, 20)
+                            .padding(.vertical, 10)
+                            
+                        }
+                        
+                    }
+                }.padding(.vertical, 10)
+                    .background(
+                        LinearGradient(
+                            gradient: Gradient(colors: themeManager.gradientColors(for: colorScheme)),
+                            startPoint: .top,
+                            endPoint: .bottom
+                        )
+                    )
                 
                 
                 VStack(alignment: .leading){
@@ -140,35 +210,56 @@ struct MemberHome: View {
                     )
                 
                     .cornerRadius(5)
+                
+                
                 VStack(alignment: .leading){
                     HStack{
-                        Text("Top Free").font(.title2).fontWeight(.semibold).padding(.leading, 20)
+                        Text("Trending")
+                            .font(.title2).fontWeight(.semibold).padding(.leading, 20)
                     }
                     ScrollView(.horizontal, showsIndicators: false) {
                         HStack{
-                            ForEach(topfree.prefix(9), id: \.id) { book in
-                                
-                                HStack(spacing: 5){
-                                    AsyncImage(url: URL(string: book.bookImageURL)) { image in
-                                        image.resizable()
-                                    } placeholder: {
-                                        ProgressView()
+                            ForEach(trending.prefix(10), id: \.id) { book in
+                                NavigationLink(destination: MemberBookDetailView(
+                                    book: book,
+                                    userData: AuthViewModel(),
+                                    bookRequest: UserBooksModel(),
+                                    prebookRequest: UserBooksModel()
+                                )){
+                                    HStack(spacing: 5) {
+                                        VStack{
+                                            AsyncImage(url: URL(string: book.bookImageURL)) { image in
+                                                image.resizable()
+                                            } placeholder: {
+                                                ProgressView()
+                                            }
+                                            .frame(width: 80, height: 120)
+                                            .cornerRadius(8)
+                                        }
+                                        VStack (alignment: .leading){
+                                            Spacer()
+                                            HStack{
+                                                Image(systemName: "star.fill")
+                                                Text(String(format: "%.1f", book.bookRating))
+                                            }
+                                            .font(.caption)
+                                            .bold()
+                                            .foregroundStyle(Color(.systemGray))
+                                            .padding(.bottom, 5)
+                                            Text("\(book.bookName)")
+                                                .multilineTextAlignment(.leading)
+                                                .font(.title3)
+                                                .bold()
+                                                .lineLimit(2)
+                                            Text("\(book.bookAuthor)")
+                                                .multilineTextAlignment(.leading)
+                                                .font(.callout)
+                                                .bold()
+                                                .lineLimit(1)
+                                        }.frame(width: 130)
+                                            .foregroundColor(themeManager.selectedTheme.bodyTextColor)
                                     }
-                                    .frame(width: 80,height: 120)
-                                    .cornerRadius(8)
-                                    VStack{
-                                        Spacer()
-                                        Text("\(book.bookName)")
-                                            .multilineTextAlignment(.leading)
-                                            .font(.title3)
-                                            .bold()
-                                            .lineLimit(2)
-                                        Text("\(book.bookAuthor)")
-                                            .multilineTextAlignment(.leading)
-                                            .font(.callout)
-                                            .bold()
-                                            .lineLimit(1)
-                                    }.frame(width: 130)
+                                    .padding(5)
                                 }
                                 .padding(5)
                             }
@@ -187,6 +278,7 @@ struct MemberHome: View {
                         )
                     )
                 
+                
             }
             .navigationTitle("Hello Member")
             .navigationBarItems(trailing: NavigationLink(destination: ProfileCompletedView(), label: {
@@ -203,7 +295,8 @@ struct MemberHome: View {
                             self.hasCalendarAccess = granted
                         }
                         await createCalendarEvents(LibViewModel: LibViewModel, userId: currentUser)
-                        LibViewModel.getBooks()
+                        LibViewModel.getTopRatedBooks()
+                        LibViewModel.getTrendingBooks()
                         try? await Task.sleep(nanoseconds: 2_000_000_000)
                     }
                     

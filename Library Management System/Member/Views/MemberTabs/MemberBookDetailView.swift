@@ -163,6 +163,26 @@ struct MemberBookDetailView: View {
                                 .padding(.horizontal)
                                 .lineSpacing(10)
                         }.padding(10)
+                        VStack(alignment:.leading){
+                            Text("Reviews")
+                                .font(.title.bold())
+                                .padding(.horizontal)
+                                .padding(.top, 20)
+                            List{
+                                ForEach(book.bookReviews, id: \.self){ review in
+                                    HStack(alignment: .center){
+                                        Image(systemName: "person.circle")
+                                            .symbolRenderingMode(.hierarchical)
+                                            .font(.system(.title))
+                                        Text(review)
+                                            .font(.system(.subheadline))
+                                        Spacer()
+                                    }
+                                    .padding(.vertical,10)
+                                }
+                            }
+                            .listStyle(.inset)
+                        }.padding(10)
                         
                     }
                     
