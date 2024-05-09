@@ -71,7 +71,7 @@ struct Library_Management_SystemApp: App {
                     }
             }
             else if emailLoggedIn == "member" {
-                MemberTabView(memModelView: memModelView, ConfiViewModel: configViewModel, LibViewModel: LibViewModel, authViewModel: userAuthViewModel)
+                MemberTabView(memModelView: memModelView, ConfiViewModel: configViewModel, LibViewModel: LibViewModel, auth: userAuthViewModel)
                     .transition(.move(edge: .leading))
                     .environmentObject(themeManager)
                     .task {

@@ -57,9 +57,9 @@ struct Membership: View {
                             UserDefaults.standard.set("false", forKey: "signIn")
                             let firebaseAuth = Auth.auth()
                             do {
-                              try firebaseAuth.signOut()
+                                try firebaseAuth.signOut()
                             } catch let signOutError as NSError {
-                              print("Error signing out: %@", signOutError)
+                                print("Error signing out: %@", signOutError)
                             }
                             
                         } label: {
@@ -164,19 +164,20 @@ struct Membership: View {
                     }, label: "Request Membership")
                     .padding(.bottom, 15)
                     
-                    NavigationLink("", destination: MemberTabView(memModelView: memModelView, ConfiViewModel: ConfiViewModel, LibViewModel: LibViewModel, authViewModel: authViewModel), isActive: $shouldNavigate)
+                    NavigationLink("", destination: MemberTabView(memModelView: memModelView, ConfiViewModel: ConfiViewModel, LibViewModel: LibViewModel, auth: authViewModel), isActive: $shouldNavigate)
                         .hidden()
                     
                 }.padding()
             }
-        
-        .onAppear(perform: {
-            Timer.scheduledTimer(withTimeInterval: 15, repeats: true) { time in
-                fetchCurrentUserDetails()
-            }
-        })
-        
-        .ignoresSafeArea(.all)
+            
+            .onAppear(perform: {
+                Timer.scheduledTimer(withTimeInterval: 15, repeats: true) { time in
+                    fetchCurrentUserDetails()
+                }
+            })
+            
+            .ignoresSafeArea(.all)
+        }
     }
     private func statusIndicator(imageName: String, text: String, status: MembershipStatus) -> some View {
         HStack {

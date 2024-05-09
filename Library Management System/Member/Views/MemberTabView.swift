@@ -18,7 +18,7 @@ struct MemberTabView: View {
     
     var body: some View {
         TabView(selection: $tabSelection) {
-            MemberHome(tabSelection: $tabSelection, LibViewModel: LibViewModel, configViewModel: ConfiViewModel)
+            MemberHome(tabSelection: $tabSelection, LibViewModel: LibViewModel, configViewModel: ConfiViewModel, MemViewModel: memModelView)
                 .tabItem {
                     Image(systemName: "books.vertical.fill")
                     Text("Library")
@@ -36,7 +36,7 @@ struct MemberTabView: View {
                     Text("My Books")
                 }.tag(3)
             
-            Support(authViewModel: authViewModel)
+            Support(authViewModel: auth)
                 .tabItem {
                     Image(systemName: "person.line.dotted.person.fill")
                     Text("Support")
@@ -55,7 +55,7 @@ struct MTVPrev: View {
     @StateObject var authViewModel = AuthViewModel()
     
     var body: some View {
-        MemberTabView(memModelView: memModelView, ConfiViewModel: ConfiViewModel, LibViewModel: LibViewModel, authViewModel: authViewModel)
+        MemberTabView(memModelView: memModelView, ConfiViewModel: ConfiViewModel, LibViewModel: LibViewModel, auth: authViewModel)
     }
 }
 
