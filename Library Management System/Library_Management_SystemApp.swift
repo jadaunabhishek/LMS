@@ -41,7 +41,7 @@ struct Library_Management_SystemApp: App {
     var body: some Scene {
         WindowGroup {
             if emailLoggedIn == "user" || isSignIn == "user" {
-                Membership()
+                Membership(memModelView: memModelView, ConfiViewModel: configViewModel, LibViewModel: LibViewModel, authViewModel: userAuthViewModel)
                     .transition(.move(edge: .leading))
                     .environmentObject(themeManager)
                     .task {
@@ -71,7 +71,7 @@ struct Library_Management_SystemApp: App {
                     }
             }
             else if emailLoggedIn == "member" {
-                MemberTabView(themeManager: themeManager, memModelView: memModelView, ConfiViewModel: configViewModel, LibViewModel: LibViewModel, auth: userAuthViewModel)
+                MemberTabView(memModelView: memModelView, ConfiViewModel: configViewModel, LibViewModel: LibViewModel, authViewModel: userAuthViewModel)
                     .transition(.move(edge: .leading))
                     .environmentObject(themeManager)
                     .task {

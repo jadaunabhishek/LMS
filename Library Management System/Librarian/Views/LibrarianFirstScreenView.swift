@@ -1,4 +1,5 @@
 import SwiftUI
+import FirebaseAuth
 
 struct LibrarianFirstScreenView: View {
     @State private var showNotifications = false
@@ -21,7 +22,7 @@ struct LibrarianFirstScreenView: View {
                 }
                 .tag(1)
             
-            NotificationsView(LibViewModel: LibModelView, selectedOption: $actionSelection)
+            NotificationsView(LibViewModel: LibModelView, configViewModel: ConfiViewModel, staffViewModel: staffViewModel, selectedOption: $actionSelection)
                 .tabItem {
                     Image(systemName: "person.bust.fill")
                     Text("Actions")

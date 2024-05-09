@@ -20,6 +20,7 @@ class StaffViewModel: ObservableObject {
     @Published var responseMessage = ""
     
     @Published var currentStaff: [Staff] = []
+    @Published var staff: [Staff] = []
     @Published var allStaffs: [Staff] = []
     
     func addStaff(
@@ -55,30 +56,32 @@ class StaffViewModel: ObservableObject {
                         completion(false, authError)
                         return
                     }
-                    
-                    let newStaff = Staff(
-                        userID: addNewStaff.documentID ,
-                        name: name,
-                        email: email,
-                        mobile: mobile,
-                        profileImageURL: imageURL,
-                        aadhar: aadhar,
-                        role: role,
-                        password: password,
-                        createdOn: Date(),
-                        updatedOn: Date()
-                    )
-                    
-                    addNewStaff.setData(newStaff.getDictionaryOfStruct()) { error in
-                        if let error = error {
-                            completion(false, error)
-                            self.responseStatus = 400
-                            self.responseMessage = "Something went wrong, Unable to add staff member. Check console for error."
-                            print("Unable to add staff member. Error: \(error)")
-                        } else {
-                            completion(true, nil)
-                            self.responseStatus = 200
-                            self.responseMessage = "Staff member added successfully."
+                    if let userId = authResult?.user.uid{
+                        let addNewStaff = self.dbInstance.collection("users").document(userId)
+                        let newStaff = Staff(
+                            userID: addNewStaff.documentID ,
+                            name: name,
+                            email: email,
+                            mobile: mobile,
+                            profileImageURL: imageURL,
+                            aadhar: aadhar,
+                            role: role,
+                            password: password,
+                            createdOn: Date(),
+                            updatedOn: Date()
+                        )
+                        
+                        addNewStaff.setData(newStaff.getDictionaryOfStruct()) { error in
+                            if let error = error {
+                                completion(false, error)
+                                self.responseStatus = 400
+                                self.responseMessage = "Something went wrong, Unable to add staff member. Check console for error."
+                                print("Unable to add staff member. Error: \(error)")
+                            } else {
+                                completion(true, nil)
+                                self.responseStatus = 200
+                                self.responseMessage = "Staff member added successfully."
+                            }
                         }
                     }
                 }
@@ -226,6 +229,25 @@ class StaffViewModel: ObservableObject {
                 self.responseStatus = 200
                 self.responseMessage = "Deleted staff member successfully."
             }
+        }
+    }
+    
+    func fetchStaffData(staffID: String) {
+        self.dbInstance.collection("users").document(staffID).getDocument { [weak self] (documentSnapshot, error) in
+            if let error = error {
+                print("Error fetching user data: \(error.localizedDescription)")
+                return
+            }
+            
+            guard let document = documentSnapshot, document.exists else {
+                print("User document not found")
+                return
+            }
+            
+            let userData = document.data()
+            var tempMember = Staff(userID: userData?["userId"] as? String ?? "", name: userData?["name"] as? String ?? "", email: userData?["email"] as? String ?? "", mobile: userData?["mobile"] as? String ?? "", profileImageURL: userData?["profileImageURL"] as? String ?? "", aadhar: userData?["aadhar"] as? String ?? "", role: userData?["role"] as? String ?? "", password: "", createdOn: (userData?["createdOn"] as? Timestamp)?.dateValue() ?? Date(), updatedOn: (userData?["updatedOn"] as? Timestamp)?.dateValue() ?? Date())
+            
+            self?.staff.append(tempMember)
         }
     }
 }

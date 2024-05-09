@@ -13,10 +13,11 @@ import FirebaseFirestore
 struct LoginView: View {
     private var db = Firestore.firestore()
     @EnvironmentObject var themeManager: ThemeManager
-    @StateObject private var viewModel = AuthViewModel()
+    @StateObject var authViewModel = AuthViewModel()
     @StateObject var LibViewModel = LibrarianViewModel()
     @StateObject var configViewModel = ConfigViewModel()
     @StateObject var memModelView = UserBooksModel()
+    @StateObject var staffViewModel = StaffViewModel()
     
     @State private var email: String = ""
     @State private var password: String = ""
@@ -89,16 +90,16 @@ struct LoginView: View {
                     
                     PrimaryCustomButton(action: {
                         print("Login Attempt")
-                        viewModel.login(email: email, password: password)
-                        print($viewModel.shouldNavigateToAdmin)
+                        authViewModel.login(email: email, password: password)
+                        print($authViewModel.shouldNavigateToAdmin)
                         
                     }, label: "Log In")
                     .disabled(email.isEmpty || password.isEmpty)
                     
-                    NavigationLink(destination: AdminTabView(), isActive: $viewModel.shouldNavigateToAdmin) { EmptyView() }
-                    NavigationLink(destination: LibrarianFirstScreenView(LibModelView: LibViewModel, ConfiViewModel: configViewModel), isActive: $viewModel.shouldNavigateToLibrarian) { EmptyView() }
-                    NavigationLink(destination: MemberTabView(themeManager: themeManager, memModelView: memModelView, ConfiViewModel: configViewModel), isActive: $viewModel.shouldNavigateToMember) { EmptyView() }
-                    NavigationLink(destination: Membership(), isActive: $viewModel.shouldNavigateToGeneral) { EmptyView() }
+                    NavigationLink(destination: AdminTabView(LibViewModel: LibViewModel, staffViewModel: staffViewModel, userAuthViewModel: authViewModel, configViewModel: configViewModel), isActive: $authViewModel.shouldNavigateToAdmin) { EmptyView() }
+                    NavigationLink(destination: LibrarianFirstScreenView(LibModelView: LibViewModel, ConfiViewModel: configViewModel), isActive: $authViewModel.shouldNavigateToLibrarian) { EmptyView() }
+                    NavigationLink(destination: MemberTabView(memModelView: memModelView, ConfiViewModel: configViewModel, LibViewModel: LibViewModel, authViewModel: authViewModel), isActive: $authViewModel.shouldNavigateToMember) { EmptyView() }
+                    NavigationLink(destination: Membership(memModelView: memModelView, ConfiViewModel: configViewModel, LibViewModel: LibViewModel, authViewModel: authViewModel), isActive: $authViewModel.shouldNavigateToGeneral) { EmptyView() }
                 }
                 
                 .padding()

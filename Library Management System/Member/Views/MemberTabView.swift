@@ -8,22 +8,22 @@
 import SwiftUI
 
 struct MemberTabView: View {
-    @ObservedObject var themeManager: ThemeManager
+    @EnvironmentObject var themeManager: ThemeManager
     @State private var applyMembership = false
-    @ObservedObject var memModelView = UserBooksModel()
-    @ObservedObject var ConfiViewModel = ConfigViewModel()
-    @ObservedObject var LibViewModel = LibrarianViewModel()
-    @ObservedObject var auth = AuthViewModel()
+    @ObservedObject var memModelView: UserBooksModel
+    @ObservedObject var ConfiViewModel: ConfigViewModel
+    @ObservedObject var LibViewModel: LibrarianViewModel
+    @ObservedObject var authViewModel: AuthViewModel
     
     var body: some View {
         TabView {
-            MemberHome(LibViewModel: LibViewModel, configViewModel: ConfiViewModel)
+            MemberHome(LibViewModel: LibViewModel, configViewModel: ConfiViewModel, MemViewModel: memModelView)
                 .tabItem {
                     Image(systemName: "books.vertical.fill")
                     Text("Library")
                 }
             
-            Books(themeManager: themeManager, MemViewModel: memModelView, configViewModel: ConfiViewModel)
+            Books(MemViewModel: memModelView, configViewModel: ConfiViewModel)
                 .tabItem {
                     Image(systemName: "magnifyingglass")
                     Text("Search")
@@ -35,7 +35,7 @@ struct MemberTabView: View {
                     Text("My Books")
                 }
             
-            Support(authViewModel: auth)
+            Support(authViewModel: authViewModel)
                 .tabItem {
                     Image(systemName: "person.line.dotted.person.fill")
                     Text("Support")
@@ -47,22 +47,21 @@ struct MemberTabView: View {
     }
 }
 
-
-
 struct MTVPrev: View {
     @StateObject var memModelView = UserBooksModel()
     @StateObject var ConfiViewModel = ConfigViewModel()
-    @ObservedObject var themeManager: ThemeManager
+    @StateObject var LibViewModel = LibrarianViewModel()
+    @StateObject var authViewModel = AuthViewModel()
     
     var body: some View {
-        MemberTabView(themeManager: themeManager, memModelView: memModelView, ConfiViewModel: ConfiViewModel)
+        MemberTabView(memModelView: memModelView, ConfiViewModel: ConfiViewModel, LibViewModel: LibViewModel, authViewModel: authViewModel)
     }
 }
 
 struct MemberTabView_Previews: PreviewProvider {
     static var previews: some View {
         let themeManager = ThemeManager()
-        return MTVPrev(themeManager: themeManager)
+        return MTVPrev()
             .environmentObject(themeManager)
     }
 }
