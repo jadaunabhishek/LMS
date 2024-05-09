@@ -13,9 +13,9 @@ struct MemberBookDetailView: View {
     @EnvironmentObject var themeManager: ThemeManager
     
     @State var book: Book
-    @State var userData: AuthViewModel
-    @State var bookRequest: UserBooksModel
-    @State var prebookRequest: UserBooksModel
+    @ObservedObject var userData: AuthViewModel
+    @ObservedObject var bookRequest: UserBooksModel
+    @ObservedObject var prebookRequest: UserBooksModel
     @State var navigateToHome = false
     @State var showAlert = false
     
@@ -118,70 +118,95 @@ struct MemberBookDetailView: View {
                         }
                         .padding(10)
                         
-                        if book.bookAvailableCount != 0 {
-                             Button(action: {
-                                Task{
-                                    bookRequest.requestBook(bookId: book.id, bookName: book.bookName, bookImageURL: book.bookImageURL, userId: userData.userID, userName: userData.userName, bookAvailableCount: book.bookAvailableCount, bookTakenCount: book.bookTakenCount, loanPeriod: 1)
-                                    try? await Task.sleep(nanoseconds: 2_000_000_000)
-                                    if(bookRequest.responseStatus == 200){
-                                        showAlert = true
-                                        if let userID = Auth.auth().currentUser?.uid {
-                                            userData.fetchUserData(userID: userID)
-                                            try? await Task.sleep(nanoseconds: 1_000_000_000)
+                        if(userData.status == "Revoked"){
+                            Button(action: {
+                           }) {
+                               Text("You dont have access")
+                                   .font(.title3)
+                                   .fontWeight(.bold)
+                                   .foregroundColor(Color(themeManager.selectedTheme.primaryThemeColor))
+                                   .frame(maxWidth: .infinity)
+                                   .padding()
+                                   .background{
+                                       Rectangle()
+                                           .fill(Color(.systemGray4))
+                                           .cornerRadius(24)
+                                   }
+                                   .cornerRadius(15)
+                                   .padding([.leading, .trailing])
+                                   .padding([.leading, .trailing])
+                                   .popoverTip(tipBorrow)
+                           }
+                           .disabled(true)
+                        }
+                        else{
+                            if book.bookAvailableCount != 0 {
+                                 Button(action: {
+                                    Task{
+                                        bookRequest.requestBook(bookId: book.id, bookName: book.bookName, bookImageURL: book.bookImageURL, userId: userData.userID, userName: userData.userName, bookAvailableCount: book.bookAvailableCount, bookTakenCount: book.bookTakenCount, loanPeriod: 1)
+                                        try? await Task.sleep(nanoseconds: 2_000_000_000)
+                                        if(bookRequest.responseStatus == 200){
+                                            showAlert = true
+                                            if let userID = Auth.auth().currentUser?.uid {
+                                                userData.fetchUserData(userID: userID)
+                                                try? await Task.sleep(nanoseconds: 1_000_000_000)
+                                            }
                                         }
                                     }
+                                    
+                                    
+                                }) {
+                                    Text("Get Book")
+                                        .font(.title3)
+                                        .fontWeight(.bold)
+                                        .foregroundColor(Color(themeManager.selectedTheme.primaryThemeColor))
+                                        .frame(maxWidth: .infinity)
+                                        .padding()
+                                        .background{
+                                            Rectangle()
+                                                .fill(Color(.systemGray4))
+                                                .cornerRadius(24)
+                                        }
+                                        .cornerRadius(15)
+                                        .padding([.leading, .trailing])
+                                        .padding([.leading, .trailing])
+                                        .popoverTip(tipBorrow)
                                 }
-                                
-                                
-                            }) {
-                                Text("Get Book")
-                                    .font(.title3)
-                                    .fontWeight(.bold)
-                                    .foregroundColor(Color(themeManager.selectedTheme.primaryThemeColor))
-                                    .frame(maxWidth: .infinity)
-                                    .padding()
-                                    .background{
-                                        Rectangle()
-                                            .fill(Color(.systemGray4))
-                                            .cornerRadius(24)
-                                    }
-                                    .cornerRadius(15)
-                                    .padding([.leading, .trailing])
-                                    .padding([.leading, .trailing])
-                                    .popoverTip(tipBorrow)
-                            }
-                        } else {
-                             Button(action: {
-                                
-                                Task{
-                                    prebookRequest.preBook(bookId: book.id, bookName: book.bookName, bookImageURL: book.bookImageURL, userId: userData.userID, userName: userData.userName, bookPreBookedCount: book.bookPreBookedCount, loanPeriod: 1)
-                                    try? await Task.sleep(nanoseconds: 2_000_000_000)
-                                    if(prebookRequest.responseStatus == 200){
-                                        showAlert = true
-                                        if let userID = Auth.auth().currentUser?.uid {
-                                            userData.fetchUserData(userID: userID)
-                                            try? await Task.sleep(nanoseconds: 1_000_000_000)
+                                .disabled(userData.status == "Revoked")
+                            } else {
+                                 Button(action: {
+                                    
+                                    Task{
+                                        prebookRequest.preBook(bookId: book.id, bookName: book.bookName, bookImageURL: book.bookImageURL, userId: userData.userID, userName: userData.userName, bookPreBookedCount: book.bookPreBookedCount, loanPeriod: 1)
+                                        try? await Task.sleep(nanoseconds: 2_000_000_000)
+                                        if(prebookRequest.responseStatus == 200){
+                                            showAlert = true
+                                            if let userID = Auth.auth().currentUser?.uid {
+                                                userData.fetchUserData(userID: userID)
+                                                try? await Task.sleep(nanoseconds: 1_000_000_000)
+                                            }
                                         }
                                     }
+                                    
+                                    
+                                }) {
+                                    Text("Pre Book")
+                                        .font(.title3)
+                                        .fontWeight(.bold)
+                                        .foregroundColor(Color(themeManager.selectedTheme.primaryThemeColor))
+                                        .frame(maxWidth: .infinity)
+                                        .padding()
+                                        .background{
+                                            Rectangle()
+                                                .fill(Color(.systemGray4))
+                                                .cornerRadius(24)
+                                        }
+                                        .cornerRadius(15)
+                                        .padding([.leading, .trailing])
+                                        .padding([.leading, .trailing])
+                                        .popoverTip(tipPreBook)
                                 }
-                                
-                                
-                            }) {
-                                Text("Pre Book")
-                                    .font(.title3)
-                                    .fontWeight(.bold)
-                                    .foregroundColor(Color(themeManager.selectedTheme.primaryThemeColor))
-                                    .frame(maxWidth: .infinity)
-                                    .padding()
-                                    .background{
-                                        Rectangle()
-                                            .fill(Color(.systemGray4))
-                                            .cornerRadius(24)
-                                    }
-                                    .cornerRadius(15)
-                                    .padding([.leading, .trailing])
-                                    .padding([.leading, .trailing])
-                                    .popoverTip(tipPreBook)
+                                .disabled(userData.status == "Revoked")
                             }
                         }
                         
@@ -229,14 +254,18 @@ struct MemberBookDetailView: View {
                                 }
                                 return Alert(title: Text("Confirmation"), message: Text("Booking confirmed for selected book"), dismissButton: button)
                      }
-        .onAppear {
-            Task{
-                if let userID = Auth.auth().currentUser?.uid {
-                    userData.fetchUserData(userID: userID)
-                    try? await Task.sleep(nanoseconds: 1_000_000_000)
-                }
-            }
+        .task {
+            print(userData.status,userData.userName)
         }
+//        .onAppear {
+//            Task{
+//                if let userID = Auth.auth().currentUser?.uid {
+//                    userData.fetchUserData(userID: userID)
+//                    try? await Task.sleep(nanoseconds: 1_000_000_000)
+//                    print(userData.status)
+//                }
+//            }
+//        }
         .padding(.bottom)
     }
 }

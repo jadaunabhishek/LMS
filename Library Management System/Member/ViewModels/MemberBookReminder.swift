@@ -46,8 +46,10 @@ func createCalendarEvents(LibViewModel: LibrarianViewModel, userId: String) asyn
     requestAccessToCalendar { granted in
         if granted {
             for loan in loans {
-                let expectedDate = dateFormatter.date(from:String(loan.bookExpectedReturnOn.split(separator: ",")[0]))!
-                addSingleDayReturnReminder(for: loan.bookName, dueDate: expectedDate, duration: calculateLoanDuration(issuedOn: loan.bookIssuedOn, expectedReturn: loan.bookExpectedReturnOn, dateFormatter: dateFormatter))
+                if(loan.loanStatus == "Issued"){
+                    let expectedDate = dateFormatter.date(from:String(loan.bookExpectedReturnOn.split(separator: ",")[0]))!
+                    addSingleDayReturnReminder(for: loan.bookName, dueDate: expectedDate, duration: calculateLoanDuration(issuedOn: loan.bookIssuedOn, expectedReturn: loan.bookExpectedReturnOn, dateFormatter: dateFormatter))
+                }
             }
         } else {
             print("Access not granted to create calendar events.")

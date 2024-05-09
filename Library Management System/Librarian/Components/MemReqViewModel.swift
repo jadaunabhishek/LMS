@@ -202,7 +202,6 @@ class NotificationsViewModel: ObservableObject {
     func reject(notification: NotificationItem) {
         let userDocRef = db.collection("users").document(notification.id)
         userDocRef.updateData([
-            "role":"user",
             "status": "rejected"
         ]) { error in
             if let error = error {

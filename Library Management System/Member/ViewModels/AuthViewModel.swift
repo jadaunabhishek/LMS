@@ -11,6 +11,7 @@ class AuthViewModel: ObservableObject {
     @Published var userName = ""
     @Published var userEmail = ""
     @Published var userID = ""
+    @Published var status = ""
     @Published var allSupports: [SupportTicket] = []
     @Published var allUsers: [UserSchema] = []
     @Published var totalIncome: Int = 0
@@ -217,14 +218,10 @@ class AuthViewModel: ObservableObject {
             self!.userEmail = userData?["email"] as? String ?? ""
             self!.userName = userData?["name"] as? String ?? ""
             self!.userID = userID
+            self!.status = userData?["status"] as? String ?? ""
             
-            // Do something with the retrieved user data
             print("User email: \(self!.userEmail), name: \(self!.userName)")
             
-            // Example: Update UI or perform further actions based on user data
-            DispatchQueue.main.async {
-                // Update UI or perform further actions
-            }
         }
     }
     

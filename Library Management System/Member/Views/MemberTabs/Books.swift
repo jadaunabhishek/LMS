@@ -12,8 +12,10 @@ struct Books: View {
     @State private var selectedCategories: [String] = []
     @State private var isPageLoading: Bool = true
     @EnvironmentObject var themeManager: ThemeManager
-    @ObservedObject var MemViewModel = UserBooksModel()
-    @ObservedObject var configViewModel = ConfigViewModel()
+    @ObservedObject var MemViewModel: UserBooksModel
+    @ObservedObject var configViewModel: ConfigViewModel
+    @ObservedObject var authViewModel: AuthViewModel
+    @ObservedObject var LibViewModel: LibrarianViewModel
     
     var categories: [String] {
         configViewModel.currentConfig.isEmpty ? [] : configViewModel.currentConfig[0].categories
@@ -63,9 +65,9 @@ struct Books: View {
                             ForEach(filteredBooks, id: \.id) { book in
                                 NavigationLink(destination: MemberBookDetailView(
                                     book: book,
-                                    userData: AuthViewModel(),
-                                    bookRequest: UserBooksModel(),
-                                    prebookRequest: UserBooksModel()
+                                    userData: authViewModel,
+                                    bookRequest: MemViewModel,
+                                    prebookRequest: MemViewModel
                                 )){
                                     VStack(alignment: .center){
                                         HStack(alignment: .center){
@@ -150,10 +152,12 @@ struct Books: View {
 
 struct BooksPrev: View {
     @StateObject var memModelView = UserBooksModel()
+    @StateObject var LibViewModel = LibrarianViewModel()
+    @StateObject var authViewModel = AuthViewModel()
     @StateObject var ConfiViewModel = ConfigViewModel()
     @ObservedObject var themeManager: ThemeManager
     var body: some View {
-        Books(MemViewModel: memModelView, configViewModel: ConfiViewModel)
+        Books(MemViewModel: memModelView, configViewModel: ConfiViewModel, authViewModel: authViewModel, LibViewModel: LibViewModel)
     }
 }
 

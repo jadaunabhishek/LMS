@@ -29,6 +29,7 @@ struct MemberHome: View {
     @Binding var tabSelection: Int
     @EnvironmentObject var themeManager: ThemeManager
     @ObservedObject var LibViewModel: LibrarianViewModel
+    @ObservedObject var authViewModel: AuthViewModel
     @State private var hasCalendarAccess = false
     @ObservedObject var configViewModel: ConfigViewModel
     @ObservedObject var MemViewModel: UserBooksModel
@@ -122,9 +123,9 @@ struct MemberHome: View {
                                     ForEach(toprated.prefix(10), id: \.id) { book in
                                         NavigationLink(destination: MemberBookDetailView(
                                             book: book,
-                                            userData: AuthViewModel(),
-                                            bookRequest: UserBooksModel(),
-                                            prebookRequest: UserBooksModel()
+                                            userData: authViewModel,
+                                            bookRequest: MemViewModel,
+                                            prebookRequest: MemViewModel
                                         )){
                                             HStack(spacing: 5) {
                                                 VStack{
@@ -238,9 +239,9 @@ struct MemberHome: View {
                                     ForEach(trending.prefix(10), id: \.id) { book in
                                         NavigationLink(destination: MemberBookDetailView(
                                             book: book,
-                                            userData: AuthViewModel(),
-                                            bookRequest: UserBooksModel(),
-                                            prebookRequest: UserBooksModel()
+                                            userData: authViewModel,
+                                            bookRequest: MemViewModel,
+                                            prebookRequest: MemViewModel
                                         )){
                                             HStack(spacing: 5) {
                                                 VStack{
@@ -315,6 +316,7 @@ struct MemberHome: View {
                             requestAccessToCalendar { granted in
                                 self.hasCalendarAccess = granted
                                 LibViewModel.fetchUserData(userID: currentUser)
+                                authViewModel.fetchUserData(userID: currentUser)
                             }
                             await createCalendarEvents(LibViewModel: LibViewModel, userId: currentUser)
                             LibViewModel.getTopRatedBooks()
@@ -337,9 +339,10 @@ struct MemberHome_Previews: PreviewProvider {
         @StateObject var ConfiViewModel = ConfigViewModel()
         @StateObject var LibViewModel = LibrarianViewModel()
         @StateObject var MemViewModel = UserBooksModel()
+        @StateObject var authViewModel = AuthViewModel()
         @State var int: Int = 0
         let themeManager = ThemeManager()
-        return MemberHome(tabSelection: $int, LibViewModel: LibViewModel, configViewModel: ConfiViewModel, MemViewModel: MemViewModel)
+        return MemberHome(tabSelection: $int, LibViewModel: LibViewModel, authViewModel: authViewModel, configViewModel: ConfiViewModel, MemViewModel: MemViewModel)
             .environmentObject(themeManager)
     }
 }

@@ -18,13 +18,13 @@ struct MemberTabView: View {
     
     var body: some View {
         TabView(selection: $tabSelection) {
-            MemberHome(tabSelection: $tabSelection, LibViewModel: LibViewModel, configViewModel: ConfiViewModel, MemViewModel: memModelView)
+            MemberHome(tabSelection: $tabSelection, LibViewModel: LibViewModel, authViewModel: auth, configViewModel: ConfiViewModel, MemViewModel: memModelView)
                 .tabItem {
                     Image(systemName: "books.vertical.fill")
                     Text("Library")
                 }.tag(1)
             
-            Books(MemViewModel: memModelView, configViewModel: ConfiViewModel)
+            Books(MemViewModel: memModelView, configViewModel: ConfiViewModel, authViewModel: auth, LibViewModel: LibViewModel)
                 .tabItem {
                     Image(systemName: "magnifyingglass")
                     Text("Search")

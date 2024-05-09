@@ -686,11 +686,11 @@ class LibrarianViewModel: ObservableObject{
                     
                     let dateFormatter = DateFormatter()
                     dateFormatter.dateFormat = "dd/MM/yy"
-                    let date = dateFormatter.date(from:String(tempLoan.bookExpectedReturnOn.split(separator: ",")[0]))!
                     
                     tempAllLoans.append(tempLoan)
                     
                     if(tempLoan.loanStatus == "Issued"){
+                        let date = dateFormatter.date(from:String(tempLoan.bookExpectedReturnOn.split(separator: ",")[0]))!
                         tempIssuedLoans.append(tempLoan)
                         if(date < Date.now){
                             tempOverDueLoans.append(tempLoan)
