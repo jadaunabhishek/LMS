@@ -90,7 +90,6 @@ class ConfigViewModel: ObservableObject {
                         maxPenalties: document!["maxPenalties"] as! Int,
                         categories: document!["categories"] as! [String],
                         monthlyMembersCount: monthlyMembersCountArray, monthlyIncome: monthlyIncomeArray)
-                    print(newConfig)
                     self.currentConfig.append(newConfig)
                     self.responseStatus = 200
                     self.responseMessage = "Book fetched successfully"

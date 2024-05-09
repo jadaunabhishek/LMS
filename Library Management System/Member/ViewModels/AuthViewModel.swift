@@ -64,7 +64,6 @@ class AuthViewModel: ObservableObject {
                     
                     tempAllUsers.append(tempUser)
                     
-                    print(tempUser)
                     if tempUser.status == "applied" {
                         tempAppliedUsers += 1
                     }

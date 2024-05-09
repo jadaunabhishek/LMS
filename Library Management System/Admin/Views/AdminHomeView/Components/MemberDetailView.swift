@@ -29,7 +29,7 @@ struct MemberDetailView: View {
 //            (month: "May", count: 9)
 //    ]
     
-    @State var montlyMembersCount: [membersCount] = []
+    @State var monthlyMembersCount: [membersCount] = []
     @State var selectedBar: Int = -1
     
     var body: some View {
@@ -40,15 +40,16 @@ struct MemberDetailView: View {
                 .padding(.bottom)
           VStack() {
                 GroupBox ("Member Frequency") {
-                    if !montlyMembersCount.isEmpty {
+                    if !monthlyMembersCount.isEmpty {
                         Chart {
-                            ForEach(montlyMembersCount.indices, id: \.self) { index in
+                            ForEach(monthlyMembersCount.indices, id: \.self) { index in
+                                let abbrMonth = getAbbrMonthName(monthlyMembersCount[index].month)
                                 BarMark(
-                                    x: .value("month", montlyMembersCount[index].month),
-                                    y: .value("Count", montlyMembersCount[index].count)
+                                    x: .value("month", abbrMonth),
+                                    y: .value("Count", monthlyMembersCount[index].count)
                                 )
                                 .foregroundStyle(Color(themeManager.selectedTheme.primaryThemeColor))
-                                .accessibilityLabel("\(montlyMembersCount)")
+                                .accessibilityLabel("\(monthlyMembersCount)")
                                 
                             }
                         }
@@ -61,7 +62,8 @@ struct MemberDetailView: View {
             VStack{
                     ZStack(alignment:.leading){
                         RoundedRectangle(cornerRadius: 10)
-                            .fill(Color(.systemGray4).opacity(0.5))
+                            .foregroundColor(Color("requestCard"))
+                            .shadow(color: Color.gray.opacity(0.5), radius: 5, x: 0, y: 2)
                             .frame(height: 125)
                         HStack{
                             VStack(alignment: .leading){
@@ -111,10 +113,27 @@ struct MemberDetailView: View {
         }
         .padding()
         .onAppear {
-            montlyMembersCount = configViewModel.currentConfig[0].monthlyMembersCount
+            monthlyMembersCount = configViewModel.currentConfig[0].monthlyMembersCount
         }
 
     }
+    func getAbbrMonthName(_ fullMonthName: String) -> String {
+            let monthAbbr = [
+                "January": "Jan",
+                "February": "Feb",
+                "March": "Mar",
+                "April": "Apr",
+                "May": "May",
+                "June": "Jun",
+                "July": "Jul",
+                "August": "Aug",
+                "September": "Sep",
+                "October": "Oct",
+                "November": "Nov",
+                "December": "Dec"
+            ]
+            return monthAbbr[fullMonthName] ?? fullMonthName
+        }
 }
 
 struct MemberDetailView_Previews: PreviewProvider {
