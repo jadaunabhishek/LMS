@@ -1006,4 +1006,65 @@ class LibrarianViewModel: ObservableObject{
         }
     }
     
+    func updateStaff(
+        userID: String,
+        name: String,
+        email: String,
+        mobile: String,
+        profilePhoto: UIImage,
+        isImageUpdated: Bool
+    ) {
+        self.responseStatus = 0
+        self.responseMessage = ""
+        
+        if isImageUpdated {
+            let storageRef = Storage.storage().reference()
+            let imageData = profilePhoto.pngData()!
+            let fileRef = storageRef.child("userProfileImages/\(userID).jpeg")
+            
+            fileRef.putData(imageData, metadata: nil) { metadata, error in
+                guard error == nil, metadata != nil else {
+                    return
+                }
+                
+                fileRef.downloadURL { url, error in
+                    guard let imageURL = url?.absoluteString, error == nil else {
+                        return
+                    }
+                    
+                    self.dbInstance.collection("users").document(userID).updateData([
+                        "name": name,
+                        "email": email,
+                        "mobile": mobile,
+                        "profileImage": imageURL
+                    ]) { [self] error in
+                        if let error = error {
+                            self.responseStatus = 400
+                            self.responseMessage = "Something went wrong, Unable to update staff member. Check console for error."
+                            print("Unable to update staff member. Error: \(error)")
+                        } else {
+                            self.responseStatus = 200
+                            self.responseMessage = "Staff member updated successfully."
+                        }
+                    }
+                }
+            }
+        } else {
+            self.dbInstance.collection("users").document(userID).updateData([
+                "name": name,
+                "email": email,
+                "mobile": mobile,
+            ]) { error in
+                if let error = error {
+                    self.responseStatus = 400
+                    self.responseMessage = "Something went wrong, Unable to update staff member. Check console for error."
+                    print("Unable to update staff member. Error: \(error)")
+                } else {
+                    self.responseStatus = 200
+                    self.responseMessage = "Staff member updated successfully."
+                }
+            }
+        }
+    }
+    
 }

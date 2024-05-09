@@ -1,8 +1,11 @@
 import SwiftUI
+import FirebaseAuth
 
 struct NotificationsView: View {
     @EnvironmentObject var themeManager: ThemeManager
     @ObservedObject var LibViewModel: LibrarianViewModel
+    @ObservedObject var configViewModel: ConfigViewModel
+    @ObservedObject var staffViewModel: StaffViewModel
     @StateObject var viewModel = NotificationsViewModel()
     @State private var selectedOption: Option = .CheckOut
     @State var searchText = ""
@@ -59,7 +62,7 @@ struct NotificationsView: View {
             }
             .navigationTitle("Actions")
             .navigationBarBackButtonHidden(true)
-            .navigationBarItems(trailing: NavigationLink(destination: ProfileCompletedView(), label: {
+            .navigationBarItems(trailing: NavigationLink(destination: LibProfileView(LibViewModel: LibViewModel, configViewModel: configViewModel, staffViewModel: staffViewModel), label: {
                 Image(systemName: "person.crop.circle")
                     .font(.title3)
                     .foregroundColor(Color(themeManager.selectedTheme.primaryThemeColor))
@@ -68,6 +71,10 @@ struct NotificationsView: View {
             .onAppear(perform: {
                 Timer.scheduledTimer(withTimeInterval: 3, repeats: true) { time in
                     Task{
+                        if let currentUser = Auth.auth().currentUser?.uid{
+                            print(currentUser)
+                            staffViewModel.fetchStaffData(staffID: currentUser)
+                        }
                         LibViewModel.getLoans()
                         try? await Task.sleep(nanoseconds: 1_000_000_000)
                         issuedLoans = LibViewModel.issuedLoans
@@ -80,6 +87,10 @@ struct NotificationsView: View {
             })
             .task{
                 Task{
+                    if let currentUser = Auth.auth().currentUser?.uid{
+                        print(currentUser)
+                        staffViewModel.fetchStaffData(staffID: currentUser)
+                    }
                     LibViewModel.getLoans()
                     try? await Task.sleep(nanoseconds: 1_000_000_000)
                     issuedLoans = LibViewModel.issuedLoans
@@ -450,8 +461,9 @@ struct TestNotificationView_Previews: PreviewProvider {
         let themeManager = ThemeManager()
         @StateObject var LibViewModel = LibrarianViewModel()
         @StateObject var ConfiViewModel = ConfigViewModel()
+        @StateObject var staffViewModel = StaffViewModel()
         
-        return NotificationsView(LibViewModel: LibViewModel)
+        return NotificationsView(LibViewModel: LibViewModel, configViewModel: ConfiViewModel, staffViewModel: staffViewModel)
             .environmentObject(themeManager)
     }
 }

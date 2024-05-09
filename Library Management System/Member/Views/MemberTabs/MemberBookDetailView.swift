@@ -17,9 +17,11 @@ struct MemberBookDetailView: View {
     @State var bookRequest: UserBooksModel
     @State var prebookRequest: UserBooksModel
     @State var navigateToHome = false
+    @State var showAlert = false
     
     // TipKit
-    var tipProcedure = profileTip()
+    var tipBorrow = borrowTip()
+    var tipPreBook = preBookTip()
     
     
     var body: some View {
@@ -35,57 +37,6 @@ struct MemberBookDetailView: View {
                         .frame(height: 600)
                         .frame(maxWidth: .infinity)
                         .position(CGPoint(x: halfScreenWidth, y: -70.0))
-                        .navigationBarItems(trailing: {
-                            if book.bookAvailableCount != 0 {
-                                return Button(action: {
-                                    Task{
-                                        bookRequest.requestBook(bookId: book.id, bookName: book.bookName, bookImageURL: book.bookImageURL, userId: userData.userID, userName: userData.userName, bookAvailableCount: book.bookAvailableCount, bookTakenCount: book.bookTakenCount, loanPeriod: 1)
-                                        try? await Task.sleep(nanoseconds: 2_000_000_000)
-                                        if(bookRequest.responseStatus == 200){
-                                            navigateToHome = false
-                                        }
-                                    }
-                                    
-                                    
-                                }) {
-                                    Text("Borrow")
-                                        .padding(10)
-                                        .background(themeManager.selectedTheme.primaryThemeColor)
-                                        .cornerRadius(8)
-                                        .foregroundColor(Color(.black))
-                                        .padding(.bottom, 2)
-                                }
-                                .popoverTip(tipProcedure)
-                            } else {
-                                return Button(action: {
-                                    
-                                    Task{
-                                        prebookRequest.preBook(bookId: book.id, bookName: book.bookName, bookImageURL: book.bookImageURL, userId: userData.userID, userName: userData.userName, bookPreBookedCount: book.bookPreBookedCount, loanPeriod: 1)
-                                        try? await Task.sleep(nanoseconds: 2_000_000_000)
-                                        if(prebookRequest.responseStatus == 200){
-                                            navigateToHome = false
-                                        }
-                                    }
-                                    
-                                    
-                                }) {
-                                    Text("Pre-Book")
-                                        .padding(10)
-                                        .background(themeManager.selectedTheme.primaryThemeColor)
-                                        .cornerRadius(8)
-                                        .foregroundColor(Color(.black))
-                                        .padding(.bottom, 2)
-                                }
-                                .popoverTip(tipProcedure)
-                            }
-                        }())
-                    
-                    NavigationLink(
-                        destination: MemberTabView(themeManager: themeManager),
-                        isActive: $navigateToHome,
-                        label: { EmptyView() }
-                    )
-                    
                 }
                 VStack{
                     VStack{
@@ -108,9 +59,17 @@ struct MemberBookDetailView: View {
                     }
                     
                     VStack{
-                        Text("By \(book.bookAuthor)")
-                            .font(.system(size: 20, weight: .regular))
-                            .padding(5)
+                        HStack {
+                            Text("By")
+                                .foregroundColor(themeManager.selectedTheme.bodyTextColor)
+                            
+                            Text("\(book.bookAuthor)")
+                                .fontWeight(.bold)
+                                
+                        }
+                        .padding(5)
+
+                        
                         HStack{
                             VStack{
                                 if(book.bookStatus == "PreBook"){
@@ -153,6 +112,77 @@ struct MemberBookDetailView: View {
                                 .cornerRadius(24)
                         }
                         .padding(10)
+                        
+                        if book.bookAvailableCount != 0 {
+                             Button(action: {
+                                Task{
+                                    bookRequest.requestBook(bookId: book.id, bookName: book.bookName, bookImageURL: book.bookImageURL, userId: userData.userID, userName: userData.userName, bookAvailableCount: book.bookAvailableCount, bookTakenCount: book.bookTakenCount, loanPeriod: 1)
+                                    try? await Task.sleep(nanoseconds: 2_000_000_000)
+                                    if(bookRequest.responseStatus == 200){
+                                        showAlert = true
+                                        if let userID = Auth.auth().currentUser?.uid {
+                                            userData.fetchUserData(userID: userID)
+                                            try? await Task.sleep(nanoseconds: 1_000_000_000)
+                                        }
+                                    }
+                                }
+                                
+                                
+                            }) {
+                                Text("Get Book")
+                                    .font(.title3)
+                                    .fontWeight(.bold)
+                                    .foregroundColor(Color(themeManager.selectedTheme.primaryThemeColor))
+                                    .frame(maxWidth: .infinity)
+                                    .padding()
+                                    .background(Color.white)
+                                    .background{
+                                        Rectangle()
+                                            .fill(Color(.systemGray4))
+                                            .cornerRadius(24)
+                                    }
+                                    .cornerRadius(15)
+                                    .padding([.leading, .trailing])
+                                    .padding([.leading, .trailing])
+                                    .popoverTip(tipBorrow)
+                            }
+                        } else {
+                             Button(action: {
+                                
+                                Task{
+                                    prebookRequest.preBook(bookId: book.id, bookName: book.bookName, bookImageURL: book.bookImageURL, userId: userData.userID, userName: userData.userName, bookPreBookedCount: book.bookPreBookedCount, loanPeriod: 1)
+                                    try? await Task.sleep(nanoseconds: 2_000_000_000)
+                                    if(prebookRequest.responseStatus == 200){
+                                        showAlert = true
+                                        if let userID = Auth.auth().currentUser?.uid {
+                                            userData.fetchUserData(userID: userID)
+                                            try? await Task.sleep(nanoseconds: 1_000_000_000)
+                                        }
+                                    }
+                                }
+                                
+                                
+                            }) {
+                                Text("Pre Book")
+                                    .font(.title3)
+                                    .fontWeight(.bold)
+                                    .foregroundColor(Color(themeManager.selectedTheme.primaryThemeColor))
+                                    .frame(maxWidth: .infinity)
+                                    .padding()
+                                    .background(Color.white)
+                                    .background{
+                                        Rectangle()
+                                            .fill(Color(.systemGray4))
+                                            .cornerRadius(24)
+                                    }
+                                    .cornerRadius(15)
+                                    .padding([.leading, .trailing])
+                                    .padding([.leading, .trailing])
+                                    .popoverTip(tipPreBook)
+                            }
+                        }
+                        
+                        
                         VStack(alignment:.leading){
                             Text("Synopsis")
                                 .font(.title.bold())
@@ -190,6 +220,12 @@ struct MemberBookDetailView: View {
             }
             
         }
+        .alert(isPresented: $showAlert) { () -> Alert in
+                                let button = Alert.Button.default(Text("OK")) {
+                                    print("OK Button Pressed")
+                                }
+                                return Alert(title: Text("Confirmation"), message: Text("Booking confirmed for selected book"), dismissButton: button)
+                     }
         .onAppear {
             Task{
                 if let userID = Auth.auth().currentUser?.uid {
