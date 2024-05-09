@@ -9,11 +9,12 @@ import SwiftUI
 
 
 struct AdminTabView: View {
-    @EnvironmentObject var themeManager: ThemeManager
-    @StateObject var LibViewModel = LibrarianViewModel()
-    @StateObject var staffViewModel = StaffViewModel()
-    @StateObject var userAuthViewModel = AuthViewModel()
-    @StateObject var configViewModel = ConfigViewModel()
+    @ObservedObject var themeManager: ThemeManager
+    @ObservedObject var LibViewModel = LibrarianViewModel()
+    @ObservedObject var staffViewModel = StaffViewModel()
+    @ObservedObject var userAuthViewModel = AuthViewModel()
+    @ObservedObject var configViewModel = ConfigViewModel()
+    
     var body: some View {
             TabView {
                 AdminHomeView(librarianViewModel: LibViewModel, staffViewModel: staffViewModel, userAuthViewModel: userAuthViewModel, configViewModel: configViewModel)
@@ -47,7 +48,7 @@ struct AdminTabView: View {
 struct AdminTabView_Previews: PreviewProvider {
     static var previews: some View {
         let themeManager = ThemeManager()
-        return AdminTabView()
+        return AdminTabView(themeManager: themeManager)
             .environmentObject(themeManager)
     }
 }

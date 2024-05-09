@@ -11,7 +11,7 @@ struct Books: View {
     @State private var searchText = ""
     @State private var selectedCategories: [String] = []
     @State private var isPageLoading: Bool = true
-    @EnvironmentObject var themeManager: ThemeManager
+    @ObservedObject var themeManager: ThemeManager
     @ObservedObject var MemViewModel = UserBooksModel()
     @ObservedObject var configViewModel = ConfigViewModel()
     
@@ -151,16 +151,16 @@ struct Books: View {
 struct BooksPrev: View {
     @StateObject var memModelView = UserBooksModel()
     @StateObject var ConfiViewModel = ConfigViewModel()
-    @State private var searchText = ""
+    @ObservedObject var themeManager: ThemeManager
     var body: some View {
-        Books()
+        Books(themeManager: themeManager, MemViewModel: memModelView, configViewModel: ConfiViewModel)
     }
 }
 
 struct BooksView_Previews: PreviewProvider {
     static var previews: some View {
         let themeManager = ThemeManager()
-        return BooksPrev()
+        return BooksPrev(themeManager: themeManager)
             .environmentObject(themeManager)
     }
 }
