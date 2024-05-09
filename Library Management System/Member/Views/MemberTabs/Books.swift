@@ -34,7 +34,6 @@ struct Books: View {
         NavigationStack {
             ScrollView(.vertical, showsIndicators: false) {
                 VStack {
-                    
                     ScrollView(.horizontal, showsIndicators: false) {
                         HStack {
                             ForEach(categories, id: \.self) { category in
@@ -128,8 +127,16 @@ struct BookRow: View {
                     }
                     .font(.caption)
                     .bold()
-                    .foregroundStyle(Color(.systemYellow))
-                    .padding(.bottom, 5)
+                    .foregroundStyle(themeManager.selectedTheme.bodyTextColor)
+                    .lineLimit(2)
+                Text("\(book.bookAuthor)")
+                    .multilineTextAlignment(.leading)
+                    .font(.subheadline)
+                    .lineLimit(1)
+                    .foregroundStyle(Color(.systemGray))
+                HStack{
+                    Image(systemName: "star.fill")
+                    Text(String(format: "%.1f", book.bookRating))
                 }
                 .padding(5)
                 Spacer()
