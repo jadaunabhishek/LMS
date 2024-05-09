@@ -8,11 +8,13 @@
 import SwiftUI
 
 struct AdminCategoriesView: View {
-    @EnvironmentObject var themeManager: ThemeManager
-    @StateObject var configViewModel = ConfigViewModel()
+    
     @State private var searchKey = ""
     @State private var isSheetPresented = false
     @State var isPageLoading: Bool = true
+    @ObservedObject var configViewModel: ConfigViewModel
+    @ObservedObject var libViewModel: LibrarianViewModel
+    @EnvironmentObject var themeManager: ThemeManager
     
     var filteredCategories: [String] {
         if searchKey.isEmpty {
@@ -29,7 +31,7 @@ struct AdminCategoriesView: View {
                     ScrollView {
                         LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 20) {
                             ForEach(filteredCategories, id: \.self) { category in
-                                NavigationLink(destination: AdminSubCategoriesView(configViewModel: ConfigViewModel(), category: category)) {
+                                NavigationLink(destination: AdminSubCategoriesView(category: category, configViewModel: configViewModel, librarianViewModel: libViewModel)) {
                                     VStack(alignment: .leading) {
                                         AdminCategoriesCard(category: category)
                                             .foregroundStyle(themeManager.selectedTheme.bodyTextColor)
@@ -37,7 +39,6 @@ struct AdminCategoriesView: View {
                                 }
                             }
                         }
-                        .padding(.bottom,86)
                     }
                     .scrollIndicators(.hidden)
                     .padding()
@@ -77,7 +78,9 @@ struct AdminCategoriesView: View {
 struct AdminCategoriesView_Previews: PreviewProvider {
     static var previews: some View {
         let themeManager = ThemeManager()
-        return AdminCategoriesView()
+        @StateObject var configViewModel = ConfigViewModel()
+        @StateObject var libViewModel = LibrarianViewModel()
+        return AdminCategoriesView(configViewModel: configViewModel, libViewModel: libViewModel)
             .environmentObject(themeManager)
     }
 }

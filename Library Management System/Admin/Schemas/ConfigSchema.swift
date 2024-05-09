@@ -20,6 +20,18 @@ struct fineDetails : Codable{
         }
 }
 
+struct membersCount: Codable {
+    var month: String
+    var count: Int
+    
+    func getDictionary() -> [String: Any] {
+        return [
+            "month": month,
+            "count": count
+        ]
+    }
+}
+
 struct Config {
     
     var configID: String
@@ -31,11 +43,17 @@ struct Config {
     var maxFine: Double
     var maxPenalties: Int
     var categories: [String]
+    var monthlyMembersCount: [membersCount]
     
     func getDictionaryOfStruct() -> [String: Any] {
         var fineDetailsArray: [[String: Any]] = []
         for fine in fineDetails {
             fineDetailsArray.append(fine.getDictionary())
+        }
+        
+        var monthlyMembersCountArray: [[String: Any]] = []
+        for member in monthlyMembersCount {
+            monthlyMembersCountArray.append(member.getDictionary())
         }
         
         return [
@@ -47,7 +65,8 @@ struct Config {
             "fineDetails": fineDetailsArray,
             "maxFine": maxFine,
             "maxPenalties": maxPenalties,
-            "categories": categories
+            "categories": categories,
+            "monthlyMembersCount": monthlyMembersCountArray
         ]
     }
 }

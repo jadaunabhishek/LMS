@@ -446,7 +446,9 @@ struct ADPrev: View {
     @StateObject var ConfiViewModel = ConfigViewModel()
     
     var body: some View {
+        let themeManager = ThemeManager()
         UpdateBookPage(LibViewModel: LibViewModel, ConfiViewModel: ConfiViewModel)
+            .environmentObject(themeManager)
     }
 }
 

@@ -20,6 +20,7 @@ struct PrimaryCustomButton: View {
                 .padding()
                 .background(themeManager.selectedTheme.primaryThemeColor)
                 .cornerRadius(15)
+                .foregroundColor(.white)
         }
         .buttonStyle(PlainButtonStyle())
     }
@@ -60,13 +61,15 @@ struct SignupCustomButton: View {
 
                 Text(label)
                     .font(.title3)
-                    .fontWeight(.bold)
                     .foregroundColor(themeManager.selectedTheme.bodyTextColor)
             }
             .frame(maxWidth: .infinity)
             .padding()
-            .background(Color(.systemGray4))
             .cornerRadius(15)
+            .overlay(
+                    RoundedRectangle(cornerRadius: 15)
+                        .stroke(themeManager.selectedTheme.bodyTextColor, lineWidth: 1) // Add a black border with width 1
+                )
         }
         .buttonStyle(PlainButtonStyle())
     }

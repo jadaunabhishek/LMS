@@ -1,4 +1,4 @@
-//
+
 //  Books.swift
 //  Library Management System
 //
@@ -7,7 +7,7 @@
 import SwiftUI
 
 struct Books: View {
-    @Environment(\.colorScheme) var colorScheme
+    
     @State private var searchText = ""
     @State private var selectedCategories: [String] = []
     @State private var isPageLoading: Bool = true
@@ -34,7 +34,6 @@ struct Books: View {
         NavigationView {
             ScrollView(.vertical, showsIndicators: false) {
                 VStack {
-                    
                     ScrollView(.horizontal, showsIndicators: false) {
                         HStack {
                             ForEach(categories, id: \.self) { category in
@@ -59,7 +58,7 @@ struct Books: View {
                         }
                         .padding(.horizontal)
                     }
-                    ScrollView(.vertical, showsIndicators: false){
+                    VStack(spacing: 8) {
                         if !filteredBooks.isEmpty {
                             ForEach(filteredBooks, id: \.id) { book in
                                 NavigationLink(destination: MemberBookDetailView(
@@ -133,7 +132,7 @@ struct Books: View {
         }
         .task {
             MemViewModel.getBooks()
-            try? await Task.sleep(nanoseconds: 3_000_000_000)
+            try? await Task.sleep(nanoseconds: 1_000_000_000)
             isPageLoading.toggle()
         }
     }
