@@ -33,7 +33,6 @@ struct Library_Management_SystemApp: App {
                     .task {
                         do{
                             await themeManager.setBaseTheme()
-                            LibModel.rateReview(bookId: "0LTr2axjCUCzyy9NGnRV", rating: 4, review: "Good Book")
                         }
                     }
             }
@@ -44,7 +43,6 @@ struct Library_Management_SystemApp: App {
                     .task {
                         do{
                             await themeManager.setBaseTheme()
-                            LibModel.rateReview(bookId: "0LTr2axjCUCzyy9NGnRV", rating: 4, review: "Good Book")
                         }
                     }
             }
@@ -55,7 +53,6 @@ struct Library_Management_SystemApp: App {
                     .task {
                         do{
                             await themeManager.setBaseTheme()
-                            LibModel.rateReview(bookId: "0LTr2axjCUCzyy9NGnRV", rating: 4, review: "Good Book")
                         }
                     }
             }
@@ -66,7 +63,6 @@ struct Library_Management_SystemApp: App {
                     .task {
                         do{
                             await themeManager.setBaseTheme()
-                            LibModel.rateReview(bookId: "0LTr2axjCUCzyy9NGnRV", rating: 4, review: "Good Book")
                         }
                     }
             }
@@ -77,7 +73,6 @@ struct Library_Management_SystemApp: App {
                     .task {
                         do{
                             await themeManager.setBaseTheme()
-                            LibModel.rateReview(bookId: "0LTr2axjCUCzyy9NGnRV", rating: 4, review: "Good Book")
                         }
                     }
             }

@@ -157,7 +157,7 @@ struct MembershipSections: View {
                         toggleSelection(key: key.id)
                     }
                     .swipeActions(edge: .leading, allowsFullSwipe: true) {
-                        Button("Reject") {
+                        Button {
                             processSwipeAction(key: key.id, approve: false)
                         } label: {
                             Image(systemName: "xmark")
@@ -166,7 +166,7 @@ struct MembershipSections: View {
                         .tint(.red)
                     }
                     .swipeActions(edge: .trailing, allowsFullSwipe: true) {
-                        Button("Approve") {
+                        Button {
                             processSwipeAction(key: key.id, approve: true)
                         } label: {
                             Image(systemName: "checkmark")
@@ -344,7 +344,7 @@ struct BooksSections: View {
                         .tint(.red)
                     }
                     .swipeActions(edge: .trailing, allowsFullSwipe: true) {
-                        Button("Approve") {
+                        Button {
                             LibViewModel.checkOutBook(loanId: key.loanId)
                             LibViewModel.getLoans()
                         } label: {

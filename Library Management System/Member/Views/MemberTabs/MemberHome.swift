@@ -54,7 +54,7 @@ struct MemberHome: View {
                     .padding([.leading, .trailing, .bottom])
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack {
-                        NavigationLink(destination: Books()) {
+                        NavigationLink(destination: Books(themeManager: themeManager)) {
                             ZStack(alignment: .bottomLeading) {
                                 
                                 Rectangle()
