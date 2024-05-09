@@ -59,6 +59,12 @@ struct NotificationsView: View {
             }
             .navigationTitle("Actions")
             .navigationBarBackButtonHidden(true)
+            .navigationBarItems(trailing: NavigationLink(destination: ProfileCompletedView(), label: {
+                Image(systemName: "person.crop.circle")
+                    .font(.title3)
+                    .foregroundColor(Color(themeManager.selectedTheme.primaryThemeColor))
+            }))
+            
             .onAppear(perform: {
                 Timer.scheduledTimer(withTimeInterval: 3, repeats: true) { time in
                     Task{
@@ -86,7 +92,7 @@ struct NotificationsView: View {
             .searchable(text: $searchText)
         }
     }
-    }
+}
 
 
 
@@ -160,7 +166,7 @@ struct MembershipSections: View {
                         .tint(.red)
                     }
                     .swipeActions(edge: .trailing, allowsFullSwipe: true) {
-                        Button{
+                        Button {
                             processSwipeAction(key: key.id, approve: true)
                         } label: {
                             Image(systemName: "checkmark")
@@ -195,9 +201,9 @@ struct MembershipSections: View {
                 }
             }
             .foregroundColor(selectedItems.isEmpty ? Color.black : themeManager.selectedTheme.primaryThemeColor)
-
+            
             Spacer()
-
+            
             Button(action: {
                 processSelectedItems(approve: true)
             }) {
@@ -206,7 +212,7 @@ struct MembershipSections: View {
             }
             .cornerRadius(8)
             .disabled(selectedItems.isEmpty)
-
+            
             Button(action: {
                 processSelectedItems(approve: false)
             }) {
@@ -254,16 +260,16 @@ struct MembershipSections: View {
         isSelectionMode = false
     }
     func processSwipeAction(key: String, approve: Bool) {
-            if let index = viewModel.notifications.firstIndex(where: { $0.id == key }) {
-                if approve {
-                    viewModel.approve(notification: viewModel.notifications[index])
-                } else {
-                    viewModel.reject(notification: viewModel.notifications[index])
-                }
+        if let index = viewModel.notifications.firstIndex(where: { $0.id == key }) {
+            if approve {
+                viewModel.approve(notification: viewModel.notifications[index])
+            } else {
+                viewModel.reject(notification: viewModel.notifications[index])
             }
-            viewModel.fetchData()
         }
+        viewModel.fetchData()
     }
+}
 
 
 
@@ -338,7 +344,7 @@ struct BooksSections: View {
                         .tint(.red)
                     }
                     .swipeActions(edge: .trailing, allowsFullSwipe: true) {
-                        Button{
+                        Button {
                             LibViewModel.checkOutBook(loanId: key.loanId)
                             LibViewModel.getLoans()
                         } label: {
@@ -374,9 +380,9 @@ struct BooksSections: View {
                 }
             }
             .foregroundColor(selectedItems.isEmpty ? Color.black : themeManager.selectedTheme.primaryThemeColor)
-
+            
             Spacer()
-
+            
             Button(action: {
                 processSelectedItems(approve: true)
             }) {
@@ -385,7 +391,7 @@ struct BooksSections: View {
             }
             .cornerRadius(8)
             .disabled(selectedItems.isEmpty)
-
+            
             Button(action: {
                 processSelectedItems(approve: false)
             }) {

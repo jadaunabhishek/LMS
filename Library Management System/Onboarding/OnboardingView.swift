@@ -3,14 +3,14 @@ import SwiftUI
 struct OnboardingView: View {
     @EnvironmentObject var themeManager: ThemeManager
     @State private var currentPage = 0
+    @State var naviToRegister = false
+    @State var naviToLogin = false
+    @State var naviToGoogleLogin = false
     
     let texts = ["We're thrilled to have you join our library community.", "Easily check out books, manage loans, and prebook items—all at your fingertips.", " From bestsellers to academic journals, we've got it all."]
     
     var body: some View {
         VStack {
-            HStack{
-                
-            }
             TabView(selection: $currentPage) {
                 ForEach(0..<3) { index in
                     VStack {
@@ -33,17 +33,19 @@ struct OnboardingView: View {
             
             VStack {
                 PrimaryCustomButton(action: {
+                    naviToRegister = true
                 }, label: "Agree & Join")
                 
                 
                 SignupCustomButton(action: {
+                    naviToGoogleLogin = true
                     print("Login Attempt")
                     
                 }, label: "Continue with Google",imageName: "google")
                 
                 
                 Button(action: {
-                    // Action for "Sign In" button
+                    naviToLogin = true
                 }) {
                     Text("Sign In")
                         .font(.title3)
@@ -51,10 +53,26 @@ struct OnboardingView: View {
                         .padding()
                         .foregroundColor(themeManager.selectedTheme.primaryThemeColor)
                 }
+                
+                NavigationLink(
+                    destination: LoginView(),
+                    isActive: $naviToLogin
+                ) {
+                    EmptyView()
+                }
+                
+                NavigationLink(
+                    destination: SignupView(),
+                    isActive: $naviToRegister
+                ) {
+                    EmptyView()
+                }
             }
             .frame(height: UIScreen.main.bounds.height / 3)
             .padding()
         }
+        .navigationBarHidden(true)
+        .navigationBarBackButtonHidden(true)
         .onAppear {
             startTimer()
         }
