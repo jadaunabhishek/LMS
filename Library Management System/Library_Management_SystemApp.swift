@@ -7,6 +7,7 @@
 
 import SwiftUI
 import Firebase
+import TipKit
 
 @main
 struct Library_Management_SystemApp: App {
@@ -84,5 +85,6 @@ struct Library_Management_SystemApp: App {
     }
     init(){
         FirebaseApp.configure()
+        try? Tips.configure()
     }
 }

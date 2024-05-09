@@ -18,6 +18,9 @@ struct MemberBookDetailView: View {
     @State var prebookRequest: UserBooksModel
     @State var navigateToHome = false
     
+    // TipKit
+    var tipProcedure = profileTip()
+    
     
     var body: some View {
         let screenWidth = UIScreen.main.bounds.width
@@ -52,11 +55,11 @@ struct MemberBookDetailView: View {
                                         .foregroundColor(Color(.black))
                                         .padding(.bottom, 2)
                                 }
+                                .popoverTip(tipProcedure)
                             } else {
                                 return Button(action: {
                                     
                                     Task{
-                                        
                                         prebookRequest.preBook(bookId: book.id, bookName: book.bookName, bookImageURL: book.bookImageURL, userId: userData.userID, userName: userData.userName, bookPreBookedCount: book.bookPreBookedCount, loanPeriod: 1)
                                         try? await Task.sleep(nanoseconds: 2_000_000_000)
                                         if(prebookRequest.responseStatus == 200){
@@ -73,6 +76,7 @@ struct MemberBookDetailView: View {
                                         .foregroundColor(Color(.black))
                                         .padding(.bottom, 2)
                                 }
+                                .popoverTip(tipProcedure)
                             }
                         }())
                     

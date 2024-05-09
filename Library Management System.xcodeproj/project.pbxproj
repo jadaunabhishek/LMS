@@ -84,6 +84,7 @@
 		D50EA9CD2BE4B9910079C1AB /* BookRequestCustomBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = D50EA9CC2BE4B9910079C1AB /* BookRequestCustomBox.swift */; };
 		D50EA9CF2BE4BA7B0079C1AB /* MemReqViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D50EA9CE2BE4BA7B0079C1AB /* MemReqViewModel.swift */; };
 		D50EA9D32BE4D0870079C1AB /* Picker.swift in Sources */ = {isa = PBXBuildFile; fileRef = D50EA9D22BE4D0870079C1AB /* Picker.swift */; };
+		D545154B2BEC831900531A14 /* Tips.swift in Sources */ = {isa = PBXBuildFile; fileRef = D545154A2BEC831900531A14 /* Tips.swift */; };
 		D55820C72BD61AB0005A00F9 /* Library_Management_SystemApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D55820C62BD61AB0005A00F9 /* Library_Management_SystemApp.swift */; };
 		D55820C92BD61AB0005A00F9 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D55820C82BD61AB0005A00F9 /* ContentView.swift */; };
 		D55820CB2BD61AB2005A00F9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D55820CA2BD61AB2005A00F9 /* Assets.xcassets */; };
@@ -184,6 +185,7 @@
 		D50EA9CC2BE4B9910079C1AB /* BookRequestCustomBox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookRequestCustomBox.swift; sourceTree = "<group>"; };
 		D50EA9CE2BE4BA7B0079C1AB /* MemReqViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemReqViewModel.swift; sourceTree = "<group>"; };
 		D50EA9D22BE4D0870079C1AB /* Picker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Picker.swift; sourceTree = "<group>"; };
+		D545154A2BEC831900531A14 /* Tips.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tips.swift; sourceTree = "<group>"; };
 		D55820C32BD61AB0005A00F9 /* Library Management System.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Library Management System.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D55820C62BD61AB0005A00F9 /* Library_Management_SystemApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Library_Management_SystemApp.swift; sourceTree = "<group>"; };
 		D55820C82BD61AB0005A00F9 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -370,6 +372,14 @@
 			path = Schema;
 			sourceTree = "<group>";
 		};
+		D54515492BEC82F700531A14 /* TipKit */ = {
+			isa = PBXGroup;
+			children = (
+				D545154A2BEC831900531A14 /* Tips.swift */,
+			);
+			path = TipKit;
+			sourceTree = "<group>";
+		};
 		D55820BA2BD61AB0005A00F9 = {
 			isa = PBXGroup;
 			children = (
@@ -396,6 +406,7 @@
 			children = (
 				840A18F22BE0E8C200B9ED91 /* Library-Management-System-Info.plist */,
 				D55820F52BD61BCC005A00F9 /* GoogleService-Info.plist */,
+				D54515492BEC82F700531A14 /* TipKit */,
 				D56B18DA2BEC0041000EF169 /* Profile */,
 				8424682E2BEB343B008746D1 /* Onboarding */,
 				D55820FF2BD637BD005A00F9 /* Admin */,
@@ -750,6 +761,7 @@
 				D55820F42BD61AF2005A00F9 /* SignupView.swift in Sources */,
 				D5027A632BE8EDB600316886 /* SupportResponse.swift in Sources */,
 				84E87D512BD7D40C00FAD5DC /* AdminCategoriesView.swift in Sources */,
+				D545154B2BEC831900531A14 /* Tips.swift in Sources */,
 				D50EA9CD2BE4B9910079C1AB /* BookRequestCustomBox.swift in Sources */,
 				1F7C0E542BD7B62A007D5221 /* ImagePicker.swift in Sources */,
 				1F7C0E502BD7B142007D5221 /* StaffViewModel.swift in Sources */,
