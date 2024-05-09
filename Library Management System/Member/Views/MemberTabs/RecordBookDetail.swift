@@ -1,13 +1,13 @@
 //
-//  CheckInView.swift
+//  RecordBookDetail.swift
 //  Library Management System
 //
-//  Created by Abhishek Jadaun on 05/05/24.
+//  Created by Abhishek Jadaun on 08/05/24.
 //
 
 import SwiftUI
 
-struct CheckInDetailsView: View {
+struct RecordBookDetail: View {
     @EnvironmentObject var themeManager: ThemeManager
     @State var checkInDetails: Loan
     @ObservedObject var LibViewModel: LibrarianViewModel
@@ -30,8 +30,8 @@ struct CheckInDetailsView: View {
                         Text(checkInDetails.bookIssuedToName)
                             .fontWeight(.semibold)
                         if !LibViewModel.currentMember.isEmpty {
-                                Text(LibViewModel.currentMember[0].email)
-                            }
+                            Text(LibViewModel.currentMember[0].email)
+                        }
                     }
                 }
             }
@@ -89,7 +89,8 @@ struct CheckInDetailsView: View {
                         .foregroundColor(.gray)
                     
                     Spacer()
-                    
+                    Text("₹")
+                        .font(.caption)
                     Text("\(checkInDetails.loanFine)")
                 }
             }
@@ -100,19 +101,7 @@ struct CheckInDetailsView: View {
                 try? await Task.sleep(nanoseconds: 1_000_000_000)
             }
         }
-        .navigationBarTitle("Checkin details", displayMode: .inline)
-        .navigationBarItems(trailing: Button(action: {
-            Task {
-                do {
-                    try await LibViewModel.checkInBook(loanId: checkInDetails.loanId, bookId: checkInDetails.bookId, userId: checkInDetails.bookIssuedTo, userFines: LibViewModel.currentMember[0].activeFine, loanFine: checkInDetails.loanFine, userPenalty: LibViewModel.currentMember[0].penaltiesCount)
-                    // Handle success
-                } catch {
-                    // Handle error
-                }
-            }
-        }, label: {
-            Text("CheckIn")
-        }))
+        .navigationBarTitle("Record details", displayMode: .inline)
     }
     
     func formatDate(_ dateString: String) -> String {
@@ -128,7 +117,7 @@ struct CheckInDetailsView: View {
     }
 }
 
-struct CIDVPrev: View {
+struct RecordBookDetailPrev: View {
     
     @State var LibViewModel = LibrarianViewModel()
     let loan = Loan(loanId: "1",
@@ -146,12 +135,13 @@ struct CIDVPrev: View {
                     timeStamp: 1620202800)
     
     var body: some View {
-        CheckInDetailsView(checkInDetails: loan, LibViewModel: LibViewModel)
+        RecordBookDetail(checkInDetails: loan, LibViewModel: LibViewModel)
     }
 }
 
 #Preview {
-    CIDVPrev()
+    RecordBookDetailPrev()
 }
+
 
 

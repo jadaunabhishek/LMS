@@ -12,7 +12,6 @@ class AuthViewModel: ObservableObject {
     @Published var userEmail = ""
     @Published var userID = ""
     @Published var allSupports: [SupportTicket] = []
-    
     @Published var allUsers: [UserSchema] = []
     @Published var totalIncome: Int = 0
     @Published var finesPending: Int = 0

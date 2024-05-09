@@ -1,4 +1,4 @@
-//
+
 //  Books.swift
 //  Library Management System
 //
@@ -7,7 +7,7 @@
 import SwiftUI
 
 struct Books: View {
-    @Environment(\.colorScheme) var colorScheme
+    
     @State private var searchText = ""
     @State private var selectedCategories: [String] = []
     @State private var isPageLoading: Bool = true
@@ -32,9 +32,8 @@ struct Books: View {
     
     var body: some View {
         NavigationStack {
-            ScrollView(.vertical, showsIndicators: false) {
+            ScrollView {
                 VStack {
-                    
                     ScrollView(.horizontal, showsIndicators: false) {
                         HStack {
                             ForEach(categories, id: \.self) { category in
@@ -59,7 +58,7 @@ struct Books: View {
                         }
                         .padding(.horizontal)
                     }
-                    ScrollView(.vertical, showsIndicators: false){
+                    VStack(spacing: 8) {
                         if !filteredBooks.isEmpty {
                             ForEach(filteredBooks, id: \.id) { book in
                                 NavigationLink(destination: MemberBookDetailView(
@@ -88,7 +87,7 @@ struct Books: View {
         }
         .task {
             MemViewModel.getBooks()
-            try? await Task.sleep(nanoseconds: 3_000_000_000)
+            try? await Task.sleep(nanoseconds: 1_000_000_000)
             isPageLoading.toggle()
         }
     }
@@ -98,50 +97,47 @@ struct Books: View {
 struct BookRow: View {
     let book: Book
     @EnvironmentObject var themeManager: ThemeManager
-    @Environment(\.colorScheme) var colorScheme
     var body: some View {
-        VStack(alignment: .center){
-            HStack(alignment: .center){
-                AsyncImage(url: URL(string: book.bookImageURL)) { image in
-                    image.resizable()
-                } placeholder: {
-                    ProgressView()
-                }
-                .frame(width: 80,height: 120)
-                .cornerRadius(8)
-                .padding(.leading, 10)
-                VStack(alignment: .leading, spacing: 5){
-                    Text("\(book.bookName)")
-                        .multilineTextAlignment(.leading)
-                        .font(.headline)
-                        .bold()
-                        .lineLimit(2)
-                    Text("\(book.bookAuthor)")
-                        .multilineTextAlignment(.leading)
-                        .font(.subheadline)
-                        .lineLimit(1)
-                        .foregroundStyle(Color(.systemGray))
-                    HStack{
-                        Image(systemName: "star.fill")
-                        Text(String(format: "%.1f", book.bookRating))
-                    }
-                    .font(.caption)
+        HStack(alignment: .center){
+            AsyncImage(url: URL(string: book.bookImageURL)) { image in
+                image.resizable()
+            } placeholder: {
+                ProgressView()
+            }
+            .frame(width: 80,height: 120)
+            .cornerRadius(8)
+            VStack(alignment: .leading, spacing: 5){
+                Text("\(book.bookName)")
+                    .multilineTextAlignment(.leading)
+                    .font(.headline)
                     .bold()
-                    .foregroundStyle(Color(.systemYellow))
-                    .padding(.bottom, 5)
+                    .foregroundStyle(themeManager.selectedTheme.bodyTextColor)
+                    .lineLimit(2)
+                Text("\(book.bookAuthor)")
+                    .multilineTextAlignment(.leading)
+                    .font(.subheadline)
+                    .lineLimit(1)
+                    .foregroundStyle(Color(.systemGray))
+                HStack{
+                    Image(systemName: "star.fill")
+                    Text(String(format: "%.1f", book.bookRating))
                 }
-                .padding(5)
-                Spacer()
-                VStack{
-                    Image(systemName: "chevron.right")
-                        .symbolRenderingMode(.hierarchical)
-                        .font(.callout)
-                        .foregroundStyle(Color(.systemGray))
-                }.padding(.trailing, 10)
-            }.cornerRadius(8)
+                .font(.caption)
+                .bold()
+                .foregroundStyle(Color(.systemYellow))
+                .padding(.bottom, 5)
+            }
+            .padding(5)
+            Spacer()
+            VStack{
+                Image(systemName: "chevron.right")
+                    .symbolRenderingMode(.hierarchical)
+                    .font(.callout)
+                    .foregroundStyle(Color(.systemGray))
+            }
         }
-        .padding(.vertical, 10)
-        .frame(maxWidth: .infinity)
+        .padding(10)
+        .cornerRadius(8)
         .background(Color(.systemGray6).opacity(0.6))
         Divider()
     }

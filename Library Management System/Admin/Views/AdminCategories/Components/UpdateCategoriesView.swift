@@ -38,11 +38,8 @@ struct UpdateCategoriesView: View {
                             .padding(.all ,14)
                             .background(Color.white)
                             .clipShape(Circle())
-                            .shadow(radius: 5)
                     }
                 }
-                
-                
                 
                 PrimaryCustomButton(action: {
                     let oldCategoryName = category
@@ -60,7 +57,6 @@ struct UpdateCategoriesView: View {
             
         }
     }
-    
     
     func fetchCategories() {
         if !configViewModel.currentConfig.isEmpty {
