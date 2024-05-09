@@ -1,6 +1,7 @@
 import SwiftUI
 import EventKit
 import FirebaseAuth
+import TipKit
 
 
 func requestAccessToCalendar(completion: @escaping (Bool) -> Void) {
@@ -32,6 +33,9 @@ struct MemberHome: View {
     @ObservedObject var MemViewModel = UserBooksModel()
     @Environment(\.colorScheme) var colorScheme
     
+    // Tip Data
+    var tipProcedure = profileTip()
+    
     var categories: [String] {
         configViewModel.currentConfig.isEmpty ? [] : configViewModel.currentConfig[0].categories
     }
@@ -57,14 +61,11 @@ struct MemberHome: View {
         let newheight = screenWidth * 0.35
         NavigationStack {
             ScrollView(.vertical, showsIndicators: false) {
-                
-                HStack{
-                    Text("Hi! Ishan ").font(.largeTitle)
-                    Spacer()
-                }.padding(.leading, 20)
+                TipView(tipProcedure)
+                    .padding([.leading, .trailing, .bottom])
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack {
-                        NavigationLink(destination: Books()) {
+                        NavigationLink(destination: Books(themeManager: themeManager)) {
                             ZStack(alignment: .bottomLeading) {
                                 
                                 Rectangle()
@@ -188,6 +189,7 @@ struct MemberHome: View {
                                 
                                 NavigationLink(destination: MemberCategoryView(category: category, configViewModel: configViewModel, librarianViewModel: LibViewModel)) {
                                     VStack(alignment: .leading){
+                                        Text("Featured Collection").multilineTextAlignment(.leading).font(.callout).fontWeight(.semibold)
                                         ZStack(alignment:.leading){
                                             Rectangle()
                                                 .fill(randomColor())
@@ -217,6 +219,14 @@ struct MemberHome: View {
                     }
                     
                 }.padding(.vertical, 10)
+                    .background(
+                        LinearGradient(
+                            gradient: Gradient(colors: themeManager.gradientColors(for: colorScheme)),
+                            startPoint: .top,
+                            endPoint: .bottom
+                        )
+                    )
+                
                     .cornerRadius(5)
                 
                 
@@ -269,6 +279,7 @@ struct MemberHome: View {
                                     }
                                     .padding(5)
                                 }
+                                .padding(5)
                             }
                         }
                         .padding(.horizontal, 20)
@@ -287,6 +298,14 @@ struct MemberHome: View {
                 
                 
             }
+            .navigationTitle("Hello Member")
+            .navigationBarItems(trailing: NavigationLink(destination: ProfileCompletedView(), label: {
+                Image(systemName: "person.crop.circle")
+                    .font(.title3)
+                    .foregroundColor(Color(themeManager.selectedTheme.primaryThemeColor))
+            }))
+            .popoverTip(tipProcedure)
+            
             .onAppear {
                 Task{
                     if let currentUser = Auth.auth().currentUser?.uid{
@@ -316,6 +335,6 @@ struct MemberHome_Previews: PreviewProvider {
         @ObservedObject var configViewModel = ConfigViewModel()
         @StateObject var LibViewModel = LibrarianViewModel()
         let themeManager = ThemeManager()
-        return MemberHome(LibViewModel: LibViewModel, configViewModel: configViewModel).environmentObject(themeManager)
+        return MemberHome(themeManager: themeManager, LibViewModel: LibViewModel, configViewModel: configViewModel).environmentObject(themeManager)
     }
 }

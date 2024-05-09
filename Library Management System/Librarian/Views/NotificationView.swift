@@ -59,6 +59,12 @@ struct NotificationsView: View {
             }
             .navigationTitle("Actions")
             .navigationBarBackButtonHidden(true)
+            .navigationBarItems(trailing: NavigationLink(destination: ProfileCompletedView(), label: {
+                Image(systemName: "person.crop.circle")
+                    .font(.title3)
+                    .foregroundColor(Color(themeManager.selectedTheme.primaryThemeColor))
+            }))
+            
             .onAppear(perform: {
                 Timer.scheduledTimer(withTimeInterval: 3, repeats: true) { time in
                     Task{
@@ -86,7 +92,7 @@ struct NotificationsView: View {
             .searchable(text: $searchText)
         }
     }
-    }
+}
 
 
 
@@ -151,17 +157,23 @@ struct MembershipSections: View {
                         toggleSelection(key: key.id)
                     }
                     .swipeActions(edge: .leading, allowsFullSwipe: true) {
-                                            Button("Reject") {
-                                                processSwipeAction(key: key.id, approve: false)
-                                            }
-                                            .tint(.red)
-                                        }
-                                        .swipeActions(edge: .trailing, allowsFullSwipe: true) {
-                                            Button("Approve") {
-                                                processSwipeAction(key: key.id, approve: true)
-                                            }
-                                            .tint(.green)
-                                        }
+                        Button {
+                            processSwipeAction(key: key.id, approve: false)
+                        } label: {
+                            Image(systemName: "xmark")
+                            Text("Reject")
+                        }
+                        .tint(.red)
+                    }
+                    .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+                        Button {
+                            processSwipeAction(key: key.id, approve: true)
+                        } label: {
+                            Image(systemName: "checkmark")
+                            Text("Accept")
+                        }
+                        .tint(.green)
+                    }
                 }
             }
             .listStyle(.inset)
@@ -189,9 +201,9 @@ struct MembershipSections: View {
                 }
             }
             .foregroundColor(selectedItems.isEmpty ? Color.black : themeManager.selectedTheme.primaryThemeColor)
-
+            
             Spacer()
-
+            
             Button(action: {
                 processSelectedItems(approve: true)
             }) {
@@ -200,7 +212,7 @@ struct MembershipSections: View {
             }
             .cornerRadius(8)
             .disabled(selectedItems.isEmpty)
-
+            
             Button(action: {
                 processSelectedItems(approve: false)
             }) {
@@ -248,16 +260,16 @@ struct MembershipSections: View {
         isSelectionMode = false
     }
     func processSwipeAction(key: String, approve: Bool) {
-            if let index = viewModel.notifications.firstIndex(where: { $0.id == key }) {
-                if approve {
-                    viewModel.approve(notification: viewModel.notifications[index])
-                } else {
-                    viewModel.reject(notification: viewModel.notifications[index])
-                }
+        if let index = viewModel.notifications.firstIndex(where: { $0.id == key }) {
+            if approve {
+                viewModel.approve(notification: viewModel.notifications[index])
+            } else {
+                viewModel.reject(notification: viewModel.notifications[index])
             }
-            viewModel.fetchData()
         }
+        viewModel.fetchData()
     }
+}
 
 
 
@@ -265,14 +277,15 @@ struct checkInSections: View {
     @ObservedObject var LibViewModel: LibrarianViewModel
     
     var body: some View {
-        List {
-            ForEach(0..<LibViewModel.issuedLoans.count, id: \.self) { userDetail in
-                NavigationLink(destination: CheckInDetailsView(checkInDetails: LibViewModel.issuedLoans[userDetail], LibViewModel: LibViewModel)){
-                    BookRequestCustomBox(bookRequestData: LibViewModel.issuedLoans[userDetail])
+        ScrollView{
+            VStack{
+                ForEach(0..<LibViewModel.issuedLoans.count, id: \.self) { userDetail in
+                    NavigationLink(destination: CheckInDetailsView(checkInDetails: LibViewModel.issuedLoans[userDetail], LibViewModel: LibViewModel)){
+                        BookRequestCustomBox(bookRequestData: LibViewModel.issuedLoans[userDetail])
+                    }
                 }
             }
         }
-        .listStyle(.inset)
     }
 }
 
@@ -319,21 +332,27 @@ struct BooksSections: View {
                         toggleSelection(key: key.loanId)
                     }
                     .swipeActions(edge: .leading, allowsFullSwipe: true) {
-                        Button("Reject") {
+                        Button{
                             Task {
                                 await LibViewModel.rejectRequest(loanId: key.loanId, bookId: key.bookId)
                                 LibViewModel.getLoans()
-                                                }
-                                            }
-                                            .tint(.red)
-                                        }
-                                        .swipeActions(edge: .trailing, allowsFullSwipe: true) {
-                                            Button("Approve") {
-                                                LibViewModel.checkOutBook(loanId: key.loanId)
-                                                LibViewModel.getLoans()
-                                            }
-                                            .tint(.green)
-                                        }
+                            }
+                        } label: {
+                            Image(systemName: "xmark")
+                            Text("Reject")
+                        }
+                        .tint(.red)
+                    }
+                    .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+                        Button {
+                            LibViewModel.checkOutBook(loanId: key.loanId)
+                            LibViewModel.getLoans()
+                        } label: {
+                            Image(systemName: "checkmark")
+                            Text("Accept")
+                        }
+                        .tint(.green)
+                    }
                 }
             }
             .listStyle(.inset)
@@ -361,9 +380,9 @@ struct BooksSections: View {
                 }
             }
             .foregroundColor(selectedItems.isEmpty ? Color.black : themeManager.selectedTheme.primaryThemeColor)
-
+            
             Spacer()
-
+            
             Button(action: {
                 processSelectedItems(approve: true)
             }) {
@@ -372,7 +391,7 @@ struct BooksSections: View {
             }
             .cornerRadius(8)
             .disabled(selectedItems.isEmpty)
-
+            
             Button(action: {
                 processSelectedItems(approve: false)
             }) {
@@ -428,11 +447,11 @@ struct BooksSections: View {
 
 struct TestNotificationView_Previews: PreviewProvider {
     static var previews: some View {
-    let themeManager = ThemeManager()
-    @StateObject var LibViewModel = LibrarianViewModel()
-    @StateObject var ConfiViewModel = ConfigViewModel()
-
-    return NotificationsView(LibViewModel: LibViewModel)
+        let themeManager = ThemeManager()
+        @StateObject var LibViewModel = LibrarianViewModel()
+        @StateObject var ConfiViewModel = ConfigViewModel()
+        
+        return NotificationsView(LibViewModel: LibViewModel)
             .environmentObject(themeManager)
     }
 }

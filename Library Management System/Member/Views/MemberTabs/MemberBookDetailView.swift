@@ -18,6 +18,9 @@ struct MemberBookDetailView: View {
     @State var prebookRequest: UserBooksModel
     @State var navigateToHome = false
     
+    // TipKit
+    var tipProcedure = profileTip()
+    
     
     var body: some View {
         let screenWidth = UIScreen.main.bounds.width
@@ -52,11 +55,11 @@ struct MemberBookDetailView: View {
                                         .foregroundColor(Color(.black))
                                         .padding(.bottom, 2)
                                 }
+                                .popoverTip(tipProcedure)
                             } else {
                                 return Button(action: {
                                     
                                     Task{
-                                        
                                         prebookRequest.preBook(bookId: book.id, bookName: book.bookName, bookImageURL: book.bookImageURL, userId: userData.userID, userName: userData.userName, bookPreBookedCount: book.bookPreBookedCount, loanPeriod: 1)
                                         try? await Task.sleep(nanoseconds: 2_000_000_000)
                                         if(prebookRequest.responseStatus == 200){
@@ -73,11 +76,12 @@ struct MemberBookDetailView: View {
                                         .foregroundColor(Color(.black))
                                         .padding(.bottom, 2)
                                 }
+                                .popoverTip(tipProcedure)
                             }
                         }())
                     
                     NavigationLink(
-                        destination: MemberTabView(),
+                        destination: MemberTabView(themeManager: themeManager),
                         isActive: $navigateToHome,
                         label: { EmptyView() }
                     )
@@ -158,6 +162,26 @@ struct MemberBookDetailView: View {
                                 .padding(.top,8)
                                 .padding(.horizontal)
                                 .lineSpacing(10)
+                        }.padding(10)
+                        VStack(alignment:.leading){
+                            Text("Reviews")
+                                .font(.title.bold())
+                                .padding(.horizontal)
+                                .padding(.top, 20)
+                            List{
+                                ForEach(book.bookReviews, id: \.self){ review in
+                                    HStack(alignment: .center){
+                                        Image(systemName: "person.circle")
+                                            .symbolRenderingMode(.hierarchical)
+                                            .font(.system(.title))
+                                        Text(review)
+                                            .font(.system(.subheadline))
+                                        Spacer()
+                                    }
+                                    .padding(.vertical,10)
+                                }
+                            }
+                            .listStyle(.inset)
                         }.padding(10)
                         
                     }

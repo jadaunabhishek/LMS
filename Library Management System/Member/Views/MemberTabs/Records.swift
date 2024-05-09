@@ -36,7 +36,7 @@ struct Records: View {
                         HStack {
                             ForEach(0..<LibViewModel.currentUserOverDueHistory.count, id: \.self) { userDetail in
                                 NavigationLink(destination: RecordBookDetail(checkInDetails: LibViewModel.currentUserOverDueHistory[userDetail], LibViewModel: LibViewModel)){
-                                    BookFineBox(bookRequestData: LibViewModel.currentUserHistory[userDetail])
+                                    BookFineBox(bookRequestData: LibViewModel.currentUserOverDueHistory[userDetail])
                                 }
                             }
                         }
