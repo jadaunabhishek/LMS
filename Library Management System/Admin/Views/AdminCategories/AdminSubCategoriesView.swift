@@ -31,7 +31,7 @@ struct AdminSubCategoriesView: View {
     var body: some View {
         NavigationStack {
             ScrollView {
-                VStack(spacing: 8) {
+                VStack(alignment: .leading, spacing: 8) {
                     if !filteredBooks.isEmpty {
                         ForEach(filteredBooks, id: \.id) { book in
                             NavigationLink(destination: BookDetailView(LibViewModel: librarianViewModel, ConfiViewModel: configViewModel, currentBookId: book.id)){
