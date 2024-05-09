@@ -19,6 +19,7 @@ struct SignupView: View {
     @State private var confirmPassword: String = ""
     @State private var shouldNavigate = false
     @State private var showAlert = false
+    @State private var isEmailValid = false
     
     var body: some View {
         ZStack {
@@ -63,9 +64,34 @@ struct SignupView: View {
                 
                 CustomTextField(text: $name, placeholder: "Name")
                 
-                CustomTextField(text: $email, placeholder: "E-mail Id")
+                ZStack{
+                    CustomTextField(text: $email, placeholder: "E-mail Id")
+                        .onChange(of: email) { newValue in
+                            validateEmail(newValue)
+                        }
+                    
+                    if !email.isEmpty {
+                        if isEmailValid {
+                            Image(systemName: "checkmark.circle.fill")
+                                .imageScale(.large)
+                                .fontWeight(.bold)
+                                .foregroundStyle(Color.green)
+                                .offset(x: 150)
+                        } else {
+                            Image(systemName: "multiply.circle.fill")
+                                .imageScale(.large)
+                                .fontWeight(.bold)
+                                .foregroundStyle(Color.red)
+                                .offset(x: 150)
+                        }
+                    }
+                }
+                
+                
                 
                 SecTextField(text: $password, placeholder: "Password")
+                
+                
                 
                 ZStack{
                     SecTextField(text: $confirmPassword, placeholder: "Confirm Password")
@@ -89,7 +115,7 @@ struct SignupView: View {
                 .padding(.bottom)
                 
                 PrimaryCustomButton(action: {
-                    if !email.isEmpty, !confirmPassword.isEmpty, !password.isEmpty,!name.isEmpty, password == confirmPassword {
+                    if isFormValid() {
                         Auth.auth().createUser(withEmail: email, password: password) { authResult, error in
                             if let error = error {
                                 // Handle the login error
@@ -121,7 +147,7 @@ struct SignupView: View {
                     }
                     
                 }, label: "Sign Up")
-                .disabled(email.isEmpty || confirmPassword.isEmpty || password.isEmpty || password != confirmPassword )
+                .disabled(!isFormValid())
                 
                 
                 NavigationLink("", destination: LoginView(), isActive: $shouldNavigate)
@@ -152,6 +178,24 @@ struct SignupView: View {
         }
         .navigationBarHidden(true)
     }
+    
+    // Function to validate email
+    private func validateEmail(_ email: String) {
+        let emailRegex = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}"
+        let emailPredicate = NSPredicate(format: "SELF MATCHES %@", emailRegex)
+        isEmailValid = emailPredicate.evaluate(with: email)
+    }
+    
+    // Function to check overall form validity
+    private func isFormValid() -> Bool {
+        return isEmailValid &&
+        !name.isEmpty &&
+        !email.isEmpty &&
+        !password.isEmpty &&
+        !confirmPassword.isEmpty &&
+        password == confirmPassword
+    }
+    
 }
 
 
