@@ -9,6 +9,8 @@ import SwiftUI
 import Firebase
 import FirebaseAuth
 import Charts
+import TipKit
+
 struct AdminHomeView: View {
     
     @ObservedObject var librarianViewModel: LibrarianViewModel
@@ -36,6 +38,11 @@ struct AdminHomeView: View {
         ]
         
     }
+    
+    // Tip Data
+    var tipProcedure = welcomingTip()
+    
+    
     @State var TotalRevenue : Int = 0
     var body: some View {
         NavigationView{
@@ -43,12 +50,13 @@ struct AdminHomeView: View {
                 if !isPageLoading {
                     ScrollView {
                         VStack(spacing:12){
-                            
                             VStack(alignment: .leading){
                                 ZStack{
                                     RoundedRectangle(cornerRadius: 10)
                                         .fill(Color(.systemGray4).opacity(0.5))
                                         .frame(height: 150)
+                                    TipView(tipProcedure)
+                                        .padding([.leading, .trailing, .bottom])
                                     
                                     // MARK: Total Revenue
                                     HStack() {

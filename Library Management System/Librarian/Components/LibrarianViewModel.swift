@@ -948,6 +948,8 @@ class LibrarianViewModel: ObservableObject{
         }
     }
     
+    
+    
     func rateReview(bookId: String, rating: Int, review: String, loanId: String){
         self.responseStatus = 0
         self.responseMessage = ""

@@ -33,7 +33,7 @@ struct MemberHome: View {
     @Environment(\.colorScheme) var colorScheme
     
     // Tip Data
-    var tipProcedure = profileTip()
+    var tipWelcome = welcomingTip()
     
     var categories: [String] {
         configViewModel.currentConfig.isEmpty ? [] : configViewModel.currentConfig[0].categories
@@ -50,8 +50,9 @@ struct MemberHome: View {
     var body: some View {
         NavigationView {
             ScrollView(.vertical, showsIndicators: false) {
-                TipView(tipProcedure)
+                TipView(tipWelcome)
                     .padding([.leading, .trailing, .bottom])
+                
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack {
                         NavigationLink(destination: Books(themeManager: themeManager)) {
@@ -286,7 +287,6 @@ struct MemberHome: View {
                     .font(.title3)
                     .foregroundColor(Color(themeManager.selectedTheme.primaryThemeColor))
             }))
-            .popoverTip(tipProcedure)
             
             .onAppear {
                 Task{

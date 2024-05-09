@@ -10,6 +10,7 @@ struct NotificationsView: View {
     @State var requestedLoans: [Loan] = []
     @State var issuedLoans: [Loan] = []
     @State var isSelectionMode: Bool = false
+    @State var showAlert = false
     
     enum Option {
         case CheckIn
