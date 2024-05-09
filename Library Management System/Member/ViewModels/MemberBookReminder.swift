@@ -37,9 +37,9 @@ func getUserHistory(userId: String) async throws -> [Loan] {
 }
 
 func createCalendarEvents(LibViewModel: LibrarianViewModel, userId: String) async {
-    LibViewModel.getUserHistory(userId: userId)
+    await LibViewModel.getUserHistory(userId: userId)
     try? await Task.sleep(nanoseconds: 2_000_000_000)
-    let loans: [Loan] = LibViewModel.currentUserHistory
+    let loans: [Loan] = await LibViewModel.currentUserHistory
     let dateFormatter = DateFormatter()
     dateFormatter.dateFormat = "dd/MM/yy"
     
