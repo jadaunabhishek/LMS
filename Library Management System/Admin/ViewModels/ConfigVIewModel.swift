@@ -62,7 +62,6 @@ class ConfigViewModel: ObservableObject {
                         monthlyMembersCountArray.append(memberCount)
                     }
 
-                    
                     var newConfig = Config(
                         configID: document!["configID"] as! String,
                         adminID: document!["adminID"] as! String,

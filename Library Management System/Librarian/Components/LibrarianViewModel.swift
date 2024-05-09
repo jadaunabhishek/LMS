@@ -751,6 +751,11 @@ class LibrarianViewModel: ObservableObject{
                         monthlyMembersCountArray.append(memberCount)
                     }
                     
+                    guard let monthlyRevenueTotalDictArray = document!["monthlyRevenueTotal"] as? [[String: Any]] else {
+                        print("Error: Unable to parse monthlyRevenueTotal array from Firestore document")
+                        return
+                    }
+                    
                     var newConfig = Config(
                         configID: document!["configID"] as! String,
                         adminID: document!["adminID"] as! String,
@@ -761,7 +766,8 @@ class LibrarianViewModel: ObservableObject{
                         maxFine: document!["maxFine"] as! Double,
                         maxPenalties: document!["maxPenalties"] as! Int,
                         categories: document!["categories"] as! [String], 
-                        monthlyMembersCount: monthlyMembersCountArray)
+                        monthlyMembersCount: monthlyMembersCountArray
+                    )
                     
                     self.dbInstance.collection("Loans").whereField("loanStatus", isEqualTo: "Issued").getDocuments{
                         
