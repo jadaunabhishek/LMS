@@ -37,7 +37,7 @@ struct Library_Management_SystemApp: App {
                     }
             }
             else if emailLoggedIn == "admin" {
-                AdminTabView(themeManager: themeManager, LibViewModel: LibViewModel, staffViewModel: staffViewModel, userAuthViewModel: userAuthViewModel, configViewModel: configViewModel)
+                AdminTabView(LibViewModel: LibViewModel, staffViewModel: staffViewModel, userAuthViewModel: userAuthViewModel, configViewModel: configViewModel)
                     .transition(.move(edge: .leading))
                     .environmentObject(themeManager)
                     .task {

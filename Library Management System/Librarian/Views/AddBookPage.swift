@@ -268,7 +268,7 @@ struct AddBookPage: View {
                         VStack{
                             Text("All fields are mandatory")
                                 .font(.system(size: 15, weight: .thin))
-                            NavigationLink(destination: BooksPage(LibViewModel: LibViewModel, ConfiViewMmodel: ConfiViewModel), tag: .ready, selection: $docState){
+                            NavigationLink(destination: BooksPage(LibViewModel: LibViewModel, ConfigViewModel: ConfiViewModel), tag: .ready, selection: $docState){
                                 Button(action:{
                                     Task{
                                         if(formValidation()){
