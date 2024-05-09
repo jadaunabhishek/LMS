@@ -24,6 +24,7 @@ func requestAccessToCalendar(completion: @escaping (Bool) -> Void) {
 
 
 struct MemberHome: View {
+    @State var category: String = ""
     @EnvironmentObject var themeManager: ThemeManager
     @ObservedObject var LibViewModel: LibrarianViewModel
     @State private var hasCalendarAccess = false
@@ -43,8 +44,18 @@ struct MemberHome: View {
         LibViewModel.trendingBooks
     }
     
+    var categoryBooks: [Book] {
+        var booksToFilter = LibViewModel.allBooks.filter { book in
+            book.bookCategory.contains(category)
+        }
+        return booksToFilter
+    }
+    
     var body: some View {
-        NavigationView {
+        let screenWidth = UIScreen.main.bounds.width
+        let newwidth = screenWidth * 0.43
+        let newheight = screenWidth * 0.35
+        NavigationStack {
             ScrollView(.vertical, showsIndicators: false) {
                 
                 HStack{
@@ -163,12 +174,19 @@ struct MemberHome: View {
                 VStack(alignment: .leading){
                     HStack{
                         Text("Categories").font(.title2).fontWeight(.semibold).padding(.leading, 20)
+                        Spacer()
+                        NavigationLink(destination: MemberCategoryListView(LibViewModel: LibViewModel, configViewModel: configViewModel)){
+                            HStack{
+                                Text("See all")
+                                Image(systemName: "chevron.right")
+                            }.padding(.trailing, 10)
+                        }
                     }
                     ScrollView(.horizontal, showsIndicators: false) {
                         HStack{
                             ForEach(categories.prefix(5), id: \.self) { category in
                                 
-                                NavigationLink(destination: Books()) {
+                                NavigationLink(destination: MemberCategoryView(category: category, configViewModel: configViewModel, librarianViewModel: LibViewModel)) {
                                     VStack(alignment: .leading){
                                         ZStack(alignment:.leading){
                                             Rectangle()
@@ -185,7 +203,7 @@ struct MemberHome: View {
                                                     .padding()
                                             }
                                         }
-                                        .frame(width: 160, height: 180)
+                                        .frame(width: newwidth, height: newheight)
                                     }.padding(3)
                                     
                                     

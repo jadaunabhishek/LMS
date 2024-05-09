@@ -68,6 +68,8 @@
 		848F9DE22BE897F9004614D9 /* CreateIssue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 848F9DE12BE897F9004614D9 /* CreateIssue.swift */; };
 		848F9DE42BE8A85F004614D9 /* SupportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 848F9DE32BE8A85F004614D9 /* SupportView.swift */; };
 		84D3293E2BDE707000E75F81 /* EditStaffDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84D3293D2BDE707000E75F81 /* EditStaffDetailsView.swift */; };
+		84D9E6392BEC9487001DE2DA /* MemberCategoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84D9E6382BEC9487001DE2DA /* MemberCategoryView.swift */; };
+		84D9E63B2BEC96DC001DE2DA /* MemberCategoryListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84D9E63A2BEC96DC001DE2DA /* MemberCategoryListView.swift */; };
 		84E87D512BD7D40C00FAD5DC /* AdminCategoriesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84E87D502BD7D40C00FAD5DC /* AdminCategoriesView.swift */; };
 		84E87D552BD7D44800FAD5DC /* AdminSubCategoriesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84E87D542BD7D44800FAD5DC /* AdminSubCategoriesView.swift */; };
 		84E87D592BD7D4E200FAD5DC /* AddCategoriesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84E87D582BD7D4E200FAD5DC /* AddCategoriesView.swift */; };
@@ -166,6 +168,8 @@
 		848F9DE12BE897F9004614D9 /* CreateIssue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateIssue.swift; sourceTree = "<group>"; };
 		848F9DE32BE8A85F004614D9 /* SupportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupportView.swift; sourceTree = "<group>"; };
 		84D3293D2BDE707000E75F81 /* EditStaffDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditStaffDetailsView.swift; sourceTree = "<group>"; };
+		84D9E6382BEC9487001DE2DA /* MemberCategoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemberCategoryView.swift; sourceTree = "<group>"; };
+		84D9E63A2BEC96DC001DE2DA /* MemberCategoryListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemberCategoryListView.swift; sourceTree = "<group>"; };
 		84E87D502BD7D40C00FAD5DC /* AdminCategoriesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdminCategoriesView.swift; sourceTree = "<group>"; };
 		84E87D542BD7D44800FAD5DC /* AdminSubCategoriesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdminSubCategoriesView.swift; sourceTree = "<group>"; };
 		84E87D582BD7D4E200FAD5DC /* AddCategoriesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCategoriesView.swift; sourceTree = "<group>"; };
@@ -330,6 +334,7 @@
 				D50EA9D22BE4D0870079C1AB /* Picker.swift */,
 				D5C949572BE9F52800D5310D /* supportCard.swift */,
 				D56B18D62BEB4FB6000EF169 /* BookReqBox.swift */,
+				1F7C0E532BD7B62A007D5221 /* ImagePicker.swift */,
 				D56B18D82BEB789F000EF169 /* BookFineBox.swift */,
 			);
 			path = Elements;
@@ -404,7 +409,6 @@
 				843CB5842BE399C9008CFAFC /* Elements */,
 				1F84616B2BD6561C008B7B3E /* Colors */,
 				D55820CC2BD61AB2005A00F9 /* Preview Content */,
-				1F7C0E532BD7B62A007D5221 /* ImagePicker.swift */,
 			);
 			path = "Library Management System";
 			sourceTree = "<group>";
@@ -540,6 +544,8 @@
 				84301CB42BDA126F004CF581 /* MemberHome.swift */,
 				845F7D712BD8E0BD006831F8 /* Filter.swift */,
 				845F7D6F2BD8DFD9006831F8 /* Membership.swift */,
+				84D9E6382BEC9487001DE2DA /* MemberCategoryView.swift */,
+				84D9E63A2BEC96DC001DE2DA /* MemberCategoryListView.swift */,
 				D57BFDAE2BDD233E0094A0B5 /* Books.swift */,
 				D57BFDB02BDD23480094A0B5 /* Support.swift */,
 				0F85ED882BE0E32900C48C75 /* MemberBookDetailView.swift */,
@@ -762,6 +768,7 @@
 				DC48E7222BD6E78000794A7C /* LibrarianViewModel.swift in Sources */,
 				840A18F12BE0E84D00B9ED91 /* MemberBookReminder.swift in Sources */,
 				DC1D402E2BD76BF000970C7B /* AddBookPage.swift in Sources */,
+				84D9E6392BEC9487001DE2DA /* MemberCategoryView.swift in Sources */,
 				84E87D5D2BD7D51400FAD5DC /* CardListView.swift in Sources */,
 				84080F2D2BDE01A3005293B8 /* UpdateCategoriesView.swift in Sources */,
 				D5013B832BEA36640067724A /* Records.swift in Sources */,
@@ -784,6 +791,7 @@
 				1F7C0E4D2BD7A920007D5221 /* StaffSchema.swift in Sources */,
 				D5C949582BE9F52800D5310D /* supportCard.swift in Sources */,
 				D50EA9CF2BE4BA7B0079C1AB /* MemReqViewModel.swift in Sources */,
+				84D9E63B2BEC96DC001DE2DA /* MemberCategoryListView.swift in Sources */,
 				84301CB72BDA13C8004CF581 /* MemberTabView.swift in Sources */,
 				D57BFDB32BDD24FD0094A0B5 /* UserBooksModel.swift in Sources */,
 				840A18EF2BE040F700B9ED91 /* TextFieldComponent.swift in Sources */,
