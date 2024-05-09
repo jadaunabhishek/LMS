@@ -44,7 +44,6 @@ struct Membership: View {
     }
     
     var body: some View {
-        ScrollView{
             VStack{
                 ZStack {
                     Rectangle()
@@ -70,11 +69,11 @@ struct Membership: View {
                             .padding(.bottom, 5)
                         HStack {
                             Image(systemName: "clock")
-                            Text("3-4 weeks duration")
+                            Text("Borrowing & Pre Booking")
                         }
                         HStack {
                             Image(systemName: "doc.text")
-                            Text("Access to Resources")
+                            Text("Remainder Notifications")
                         }
                         HStack {
                             Image(systemName: "star")
@@ -82,7 +81,7 @@ struct Membership: View {
                         }
                         HStack {
                             Image(systemName: "globe")
-                            Text("24/7: Explore Anytime")
+                            Text("Support from Librarian")
                         }
                     }
                     
@@ -116,7 +115,6 @@ struct Membership: View {
                     Spacer()
                 }
                 HStack{
-                    
                     VStack(alignment: .leading){
                         HStack{
                             statusIndicator(imageName: "clock", text: "Request Sent", status: status_sent)
@@ -156,7 +154,7 @@ struct Membership: View {
                     
                 }.padding()
             }
-        }
+        
         .onAppear(perform: {
             Timer.scheduledTimer(withTimeInterval: 15, repeats: true) { time in
                 fetchCurrentUserDetails()

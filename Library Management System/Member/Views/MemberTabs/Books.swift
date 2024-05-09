@@ -72,8 +72,8 @@ struct Books: View {
                                             AsyncImage(url: URL(string: book.bookImageURL)) { image in
                                                 image.resizable()
                                             } placeholder: {
-                                                ProgressView()
-                                            }
+                                                Rectangle().fill(Color(.systemGray4))
+                                                .frame(width: 80, height: 120)                                     }
                                             .frame(width: 80,height: 120)
                                             .cornerRadius(8)
                                             .padding(.leading, 10)

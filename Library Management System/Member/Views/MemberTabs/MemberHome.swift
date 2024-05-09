@@ -26,6 +26,7 @@ func requestAccessToCalendar(completion: @escaping (Bool) -> Void) {
 
 struct MemberHome: View {
     @State var category: String = ""
+    @Binding var tabSelection: Int
     @EnvironmentObject var themeManager: ThemeManager
     @ObservedObject var LibViewModel: LibrarianViewModel
     @State private var hasCalendarAccess = false
@@ -66,7 +67,6 @@ struct MemberHome: View {
                 
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack {
-                        NavigationLink(destination: Books(themeManager: themeManager)) {
                             ZStack(alignment: .bottomLeading) {
                                 
                                 Rectangle()
@@ -85,9 +85,11 @@ struct MemberHome: View {
                                         .frame(width: 20, height: 20)
                                 }
                                 .padding()
+                            }.onTapGesture {
+                                tabSelection = 3
                             }
                             
-                        }
+                        NavigationLink(destination: UserHistory(LibViewModel: LibViewModel)) {
                         ZStack(alignment: .bottomLeading) {
                             Rectangle()
                                 .foregroundColor(themeManager.selectedTheme.primaryThemeColor)
@@ -103,6 +105,7 @@ struct MemberHome: View {
                                     .frame(width: 20, height: 20)
                             }.padding()
                         }
+                    }
                     }.padding()
                 }
                 
@@ -126,7 +129,8 @@ struct MemberHome: View {
                                             AsyncImage(url: URL(string: book.bookImageURL)) { image in
                                                 image.resizable()
                                             } placeholder: {
-                                                ProgressView()
+                                                Rectangle().fill(Color(.systemGray4))
+                                                .frame(width: 80, height: 120)
                                             }
                                             .frame(width: 80, height: 120)
                                             .cornerRadius(8)
@@ -139,7 +143,7 @@ struct MemberHome: View {
                                             }
                                             .font(.caption)
                                             .bold()
-                                            .foregroundStyle(Color(.systemGray))
+                                            .foregroundStyle(Color(.systemYellow))
                                             .padding(.bottom, 5)
                                             Text("\(book.bookName)")
                                                 .multilineTextAlignment(.leading)
@@ -192,7 +196,7 @@ struct MemberHome: View {
                                     VStack(alignment: .leading){
                                         ZStack(alignment:.leading){
                                             Rectangle()
-                                                .fill(randomColor())
+                                                .fill(themeManager.randomColor())
                                                 .cornerRadius(12)
                                             VStack(alignment:.leading){
                                                 Spacer()
@@ -241,7 +245,8 @@ struct MemberHome: View {
                                             AsyncImage(url: URL(string: book.bookImageURL)) { image in
                                                 image.resizable()
                                             } placeholder: {
-                                                ProgressView()
+                                                Rectangle().fill(Color(.systemGray4))
+                                                .frame(width: 80, height: 120)
                                             }
                                             .frame(width: 80, height: 120)
                                             .cornerRadius(8)
@@ -254,7 +259,7 @@ struct MemberHome: View {
                                             }
                                             .font(.caption)
                                             .bold()
-                                            .foregroundStyle(Color(.systemGray))
+                                            .foregroundStyle(Color(.systemYellow))
                                             .padding(.bottom, 5)
                                             Text("\(book.bookName)")
                                                 .multilineTextAlignment(.leading)
@@ -290,7 +295,7 @@ struct MemberHome: View {
                 
                 
             }
-            .navigationTitle("Hello Member")
+            .navigationTitle("Trove")
             .navigationBarItems(trailing: NavigationLink(destination: ProfileCompletedView(), label: {
                 Image(systemName: "person.crop.circle")
                     .font(.title3)
@@ -316,16 +321,17 @@ struct MemberHome: View {
     }
 }
 
-func randomColor() -> Color {
-    let systemColors: [Color] = [.red, .green, .blue, .orange, .yellow, .pink, .purple, .teal, .cyan, .indigo, .brown, .gray, .mint]
-    return systemColors.randomElement() ?? .red
-}
+//func randomColor() -> Color {
+//    let systemColors: [Color] = [.red, .green, .blue, .orange, .yellow, .pink, .purple, .teal, .cyan, .indigo, .brown, .gray, .mint]
+//    return systemColors.randomElement() ?? .red
+//}
 
 struct MemberHome_Previews: PreviewProvider {
     static var previews: some View {
+        @State var int: Int = 0
         @ObservedObject var configViewModel = ConfigViewModel()
         @StateObject var LibViewModel = LibrarianViewModel()
         let themeManager = ThemeManager()
-        return MemberHome(LibViewModel: LibViewModel, configViewModel: configViewModel).environmentObject(themeManager)
+        return MemberHome(tabSelection: $int, LibViewModel: LibViewModel, configViewModel: configViewModel).environmentObject(themeManager)
     }
 }

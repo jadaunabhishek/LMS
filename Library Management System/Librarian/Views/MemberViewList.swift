@@ -63,7 +63,7 @@ struct MembersView: View {
     }
     
     var body: some View {
-        NavigationView {
+        NavigationStack {
             VStack{
                 List{
                     ForEach(filteredMembers, id: \.id) { member in

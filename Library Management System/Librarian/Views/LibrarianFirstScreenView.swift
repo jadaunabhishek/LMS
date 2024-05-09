@@ -28,26 +28,20 @@ struct LibrarianFirstScreenView: View {
                     }
                     .tag(2)
                 
-                BooksPage(LibViewModel: LibModelView, ConfigViewModel: ConfiViewModel)
+            BooksPage(LibViewModel: LibModelView, ConfigViewModel: ConfiViewModel)
                     .tabItem {
                         Image(systemName: "book.closed")
                         Text("Books")
                     }
                     .tag(3)
-                
-                MembersView()
-                    .tabItem {
-                        Image(systemName: "person.3.fill")
-                        Text("Member")
-                    }
-                    .tag(4)
+
                 
                 SupportView(authViewModel: auth)
                     .tabItem {
                         Image(systemName: "person.line.dotted.person.fill")
                         Text("Support")
                     }
-                    .tag(5)
+                    .tag(4)
             }
             .accentColor(themeManager.selectedTheme.primaryThemeColor)
             .navigationBarHidden(true)

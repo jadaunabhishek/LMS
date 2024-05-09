@@ -20,7 +20,7 @@ struct AdminCategoriesCard: View {
             
             ZStack(alignment:.leading){
                 Rectangle()
-                    .fill(randomColor())
+                    .fill(themeManager.randomColor())
                     .cornerRadius(12)
                  
                 VStack(alignment:.leading){
@@ -38,10 +38,6 @@ struct AdminCategoriesCard: View {
         }
     }
     
-    func randomColor() -> Color {
-        let systemColors: [Color] = [.red, .green, .blue, .orange, .yellow, .pink, .purple, .teal, .cyan, .indigo, .brown, .gray, .mint]
-        return systemColors.randomElement() ?? .red
-    }
 }
 
 

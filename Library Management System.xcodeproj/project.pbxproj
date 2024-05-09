@@ -14,6 +14,7 @@
 		0FC0423E2BEB3558000BDA67 /* RevenueDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FC0423D2BEB3558000BDA67 /* RevenueDetailView.swift */; };
 		0FC042402BEB3624000BDA67 /* ColorSelecterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FC0423F2BEB3624000BDA67 /* ColorSelecterView.swift */; };
 		0FC042422BEB3784000BDA67 /* MemberDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FC042412BEB3784000BDA67 /* MemberDetailView.swift */; };
+		0FC042442BECFD64000BDA67 /* UserHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FC042432BECFD64000BDA67 /* UserHistory.swift */; };
 		1F7C0E4D2BD7A920007D5221 /* StaffSchema.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F7C0E4C2BD7A920007D5221 /* StaffSchema.swift */; };
 		1F7C0E502BD7B142007D5221 /* StaffViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F7C0E4F2BD7B142007D5221 /* StaffViewModel.swift */; };
 		1F7C0E522BD7B3B2007D5221 /* AddStaffView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F7C0E512BD7B3B2007D5221 /* AddStaffView.swift */; };
@@ -145,6 +146,7 @@
 		0FC0423D2BEB3558000BDA67 /* RevenueDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RevenueDetailView.swift; sourceTree = "<group>"; };
 		0FC0423F2BEB3624000BDA67 /* ColorSelecterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorSelecterView.swift; sourceTree = "<group>"; };
 		0FC042412BEB3784000BDA67 /* MemberDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemberDetailView.swift; sourceTree = "<group>"; };
+		0FC042432BECFD64000BDA67 /* UserHistory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserHistory.swift; sourceTree = "<group>"; };
 		1F7C0E4C2BD7A920007D5221 /* StaffSchema.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaffSchema.swift; sourceTree = "<group>"; };
 		1F7C0E4F2BD7B142007D5221 /* StaffViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaffViewModel.swift; sourceTree = "<group>"; };
 		1F7C0E512BD7B3B2007D5221 /* AddStaffView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddStaffView.swift; sourceTree = "<group>"; };
@@ -579,6 +581,7 @@
 				D57BFDAE2BDD233E0094A0B5 /* Books.swift */,
 				D57BFDB02BDD23480094A0B5 /* Support.swift */,
 				0F85ED882BE0E32900C48C75 /* MemberBookDetailView.swift */,
+				0FC042432BECFD64000BDA67 /* UserHistory.swift */,
 				848F9DE12BE897F9004614D9 /* CreateIssue.swift */,
 				D5C949592BEA193100D5310D /* SupportReply.swift */,
 				D5013B822BEA36630067724A /* Records.swift */,
@@ -806,6 +809,7 @@
 				D5013B832BEA36640067724A /* Records.swift in Sources */,
 				84E87D552BD7D44800FAD5DC /* AdminSubCategoriesView.swift in Sources */,
 				D57BFDAF2BDD233E0094A0B5 /* Books.swift in Sources */,
+				0FC042442BECFD64000BDA67 /* UserHistory.swift in Sources */,
 				D50A722B2BE7F8E700C9BE05 /* LibrarianHomeView.swift in Sources */,
 				D50A72292BE7DC9300C9BE05 /* CheckInDetailsView.swift in Sources */,
 				0F85ED832BD902B400C48C75 /* ConfigVIewModel.swift in Sources */,

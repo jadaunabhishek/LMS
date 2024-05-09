@@ -4,7 +4,6 @@ struct Support: View {
     @State private var createIssue = false
     @State private var showDetails = false
     @ObservedObject var authViewModel: AuthViewModel
-    @State private var searchText = ""
     
     var body: some View {
         NavigationView {
@@ -38,7 +37,6 @@ struct Support: View {
                     try? await Task.sleep(nanoseconds: 1_000_000_000)
                 }
             }
-            .searchable(text: $searchText)
         }
     }
 }

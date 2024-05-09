@@ -404,7 +404,7 @@ struct AdminHomeView: View {
                 }
             }
             .navigationBarBackButtonHidden()
-            .navigationBarTitle("Hello! Admin")
+            .navigationBarTitle("Trove")
             .navigationBarItems(trailing: NavigationLink(destination: ProfileCompletedView(), label: {
                 Image(systemName: "person.crop.circle")
                     .font(.title3)
