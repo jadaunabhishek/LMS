@@ -1,5 +1,10 @@
 import Foundation
 
+struct categoryStats{
+    var category: String
+    var count: Int
+}
+
 struct Loan{
     
     var loanId: String

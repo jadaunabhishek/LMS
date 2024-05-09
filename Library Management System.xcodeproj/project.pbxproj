@@ -108,6 +108,7 @@
 		DC1D40302BD77E4B00970C7B /* AdminHomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC1D402F2BD77E4B00970C7B /* AdminHomeView.swift */; };
 		DC1D40322BD77E8000970C7B /* AdminStaffView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC1D40312BD77E8000970C7B /* AdminStaffView.swift */; };
 		DC1D40342BD77E9600970C7B /* AdminTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC1D40332BD77E9600970C7B /* AdminTabView.swift */; };
+		DC1E451E2BEC960000BEC61F /* Dashboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC1E451D2BEC960000BEC61F /* Dashboard.swift */; };
 		DC48E7222BD6E78000794A7C /* LibrarianViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC48E7212BD6E78000794A7C /* LibrarianViewModel.swift */; };
 		DC79BDC42BDA23710048F1DE /* UpdateBookPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC79BDC32BDA23710048F1DE /* UpdateBookPage.swift */; };
 		DC79BDC62BDA23780048F1DE /* BooksPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC79BDC52BDA23780048F1DE /* BooksPage.swift */; };
@@ -210,6 +211,7 @@
 		DC1D402F2BD77E4B00970C7B /* AdminHomeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AdminHomeView.swift; sourceTree = "<group>"; };
 		DC1D40312BD77E8000970C7B /* AdminStaffView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AdminStaffView.swift; sourceTree = "<group>"; };
 		DC1D40332BD77E9600970C7B /* AdminTabView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AdminTabView.swift; sourceTree = "<group>"; };
+		DC1E451D2BEC960000BEC61F /* Dashboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dashboard.swift; sourceTree = "<group>"; };
 		DC48E7212BD6E78000794A7C /* LibrarianViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibrarianViewModel.swift; sourceTree = "<group>"; };
 		DC79BDC32BDA23710048F1DE /* UpdateBookPage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UpdateBookPage.swift; sourceTree = "<group>"; };
 		DC79BDC52BDA23780048F1DE /* BooksPage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BooksPage.swift; sourceTree = "<group>"; };
@@ -511,6 +513,7 @@
 				D50A722A2BE7F8E700C9BE05 /* LibrarianHomeView.swift */,
 				848F9DE32BE8A85F004614D9 /* SupportView.swift */,
 				D5027A622BE8EDB600316886 /* SupportResponse.swift */,
+				DC1E451D2BEC960000BEC61F /* Dashboard.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -794,6 +797,7 @@
 				DC79BDC62BDA23780048F1DE /* BooksPage.swift in Sources */,
 				84D3293E2BDE707000E75F81 /* EditStaffDetailsView.swift in Sources */,
 				1F84616F2BD65679008B7B3E /* ThemeManager.swift in Sources */,
+				DC1E451E2BEC960000BEC61F /* Dashboard.swift in Sources */,
 				842468302BEB38B7008746D1 /* OnboardingView.swift in Sources */,
 				DC1D40322BD77E8000970C7B /* AdminStaffView.swift in Sources */,
 				84301CB92BDA4B87004CF581 /* StaffDetailsView.swift in Sources */,
