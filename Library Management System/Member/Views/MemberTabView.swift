@@ -17,7 +17,7 @@ struct MemberTabView: View {
     
     var body: some View {
         TabView {
-            MemberHome(themeManager: themeManager, LibViewModel: LibViewModel, configViewModel: ConfiViewModel)
+            MemberHome(LibViewModel: LibViewModel, configViewModel: ConfiViewModel)
                 .tabItem {
                     Image(systemName: "books.vertical.fill")
                     Text("Library")

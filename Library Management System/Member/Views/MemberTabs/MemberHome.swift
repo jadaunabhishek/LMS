@@ -189,7 +189,6 @@ struct MemberHome: View {
                                 
                                 NavigationLink(destination: MemberCategoryView(category: category, configViewModel: configViewModel, librarianViewModel: LibViewModel)) {
                                     VStack(alignment: .leading){
-                                        Text("Featured Collection").multilineTextAlignment(.leading).font(.callout).fontWeight(.semibold)
                                         ZStack(alignment:.leading){
                                             Rectangle()
                                                 .fill(randomColor())
@@ -219,14 +218,6 @@ struct MemberHome: View {
                     }
                     
                 }.padding(.vertical, 10)
-                    .background(
-                        LinearGradient(
-                            gradient: Gradient(colors: themeManager.gradientColors(for: colorScheme)),
-                            startPoint: .top,
-                            endPoint: .bottom
-                        )
-                    )
-                
                     .cornerRadius(5)
                 
                 
@@ -335,6 +326,6 @@ struct MemberHome_Previews: PreviewProvider {
         @ObservedObject var configViewModel = ConfigViewModel()
         @StateObject var LibViewModel = LibrarianViewModel()
         let themeManager = ThemeManager()
-        return MemberHome(themeManager: themeManager, LibViewModel: LibViewModel, configViewModel: configViewModel).environmentObject(themeManager)
+        return MemberHome(LibViewModel: LibViewModel, configViewModel: configViewModel).environmentObject(themeManager)
     }
 }
