@@ -13,86 +13,91 @@ struct StaffDetailsView: View {
     @StateObject var staffViewModel = StaffViewModel()
     
     var body: some View {
-        NavigationView{
-            List {
-                Section(header: Text("Staff Details").font(.callout)) {
-                    VStack(alignment: .center){
-                        if let profileURL = URL(string: staffMember.profileImageURL) {
-                            AsyncImage(url: profileURL) { image in
-                                image
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fill)
-                                    .frame(width: 120, height: 120)
-                                    .clipShape(Circle())
-                                    .padding(.top, 20)
-                            } placeholder: {
-                                Image(systemName: "person.circle.fill")
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fit)
-                                    .frame(width: 120, height: 120)
-                                    .clipShape(Rectangle())
-                                    .cornerRadius(10)
+            VStack{
+                List {
+                    Section() {
+                        VStack(alignment: .center){
+                            if let profileURL = URL(string: staffMember.profileImageURL) {
+                                AsyncImage(url: profileURL) { image in
+                                    image
+                                        .resizable()
+                                        .aspectRatio(contentMode: .fill)
+                                        .frame(width: 120, height: 120)
+                                        .clipShape(Circle())
+                                        .padding(.top, 20)
+                                } placeholder: {
+                                    Image(systemName: "person.circle.fill")
+                                        .resizable()
+                                        .aspectRatio(contentMode: .fit)
+                                        .frame(width: 120, height: 120)
+                                        .clipShape(Rectangle())
+                                        .cornerRadius(10)
+                                }
+                                Text(staffMember.name)
+                                    .font(.title)
+                                    .fontWeight(.bold)
+                                    .foregroundColor(themeManager.selectedTheme.secondaryThemeColor)
                             }
-                            Text(staffMember.name)
-                                .font(.title)
-                                .fontWeight(.bold)
-                                .foregroundColor(themeManager.selectedTheme.secondaryThemeColor)
                         }
-                    }
-                    .frame(maxWidth: .infinity)
-                }
-                
-                Section(header: Text("Contact Information").font(.callout)) {
-                    HStack{
-                        Text("Email:")
-                            .font(.callout)
-                        Text(staffMember.email)
-                            .font(.callout)
-                    }
-                    HStack{
-                        Text("Mobile:")
-                            .font(.callout)
-                        Text(staffMember.mobile)
-                            .font(.callout)
-                    }
-                    HStack{
-                        Text("Aadhar:")
-                            .font(.callout)
-                        Text(staffMember.aadhar)
-                            .font(.callout)
-                    }
-                }
-                
-                Section(header: Text("Dates").font(.callout)) {
-                    HStack {
-                        Text("Created On:")
-                            .font(.callout)
-                        Text("\(formattedDate(from: staffMember.createdOn))")
-                            .font(.callout)
-                    }
-                    HStack{
-                        Text("Updated On:")
-                            .font(.callout)
-                        Text("\(formattedDate(from: staffMember.updatedOn))")
-                            .font(.callout)
+                        .frame(maxWidth: .infinity)
                     }
                     
-                }
-            }
-            .listStyle(InsetGroupedListStyle())
-        }
-        .navigationBarItems(
-            leading: Spacer(),
-            trailing:
-                NavigationLink(
-                    destination: EditStaffDetailsView(staffMember: staffMember),
-                    label: {
-                        Text("Edit")
-                            .font(.title3)
-                            .foregroundColor(themeManager.selectedTheme.primaryThemeColor)
+                    Section(header: Text("Contact Information").font(.callout)) {
+                        HStack{
+                            Text("Email:")
+                                .font(.callout)
+                            Text(staffMember.email)
+                                .font(.callout)
+                        }
+                        HStack{
+                            Text("Mobile:")
+                                .font(.callout)
+                            Text(staffMember.mobile)
+                                .font(.callout)
+                        }
+                        HStack{
+                            Text("Aadhar:")
+                                .font(.callout)
+                            Text(staffMember.aadhar)
+                                .font(.callout)
+                        }
+                        HStack{
+                            Text("Role:")
+                                .font(.callout)
+                            Text(staffMember.role)
+                                .font(.callout)
+                        }
                     }
+                    
+                    Section(header: Text("Dates").font(.callout)) {
+                        HStack {
+                            Text("Created On:")
+                                .font(.callout)
+                            Text("\(formattedDate(from: staffMember.createdOn))")
+                                .font(.callout)
+                        }
+                        HStack{
+                            Text("Updated On:")
+                                .font(.callout)
+                            Text("\(formattedDate(from: staffMember.updatedOn))")
+                                .font(.callout)
+                        }
+                        
+                    }
+                }
+                .listStyle(InsetGroupedListStyle())
+            } .navigationBarTitle("Details")
+                .navigationBarItems(
+                    trailing:
+                        NavigationLink(
+                            destination: EditStaffDetailsView(staffMember: staffMember),
+                            label: {
+                                Text("Edit")
+                                    
+                                    .foregroundColor(themeManager.selectedTheme.primaryThemeColor)
+                            }
+                        )
                 )
-        )
         .onAppear(
             perform: {
                 Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { time in
@@ -108,7 +113,7 @@ struct StaffDetailsView: View {
 
 func formattedDate(from date: Date) -> String {
     let dateFormatter = DateFormatter()
-    dateFormatter.dateFormat = "dd-MM-yyyy HH:mm" // Customize the date format here
+    dateFormatter.dateFormat = "dd-MM-yyyy HH:mm" 
     return dateFormatter.string(from: date)
 }
 struct StaffDetailsView_Previews: PreviewProvider {
