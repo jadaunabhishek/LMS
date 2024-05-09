@@ -13,7 +13,7 @@ import Charts
 struct MemberDetailView: View {
     @ObservedObject var userAuthViewModel: AuthViewModel
     @ObservedObject var configViewModel: ConfigViewModel
-    
+    @EnvironmentObject var themeManager: ThemeManager
 //    @State var memberData: [(month: String, count: Int)] = [
 //            (month: "June", count: 10),
 //            (month: "July", count: 20),
@@ -37,7 +37,7 @@ struct MemberDetailView: View {
             RoundedRectangle(cornerRadius: 15)
                 .fill(Color(.systemGray4))
                 .frame(width: 100,height: 5)
-                .padding()
+                .padding(.bottom)
             let maxCount = montlyMembersCount.map { $0.count }.max() ?? 0
 //            HStack{
 //                VStack{
@@ -97,7 +97,7 @@ struct MemberDetailView: View {
                                     x: .value("month", montlyMembersCount[index].month),
                                     y: .value("Count", montlyMembersCount[index].count)
                                 )
-                                .foregroundStyle(Color(.blue))
+                                .foregroundStyle(Color(themeManager.selectedTheme.primaryThemeColor))
                                 .accessibilityLabel("\(montlyMembersCount)")
                                 //                                            .accessibilityValue("\(weight.pounds) pounds")
                             }
@@ -219,7 +219,7 @@ struct MemberDetailView: View {
             Spacer()
         }
         .padding()
-        .task {
+        .onAppear {
             montlyMembersCount = configViewModel.currentConfig[0].monthlyMembersCount
         }
 

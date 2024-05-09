@@ -96,7 +96,7 @@ class NotificationsViewModel: ObservableObject {
         userDocRef.updateData([
             "role": "member",
             "status": "approved"
-        ]) { error in
+        ]) { [self] error in
             if let error = error {
                 print("Error updating user role: \(error.localizedDescription)")
             } else {
@@ -104,6 +104,95 @@ class NotificationsViewModel: ObservableObject {
                 print("User role successfully updated to 'member'")
                 if let index = self.notifications.firstIndex(where: { $0.id == notification.id }) {
                     self.notifications[index].message = "Approved"
+                    db.collection("configuration").document("HJ9L6mDbi01TJvX3ja7Z").getDocument{ (document,error) in
+                        if error == nil{
+                            if (document != nil && document!.exists){
+                                guard let fineDetailsDictArray = document!["fineDetails"] as? [[String: Any]] else {
+                                    print("Error: Unable to parse fineDetails array from Firestore document")
+                                    return
+                                }
+
+                                var fineDetailsArray: [fineDetails] = []
+                                for fineDetailDict in fineDetailsDictArray {
+                                    guard let fine = fineDetailDict["fine"] as? Int,
+                                          let period = fineDetailDict["period"] as? Int else {
+                                        print("Error: Unable to parse fineDetail from dictionary")
+                                        continue
+                                    }
+                                    
+                                    let fineDetail = fineDetails(fine: fine, period: period)
+                                    fineDetailsArray.append(fineDetail)
+                                    
+                                }
+                                
+                                guard let monthlyMembersCountDictArray = document!["monthlyMembersCount"] as? [[String: Any]] else {
+                                    print("Error: Unable to parse monthlyMembersCount array from Firestore document")
+                                    return
+                                }
+
+                                var monthlyMembersCountArray: [membersCount] = []
+                                for memberCountDict in monthlyMembersCountDictArray {
+                                    guard let month = memberCountDict["month"] as? String,
+                                          let count = memberCountDict["count"] as? Int else {
+                                        print("Error: Unable to parse memberCount from dictionary")
+                                        continue
+                                    }
+                                    
+                                    let memberCount = membersCount(month: month, count: count)
+                                    monthlyMembersCountArray.append(memberCount)
+                                }
+
+                                
+                                guard let monthlyIncomeDictArray = document!["monthlyIncome"] as? [[String: Any]] else {
+                                    print("Error: Unable to parse monthlyMembersCount array from Firestore document")
+                                    return
+                                }
+                                
+                                var monthlyIncomeArray: [monthlyIncome] = []
+                                for memberIncomeDict in monthlyIncomeDictArray {
+                                    guard let month = memberIncomeDict["month"] as? String,
+                                          let count = memberIncomeDict["income"] as? Int else {
+                                        print("Error: Unable to parse memberCount from dictionary")
+                                        continue
+                                    }
+                                    
+                                    let monthlyIncome = monthlyIncome(month: month, income: count)
+                                    monthlyIncomeArray.append(monthlyIncome)
+                                }
+
+                                
+                                var newConfig = Config(
+                                    configID: document!["configID"] as! String,
+                                    adminID: document!["adminID"] as! String,
+                                    logo: document!["logo"] as! String,
+                                    accentColor: document!["accentColor"] as! String,
+                                    loanPeriod: document!["loanPeriod"] as! Int,
+                                    fineDetails: fineDetailsArray,
+                                    maxFine: document!["maxFine"] as! Double,
+                                    maxPenalties: document!["maxPenalties"] as! Int,
+                                    categories: document!["categories"] as! [String],
+                                    monthlyMembersCount: monthlyMembersCountArray, monthlyIncome: monthlyIncomeArray)
+                                
+                                if let monthInt = Calendar.current.dateComponents([.month], from: Date()).month {
+                                    let monthStr = Calendar.current.monthSymbols[monthInt-1]
+                                    
+                                    for i in 0..<newConfig.monthlyMembersCount.count{
+                                        if(newConfig.monthlyMembersCount[i].month == monthStr){
+                                            newConfig.monthlyMembersCount[i].count += 1
+                                        }
+                                    }
+                                    self.db.collection("configuration").document("HJ9L6mDbi01TJvX3ja7Z").setData(newConfig.getDictionaryOfStruct()){ error in
+                                        if let error = error{
+                                            print(error)
+                                        }
+                                        else{
+                                            print("Done")
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
                     self.updateFilteredNotifications()
                 }
             }
@@ -127,4 +216,5 @@ class NotificationsViewModel: ObservableObject {
             }
         }
     }
+    
 }
