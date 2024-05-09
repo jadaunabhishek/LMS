@@ -9,6 +9,7 @@ import SwiftUI
 
 struct ContentView: View {
     @State private var isActive: Bool = false
+    @AppStorage("onBoarded") var onBoarded = false
     
     var body: some View {
         NavigationView {
@@ -23,7 +24,7 @@ struct ContentView: View {
                 Text("Trove")
                     .font(.largeTitle)
                     .fontWeight(.bold)
-                    .foregroundColor(.white) 
+                    .foregroundColor(.white)
                 
                 
                 Spacer()
@@ -31,26 +32,34 @@ struct ContentView: View {
                 Text("One scan for healthy skin!")
                     .foregroundColor(Color("PrimaryColor"))
                     .padding(.top, 8)
-                 
-                NavigationLink(
-                    destination: OnboardingView(),
-                    isActive: $isActive
-                ) {
-                    EmptyView()
-                }
-                .navigationBarTitle("Main Screen", displayMode: .inline)
-                .onAppear {
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                        withAnimation {
-                            self.isActive = true
-                        }
+                
+                if onBoarded {
+                    NavigationLink(
+                        destination: OnboardingView(),
+                        isActive: $isActive
+                    ) {
+                        EmptyView()
+                    }
+                } else {
+                    NavigationLink(
+                        destination: LoginView(),
+                        isActive: $isActive
+                    ) {
+                        EmptyView()
                     }
                 }
-                .background(
-                    Text("Your App Content")
-                )
-                .navigationBarHidden(true)
             }
+            
+            .navigationBarTitle("Main Screen", displayMode: .inline)
+            .onAppear {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                    withAnimation {
+                        self.isActive = true
+                    }
+                }
+            }
+            .navigationBarHidden(true)
+            
         }
     }
 }

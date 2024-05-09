@@ -30,20 +30,19 @@ struct SignupView: View {
                             image
                                 .resizable()
                                 .aspectRatio(contentMode: .fit)
-                                .frame(width: 300, height: 150)
+                                .frame(width: 250, height: 100)
                         default:
-                            ProgressView()
-//                            Image("AppLogo")
-//                                .resizable()
-//                                .aspectRatio(contentMode: .fit)
-//                                .frame(width: 300, height: 150)
+                            Image("AppLogo")
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .frame(width: 250, height: 100)
                         }
                     }
                 } else {
                     Image("AppLogo")
                         .resizable()
                         .aspectRatio(contentMode: .fit)
-                        .frame(width: 300, height: 150)
+                        .frame(width: 250, height: 100)
                 }
                 
                 Text("Sign Up")

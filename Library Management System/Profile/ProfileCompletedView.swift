@@ -24,7 +24,8 @@ struct ProfileCompletedView: View {
             Text("User Profile")
             VStack {
                 Button {
-                    UserDefaults.standard.set("LogOut", forKey: "emailLoggedIn")
+                    UserDefaults.standard.set("false", forKey: "emailLoggedIn")
+                    UserDefaults.standard.set("false", forKey: "signIn")
                     let firebaseAuth = Auth.auth()
                     do {
                       try firebaseAuth.signOut()

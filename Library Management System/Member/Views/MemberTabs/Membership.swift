@@ -44,14 +44,27 @@ struct Membership: View {
     }
     
     var body: some View {
-        ScrollView{
+        NavigationView {
             VStack{
                 ZStack {
                     Rectangle()
                         .foregroundColor(themeManager.selectedTheme.primaryThemeColor)
                         .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
                         .frame(height: 250)
-                        .navigationBarHidden(true)
+                        .navigationBarItems(trailing: Button {
+                            UserDefaults.standard.set("false", forKey: "emailLoggedIn")
+                            UserDefaults.standard.set("false", forKey: "signIn")
+                            let firebaseAuth = Auth.auth()
+                            do {
+                              try firebaseAuth.signOut()
+                            } catch let signOutError as NSError {
+                              print("Error signing out: %@", signOutError)
+                            }
+                            
+                        } label: {
+                            Text("Log out")
+                                .foregroundColor(Color.red)
+                        })
                     
                     VStack( spacing: 10) {
                         Text("Membership Access")
