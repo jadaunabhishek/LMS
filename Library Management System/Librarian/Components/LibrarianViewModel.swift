@@ -10,6 +10,7 @@ class LibrarianViewModel: ObservableObject{
     @Published var responseStatus = 0
     @Published var responseMessage = ""
     
+    @Published var currentStaff: [Staff] = []
     @Published var currentConfig: [Config] = []
     @Published var currentMember: [UserSchema] = []
     @Published var currentBook: [Book] = []
@@ -947,6 +948,28 @@ class LibrarianViewModel: ObservableObject{
             self?.currentMember.append(tempMember)
         }
     }
+    
+    
+    func fetchStaffData(staffID: String) {
+        self.dbInstance.collection("users").document(staffID).getDocument { [weak self] (documentSnapshot, error) in
+            if let error = error {
+                print("Error fetching user data: \(error.localizedDescription)")
+                return
+            }
+            
+            guard let document = documentSnapshot, document.exists else {
+                print("User document not found")
+                return
+            }
+            
+            let staffData = document.data()
+            var tempMember = Staff(userID: staffData?["userID"] as? String ?? "", name: staffData?["name"] as? String ?? "", email: staffData?["email"] as? String ?? "", mobile: staffData?["mobile"] as? String ?? "", profileImageURL: staffData?["profileImage"] as? String ?? "", aadhar: staffData?["aadhar"] as? String ?? "", role: staffData?["role"] as? String ?? "", password: staffData?["password"] as? String ?? "", createdOn: Date.now, updatedOn: Date.now)
+            
+            self?.currentStaff.append(tempMember)
+        }
+    }
+    
+    
     
     func rateReview(bookId: String, rating: Int, review: String, loanId: String){
         self.responseStatus = 0

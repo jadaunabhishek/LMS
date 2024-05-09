@@ -200,7 +200,7 @@ struct MembershipSections: View {
                     Text(selectedItems.count == viewModel.notifications.count ? "Unselect All" : "Select All")
                 }
             }
-            .foregroundColor(selectedItems.isEmpty ? Color.black : themeManager.selectedTheme.primaryThemeColor)
+            .foregroundColor(selectedItems.isEmpty ? themeManager.selectedTheme.bodyTextColor : themeManager.selectedTheme.primaryThemeColor)
             
             Spacer()
             
@@ -379,7 +379,7 @@ struct BooksSections: View {
                     Text(selectedItems.count == LibViewModel.requestedLoans.count ? "Unselect All" : "Select All")
                 }
             }
-            .foregroundColor(selectedItems.isEmpty ? Color.black : themeManager.selectedTheme.primaryThemeColor)
+            .foregroundColor(selectedItems.isEmpty ? themeManager.selectedTheme.primaryThemeColor : themeManager.selectedTheme.primaryThemeColor)
             
             Spacer()
             

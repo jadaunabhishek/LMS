@@ -93,7 +93,7 @@ struct LoginView: View {
                     }, label: "Log In")
                     .disabled(email.isEmpty || password.isEmpty)
                     
-                    NavigationLink(destination: AdminTabView(themeManager: themeManager), isActive: $viewModel.shouldNavigateToAdmin) { EmptyView() }
+                    NavigationLink(destination: AdminTabView(), isActive: $viewModel.shouldNavigateToAdmin) { EmptyView() }
                     NavigationLink(destination: LibrarianFirstScreenView(LibModelView: LibViewModel, ConfiViewModel: configViewModel), isActive: $viewModel.shouldNavigateToLibrarian) { EmptyView() }
                     NavigationLink(destination: MemberTabView(themeManager: themeManager, memModelView: memModelView, ConfiViewModel: configViewModel), isActive: $viewModel.shouldNavigateToMember) { EmptyView() }
                     NavigationLink(destination: Membership(), isActive: $viewModel.shouldNavigateToGeneral) { EmptyView() }
