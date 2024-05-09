@@ -12,6 +12,7 @@ struct RecordBookDetail: View {
     @State var checkInDetails: Loan
     @ObservedObject var LibViewModel: LibrarianViewModel
     @State private var authViewModel = AuthViewModel()
+    @State private var showReview: Bool = false
     
     var body: some View {
         List {
@@ -95,10 +96,17 @@ struct RecordBookDetail: View {
                 }
             }
         }
+        .sheet(isPresented: $showReview, content: {
+            Review(LibViewModel: LibViewModel, bookId: checkInDetails.bookId, loanId: checkInDetails.loanId)
+                .presentationDetents([.medium])
+        })
         .task {
             do{
                 LibViewModel.fetchUserData(userID: checkInDetails.bookIssuedTo)
                 try? await Task.sleep(nanoseconds: 1_000_000_000)
+                if(checkInDetails.loanStatus == "Returned"){
+                    showReview = true
+                }
             }
         }
         .navigationBarTitle("Record details", displayMode: .inline)

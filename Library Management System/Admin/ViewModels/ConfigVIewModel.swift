@@ -63,6 +63,24 @@ class ConfigViewModel: ObservableObject {
                     }
 
                     
+                    guard let monthlyIncomeDictArray = document!["monthlyIncome"] as? [[String: Any]] else {
+                        print("Error: Unable to parse monthlyMembersCount array from Firestore document")
+                        return
+                    }
+                    
+                    var monthlyIncomeArray: [monthlyIncome] = []
+                    for memberIncomeDict in monthlyIncomeDictArray {
+                        guard let month = memberIncomeDict["month"] as? String,
+                              let count = memberIncomeDict["income"] as? Int else {
+                            print("Error: Unable to parse memberCount from dictionary")
+                            continue
+                        }
+                        
+                        let monthlyIncome = monthlyIncome(month: month, income: count)
+                        monthlyIncomeArray.append(monthlyIncome)
+                    }
+
+                    
                     var newConfig = Config(
                         configID: document!["configID"] as! String,
                         adminID: document!["adminID"] as! String,
@@ -73,8 +91,7 @@ class ConfigViewModel: ObservableObject {
                         maxFine: document!["maxFine"] as! Double,
                         maxPenalties: document!["maxPenalties"] as! Int,
                         categories: document!["categories"] as! [String],
-                        monthlyMembersCount: monthlyMembersCountArray
-                                                )
+                        monthlyMembersCount: monthlyMembersCountArray, monthlyIncome: monthlyIncomeArray)
                     print(newConfig)
                     self.currentConfig.append(newConfig)
                     self.responseStatus = 200
