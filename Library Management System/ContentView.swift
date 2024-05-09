@@ -9,7 +9,8 @@ import SwiftUI
 
 struct ContentView: View {
     @State private var isActive: Bool = false
-    @AppStorage("onBoarded") var onBoarded = false
+    @State private var onBoarded: Bool = UserDefaults.standard.bool(forKey: "onBoarded")
+    //@AppStorage("onBoarded") var onBoarded = false
     
     var body: some View {
         NavigationView {
@@ -33,7 +34,7 @@ struct ContentView: View {
                     .foregroundColor(Color("PrimaryColor"))
                     .padding(.top, 8)
                 
-                if onBoarded {
+                if !onBoarded {
                     NavigationLink(
                         destination: OnboardingView(),
                         isActive: $isActive

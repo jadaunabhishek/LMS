@@ -140,6 +140,7 @@ struct LoginView: View {
                 .navigationBarBackButtonHidden(true)
                 .task {
                     LibViewModel.getBooks()
+                    UserDefaults.standard.set(true, forKey: "onBoarded")
                 }
             }
         }
