@@ -16,7 +16,7 @@ struct LibrarianFirstScreenView: View {
                         Text("Actions")
                     }
                 
-                BooksPage(LibViewModel: LibModelView, ConfiViewMmodel: ConfiViewModel)
+                BooksPage(LibViewModel: LibModelView, ConfigViewModel: ConfiViewModel)
                     .tabItem {
                         Image(systemName: "book.closed")
                         Text("Books")
