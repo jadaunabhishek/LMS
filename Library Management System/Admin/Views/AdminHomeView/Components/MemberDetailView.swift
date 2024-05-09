@@ -38,57 +38,7 @@ struct MemberDetailView: View {
                 .fill(Color(.systemGray4))
                 .frame(width: 100,height: 5)
                 .padding(.bottom)
-            let maxCount = montlyMembersCount.map { $0.count }.max() ?? 0
-//            HStack{
-//                VStack{
-//                    Spacer()
-//                    HStack(spacing:6){
-//                        VStack(spacing:0){
-//                            ForEach(0..<maxCount/10){ index in
-//                                Text("\(maxCount - (index * 10))")
-//                                    .font(.caption2)
-//                                Rectangle()
-//                                    .frame(width: 0, height: 40)
-//                                
-//                            }
-//                            Text("0")
-//                                .font(.caption2)
-//                            
-//                        }
-//                        .offset(y:10)
-//                        Rectangle()
-//                            .fill(Color.black)
-//                            .frame(width: 1, height: CGFloat(maxCount)*5)
-//                        
-//                        
-//                    }
-//                }
-//                .padding(.bottom)
-//                ScrollView(.horizontal) {
-//                    HStack(spacing: 10) {
-//                        if !montlyMembersCount.isEmpty {
-//                            
-//                            ForEach(montlyMembersCount.indices, id: \.self) { index in
-//                                VStack {
-//                                    Spacer()
-//                                    Rectangle()
-//                                        .fill(Color.blue)
-//                                        .frame(width: 40, height: CGFloat(montlyMembersCount[index].count * 5))
-//                                    Text("\(montlyMembersCount[index].month)")
-//                                }
-//                                .onTapGesture {
-//                                    selectedBar = index
-//                                }
-//                            }
-//                        }
-//                    }
-//                    .padding(.top, 20)
-//                }
-//                .scrollIndicators(.hidden)
-//                
-//                
-//            }
-            VStack() {
+          VStack() {
                 GroupBox ("Member Frequency") {
                     if !montlyMembersCount.isEmpty {
                         Chart {
@@ -99,7 +49,7 @@ struct MemberDetailView: View {
                                 )
                                 .foregroundStyle(Color(themeManager.selectedTheme.primaryThemeColor))
                                 .accessibilityLabel("\(montlyMembersCount)")
-                                //                                            .accessibilityValue("\(weight.pounds) pounds")
+                                
                             }
                         }
                     }
@@ -107,114 +57,55 @@ struct MemberDetailView: View {
                             }
             .frame(height: 280)
             .padding(.bottom)
-//            .groupBoxStyle(YellowGroupBoxStyle())
-//            .frame(width: ViewConstants.chartWidth,  height: ViewConstants.chartHeight)
-//
-//            Text("Generate Data")
-//                .font(.title2)
-//            HStack {
-//                Button("10") {
-//                    weightVm.generateWeightData(numberOfDays: 10)
-//                }
-//                Button("50") {
-//                    weightVm.generateWeightData(numberOfDays: 50)
-//                }
-//                Button("100") {
-//                    weightVm.generateWeightData(numberOfDays: 100)
-//                }
-//                Button("1000") {
-//                    weightVm.generateWeightData(numberOfDays: 1000)
-//                }
-//            }
-//
-//            ScrollView(.horizontal){
-//                Chart{
-//                    ForEach(memberData.indices, id: \.self) { index in
-//                        BarMark(
-//                            x: .value("Month", memberData[index].month),
-//                            y: .value("Members", memberData[index].count)
-//                        )
-//                    }
-//                }
-//            }
-//            Text(configViewModel.currentConfig[0].monthlyMembersCount)
+            
             VStack{
-//                if selectedBar == -1 {
-//                    Text("Total")
-//                } else {
-//                    Text("\(selectedBar)")
-//                }
-//
-                // MARK: Applied and Rejected
-                HStack(spacing:12){
-                    ZStack{
+                    ZStack(alignment:.leading){
                         RoundedRectangle(cornerRadius: 10)
                             .fill(Color(.systemGray4).opacity(0.5))
                             .frame(height: 125)
-                        VStack(alignment: .leading){
-                                Text("Rejected")
-                                    .font(.title3)
-                        
-                            .foregroundStyle(Color.gray)
-                            Text(String("\(userAuthViewModel.rejectedUsers)"))
-                                .font(.title)
-                                .bold()
-                                .padding(.top)
-                        }
-                        .padding(.horizontal)
-                    }
-                    
-                    ZStack{
-                        RoundedRectangle(cornerRadius: 10)
-                            .fill(Color(.systemGray4).opacity(0.5))
-                            .frame(height: 125)
-                        VStack(alignment: .leading){
-                            Text("Applied")
-                                    .font(.title3)
-                            .foregroundStyle(Color.gray)
-                            Text(String("\(userAuthViewModel.appliedUsers)"))
-                                .font(.title)
-                                .bold()
-                                .padding(.top)
-                        }
-                        .padding(.horizontal)
-                    }
-                }
-                
-                // MARK: Approved and New
-                HStack(spacing:12){
-                    ZStack{
-                        RoundedRectangle(cornerRadius: 10)
-                            .fill(Color(.systemGray4).opacity(0.5))
-                            .frame(height: 125)
-                        VStack(alignment: .leading){
+                        HStack{
+                            VStack(alignment: .leading){
                                 Text("Approved")
                                     .font(.title3)
-                            .foregroundStyle(Color.gray)
-                            Text(String("\(userAuthViewModel.approvedUsers)"))
-                                .font(.title)
-                                .bold()
-                                .padding(.top)
-                        }
-                        .padding(.horizontal)
-                    }
-                    
-                    ZStack{
-                        RoundedRectangle(cornerRadius: 10)
-                            .fill(Color(.systemGray4).opacity(0.5))
-                            .frame(height: 125)
-                        VStack(alignment: .leading){
-                                Text("New")
+                                    .foregroundStyle(Color.gray)
+                                Text(String("\(userAuthViewModel.approvedUsers)"))
+                                    .font(.title)
+                                    .bold()
+                                    .padding(.top)
+                            }
+                            .padding(.horizontal)
+                            
+                            Divider()
+                                .frame(height: 100)
+                            
+                            VStack(alignment: .leading){
+                                Text("Applied")
                                     .font(.title3)
-                            .foregroundStyle(Color.gray)
-                            Text(String("\(userAuthViewModel.newUsers)"))
-                                .font(.title)
-                                .bold()
-                                .padding(.top)
+                                    .foregroundStyle(Color.gray)
+                                Text(String("\(userAuthViewModel.appliedUsers)"))
+                                    .font(.title)
+                                    .bold()
+                                    .padding(.top)
+                            }
+                            .padding(.horizontal)
+                            
+                            Divider()
+                                .frame(height: 100)
+                            
+                            VStack(alignment: .leading){
+                                Text("Rejected")
+                                    .font(.title3)
+                                
+                                    .foregroundStyle(Color.gray)
+                                Text(String("\(userAuthViewModel.rejectedUsers)"))
+                                    .font(.title)
+                                    .bold()
+                                    .padding(.top)
+                            }
+                            .padding(.horizontal)
                         }
-                        .padding(.horizontal)
                     }
-                }
+                
             }
             Spacer()
         }

@@ -36,7 +36,7 @@ struct AdminHomeView: View {
         ]
         
     }
-    @State var TotalRevenue : Int = 0
+    @State var totalRevenue : Int = 0
     var body: some View {
         NavigationView{
             VStack {
@@ -57,13 +57,13 @@ struct AdminHomeView: View {
                                                 Text("Total Revenue")
                                                     .foregroundStyle(Color.gray)
                                                     .font(.title3)
-                                                Text("₹ \(userAuthViewModel.totalIncome + (userAuthViewModel.allUsers.count*50))")
+                                                Text("₹ \(totalRevenue)")
                                                     .font(.title)
                                                     .bold()
                                                     .padding(.top,2)
                                                     .padding(.leading,2)
                                             }
-                                            HStack(alignment: .center,spacing: 14){
+                                            HStack(spacing: 14){
                                                 VStack(alignment:.leading){
                                                     HStack {
                                                         Rectangle()
@@ -73,7 +73,7 @@ struct AdminHomeView: View {
                                                             .font(.caption)
                                                     }
                                                     Text("\(data[0].amount)")
-                                                        .font(.caption)
+                                                        .font(.caption2)
                                                 }
                                                 
                                                 VStack(alignment:.leading){
@@ -85,11 +85,10 @@ struct AdminHomeView: View {
                                                             .font(.caption)
                                                     }
                                                     Text("\(data[1].amount)")
-                                                        .font(.caption)
+                                                        .font(.caption2)
                                                 }
                                             }
                                             .padding(6)
-                                            .padding(.leading,10)
                                         }
                                         .padding()
                                         VStack{
@@ -99,11 +98,14 @@ struct AdminHomeView: View {
                                                 .foregroundStyle(themeManager.selectedTheme.primaryThemeColor)
                                                 .cornerRadius(24)
                                                 .opacity(dataItem.type != "Fine" ? 0.7 : 1)
-//                                                .annotation(position: .overlay) {
-//                                                    let percentage = (Float(dataItem.amount) / Float(TotalRevenue)) * 100
-//                                                    let roundedPercentage = round(percentage)
-//                                                    Text("\(Int(roundedPercentage))%")
-//                                                }
+                                                .annotation(position: .overlay) {
+                                                            let percentage = (Float(dataItem.amount) / Float(totalRevenue)) * 100
+                                                            let roundedPercentage = round(percentage)
+                                                            Text("\(Int(roundedPercentage))%")
+                                                        .foregroundStyle(Color.white)
+                                                        .font(.body)
+                                                            
+                                                }
                                                 
                                             }
                                             
@@ -148,7 +150,7 @@ struct AdminHomeView: View {
                                 }
                                 .sheet(isPresented: $isMemberSheetPresented) {
                                     MemberDetailView(userAuthViewModel: userAuthViewModel, configViewModel: configViewModel)
-                                        .presentationDetents([.fraction(0.90)])
+                                        .presentationDetents([.fraction(0.70)])
                                 }
                                 
                                 NavigationLink(destination: AdminCategoriesView(configViewModel: configViewModel, libViewModel: librarianViewModel)){
@@ -367,6 +369,7 @@ struct AdminHomeView: View {
                     staffViewModel.getStaff()
                     staffViewModel.getAllStaff()
                     try? await Task.sleep(nanoseconds: 2_000_000_000)
+                    totalRevenue = userAuthViewModel.totalIncome + (userAuthViewModel.allUsers.count*50)
                     isPageLoading = false
                 }
             }
