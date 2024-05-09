@@ -38,6 +38,7 @@ class ThemeManager: ObservableObject {
             selectedTheme = Green()
         }
     }
+    
     func gradientColors(for colorScheme: ColorScheme) -> [Color] {
        if colorScheme == .dark {
            return [Color(.systemGray5), Color(.black)]
@@ -45,6 +46,11 @@ class ThemeManager: ObservableObject {
            return [Color(.white), Color(.systemGray5)]
        }
    }
+    func randomColor() -> Color {
+        let systemColors: [Color] = [.red, .green, .blue, .orange, .yellow, .pink, .purple, .teal, .cyan, .indigo, .brown, .gray, .mint]
+        return systemColors.randomElement() ?? .red
+    }
+
     func updateTheme(_ theme: ThemeProtocol) {
         let accentColor: String
         switch theme {

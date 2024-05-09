@@ -120,7 +120,7 @@ struct LoginView: View {
                     
                     NavigationLink(destination: AdminTabView(LibViewModel: LibViewModel, staffViewModel: staffViewModel, userAuthViewModel: authViewModel, configViewModel: configViewModel), isActive: $authViewModel.shouldNavigateToAdmin) { EmptyView() }
                     NavigationLink(destination: LibrarianFirstScreenView(LibModelView: LibViewModel, ConfiViewModel: configViewModel), isActive: $authViewModel.shouldNavigateToLibrarian) { EmptyView() }
-                    NavigationLink(destination: MemberTabView(memModelView: memModelView, ConfiViewModel: configViewModel, LibViewModel: LibViewModel, authViewModel: authViewModel), isActive: $authViewModel.shouldNavigateToMember) { EmptyView() }
+                    NavigationLink(destination: MemberTabView(memModelView: memModelView, ConfiViewModel: configViewModel, LibViewModel: LibViewModel, auth: authViewModel), isActive: $authViewModel.shouldNavigateToMember) { EmptyView() }
                     NavigationLink(destination: Membership(memModelView: memModelView, ConfiViewModel: configViewModel, LibViewModel: LibViewModel, authViewModel: authViewModel), isActive: $authViewModel.shouldNavigateToGeneral) { EmptyView() }
                 }
                 

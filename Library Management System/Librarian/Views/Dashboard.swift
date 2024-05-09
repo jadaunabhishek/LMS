@@ -40,7 +40,7 @@ struct Dashboard: View {
     }
     @State var TotalRevenue : Int = 0
     var body: some View {
-        NavigationView{
+        NavigationStack{
             VStack {
                 if !isPageLoading {
                     ScrollView {
@@ -146,33 +146,32 @@ struct Dashboard: View {
                             
                             // MARK: Member and Books
                             HStack(spacing:12){
-                                ZStack{
-                                    RoundedRectangle(cornerRadius: 10)
-                                        .frame(height: 125)
-                                        .foregroundColor(Color("requestCard"))
-                                        .shadow(color: Color.gray.opacity(0.5), radius: 5, x: 0, y: 2)
-                                    VStack(alignment: .leading){
-                                        HStack{
-                                            Text("Members")
-                                                .font(.title3)
-                                            Spacer()
-                                            Image(systemName: "chevron.right")
-                                                .font(.subheadline)
+                                NavigationLink(destination: MembersView()){
+                                    ZStack{
+                                        RoundedRectangle(cornerRadius: 10)
+                                            .frame(height: 125)
+                                            .foregroundColor(Color("requestCard"))
+                                            .shadow(color: Color.gray.opacity(0.5), radius: 5, x: 0, y: 2)
+                                        VStack(alignment: .leading){
+                                            HStack{
+                                                Text("Members")
+                                                    .font(.title3)
+                                                Spacer()
+                                                Image(systemName: "chevron.right")
+                                                    .font(.subheadline)
+                                            }
+                                            .foregroundStyle(Color.gray)
+                                            Text(String("\(userAuthViewModel.allUsers.count)"))
+                                                .font(.title)
+                                                .bold()
+                                                .padding(.top)
+                                                .foregroundColor(themeManager.selectedTheme.bodyTextColor)
                                         }
-                                        .foregroundStyle(Color.gray)
-                                        Text(String("\(userAuthViewModel.allUsers.count)"))
-                                            .font(.title)
-                                            .bold()
-                                            .padding(.top)
+                                        .padding(.horizontal)
+                                    }.sheet(isPresented: $isMemberSheetPresented) {
+                                        MemberDetailView(userAuthViewModel: userAuthViewModel, configViewModel: configViewModel)
+                                            .presentationDetents([.fraction(0.90)])
                                     }
-                                    .padding(.horizontal)
-                                }
-                                .onTapGesture {
-                                    tabSelection = 4
-                                }
-                                .sheet(isPresented: $isMemberSheetPresented) {
-                                    MemberDetailView(userAuthViewModel: userAuthViewModel, configViewModel: configViewModel)
-                                        .presentationDetents([.fraction(0.90)])
                                 }
                                 
                                 ZStack{
@@ -302,7 +301,7 @@ struct Dashboard: View {
         }
         .navigationBarBackButtonHidden()
         .navigationBarTitleDisplayMode(.inline)
-        .navigationTitle("Hello!)")
+        .navigationTitle("Trove")
     }
 }
 

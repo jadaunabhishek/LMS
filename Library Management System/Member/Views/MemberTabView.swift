@@ -10,36 +10,37 @@ import SwiftUI
 struct MemberTabView: View {
     @EnvironmentObject var themeManager: ThemeManager
     @State private var applyMembership = false
-    @ObservedObject var memModelView: UserBooksModel
-    @ObservedObject var ConfiViewModel: ConfigViewModel
-    @ObservedObject var LibViewModel: LibrarianViewModel
-    @ObservedObject var authViewModel: AuthViewModel
+    @ObservedObject var memModelView = UserBooksModel()
+    @ObservedObject var ConfiViewModel = ConfigViewModel()
+    @ObservedObject var LibViewModel = LibrarianViewModel()
+    @ObservedObject var auth = AuthViewModel()
+    @State var tabSelection: Int = 1
     
     var body: some View {
-        TabView {
-            MemberHome(LibViewModel: LibViewModel, configViewModel: ConfiViewModel, MemViewModel: memModelView)
+        TabView(selection: $tabSelection) {
+            MemberHome(tabSelection: $tabSelection, LibViewModel: LibViewModel, configViewModel: ConfiViewModel, MemViewModel: memModelView)
                 .tabItem {
                     Image(systemName: "books.vertical.fill")
                     Text("Library")
-                }
+                }.tag(1)
             
             Books(MemViewModel: memModelView, configViewModel: ConfiViewModel)
                 .tabItem {
                     Image(systemName: "magnifyingglass")
                     Text("Search")
-                }
+                }.tag(2)
             
             Records(LibViewModel: LibViewModel)
                 .tabItem {
                     Image(systemName: "book.fill")
                     Text("My Books")
-                }
+                }.tag(3)
             
-            Support(authViewModel: authViewModel)
+            Support(authViewModel: auth)
                 .tabItem {
                     Image(systemName: "person.line.dotted.person.fill")
                     Text("Support")
-                }
+                }.tag(4)
         }
         .navigationBarHidden(true)
         .navigationBarBackButtonHidden(true)
@@ -54,7 +55,7 @@ struct MTVPrev: View {
     @StateObject var authViewModel = AuthViewModel()
     
     var body: some View {
-        MemberTabView(memModelView: memModelView, ConfiViewModel: ConfiViewModel, LibViewModel: LibViewModel, authViewModel: authViewModel)
+        MemberTabView(memModelView: memModelView, ConfiViewModel: ConfiViewModel, LibViewModel: LibViewModel, auth: authViewModel)
     }
 }
 

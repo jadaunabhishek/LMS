@@ -41,7 +41,7 @@ struct welcomingTip: Tip {
         Text("Discover & Organize")
     }
     var message: Text? {
-        Text("Welcome to Trove, your ultimate library app! 📚✨ Dive into our collection and discover literary treasures. Happy exploring!")
+        Text("Welcome to Trove, your ultimate library app! 📚 Dive into our collection and discover literary treasures. Happy exploring!✨")
     }
 }
 

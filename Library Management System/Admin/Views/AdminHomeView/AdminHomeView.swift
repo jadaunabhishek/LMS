@@ -112,14 +112,14 @@ struct AdminHomeView: View {
                                                 .foregroundStyle(themeManager.selectedTheme.primaryThemeColor)
                                                 .cornerRadius(14)
                                                 .opacity(dataItem.type != "Fine" ? 0.7 : 1)
-                                                .annotation(position: .overlay) {
-                                                            let percentage = (Float(dataItem.amount) / Float(totalRevenue)) * 100
-                                                            let roundedPercentage = round(percentage)
-                                                            Text("\(Int(roundedPercentage))%")
-                                                        .foregroundStyle(Color.white)
-                                                        .font(.body)
-                                                            
-                                                }
+//                                                .annotation(position: .overlay) {
+//                                                            let percentage = (Float(dataItem.amount) / Float(totalRevenue)) * 100
+//                                                            let roundedPercentage = round(percentage)
+//                                                            Text("\(Int(roundedPercentage))%")
+//                                                        .foregroundStyle(Color.white)
+//                                                        .font(.body)
+//                                                            
+//                                                }
                                                 
                                             }
                                             
@@ -404,12 +404,12 @@ struct AdminHomeView: View {
                 }
             }
             .navigationBarBackButtonHidden()
-            .navigationBarTitle("Hello! Admin")
-//            .navigationBarItems(trailing: NavigationLink(destination: ProfileView(LibViewModel: librarianViewModel, configViewModel: configViewModel), label: {
-//                Image(systemName: "person.crop.circle")
-//                    .font(.title3)
-//                    .foregroundColor(Color(themeManager.selectedTheme.primaryThemeColor))
-//            }))
+            .navigationBarTitle("Trove")
+            .navigationBarItems(trailing: NavigationLink(destination: ProfileView(LibViewModel: librarianViewModel, configViewModel: configViewModel), label: {
+                Image(systemName: "person.crop.circle")
+                    .font(.title3)
+                    .foregroundColor(Color(themeManager.selectedTheme.primaryThemeColor))
+            }))
         }
     }
 }

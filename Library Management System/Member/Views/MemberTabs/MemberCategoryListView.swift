@@ -38,7 +38,7 @@ struct MemberCategoryListView: View {
                                     VStack(alignment: .leading) {
                                         ZStack(alignment:.leading){
                                             Rectangle()
-                                                .fill(randomColor())
+                                                .fill(themeManager.randomColor())
                                                 .cornerRadius(12)
                                             
                                             VStack(alignment:.leading){

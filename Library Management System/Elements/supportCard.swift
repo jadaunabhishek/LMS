@@ -10,7 +10,7 @@ import SwiftUI
 
 struct supportCard: View {
     @State var supportData: SupportTicket
-    
+    @EnvironmentObject var themeManager: ThemeManager
     var body: some View {
         VStack{
             HStack(spacing: 15) {
@@ -27,35 +27,34 @@ struct supportCard: View {
                             Text(formatDate(supportData.createdOn))
                                 .font(.system(size: 12))
                                 .foregroundColor(.gray)
-                            Image(systemName: "chevron.right")
-                                .foregroundColor(.gray)
                         }
                     }
                     
                     HStack{
                         Text("Subject :")
                             .font(.callout)
-                            .foregroundColor(.secondary)
+                            .foregroundColor(themeManager.selectedTheme.bodyTextColor)
                         Text(supportData.Subject)
                             .font(.callout)
-                            .foregroundColor(.black)
+                            .foregroundColor(themeManager.selectedTheme.bodyTextColor)
                     }
                     
                     HStack {
                         Text("Status :")
                             .font(.callout)
-                            .foregroundColor(.secondary)
+                            .foregroundColor(themeManager.selectedTheme.bodyTextColor)
                         Text(supportData.status)
                             .font(.callout)
-                            .foregroundColor(.black)
+                            .foregroundColor(themeManager.selectedTheme.bodyTextColor)
                         
                     }
                     .padding(.bottom, 8)
-                    Divider()
                         .padding(.horizontal, 8)
                 }
-                .padding(.horizontal)
-            }
+                .padding(15)
+                .background(Color(.systemGray6))
+                .cornerRadius(10)
+            }.padding(.horizontal, 10)
         }
     }
     

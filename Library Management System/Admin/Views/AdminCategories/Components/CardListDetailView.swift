@@ -22,7 +22,8 @@ struct CardListDetailView: View {
                                     AsyncImage(url: URL(string: books[index].bookImageURL)) { image in
                                         image.resizable()
                                     } placeholder: {
-                                        ProgressView()
+                                        Rectangle().fill(Color(.systemGray4))
+                                        .frame(width: 60, height: 80)             
                                     }
                                     .frame(width: 60,height: 80)
                                     .cornerRadius(8)

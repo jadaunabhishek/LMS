@@ -26,8 +26,7 @@ struct SupportView: View {
                     }
                 }
             }
-            .listStyle(.inset)
-            .background(Color.black.opacity(0.05))
+            .background(Color(.systemGray5))
             .navigationTitle("Support")
             .sheet(isPresented: $createIssue) {
                 CreateIssue()

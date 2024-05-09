@@ -25,11 +25,11 @@ struct CreateIssue: View {
     }
     
     var body: some View {
-        NavigationView {
+        NavigationStack{
             Form {
-                Section(header: Text("Message")) {
-                    TextField("Subject", text: $subject)
-                }
+                Section(header: Text("Subject")) {
+                    TextField("", text: $subject)
+                }.padding(.top, 10)
                 
                 Section(header: Text("Message")) {
                     TextEditor(text: $message)

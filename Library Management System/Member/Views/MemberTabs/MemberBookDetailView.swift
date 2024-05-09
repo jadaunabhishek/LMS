@@ -50,7 +50,8 @@ struct MemberBookDetailView: View {
                         AsyncImage(url: URL(string: book.bookImageURL)) { image in
                             image.resizable().shadow(color: Color(.systemGray).opacity(0.3), radius: 5, x: 0, y: 4)
                         } placeholder: {
-                            ProgressView()
+                            Rectangle().fill(Color(.systemGray4))
+                            .frame(width: 200, height: 300)             
                         }
                         .frame(width: 200,height: 300)
                         .cornerRadius(8)
@@ -89,7 +90,10 @@ struct MemberBookDetailView: View {
                             VStack{
                                 Text("Rating")
                                 Spacer()
-                                Text(String(book.bookRating))
+                                HStack{
+                                    Image(systemName: "star.fill").foregroundColor(Color(.systemYellow))
+                                    Text(String(book.bookRating))
+                                }
                             }
                             Divider()
                                 .background(.black)
@@ -106,6 +110,7 @@ struct MemberBookDetailView: View {
                         .padding(25)
                         .frame( height: 90)
                         .font(.title3)
+                        .foregroundColor(.black)
                         .background{
                             Rectangle()
                                 .fill(themeManager.selectedTheme.secondaryThemeColor)
@@ -209,7 +214,7 @@ struct MemberBookDetailView: View {
                                     .padding(.vertical,10)
                                 }
                             }
-                            .listStyle(.inset)
+        
                         }.padding(10)
                         
                     }

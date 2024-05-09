@@ -23,7 +23,8 @@ struct BookReqBox: View {
                     AsyncImage(url: URL(string: bookRequestData.bookImageURL)) { image in
                         image.resizable()
                     } placeholder: {
-                        ProgressView()
+                        Rectangle().fill(Color(.systemGray4))
+                        .frame(width: 60, height: 100)
                     }
                     .frame(width: 60,height: 100)
                     .cornerRadius(8)
