@@ -215,30 +215,6 @@ struct BookDetailView: View {
                                     }
                                 }
                                 .frame(maxWidth: .infinity)
-                                HStack{
-                                    Text("Sub Category")
-                                        .font(.system(size: 18, weight: .bold))
-                                    Spacer()
-                                    if(canEdit){
-                                        Picker("", selection: $bookSubCategory){
-                                            Text("Choose").tag("Choose")
-                                            if(!ConfiViewModel.currentConfig.isEmpty){
-                                                ForEach(ConfiViewModel.currentConfig[0].categories, id: \.self){ category in
-                                                    Text(category).tag(category)
-                                                }
-                                            }
-                                        }
-                                        .accentColor(themeManager.selectedTheme.bodyTextColor)
-                                        .labelsHidden()
-                                        .disabled(!canEdit)
-                                        .onChange(of: bookSubCategory, initial: true){ (oldValue,newValue)  in
-                                            if(newValue != oldValue && newValue != "Choose" && !bookSubCategories.contains(newValue)){
-                                                bookSubCategories.append(bookSubCategory)
-                                            }
-                                        }
-                                    }
-                                }
-                                .frame(maxWidth: .infinity)
                                 if(!bookSubCategories.isEmpty){
                                     LazyVGrid(columns: [GridItem(.adaptive(minimum: 120))], content: {
                                         ForEach(0..<bookSubCategories.count, id: \.self){ index in
@@ -404,31 +380,6 @@ struct BookDetailView: View {
         }
         .padding(.vertical,20)
         .background(.black.opacity(0.05))
-        .navigationTitle("Update Book")
-        .navigationBarItems(trailing: Button(action:{
-            canEdit.toggle()
-        }){
-            if(!canEdit){
-                VStack{
-                    HStack{
-                        Spacer()
-                        Text("Edit")
-                            .font(.system(size: 18, weight: .regular))
-                    }
-                }
-                .frame(maxWidth: .infinity)
-            }
-            else{
-                VStack{
-                    HStack{
-                        Spacer()
-                        Text("Cancel")
-                            .font(.system(size: 18, weight: .regular))
-                    }
-                }
-                .frame(maxWidth: .infinity)
-            }
-        })
         
         .task {
             do{
