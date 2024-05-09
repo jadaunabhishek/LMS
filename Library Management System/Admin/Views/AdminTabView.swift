@@ -54,7 +54,7 @@ struct AdminTabView: View {
 struct AdminTabView_Previews: PreviewProvider {
     static var previews: some View {
         let themeManager = ThemeManager()
-        return AdminTabView(themeManager: themeManager)
+        return AdminTabView()
             .environmentObject(themeManager)
     }
 }
