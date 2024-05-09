@@ -42,15 +42,18 @@ struct AdminHomeView: View {
     }
     
     // Tip Data
-    var tipProcedure = welcomingTip()
+    var tipProcedure = customizeTip()
+    @State var totalRevenue : Int = 0
     
     
-    @State var TotalRevenue : Int = 0
     var body: some View {
         NavigationView{
             VStack {
                 if !isPageLoading {
                     ScrollView {
+                        TipView(tipProcedure)
+                            .padding([.leading, .trailing, .bottom])
+                        
                         VStack(spacing:12){
                             VStack(alignment: .leading){
                                 ZStack{
@@ -58,10 +61,6 @@ struct AdminHomeView: View {
                                         .foregroundColor(Color("requestCard"))
                                         .shadow(color: Color.gray.opacity(0.5), radius: 5, x: 0, y: 2)
                                         .frame(height: 170)
-                                        .fill(Color(.systemGray4).opacity(0.5))
-                                        .frame(height: 150)
-                                    TipView(tipProcedure)
-                                        .padding([.leading, .trailing, .bottom])
                                     
                                     // MARK: Total Revenue
                                     HStack() {

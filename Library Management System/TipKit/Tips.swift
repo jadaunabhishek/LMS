@@ -48,13 +48,10 @@ struct welcomingTip: Tip {
 struct customizeTip: Tip {
     @EnvironmentObject var themeManager: ThemeManager
     var title: Text {
-        Text("Customize Your Trove: Tailor Your Style!")
+        Text("Customize Your Trove!")
     }
     var message: Text? {
         Text("Customize your Trove experience! 🎨✨ Personalize your app's theme and brand logo to reflect your unique style.")
-    }
-    var image: Image? {
-        Image(systemName: "checkmark.seal.fill")
     }
 }
 
