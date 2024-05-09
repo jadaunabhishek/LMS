@@ -34,7 +34,6 @@ class AuthViewModel: ObservableObject {
             } else {
                 // Login was successful, check for user role
                 print("Login successful!")
-                UserDefaults.standard.set(true, forKey: "emailLoggedIn")
                 UserDefaults.standard.set(email, forKey: "email")
                 // Assume the UID is used as the document ID in `users` collection
                 self?.fetchUserRole(email: email)
@@ -238,10 +237,16 @@ class AuthViewModel: ObservableObject {
             switch role {
             case "admin":
                 self.shouldNavigateToAdmin = true
+                UserDefaults.standard.set("admin", forKey: "emailLoggedIn")
+                
             case "librarian":
                 self.shouldNavigateToLibrarian = true
+                UserDefaults.standard.set("librarian", forKey: "emailLoggedIn")
+                
             case "member":
                 self.shouldNavigateToMember = true
+                UserDefaults.standard.set("member", forKey: "emailLoggedIn")
+                
             default:
                 self.shouldNavigateToGeneral = true
             }

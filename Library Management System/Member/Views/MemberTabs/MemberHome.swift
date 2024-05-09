@@ -1,6 +1,7 @@
 import SwiftUI
 import EventKit
 import FirebaseAuth
+import TipKit
 
 
 func requestAccessToCalendar(completion: @escaping (Bool) -> Void) {
@@ -24,12 +25,16 @@ func requestAccessToCalendar(completion: @escaping (Bool) -> Void) {
 
 
 struct MemberHome: View {
+    @State var category: String = ""
     @EnvironmentObject var themeManager: ThemeManager
     @ObservedObject var LibViewModel: LibrarianViewModel
     @State private var hasCalendarAccess = false
     @ObservedObject var configViewModel: ConfigViewModel
     @ObservedObject var MemViewModel = UserBooksModel()
     @Environment(\.colorScheme) var colorScheme
+    
+    // Tip Data
+    var tipProcedure = profileTip()
     
     var categories: [String] {
         configViewModel.currentConfig.isEmpty ? [] : configViewModel.currentConfig[0].categories
@@ -43,17 +48,24 @@ struct MemberHome: View {
         LibViewModel.trendingBooks
     }
     
+    var categoryBooks: [Book] {
+        var booksToFilter = LibViewModel.allBooks.filter { book in
+            book.bookCategory.contains(category)
+        }
+        return booksToFilter
+    }
+    
     var body: some View {
-        NavigationView {
+        let screenWidth = UIScreen.main.bounds.width
+        let newwidth = screenWidth * 0.43
+        let newheight = screenWidth * 0.35
+        NavigationStack {
             ScrollView(.vertical, showsIndicators: false) {
-                
-                HStack{
-                    Text("Hi! Ishan ").font(.largeTitle)
-                    Spacer()
-                }.padding(.leading, 20)
+                TipView(tipProcedure)
+                    .padding([.leading, .trailing, .bottom])
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack {
-                        NavigationLink(destination: Books()) {
+                        NavigationLink(destination: Books(themeManager: themeManager)) {
                             ZStack(alignment: .bottomLeading) {
                                 
                                 Rectangle()
@@ -163,12 +175,19 @@ struct MemberHome: View {
                 VStack(alignment: .leading){
                     HStack{
                         Text("Categories").font(.title2).fontWeight(.semibold).padding(.leading, 20)
+                        Spacer()
+                        NavigationLink(destination: MemberCategoryListView(LibViewModel: LibViewModel, configViewModel: configViewModel)){
+                            HStack{
+                                Text("See all")
+                                Image(systemName: "chevron.right")
+                            }.padding(.trailing, 10)
+                        }
                     }
                     ScrollView(.horizontal, showsIndicators: false) {
                         HStack{
                             ForEach(categories.prefix(5), id: \.self) { category in
                                 
-                                NavigationLink(destination: Books()) {
+                                NavigationLink(destination: MemberCategoryView(category: category, configViewModel: configViewModel, librarianViewModel: LibViewModel)) {
                                     VStack(alignment: .leading){
                                         ZStack(alignment:.leading){
                                             Rectangle()
@@ -185,7 +204,7 @@ struct MemberHome: View {
                                                     .padding()
                                             }
                                         }
-                                        .frame(width: 160, height: 180)
+                                        .frame(width: newwidth, height: newheight)
                                     }.padding(3)
                                     
                                     
@@ -251,6 +270,7 @@ struct MemberHome: View {
                                     }
                                     .padding(5)
                                 }
+                                .padding(5)
                             }
                         }
                         .padding(.horizontal, 20)
@@ -269,6 +289,14 @@ struct MemberHome: View {
                 
                 
             }
+            .navigationTitle("Hello Member")
+            .navigationBarItems(trailing: NavigationLink(destination: ProfileCompletedView(), label: {
+                Image(systemName: "person.crop.circle")
+                    .font(.title3)
+                    .foregroundColor(Color(themeManager.selectedTheme.primaryThemeColor))
+            }))
+            .popoverTip(tipProcedure)
+            
             .onAppear {
                 Task{
                     if let currentUser = Auth.auth().currentUser?.uid{

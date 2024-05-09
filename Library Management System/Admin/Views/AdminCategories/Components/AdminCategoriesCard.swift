@@ -13,6 +13,9 @@ struct AdminCategoriesCard: View {
     @EnvironmentObject var themeManager: ThemeManager
     
     var body: some View {
+        let screenWidth = UIScreen.main.bounds.width
+        let newwidth = screenWidth * 0.40
+        let newheight = screenWidth * 0.35
         NavigationStack {
             
             ZStack(alignment:.leading){
@@ -31,7 +34,7 @@ struct AdminCategoriesCard: View {
                         .padding()
                 }
             }
-            .frame(width: 170, height: 120)
+            .frame(width: newwidth, height: newheight)
         }
     }
     

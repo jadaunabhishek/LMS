@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct MemberTabView: View {
-    @EnvironmentObject var themeManager: ThemeManager
+    @ObservedObject var themeManager: ThemeManager
     @State private var applyMembership = false
     @ObservedObject var memModelView = UserBooksModel()
     @ObservedObject var ConfiViewModel = ConfigViewModel()
@@ -23,7 +23,7 @@ struct MemberTabView: View {
                     Text("Library")
                 }
             
-            Books()
+            Books(themeManager: themeManager, MemViewModel: memModelView, configViewModel: ConfiViewModel)
                 .tabItem {
                     Image(systemName: "magnifyingglass")
                     Text("Search")
@@ -52,16 +52,17 @@ struct MemberTabView: View {
 struct MTVPrev: View {
     @StateObject var memModelView = UserBooksModel()
     @StateObject var ConfiViewModel = ConfigViewModel()
+    @ObservedObject var themeManager: ThemeManager
     
     var body: some View {
-        MemberTabView(memModelView: memModelView, ConfiViewModel: ConfiViewModel)
+        MemberTabView(themeManager: themeManager, memModelView: memModelView, ConfiViewModel: ConfiViewModel)
     }
 }
 
 struct MemberTabView_Previews: PreviewProvider {
     static var previews: some View {
         let themeManager = ThemeManager()
-        return MTVPrev()
+        return MTVPrev(themeManager: themeManager)
             .environmentObject(themeManager)
     }
 }
