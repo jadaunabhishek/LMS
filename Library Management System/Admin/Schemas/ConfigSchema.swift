@@ -32,6 +32,7 @@ struct membersCount: Codable {
     }
 }
 
+
 struct Config {
     
     var configID: String
@@ -67,6 +68,7 @@ struct Config {
             "maxPenalties": maxPenalties,
             "categories": categories,
             "monthlyMembersCount": monthlyMembersCountArray
+            
         ]
     }
 }
