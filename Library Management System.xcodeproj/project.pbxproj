@@ -14,6 +14,7 @@
 		0FC0423E2BEB3558000BDA67 /* RevenueDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FC0423D2BEB3558000BDA67 /* RevenueDetailView.swift */; };
 		0FC042402BEB3624000BDA67 /* ColorSelecterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FC0423F2BEB3624000BDA67 /* ColorSelecterView.swift */; };
 		0FC042422BEB3784000BDA67 /* MemberDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FC042412BEB3784000BDA67 /* MemberDetailView.swift */; };
+		1F7832352BECEF76000D027F /* LibProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F7832342BECEF76000D027F /* LibProfileView.swift */; };
 		1F7C0E4D2BD7A920007D5221 /* StaffSchema.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F7C0E4C2BD7A920007D5221 /* StaffSchema.swift */; };
 		1F7C0E502BD7B142007D5221 /* StaffViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F7C0E4F2BD7B142007D5221 /* StaffViewModel.swift */; };
 		1F7C0E522BD7B3B2007D5221 /* AddStaffView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F7C0E512BD7B3B2007D5221 /* AddStaffView.swift */; };
@@ -149,6 +150,7 @@
 		0FC0423D2BEB3558000BDA67 /* RevenueDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RevenueDetailView.swift; sourceTree = "<group>"; };
 		0FC0423F2BEB3624000BDA67 /* ColorSelecterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorSelecterView.swift; sourceTree = "<group>"; };
 		0FC042412BEB3784000BDA67 /* MemberDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemberDetailView.swift; sourceTree = "<group>"; };
+		1F7832342BECEF76000D027F /* LibProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibProfileView.swift; sourceTree = "<group>"; };
 		1F7C0E4C2BD7A920007D5221 /* StaffSchema.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaffSchema.swift; sourceTree = "<group>"; };
 		1F7C0E4F2BD7B142007D5221 /* StaffViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaffViewModel.swift; sourceTree = "<group>"; };
 		1F7C0E512BD7B3B2007D5221 /* AddStaffView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddStaffView.swift; sourceTree = "<group>"; };
@@ -580,6 +582,7 @@
 			children = (
 				D56B18DB2BEC005A000EF169 /* ProfileCompletedView.swift */,
 				D56B18DD2BEC020B000EF169 /* ProfileView.swift */,
+				1F7832342BECEF76000D027F /* LibProfileView.swift */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -811,6 +814,7 @@
 				0F85ED872BDA71F800C48C75 /* BookDetailView.swift in Sources */,
 				D50EA9D32BE4D0870079C1AB /* Picker.swift in Sources */,
 				841045A92BD8D7D400E801D0 /* AuthViewModel.swift in Sources */,
+				1F7832352BECEF76000D027F /* LibProfileView.swift in Sources */,
 				84E87D5B2BD7D4FB00FAD5DC /* AdminCategoriesCard.swift in Sources */,
 				DC1D402C2BD6EB4A00970C7B /* BookSchema.swift in Sources */,
 				84E87D592BD7D4E200FAD5DC /* AddCategoriesView.swift in Sources */,

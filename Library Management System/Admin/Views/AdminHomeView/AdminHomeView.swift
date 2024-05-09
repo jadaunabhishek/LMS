@@ -405,11 +405,11 @@ struct AdminHomeView: View {
             }
             .navigationBarBackButtonHidden()
             .navigationBarTitle("Hello! Admin")
-            .navigationBarItems(trailing: NavigationLink(destination: ProfileCompletedView(), label: {
-                Image(systemName: "person.crop.circle")
-                    .font(.title3)
-                    .foregroundColor(Color(themeManager.selectedTheme.primaryThemeColor))
-            }))
+//            .navigationBarItems(trailing: NavigationLink(destination: ProfileView(LibViewModel: librarianViewModel, configViewModel: configViewModel), label: {
+//                Image(systemName: "person.crop.circle")
+//                    .font(.title3)
+//                    .foregroundColor(Color(themeManager.selectedTheme.primaryThemeColor))
+//            }))
         }
     }
 }

@@ -7,13 +7,12 @@
 
 import SwiftUI
 
-
 struct AdminTabView: View {
     @EnvironmentObject var themeManager: ThemeManager
-    @StateObject var LibViewModel = LibrarianViewModel()
-    @StateObject var staffViewModel = StaffViewModel()
-    @StateObject var userAuthViewModel = AuthViewModel()
-    @StateObject var configViewModel = ConfigViewModel()
+    @ObservedObject var LibViewModel: LibrarianViewModel
+    @ObservedObject var staffViewModel: StaffViewModel
+    @ObservedObject var userAuthViewModel: AuthViewModel
+    @ObservedObject var configViewModel: ConfigViewModel
     
     @State var tabSelection: Int = 0
     
@@ -54,7 +53,11 @@ struct AdminTabView: View {
 struct AdminTabView_Previews: PreviewProvider {
     static var previews: some View {
         let themeManager = ThemeManager()
-        return AdminTabView()
+        @StateObject var LibViewModel = LibrarianViewModel()
+        @StateObject var staffViewModel = StaffViewModel()
+        @StateObject var userAuthViewModel = AuthViewModel()
+        @StateObject var configViewModel = ConfigViewModel()
+        return AdminTabView(LibViewModel: LibViewModel, staffViewModel: staffViewModel, userAuthViewModel: userAuthViewModel, configViewModel: configViewModel)
             .environmentObject(themeManager)
     }
 }
