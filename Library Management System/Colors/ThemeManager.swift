@@ -26,7 +26,7 @@ class ThemeManager: ObservableObject {
     func setBaseTheme() async{
         
         configModel.fetchConfig()
-        try? await Task.sleep(nanoseconds: 3_000_000_000)
+        try? await Task.sleep(nanoseconds: 4_000_000_000)
         
         if(configModel.currentConfig[0].accentColor == "Red"){
             selectedTheme = Red()

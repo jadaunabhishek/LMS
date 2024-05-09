@@ -1,18 +1,19 @@
 //
-//  ProfileView.swift
+//  LibProfileView.swift
 //  Library Management System
 //
-//  Created by Abhishek Jadaun on 09/05/24.
+//  Created by Manvi Singhal on 09/05/24.
 //
 
 import SwiftUI
 import Firebase
 import FirebaseAuth
 
-struct ProfileView: View {
+struct LibProfileView: View {
     @EnvironmentObject var themeManager: ThemeManager
     @ObservedObject var LibViewModel: LibrarianViewModel
     @ObservedObject var configViewModel: ConfigViewModel
+    @ObservedObject var staffViewModel: StaffViewModel
     
     var body: some View {
         VStack {
@@ -20,7 +21,7 @@ struct ProfileView: View {
                 Section() {
                     VStack(alignment: .center){
                         
-                        if let profileURL = URL(string: LibViewModel.currentMember[0].profileImage){
+                        if let profileURL = URL(string: staffViewModel.staff[0].profileImageURL){
                             AsyncImage(url: profileURL) { phase in
                                 switch phase {
                                 case .success(let image):
@@ -50,7 +51,7 @@ struct ProfileView: View {
                                 .cornerRadius(10)
                         }
                         
-                        Text(LibViewModel.currentMember[0].name)
+                        Text(staffViewModel.staff[0].name)
                             .font(.title)
                             .fontWeight(.bold)
                             .foregroundColor(themeManager.selectedTheme.bodyTextColor)
@@ -62,13 +63,13 @@ struct ProfileView: View {
                     HStack{
                         Text("Email:")
                             .font(.callout)
-                        Text(LibViewModel.currentMember[0].email)
+                        Text(staffViewModel.staff[0].email)
                             .font(.callout)
                     }
                     HStack{
                         Text("Mobile:")
                             .font(.callout)
-                        Text(LibViewModel.currentMember[0].mobile)
+                        Text(staffViewModel.staff[0].mobile)
                             .font(.callout)
                     }
                 }
@@ -77,13 +78,13 @@ struct ProfileView: View {
                     HStack {
                         Text("Created On:")
                             .font(.callout)
-                        Text("\(formattedDate(from: LibViewModel.currentMember[0].createdOn))")
+                        Text("\(formattedDate(from: staffViewModel.staff[0].createdOn))")
                             .font(.callout)
                     }
                     HStack{
                         Text("Updated On:")
                             .font(.callout)
-                        Text("\(formattedDate(from: LibViewModel.currentMember[0].updateOn))")
+                        Text("\(formattedDate(from: staffViewModel.staff[0].updatedOn))")
                             .font(.callout)
                     }
                     
@@ -111,24 +112,15 @@ struct ProfileView: View {
             }
             .listStyle(InsetGroupedListStyle())
         }
-//        .navigationBarItems(
-//            trailing:
-//                NavigationLink(
-//                    destination: ProfileCompletedView(LibViewModel: LibViewModel, configViewModel: configViewModel),
-//                    label: {
-//                        Text("Edit")
-//                            .foregroundColor(themeManager.selectedTheme.primaryThemeColor)
-//                    }
-//                )
-//        )
     }
 }
 
-struct ProfileView_Previews: PreviewProvider {
+struct LibProfileView_Previews: PreviewProvider {
     static var previews: some View {
         @StateObject var configViewModel = ConfigViewModel()
         @StateObject var LibViewModel = LibrarianViewModel()
+        @StateObject var staffViewModel = StaffViewModel()
         let themeManager = ThemeManager()
-        return ProfileView(LibViewModel: LibViewModel, configViewModel: configViewModel).environmentObject(themeManager)
+        return LibProfileView(LibViewModel: LibViewModel, configViewModel: configViewModel, staffViewModel: staffViewModel).environmentObject(themeManager)
     }
 }

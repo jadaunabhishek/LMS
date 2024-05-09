@@ -19,16 +19,17 @@ struct Membership: View {
         case new
     }
     
-    
-    @State private var status_sent: MembershipStatus = .new
-    @State private var status_received: MembershipStatus = .new
-    @State private var shouldNavigate = false
-    private var db = Firestore.firestore()
-    @State private var requestStatus = "Request Status"
-    @StateObject var ConfiViewMOdel = ConfigViewModel()
-    @StateObject var memModelView = UserBooksModel()
+    @State var status_sent: MembershipStatus = .new
+    @State var status_received: MembershipStatus = .new
+    @State var shouldNavigate = false
+    @State var requestStatus = "Request Status"
+    @ObservedObject var memModelView: UserBooksModel
+    @ObservedObject var ConfiViewModel: ConfigViewModel
+    @ObservedObject var LibViewModel: LibrarianViewModel
+    @ObservedObject var authViewModel: AuthViewModel
     @EnvironmentObject var themeManager: ThemeManager
     
+    var db = Firestore.firestore()
     
     private func colorForStatus(_ status: MembershipStatus) -> Color {
         switch status {
@@ -44,13 +45,27 @@ struct Membership: View {
     }
     
     var body: some View {
+        NavigationView {
             VStack{
                 ZStack {
                     Rectangle()
                         .foregroundColor(themeManager.selectedTheme.primaryThemeColor)
                         .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
                         .frame(height: 250)
-                        .navigationBarHidden(true)
+                        .navigationBarItems(trailing: Button {
+                            UserDefaults.standard.set("false", forKey: "emailLoggedIn")
+                            UserDefaults.standard.set("false", forKey: "signIn")
+                            let firebaseAuth = Auth.auth()
+                            do {
+                              try firebaseAuth.signOut()
+                            } catch let signOutError as NSError {
+                              print("Error signing out: %@", signOutError)
+                            }
+                            
+                        } label: {
+                            Text("Log out")
+                                .foregroundColor(Color.red)
+                        })
                     
                     VStack( spacing: 10) {
                         Text("Membership Access")
@@ -149,7 +164,7 @@ struct Membership: View {
                     }, label: "Request Membership")
                     .padding(.bottom, 15)
                     
-                    NavigationLink("", destination: MemberTabView(themeManager: themeManager, memModelView: memModelView, ConfiViewModel: ConfiViewMOdel), isActive: $shouldNavigate)
+                    NavigationLink("", destination: MemberTabView(memModelView: memModelView, ConfiViewModel: ConfiViewModel, LibViewModel: LibViewModel, authViewModel: authViewModel), isActive: $shouldNavigate)
                         .hidden()
                     
                 }.padding()
@@ -247,8 +262,12 @@ struct Membership: View {
 
 struct Membership_Previews: PreviewProvider {
     static var previews: some View {
+        @StateObject var memModelView = UserBooksModel()
+        @StateObject var ConfiViewModel = ConfigViewModel()
+        @StateObject var LibViewModel = LibrarianViewModel()
+        @StateObject var authViewModel = AuthViewModel()
         let themeManager = ThemeManager()
-        return Membership()
+        return Membership(memModelView: memModelView, ConfiViewModel: ConfiViewModel, LibViewModel: LibViewModel, authViewModel: authViewModel)
             .environmentObject(themeManager)
     }
 }

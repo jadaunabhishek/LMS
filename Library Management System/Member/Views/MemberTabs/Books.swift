@@ -11,7 +11,7 @@ struct Books: View {
     @State private var searchText = ""
     @State private var selectedCategories: [String] = []
     @State private var isPageLoading: Bool = true
-    @ObservedObject var themeManager: ThemeManager
+    @EnvironmentObject var themeManager: ThemeManager
     @ObservedObject var MemViewModel = UserBooksModel()
     @ObservedObject var configViewModel = ConfigViewModel()
     
@@ -153,7 +153,7 @@ struct BooksPrev: View {
     @StateObject var ConfiViewModel = ConfigViewModel()
     @ObservedObject var themeManager: ThemeManager
     var body: some View {
-        Books(themeManager: themeManager, MemViewModel: memModelView, configViewModel: ConfiViewModel)
+        Books(MemViewModel: memModelView, configViewModel: ConfiViewModel)
     }
 }
 

@@ -13,19 +13,23 @@ import FirebaseFirestore
 struct LoginView: View {
     private var db = Firestore.firestore()
     @EnvironmentObject var themeManager: ThemeManager
-    @StateObject private var viewModel = AuthViewModel()
+    @StateObject var authViewModel = AuthViewModel()
     @StateObject var LibViewModel = LibrarianViewModel()
     @StateObject var configViewModel = ConfigViewModel()
     @StateObject var memModelView = UserBooksModel()
+    @StateObject var staffViewModel = StaffViewModel()
     
     @State private var email: String = ""
     @State private var password: String = ""
     @State private var shouldNavigate: Bool = false
     @State private var isForgetSheetPresented: Bool = false
+    @State private var isEmailValid = false
     
     var body: some View {
         ZStack {
             VStack {
+                Spacer()
+                
                 VStack {
                     if let logoURL = configViewModel.currentConfig.first?.logo {
                         AsyncImage(url: URL(string: logoURL)) { phase in
@@ -34,12 +38,12 @@ struct LoginView: View {
                                 image
                                     .resizable()
                                     .aspectRatio(contentMode: .fit)
-                                    .frame(width: 300, height: 150)
+                                    .frame(width: 270, height: 120)
                             default:
                                 Image("AppLogo")
                                     .resizable()
                                     .aspectRatio(contentMode: .fit)
-                                    .frame(width: 300, height: 150)
+                                    .frame(width: 270, height: 120)
                             }
                         }
                     } else {
@@ -66,7 +70,28 @@ struct LoginView: View {
                         
                     }
                     
-                    CustomTextField(text: $email, placeholder: "E-mail")
+                    ZStack{
+                        CustomTextField(text: $email, placeholder: "E-mail Id")
+                            .onChange(of: email) { newValue in
+                                validateEmail(newValue)
+                            }
+                        
+                        if !email.isEmpty {
+                            if isEmailValid {
+                                Image(systemName: "checkmark.circle.fill")
+                                    .imageScale(.large)
+                                    .fontWeight(.bold)
+                                    .foregroundStyle(Color.green)
+                                    .offset(x: 150)
+                            } else {
+                                Image(systemName: "multiply.circle.fill")
+                                    .imageScale(.large)
+                                    .fontWeight(.bold)
+                                    .foregroundStyle(Color.red)
+                                    .offset(x: 150)
+                            }
+                        }
+                    }
                     
                     SecTextField(text: $password, placeholder: "Password")
                     
@@ -87,19 +112,21 @@ struct LoginView: View {
                     
                     PrimaryCustomButton(action: {
                         print("Login Attempt")
-                        viewModel.login(email: email, password: password)
-                        print($viewModel.shouldNavigateToAdmin)
+                        authViewModel.login(email: email, password: password)
+                        print($authViewModel.shouldNavigateToAdmin)
                         
                     }, label: "Log In")
                     .disabled(email.isEmpty || password.isEmpty)
                     
-                    NavigationLink(destination: AdminTabView(), isActive: $viewModel.shouldNavigateToAdmin) { EmptyView() }
-                    NavigationLink(destination: LibrarianFirstScreenView(LibModelView: LibViewModel, ConfiViewModel: configViewModel), isActive: $viewModel.shouldNavigateToLibrarian) { EmptyView() }
-                    NavigationLink(destination: MemberTabView(themeManager: themeManager, memModelView: memModelView, ConfiViewModel: configViewModel), isActive: $viewModel.shouldNavigateToMember) { EmptyView() }
-                    NavigationLink(destination: Membership(), isActive: $viewModel.shouldNavigateToGeneral) { EmptyView() }
+                    NavigationLink(destination: AdminTabView(LibViewModel: LibViewModel, staffViewModel: staffViewModel, userAuthViewModel: authViewModel, configViewModel: configViewModel), isActive: $authViewModel.shouldNavigateToAdmin) { EmptyView() }
+                    NavigationLink(destination: LibrarianFirstScreenView(LibModelView: LibViewModel, ConfiViewModel: configViewModel), isActive: $authViewModel.shouldNavigateToLibrarian) { EmptyView() }
+                    NavigationLink(destination: MemberTabView(memModelView: memModelView, ConfiViewModel: configViewModel, LibViewModel: LibViewModel, authViewModel: authViewModel), isActive: $authViewModel.shouldNavigateToMember) { EmptyView() }
+                    NavigationLink(destination: Membership(memModelView: memModelView, ConfiViewModel: configViewModel, LibViewModel: LibViewModel, authViewModel: authViewModel), isActive: $authViewModel.shouldNavigateToGeneral) { EmptyView() }
                 }
                 
                 .padding()
+                
+                Spacer()
                 
                 HStack{
                     Text("Don't have an account?")
@@ -108,7 +135,7 @@ struct LoginView: View {
                             .foregroundColor(themeManager.selectedTheme.primaryThemeColor)
                     }
                 }
-                .padding([.leading, .trailing, .top])
+                .padding()
                 .navigationBarHidden(true)
                 .navigationBarBackButtonHidden(true)
                 .task {
@@ -117,7 +144,19 @@ struct LoginView: View {
             }
         }
     }
+    // Function to validate email
+    private func validateEmail(_ email: String) {
+        let emailRegex = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}"
+        let emailPredicate = NSPredicate(format: "SELF MATCHES %@", emailRegex)
+        isEmailValid = emailPredicate.evaluate(with: email)
+    }
     
+    // Function to check overall form validity
+    private func isFormValid() -> Bool {
+        return isEmailValid &&
+        !email.isEmpty &&
+        !password.isEmpty
+    }
     
 }
 
