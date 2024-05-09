@@ -52,7 +52,6 @@ struct OnboardingView: View {
                 
                 Button(action: {
                     naviToLogin = true
-                    UserDefaults.standard.set(true, forKey: "onBoarded")
                 }) {
                     Text("Sign In")
                         .font(.title3)
