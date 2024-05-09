@@ -15,6 +15,7 @@ struct AdminHomeView: View {
     @ObservedObject var staffViewModel: StaffViewModel
     @ObservedObject var userAuthViewModel: AuthViewModel
     @ObservedObject var configViewModel: ConfigViewModel
+    @EnvironmentObject var themeManager: ThemeManager
     
     @State var isPageLoading: Bool = true
     @State var isThemeSelecterSheetPresented: Bool = false
@@ -24,21 +25,22 @@ struct AdminHomeView: View {
     @State var isLogoSelected = false
     
     @Environment(\.presentationMode) var presentationMode
-    @EnvironmentObject var themeManager: ThemeManager
+    
     
     @State var memberData: [Int] = [5, 10, 200, 300,0,0,0]
     
     @State private var isMemberSheetPresented: Bool = false
     @State private var isTotalRevenueSheetPresented: Bool = false
+    
     var data: [(type: String, amount: Int)]{
         [(type: "Fine", amount : userAuthViewModel.totalIncome),
          (type: "Membership", amount : userAuthViewModel.allUsers.count * 50)
         ]
         
     }
-    
+    @State var TotalRevenue : Int = 0
     var body: some View {
-        NavigationView{
+        NavigationStack{
             VStack {
                 if !isPageLoading {
                     ScrollView {
@@ -52,8 +54,7 @@ struct AdminHomeView: View {
                                     
                                     // MARK: Total Revenue
                                     HStack() {
-                                        Spacer()
-                                        VStack(alignment:.trailing,spacing:4){
+                                        VStack(alignment:.leading,spacing:4){
                                             VStack(alignment:.leading){
                                                 Text("Total Revenue")
                                                     .foregroundStyle(Color.gray)
@@ -61,9 +62,11 @@ struct AdminHomeView: View {
                                                 Text("₹ \(userAuthViewModel.totalIncome + (userAuthViewModel.allUsers.count*50))")
                                                     .font(.title)
                                                     .bold()
+                                                    .padding(.top,2)
                                             }
+                                            .padding(.leading,10)
                                             HStack(alignment: .center,spacing: 14){
-                                                VStack{
+                                                VStack(alignment:.leading){
                                                     HStack {
                                                         Rectangle()
                                                             .fill(Color(themeManager.selectedTheme.primaryThemeColor))
@@ -74,7 +77,8 @@ struct AdminHomeView: View {
                                                     Text("\(data[0].amount)")
                                                         .font(.caption)
                                                 }
-                                                VStack{
+                                                
+                                                VStack(alignment:.leading){
                                                     HStack {
                                                         Rectangle()
                                                             .fill(Color(themeManager.selectedTheme.primaryThemeColor).opacity(0.5))
@@ -87,19 +91,26 @@ struct AdminHomeView: View {
                                                 }
                                             }
                                             .padding(6)
+                                            .padding(.leading,10)
                                         }
                                         .padding()
-                                        Spacer()
-                                        Chart(data, id: \.type) { dataItem in
-                                            SectorMark(angle: .value("type", dataItem.amount),
-                                                       //
-                                                       angularInset: 1.5)
-                                            .foregroundStyle(themeManager.selectedTheme.primaryThemeColor)
-                                            .cornerRadius(24)
-                                            .opacity(dataItem.type != "Fine" ? 0.7 : 1)
+                                        VStack{
+                                            Chart(data, id: \.type) { dataItem in
+                                                SectorMark(angle: .value("type", dataItem.amount),
+                                                           angularInset: 1.5)
+                                                .foregroundStyle(themeManager.selectedTheme.primaryThemeColor)
+                                                .cornerRadius(24)
+                                                .opacity(dataItem.type != "Fine" ? 0.7 : 1)
+                                                .annotation(position: .overlay) {
+                                                    let percentage = (Float(dataItem.amount) / Float(TotalRevenue)) * 100
+                                                    let roundedPercentage = round(percentage)
+                                                    Text("\(Int(roundedPercentage))%")
+                                                }
+                                                
+                                            }
+                                            
+                                            .frame(width: 130)
                                         }
-                                        .frame(width: 120)
-                                        
                                         Spacer()
                                     }
                                 }
@@ -142,71 +153,79 @@ struct AdminHomeView: View {
                                         .presentationDetents([.fraction(0.90)])
                                 }
                                 
-                                
-                                ZStack{
-                                    RoundedRectangle(cornerRadius: 10)
-                                        .fill(Color(.systemGray4).opacity(0.5))
-                                        .frame(height: 125)
-                                    VStack(alignment: .leading){
-                                        HStack{
-                                            Text("Books")
-                                                .font(.title3)
-                                            Spacer()
-                                            Image(systemName: "chevron.right")
-                                                .font(.subheadline)
+                                NavigationLink(destination: AdminCategoriesView()){
+                                    ZStack{
+                                        RoundedRectangle(cornerRadius: 10)
+                                            .fill(Color(.systemGray4).opacity(0.5))
+                                            .frame(height: 125)
+                                        VStack(alignment: .leading){
+                                            HStack{
+                                                Text("Books")
+                                                    .font(.title3)
+                                                Spacer()
+                                                Image(systemName: "chevron.right")
+                                                    .font(.subheadline)
+                                            }
+                                            .foregroundStyle(Color.gray)
+                                            Text(String("\(librarianViewModel.allBooks.count)"))
+                                                .foregroundStyle(Color(themeManager.selectedTheme.bodyTextColor))
+                                                .font(.title)
+                                                .bold()
+                                                .padding(.top)
                                         }
-                                        .foregroundStyle(Color.gray)
-                                        Text(String("\(librarianViewModel.allBooks.count)"))
-                                            .font(.title)
-                                            .bold()
-                                            .padding(.top)
+                                        .padding(.horizontal)
                                     }
-                                    .padding(.horizontal)
                                 }
                             }
                             
                             // MARK: Staff and Fine
                             HStack(spacing:12){
-                                ZStack{
-                                    RoundedRectangle(cornerRadius: 10)
-                                        .fill(Color(.systemGray4).opacity(0.5))
-                                        .frame(height: 125)
-                                    VStack(alignment: .leading){
-                                        HStack{
-                                            Text("Staff")
-                                                .font(.title3)
-                                            Spacer()
-                                            Image(systemName: "chevron.right")
-                                                .font(.subheadline)
+                                NavigationLink(destination: AdminStaffView()){
+                                    ZStack{
+                                        RoundedRectangle(cornerRadius: 10)
+                                            .fill(Color(.systemGray4).opacity(0.5))
+                                            .frame(height: 125)
+                                        VStack(alignment: .leading){
+                                            HStack{
+                                                Text("Staff")
+                                                    .font(.title3)
+                                                Spacer()
+                                                Image(systemName: "chevron.right")
+                                                    .font(.subheadline)
+                                            }
+                                            .foregroundStyle(Color.gray)
+                                            Text(String("\(staffViewModel.currentStaff.count)"))
+                                                .foregroundStyle(Color(themeManager.selectedTheme.bodyTextColor))
+                                                .font(.title)
+                                                .bold()
+                                                .padding(.top)
                                         }
-                                        .foregroundStyle(Color.gray)
-                                        Text(String("\(staffViewModel.currentStaff.count)"))
-                                            .font(.title)
-                                            .bold()
-                                            .padding(.top)
+                                        .padding(.horizontal)
                                     }
-                                    .padding(.horizontal)
                                 }
                                 
-                                ZStack{
-                                    RoundedRectangle(cornerRadius: 10)
-                                        .fill(Color(.systemGray4).opacity(0.5))
-                                        .frame(height: 125)
-                                    VStack(alignment: .leading){
-                                        HStack{
-                                            Text("Fine")
-                                                .font(.title3)
-                                            Spacer()
-                                            Image(systemName: "chevron.right")
-                                                .font(.subheadline)
+                                NavigationLink(destination: AdminFineView(configViewModel: configViewModel)){
+                                    ZStack{
+                                        RoundedRectangle(cornerRadius: 10)
+                                            .fill(Color(.systemGray4).opacity(0.5))
+                                            .frame(height: 125)
+                                        VStack(alignment: .leading){
+                                            HStack{
+                                                Text("Fine")
+                                                    .font(.title3)
+                                                Spacer()
+                                                Image(systemName: "chevron.right")
+                                                    .font(.subheadline)
+                                            }
+                                            .foregroundStyle(Color.gray)
+                                            Text("₹ \(userAuthViewModel.finesPending)")
+                                                .foregroundStyle(Color(themeManager.selectedTheme.bodyTextColor))
+                                                .font(.title)
+                                                .bold()
+                                                .padding(.top)
                                         }
-                                        .foregroundStyle(Color.gray)
-                                        Text("₹ \(userAuthViewModel.finesPending)")
-                                            .font(.title)
-                                            .bold()
-                                            .padding(.top)
+                                        .padding(.horizontal)
                                     }
-                                    .padding(.horizontal)
                                 }
                                 
                             }
@@ -350,6 +369,7 @@ struct AdminHomeView: View {
                     staffViewModel.getStaff()
                     staffViewModel.getAllStaff()
                     try? await Task.sleep(nanoseconds: 2_000_000_000)
+                    TotalRevenue = userAuthViewModel.totalIncome + (userAuthViewModel.allUsers.count*50)
                     isPageLoading = false
                 }
             }

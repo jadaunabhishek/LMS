@@ -16,6 +16,7 @@ class AuthViewModel: ObservableObject {
     @Published var allUsers: [UserSchema] = []
     @Published var totalIncome: Int = 0
     @Published var finesPending: Int = 0
+    
 
     @Published var appliedUsers: Int = 0
     @Published var rejectedUsers: Int = 0
