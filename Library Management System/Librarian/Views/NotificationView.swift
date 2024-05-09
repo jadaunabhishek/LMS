@@ -462,9 +462,10 @@ struct TestNotificationView_Previews: PreviewProvider {
     let themeManager = ThemeManager()
     @StateObject var LibViewModel = LibrarianViewModel()
     @StateObject var ConfiViewModel = ConfigViewModel()
+    @StateObject var staffViewModel = StaffViewModel()
     @State var selectedOption: Option = .CheckOut
         
-    return NotificationsView(LibViewModel: LibViewModel, selectedOption: $selectedOption)
+    return NotificationsView(LibViewModel: LibViewModel, configViewModel: ConfiViewModel, staffViewModel: staffViewModel, selectedOption: $selectedOption)
         .environmentObject(themeManager)
     }
 }

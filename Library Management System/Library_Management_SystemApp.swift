@@ -40,7 +40,7 @@ struct Library_Management_SystemApp: App {
     
     var body: some Scene {
         WindowGroup {
-            if emailLoggedIn == "user" {
+            if emailLoggedIn == "user" || isSignIn == "user" {
                 Membership(memModelView: memModelView, ConfiViewModel: configViewModel, LibViewModel: LibViewModel, authViewModel: userAuthViewModel)
                     .transition(.move(edge: .leading))
                     .environmentObject(themeManager)

@@ -14,6 +14,8 @@ struct AdminTabView: View {
     @ObservedObject var userAuthViewModel: AuthViewModel
     @ObservedObject var configViewModel: ConfigViewModel
     
+    @State var tabSelection: Int = 0
+    
     var body: some View {
         TabView (selection: $tabSelection) {
             AdminHomeView(adminTabSelection: $tabSelection, librarianViewModel: LibViewModel, staffViewModel: staffViewModel, userAuthViewModel: userAuthViewModel, configViewModel: configViewModel)

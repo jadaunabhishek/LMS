@@ -22,7 +22,7 @@ struct LibrarianFirstScreenView: View {
                 }
                 .tag(1)
             
-            NotificationsView(LibViewModel: LibModelView, selectedOption: $actionSelection)
+            NotificationsView(LibViewModel: LibModelView, configViewModel: ConfiViewModel, staffViewModel: staffViewModel, selectedOption: $actionSelection)
                 .tabItem {
                     Image(systemName: "person.bust.fill")
                     Text("Actions")
