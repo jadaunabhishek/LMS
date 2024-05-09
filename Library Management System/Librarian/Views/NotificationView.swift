@@ -1,21 +1,21 @@
 import SwiftUI
 
+enum Option {
+    case CheckIn
+    case Membership
+    case CheckOut
+}
+
 struct NotificationsView: View {
     @EnvironmentObject var themeManager: ThemeManager
     @ObservedObject var LibViewModel: LibrarianViewModel
     @StateObject var viewModel = NotificationsViewModel()
-    @State private var selectedOption: Option = .CheckOut
+    @Binding var selectedOption: Option
     @State var searchText = ""
     @State var notifications: [NotificationItem] = []
     @State var requestedLoans: [Loan] = []
     @State var issuedLoans: [Loan] = []
     @State var isSelectionMode: Bool = false
-    
-    enum Option {
-        case CheckIn
-        case Membership
-        case CheckOut
-    }
     
     var body: some View {
         NavigationView{
@@ -447,12 +447,13 @@ struct BooksSections: View {
 
 struct TestNotificationView_Previews: PreviewProvider {
     static var previews: some View {
-        let themeManager = ThemeManager()
-        @StateObject var LibViewModel = LibrarianViewModel()
-        @StateObject var ConfiViewModel = ConfigViewModel()
+    let themeManager = ThemeManager()
+    @StateObject var LibViewModel = LibrarianViewModel()
+    @StateObject var ConfiViewModel = ConfigViewModel()
+    @State var selectedOption: Option = .CheckOut
         
-        return NotificationsView(LibViewModel: LibViewModel)
-            .environmentObject(themeManager)
+    return NotificationsView(LibViewModel: LibViewModel, selectedOption: $selectedOption)
+        .environmentObject(themeManager)
     }
 }
 
