@@ -31,8 +31,8 @@ struct Books: View {
     }
     
     var body: some View {
-        NavigationStack {
-            ScrollView {
+        NavigationView {
+            ScrollView(.vertical, showsIndicators: false) {
                 VStack {
                     ScrollView(.horizontal, showsIndicators: false) {
                         HStack {
@@ -67,7 +67,52 @@ struct Books: View {
                                     bookRequest: UserBooksModel(),
                                     prebookRequest: UserBooksModel()
                                 )){
-                                    BookRow(book: book)
+                                    VStack(alignment: .center){
+                                        HStack(alignment: .center){
+                                            AsyncImage(url: URL(string: book.bookImageURL)) { image in
+                                                image.resizable()
+                                            } placeholder: {
+                                                ProgressView()
+                                            }
+                                            .frame(width: 80,height: 120)
+                                            .cornerRadius(8)
+                                            .padding(.leading, 10)
+                                            VStack(alignment: .leading, spacing: 5){
+                                                Text("\(book.bookName)")
+                                                    .multilineTextAlignment(.leading)
+                                                    .font(.headline)
+                                                    .bold()
+                                                    .lineLimit(2)
+                                                
+                                                Text("\(book.bookAuthor)")
+                                                    .multilineTextAlignment(.leading)
+                                                    .font(.subheadline)
+                                                    .lineLimit(1)
+                                                    .foregroundStyle(Color(.systemGray))
+                                                HStack{
+                                                    Image(systemName: "star.fill")
+                                                    Text(String(format: "%.1f", book.bookRating))
+                                                }
+                                                .font(.caption)
+                                                .bold()
+                                                .foregroundStyle(Color(.systemYellow))
+                                                .padding(.bottom, 5)
+                                            }
+                                            .padding(5)
+                                            Spacer()
+                                            VStack{
+                                                Image(systemName: "chevron.right")
+                                                    .symbolRenderingMode(.hierarchical)
+                                                    .font(.callout)
+                                                    .foregroundStyle(Color(.systemGray))
+                                            }.padding(.trailing, 10)
+                                        }.cornerRadius(8)
+                                    }
+                                    .padding(.vertical, 10)
+                                    .frame(maxWidth: .infinity)
+                                    .background(Color(.systemGray6).opacity(0.6))
+                                    .foregroundColor(themeManager.selectedTheme.bodyTextColor)
+                                    Divider()
                                 }
                             }
                         } else {
@@ -94,54 +139,14 @@ struct Books: View {
 }
 
 
-struct BookRow: View {
-    let book: Book
-    @EnvironmentObject var themeManager: ThemeManager
-    var body: some View {
-        HStack(alignment: .center){
-            AsyncImage(url: URL(string: book.bookImageURL)) { image in
-                image.resizable()
-            } placeholder: {
-                ProgressView()
-            }
-            .frame(width: 80,height: 120)
-            .cornerRadius(8)
-            VStack(alignment: .leading, spacing: 5){
-                Text("\(book.bookName)")
-                    .multilineTextAlignment(.leading)
-                    .font(.headline)
-                    .bold()
-                    .foregroundStyle(themeManager.selectedTheme.bodyTextColor)
-                    .lineLimit(2)
-                Text("\(book.bookAuthor)")
-                    .multilineTextAlignment(.leading)
-                    .font(.subheadline)
-                    .lineLimit(1)
-                    .foregroundStyle(Color(.systemGray))
-                HStack{
-                    Image(systemName: "star.fill")
-                    Text(String(format: "%.1f", book.bookRating))
-                }
-                .font(.caption)
-                .bold()
-                .foregroundStyle(Color(.systemYellow))
-                .padding(.bottom, 5)
-            }
-            .padding(5)
-            Spacer()
-            VStack{
-                Image(systemName: "chevron.right")
-                    .symbolRenderingMode(.hierarchical)
-                    .font(.callout)
-                    .foregroundStyle(Color(.systemGray))
-            }
-        }
-        .padding(10)
-        .cornerRadius(8)
-        .background(Color(.systemGray6).opacity(0.6))
-        Divider()
-    }
-}
+//struct BookRow: View {
+//    let book: Book
+//    @EnvironmentObject var themeManager: ThemeManager
+//    @Environment(\.colorScheme) var colorScheme
+//    var body: some View {
+//        
+//    }
+//}
 
 struct BooksPrev: View {
     @StateObject var memModelView = UserBooksModel()

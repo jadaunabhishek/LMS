@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct BookDetailView: View {
-    
+    @EnvironmentObject var themeManager: ThemeManager
     @ObservedObject var LibViewModel: LibrarianViewModel
     @ObservedObject var ConfiViewModel: ConfigViewModel
     @State var currentBookId: String = "E5Jf4wPKbMlCK44HYz0p"
@@ -71,17 +71,15 @@ struct BookDetailView: View {
     }
     
     var body: some View {
-        ZStack{
-            Color("BgColor")
+        ScrollView{
             VStack(spacing: 26){
-                
                 if(isPageLoading){
                     LoadingAnimation()
                 }
                 else{
                     ScrollView{
                         VStack(spacing: 20){
-                            HStack{
+                            VStack(alignment: .center){
                                 Button(action:{
                                     openPhotoPicker.toggle()
                                 }){
@@ -91,7 +89,7 @@ struct BookDetailView: View {
                                         } placeholder: {
                                             ProgressView()
                                         }
-                                        .frame(width: 120,height: 180)
+                                        .frame(width: 200,height: 320)
                                         .cornerRadius(8)
                                     }
                                     else{
@@ -102,64 +100,67 @@ struct BookDetailView: View {
                                     }
                                 }
                                 .disabled(!canEdit)
-                                VStack(spacing: 20){
-                                    HStack{
-                                        Text("ISBN")
-                                            .font(.system(size: 18, weight: .bold))
-                                        Spacer()
-                                        TextField(bookISBN,text: $bookISBN)
-                                            .font(.system(size: 18, weight: .regular))
-                                            .scaledToFit()
-                                            .disabled(!canEdit)
-                                    }
-                                    .frame(maxWidth: .infinity)
-                                    HStack{
-                                        Text("Name")
-                                            .font(.system(size: 18, weight: .bold))
-                                        Spacer()
-                                        TextField(bookName,text: $bookName)
-                                            .font(.system(size: 18, weight: .regular))
-                                            .scaledToFit()
-                                            .disabled(!canEdit)
-                                    }
-                                    .frame(maxWidth: .infinity)
-                                    HStack{
-                                        Text("Author")
-                                            .font(.system(size: 18, weight: .bold))
-                                        Spacer()
-                                        TextField(bookAuthor,text: $bookAuthor)
-                                            .font(.system(size: 18, weight: .regular))
-                                            .scaledToFit()
-                                            .disabled(!canEdit)
-                                    }
-                                    .frame(maxWidth: .infinity)
-                                    HStack{
-                                        Text("Status")
-                                            .font(.system(size: 18, weight: .bold))
-                                        Spacer()
-                                        if(canEdit){
-                                            Picker("",selection: $bookStatus){
-                                                Text("Available").tag("Available")
-                                                Text("PreBooked").tag("PreBooked")
-                                                Text("Taken").tag("Taken")
-                                            }
-                                            .padding(0)
-                                            .accentColor(.black)
-                                            .labelsHidden()
-                                            .disabled(!canEdit)
-                                        }
-                                        else{
-                                            Text("\(bookStatus)")
-                                                .font(.system(size: 18, weight: .regular))
-                                        }
-                                    }
-                                    .frame(maxWidth: .infinity)
-                                }
-                                .padding(10)
-                                .background(.white)
-                                .cornerRadius(8)
+
+
                             }
                             VStack(spacing: 20){
+                                HStack{
+                                    Text("Name")
+                                        .font(.system(size: 22, weight: .bold))
+                                    Spacer()
+                                    TextField(bookName,text: $bookName)
+                                        .font(.system(size: 20, weight: .regular))
+                                        .scaledToFit()
+                                        .disabled(!canEdit)
+                                }
+                                .frame(maxWidth: .infinity)
+                                HStack{
+                                    Text("Author")
+                                        .font(.system(size: 20, weight: .bold))
+                                    Spacer()
+                                    TextField(bookAuthor,text: $bookAuthor)
+                                        .font(.system(size: 18, weight: .regular))
+                                        .scaledToFit()
+                                        .disabled(!canEdit)
+                                }
+                                .frame(maxWidth: .infinity)
+                            }.padding(10)
+                                .background(Color(.systemGray5))
+                                .cornerRadius(8)
+                            VStack(spacing: 20){
+                                HStack{
+                                    Text("ISBN")
+                                        .font(.system(size: 18, weight: .bold))
+                                    Spacer()
+                                    TextField(bookISBN,text: $bookISBN)
+                                        .font(.system(size: 18, weight: .regular))
+                                        .scaledToFit()
+                                        .disabled(!canEdit)
+                                }
+                                .frame(maxWidth: .infinity)
+                                
+                                HStack{
+                                    Text("Status")
+                                        .font(.system(size: 18, weight: .bold))
+                                    Spacer()
+                                    if(canEdit){
+                                        Picker("",selection: $bookStatus){
+                                            Text("Available").tag("Available")
+                                            Text("PreBooked").tag("PreBooked")
+                                            Text("Taken").tag("Taken")
+                                        }
+                                        .padding(0)
+                                        .accentColor(themeManager.selectedTheme.bodyTextColor)
+                                        .labelsHidden()
+                                        .disabled(!canEdit)
+                                    }
+                                    else{
+                                        Text("\(bookStatus)")
+                                            .font(.system(size: 18, weight: .regular))
+                                    }
+                                }
+                                .frame(maxWidth: .infinity)
+
                                 HStack{
                                     Text("Publishing Date")
                                         .font(.system(size: 18, weight: .bold))
@@ -175,6 +176,23 @@ struct BookDetailView: View {
                                 }
                                 .frame(maxWidth: .infinity)
                                 HStack{
+                                    Text("Copies")
+                                        .font(.system(size: 18, weight: .bold))
+                                    Spacer()
+                                    TextField(bookCount,text: $bookCount)
+                                        .font(.system(size: 18, weight: .regular))
+                                        .scaledToFit()
+                                        .keyboardType(.numberPad)
+                                        .disabled(!canEdit)
+                                }
+                                .frame(maxWidth: .infinity)
+                            }
+                            .padding(10)
+                            .background(Color(.systemGray5))
+                            .cornerRadius(8)
+                            .opacity(0.8)
+                            VStack(spacing: 20){
+                                HStack{
                                     Text("Category")
                                         .font(.system(size: 18, weight: .bold))
                                     Spacer()
@@ -187,42 +205,13 @@ struct BookDetailView: View {
                                                 }
                                             }
                                         }
-                                        .accentColor(.black)
+                                        .accentColor(themeManager.selectedTheme.bodyTextColor)
                                         .labelsHidden()
                                         .disabled(!canEdit)
                                     }
                                     else{
                                         Text("\(bookCategory)")
                                             .font(.system(size: 18, weight: .regular))
-                                    }
-                                }
-                                .frame(maxWidth: .infinity)
-                            }
-                            .padding(10)
-                            .background(.white)
-                            .cornerRadius(8)
-                            VStack(spacing: 20){
-                                HStack{
-                                    Text("Sub Category")
-                                        .font(.system(size: 18, weight: .bold))
-                                    Spacer()
-                                    if(canEdit){
-                                        Picker("", selection: $bookSubCategory){
-                                            Text("Choose").tag("Choose")
-                                            if(!ConfiViewModel.currentConfig.isEmpty){
-                                                ForEach(ConfiViewModel.currentConfig[0].categories, id: \.self){ category in
-                                                    Text(category).tag(category)
-                                                }
-                                            }
-                                        }
-                                        .accentColor(.black)
-                                        .labelsHidden()
-                                        .disabled(!canEdit)
-                                        .onChange(of: bookSubCategory, initial: true){ (oldValue,newValue)  in
-                                            if(newValue != oldValue && newValue != "Choose" && !bookSubCategories.contains(newValue)){
-                                                bookSubCategories.append(bookSubCategory)
-                                            }
-                                        }
                                     }
                                 }
                                 .frame(maxWidth: .infinity)
@@ -240,15 +229,14 @@ struct BookDetailView: View {
                                                 .disabled(!canEdit)
                                             }
                                             .padding(10)
-                                            .foregroundColor(.black)
-                                            .background(Color("PrimaryColor").opacity(0.25))
+                                            .foregroundColor(themeManager.selectedTheme.bodyTextColor)
                                             .cornerRadius(8)
                                         }
                                     })
                                 }
                             }
                             .padding(10)
-                            .background(.white)
+                            .background(Color(.systemGray5))
                             .cornerRadius(8)
                             VStack(alignment: .leading,spacing: 20){
                                 Text("Description")
@@ -258,7 +246,7 @@ struct BookDetailView: View {
                                     .disabled(!canEdit)
                             }
                             .padding(10)
-                            .background(.white)
+                            .background(Color(.systemGray5))
                             .cornerRadius(8)
                             if(canEdit){
                                 Button(action:{
@@ -285,7 +273,7 @@ struct BookDetailView: View {
                                             .foregroundColor(.white)
                                             .padding(10)
                                             .frame(maxWidth: .infinity)
-                                            .background(Color("PrimaryColor").opacity(0.5))
+                                            .background(themeManager.selectedTheme.secondaryThemeColor)
                                             .cornerRadius(8)
                                             .disabled(isButtonLoading)
                                     }
@@ -295,7 +283,7 @@ struct BookDetailView: View {
                                             .foregroundColor(.white)
                                             .padding(10)
                                             .frame(maxWidth: .infinity)
-                                            .background(Color("PrimaryColor"))
+                                            .background(themeManager.selectedTheme.secondaryThemeColor)
                                             .cornerRadius(8)
                                     }
                                 }
@@ -307,7 +295,6 @@ struct BookDetailView: View {
                                             isButtonLoading.toggle()
                                             LibViewModel.deleteBook(bookId: currentBookId)
                                             try? await Task.sleep(nanoseconds: 3_000_000_000)
-                                            print(LibViewModel.responseStatus)
                                             if(LibViewModel.responseStatus == 200){
                                                 docState = .ready
                                             }
@@ -328,7 +315,7 @@ struct BookDetailView: View {
                                                 .foregroundColor(.white)
                                                 .padding(10)
                                                 .frame(maxWidth: .infinity)
-                                                .background(Color("PrimaryColor").opacity(0.5))
+                                                .background(themeManager.selectedTheme.secondaryThemeColor)
                                                 .cornerRadius(8)
                                                 .disabled(isButtonLoading)
                                         }
@@ -338,7 +325,7 @@ struct BookDetailView: View {
                                                 .foregroundColor(.white)
                                                 .padding(10)
                                                 .frame(maxWidth: .infinity)
-                                                .background(Color("PrimaryColor"))
+                                                .background(themeManager.selectedTheme.secondaryThemeColor)
                                                 .cornerRadius(8)
                                         }
                                     }
@@ -348,18 +335,44 @@ struct BookDetailView: View {
                     }
                 }
             }
+            .navigationBarTitle("Book Details", displayMode: .inline)
+            .navigationBarItems(trailing: Button(action:{
+                canEdit.toggle()
+            }){
+                if(!canEdit){
+                    VStack{
+                        HStack{
+                            Spacer()
+                            Text("Edit")
+                                .font(.system(size: 18, weight: .regular))
+                                .foregroundColor(themeManager.selectedTheme.bodyTextColor)
+                        }
+                    }
+                    .frame(maxWidth: .infinity)
+                }
+                else{
+                    VStack{
+                        HStack{
+                            Spacer()
+                            Text("Cancel")
+                                .font(.system(size: 18, weight: .regular))
+                                .foregroundColor(themeManager.selectedTheme.bodyTextColor)
+                        }
+                    }
+                    .frame(maxWidth: .infinity)
+                }
+            })
             .padding(.horizontal,10)
             .fullScreenCover(isPresented: $openPhotoPicker) {
-                ImagePicker(selectedImage: $bookImage, isImageSelected: $isImageSelected, sourceType: .photoLibrary).frame(maxHeight: .infinity).ignoresSafeArea(.all)
+                ImagePicker(selectedImage: $bookImage, isImageSelected: $isImageSelected, sourceType: .photoLibrary).frame(maxHeight: .infinity)
             }
-            
             if(isPopupShown){
                 VStack{
                     Text("\(popupMessage)")
                         .font(.system(size: 18, weight: .light))
                         .foregroundColor(.white)
                         .padding(10)
-                        .background(Color("PrimaryColor").opacity(0.75))
+                        .background(themeManager.selectedTheme.secondaryThemeColor)
                         .cornerRadius(100)
                 }
                 .offset(y:-320)
@@ -367,31 +380,6 @@ struct BookDetailView: View {
         }
         .padding(.vertical,20)
         .background(.black.opacity(0.05))
-        .navigationTitle("Update Book")
-        .navigationBarItems(trailing: Button(action:{
-            canEdit.toggle()
-        }){
-            if(!canEdit){
-                VStack{
-                    HStack{
-                        Spacer()
-                        Text("Edit")
-                            .font(.system(size: 18, weight: .regular))
-                    }
-                }
-                .frame(maxWidth: .infinity)
-            }
-            else{
-                VStack{
-                    HStack{
-                        Spacer()
-                        Text("Cancel")
-                            .font(.system(size: 18, weight: .regular))
-                    }
-                }
-                .frame(maxWidth: .infinity)
-            }
-        })
         
         .task {
             do{
@@ -415,6 +403,13 @@ struct ADPrev: View {
     }
 }
 
-#Preview {
-    UBPrev()
+struct UBPrev_Previews: PreviewProvider {
+static var previews: some View {
+    let themeManager = ThemeManager()
+    let librarianViewModel = LibrarianViewModel()
+    let configViewModel = ConfigViewModel()
+    
+    return UBPrev()
+        .environmentObject(themeManager)
+}
 }

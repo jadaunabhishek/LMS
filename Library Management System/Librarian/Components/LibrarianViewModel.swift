@@ -7,7 +7,7 @@ class LibrarianViewModel: ObservableObject{
     
     let dbInstance = Firestore.firestore()
     
-    //@StateObject var confiViewModel = ConfigViewModel()
+
     
     @Published var responseStatus = 0
     @Published var responseMessage = ""
