@@ -113,15 +113,15 @@ struct EditStaffDetailsView: View {
                         }),
                         secondaryButton: .cancel()
                     )
-                }).padding()
+                }).padding(.bottom, 90)
                 
                 NavigationLink(value: navigateToAdminStaffView) {
-                    Text("Go to Admin Staff View")
+                    Text("")
                 }
                 .navigationDestination(isPresented: $navigateToAdminStaffView) {
                     AdminStaffView()
                 }
-                .navigationTitle("Edit Staff").hidden()
+                .navigationTitle("Edit Staff")
             }
             .navigationBarBackButtonHidden()
             .navigationBarItems(

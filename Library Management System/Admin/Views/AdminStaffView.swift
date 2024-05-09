@@ -50,8 +50,6 @@ struct AdminStaffView: View {
         NavigationView {
             ScrollView{
                 VStack {
-                    StaffSearchBar(text: $searchText)
-                    
                     if !filteredStaff.isEmpty {
                         VStack(alignment: .leading) {
                             ForEach(filteredStaff, id: \.userID) { staffMember in
@@ -88,14 +86,13 @@ struct AdminStaffView: View {
                                 }
                                 
                             }.padding(.horizontal)
-                        }
+                        }.navigationBarTitle("Manage Staff")
                         
                     } else {
                         Text("No staff members found.")
                             .foregroundColor(.secondary)
                     }
                 }
-                .navigationBarTitle("Manage Staff")
                 .navigationBarBackButtonHidden()
                 .navigationBarItems(leading: Spacer(),trailing:
                                         Button(action: {
@@ -113,7 +110,7 @@ struct AdminStaffView: View {
                 .onAppear{
                     staffViewModel.getStaff()
                 }
-            }
+            }.searchable(text: $searchText)
         }
     }
 }

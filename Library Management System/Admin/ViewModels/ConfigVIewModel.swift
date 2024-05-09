@@ -61,7 +61,6 @@ class ConfigViewModel: ObservableObject {
                         let memberCount = membersCount(month: month, count: count)
                         monthlyMembersCountArray.append(memberCount)
                     }
-
                     
                     guard let monthlyIncomeDictArray = document!["monthlyIncome"] as? [[String: Any]] else {
                         print("Error: Unable to parse monthlyMembersCount array from Firestore document")
@@ -79,8 +78,7 @@ class ConfigViewModel: ObservableObject {
                         let monthlyIncome = monthlyIncome(month: month, income: count)
                         monthlyIncomeArray.append(monthlyIncome)
                     }
-
-                    
+                  
                     var newConfig = Config(
                         configID: document!["configID"] as! String,
                         adminID: document!["adminID"] as! String,

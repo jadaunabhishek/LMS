@@ -27,6 +27,8 @@
 		840A18EF2BE040F700B9ED91 /* TextFieldComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 840A18EE2BE040F700B9ED91 /* TextFieldComponent.swift */; };
 		840A18F12BE0E84D00B9ED91 /* MemberBookReminder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 840A18F02BE0E84D00B9ED91 /* MemberBookReminder.swift */; };
 		841045A92BD8D7D400E801D0 /* AuthViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 841045A82BD8D7D400E801D0 /* AuthViewModel.swift */; };
+		842468302BEB38B7008746D1 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8424682F2BEB38B7008746D1 /* OnboardingView.swift */; };
+		842468322BEB752F008746D1 /* SplashScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 842468312BEB752F008746D1 /* SplashScreenView.swift */; };
 		84301CB52BDA126F004CF581 /* MemberHome.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84301CB42BDA126F004CF581 /* MemberHome.swift */; };
 		84301CB72BDA13C8004CF581 /* MemberTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84301CB62BDA13C8004CF581 /* MemberTabView.swift */; };
 		84301CB92BDA4B87004CF581 /* StaffDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84301CB82BDA4B87004CF581 /* StaffDetailsView.swift */; };
@@ -151,6 +153,8 @@
 		840A18F02BE0E84D00B9ED91 /* MemberBookReminder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemberBookReminder.swift; sourceTree = "<group>"; };
 		840A18F22BE0E8C200B9ED91 /* Library-Management-System-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "Library-Management-System-Info.plist"; sourceTree = SOURCE_ROOT; };
 		841045A82BD8D7D400E801D0 /* AuthViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewModel.swift; sourceTree = "<group>"; };
+		8424682F2BEB38B7008746D1 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
+		842468312BEB752F008746D1 /* SplashScreenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashScreenView.swift; sourceTree = "<group>"; };
 		84301CB42BDA126F004CF581 /* MemberHome.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemberHome.swift; sourceTree = "<group>"; };
 		84301CB62BDA13C8004CF581 /* MemberTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemberTabView.swift; sourceTree = "<group>"; };
 		84301CB82BDA4B87004CF581 /* StaffDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaffDetailsView.swift; sourceTree = "<group>"; };
@@ -310,6 +314,15 @@
 			path = Colors;
 			sourceTree = "<group>";
 		};
+		8424682E2BEB343B008746D1 /* Onboarding */ = {
+			isa = PBXGroup;
+			children = (
+				8424682F2BEB38B7008746D1 /* OnboardingView.swift */,
+				842468312BEB752F008746D1 /* SplashScreenView.swift */,
+			);
+			path = Onboarding;
+			sourceTree = "<group>";
+		};
 		843CB5842BE399C9008CFAFC /* Elements */ = {
 			isa = PBXGroup;
 			children = (
@@ -381,6 +394,7 @@
 			children = (
 				840A18F22BE0E8C200B9ED91 /* Library-Management-System-Info.plist */,
 				D55820F52BD61BCC005A00F9 /* GoogleService-Info.plist */,
+				8424682E2BEB343B008746D1 /* Onboarding */,
 				D55820FF2BD637BD005A00F9 /* Admin */,
 				D55821002BD637C4005A00F9 /* Librarian */,
 				D55821012BD637CB005A00F9 /* Member */,
@@ -780,11 +794,13 @@
 				DC79BDC62BDA23780048F1DE /* BooksPage.swift in Sources */,
 				84D3293E2BDE707000E75F81 /* EditStaffDetailsView.swift in Sources */,
 				1F84616F2BD65679008B7B3E /* ThemeManager.swift in Sources */,
+				842468302BEB38B7008746D1 /* OnboardingView.swift in Sources */,
 				DC1D40322BD77E8000970C7B /* AdminStaffView.swift in Sources */,
 				84301CB92BDA4B87004CF581 /* StaffDetailsView.swift in Sources */,
 				0FC042422BEB3784000BDA67 /* MemberDetailView.swift in Sources */,
 				84E96EE02BDA2A2700A572BC /* MemberViewList.swift in Sources */,
 				84E87D612BD7D5EA00FAD5DC /* CardListDetailView.swift in Sources */,
+				842468322BEB752F008746D1 /* SplashScreenView.swift in Sources */,
 				D55821062BD63AF4005A00F9 /* LibrarianFirstScreenView.swift in Sources */,
 				D57BFDB12BDD23480094A0B5 /* Support.swift in Sources */,
 				845F7D722BD8E0BD006831F8 /* Filter.swift in Sources */,

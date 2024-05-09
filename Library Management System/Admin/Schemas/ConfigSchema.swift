@@ -32,6 +32,7 @@ struct membersCount: Codable {
     }
 }
 
+
 struct monthlyIncome{
     var month: String
     var income: Int

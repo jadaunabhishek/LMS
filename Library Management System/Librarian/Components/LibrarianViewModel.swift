@@ -7,7 +7,7 @@ class LibrarianViewModel: ObservableObject{
     
     let dbInstance = Firestore.firestore()
     
-    //@StateObject var confiViewModel = ConfigViewModel()
+
     
     @Published var responseStatus = 0
     @Published var responseMessage = ""
@@ -855,6 +855,10 @@ class LibrarianViewModel: ObservableObject{
                         monthlyIncomeArray.append(monthlyIncome)
                     }
 
+                    guard let monthlyRevenueTotalDictArray = document!["monthlyRevenueTotal"] as? [[String: Any]] else {
+                        print("Error: Unable to parse monthlyRevenueTotal array from Firestore document")
+                        return
+                    }
                     
                     var newConfig = Config(
                         configID: document!["configID"] as! String,
