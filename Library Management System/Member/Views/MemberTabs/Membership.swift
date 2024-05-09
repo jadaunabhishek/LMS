@@ -151,7 +151,7 @@ struct Membership: View {
                     }, label: "Request Membership")
                     .padding(.bottom, 15)
                     
-                    NavigationLink("", destination: MemberTabView(memModelView: memModelView, ConfiViewModel: ConfiViewMOdel), isActive: $shouldNavigate)
+                    NavigationLink("", destination: MemberTabView(themeManager: themeManager, memModelView: memModelView, ConfiViewModel: ConfiViewMOdel), isActive: $shouldNavigate)
                         .hidden()
                     
                 }.padding()
