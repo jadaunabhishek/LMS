@@ -105,6 +105,19 @@ struct Records: View {
                     }
                 }
             }
+            .onAppear(
+                perform: {
+                    Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { time in
+                        Task{
+                            if let userID = Auth.auth().currentUser?.uid {
+                                LibViewModel.getUserHistory(userId: userID)
+                                try? await Task.sleep(nanoseconds: 1_000_000_000)
+                                print(LibViewModel.currentUserHistory)
+                            }
+                        }
+                    }
+                }
+            )
         }
     }
 }

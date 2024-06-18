@@ -137,7 +137,7 @@ class UserBooksModel: ObservableObject{
                 else{
                     let addNewLoan = self.dbInstance.collection("Loans").document()
                     
-                    let newLoan = Loan(loanId: addNewLoan.documentID, bookId: bookId, bookName: bookName, bookImageURL: bookImageURL, bookIssuedTo: userId, bookIssuedToName: userName, bookIssuedOn: "", bookExpectedReturnOn: "", bookReturnedOn: "", loanStatus: "Requested", loanReminderStatus: "notSet", fineCalculatedDays: 0, loanFine: 0, createdOn: Date.now.formatted(), updatedOn: Date.now.formatted(), timeStamp: retrievedSort)
+                    let newLoan = Loan(loanId: addNewLoan.documentID, bookId: bookId, bookName: bookName, bookImageURL: bookImageURL, bookIssuedTo: userId, bookIssuedToName: userName, bookIssuedOn: Date.now.formatted(), bookExpectedReturnOn: (Calendar.current.date(byAdding: .day, value: loanPeriod, to: Date.now)?.formatted())!, bookReturnedOn: "", loanStatus: "Requested", loanReminderStatus: "notSet", fineCalculatedDays: 0, loanFine: 0, createdOn: Date.now.formatted(), updatedOn: Date.now.formatted(), timeStamp: retrievedSort)
                     
                     addNewLoan.setData(newLoan.getDictionaryOfStruct()){ error in
                         
